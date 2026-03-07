@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script>
+    // GitHub Pages SPA redirect: convert path to hash
+    var path = window.location.pathname.replace(/\/$/, '').split('/').pop();
+    if (path && path !== 'index.html') {
+        window.location.replace(window.location.origin + window.location.pathname.replace(path, '') + '#' + path);
+    } else {
+        window.location.replace(window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/'));
+    }
+</script>
+</head>
+<body></body>
+</html>

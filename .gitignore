@@ -1,0 +1,20 @@
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# Claude
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated incorrect quiz files
+incorrect_*.json
+incorrect_*.yml
