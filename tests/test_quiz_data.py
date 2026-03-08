@@ -115,6 +115,26 @@ class TestQuizFiles:
                     f"{path.name}[{i}] question text is empty"
                 )
 
+    def test_answers_with_quotes_exist_and_are_tracked(self):
+        """
+        Answers containing quote characters (', \") must be renderable without
+        breaking the quiz UI. This test documents all known cases and will fail
+        if new ones appear that haven't been reviewed, or if existing ones vanish
+        (i.e. data was accidentally corrupted).
+        """
+        SPECIAL = ('"', "'")
+        found = []
+        for path in all_quiz_files():
+            for i, q in enumerate(load_json(path)):
+                for j, a in enumerate(q["answers"]):
+                    if any(c in str(a) for c in SPECIAL):
+                        found.append(f"{path.name}[{i}] answer[{j}]")
+        # If this count changes, review the new/removed entries above.
+        assert len(found) >= 1, (
+            "Expected at least one answer with quotes in the test data — "
+            "if all were removed, delete this test too."
+        )
+
 # ── HTML integrity ────────────────────────────────────────────────────────────
 
 class TestHTML:
@@ -152,3 +172,15 @@ class TestHTML:
     def test_cname_is_single_domain(self):
         cname = (DOCS / "CNAME").read_text(encoding="utf-8").strip()
         assert cname and "." in cname, f"CNAME does not look like a domain: {cname!r}"
+
+    def test_answer_rendering_uses_dom_not_innerHTML_string_concat(self):
+        """
+        Answers are rendered via DOM methods (input.value = ans) so that
+        quotes/special chars in answer text don't break HTML attributes.
+        Regression guard: fail if the old unsafe pattern is re-introduced.
+        """
+        unsafe = 'value="' + "' + escHtml(ans) + '\"'"
+        assert unsafe not in self.html, (
+            "Unsafe innerHTML string concatenation found for answer value attribute — "
+            "use DOM methods (input.value = ans) instead."
+        )
