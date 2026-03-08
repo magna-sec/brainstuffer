@@ -850,13 +850,55 @@
 
             <div class="card">
                 <h2>Load Custom Quiz</h2>
-                <p style="color:var(--subtle);font-size:0.88rem;margin-bottom:1rem">Upload a YAML or JSON question file to use it in a quiz session.</p>
+                <p style="color:var(--subtle);font-size:0.88rem;margin-bottom:1rem">Upload a YAML, JSON, or encrypted .bsq question file.</p>
                 <div class="upload-zone" id="upload-zone">
-                    <input type="file" id="file-upload" accept=".yml,.yaml,.json">
+                    <input type="file" id="file-upload" accept=".yml,.yaml,.json,.bsq">
                     <div class="upload-zone-icon">&#128193;</div>
                     <div class="upload-zone-text">Click to browse or <strong>drag &amp; drop</strong></div>
+                    <div class="upload-zone-hint">.yml, .yaml, .json, or .bsq (encrypted)</div>
+                </div>
+                <div id="decrypt-prompt" style="display:none;margin-top:0.75rem">
+                    <label for="decrypt-password">Password to decrypt</label>
+                    <input type="password" id="decrypt-password" placeholder="Enter password…" autocomplete="off">
+                    <button class="btn btn-primary" id="btn-decrypt-file" style="width:100%">Decrypt &amp; Load</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>&#128279; Load from GitHub</h2>
+                <p style="color:var(--subtle);font-size:0.88rem;margin-bottom:1rem">Paste a public GitHub repo URL. BrainStuffer will find all compatible question files inside it.</p>
+                <label for="github-url">GitHub repository URL</label>
+                <input type="text" id="github-url" placeholder="https://github.com/user/repo" autocomplete="off" spellcheck="false">
+                <button class="btn btn-primary" id="btn-github-load" style="width:100%;margin-bottom:0.75rem">Browse Repo</button>
+                <div id="github-file-list" style="display:none">
+                    <label>Files found</label>
+                    <select id="github-file-select"></select>
+                    <div id="github-decrypt-prompt" style="display:none;margin-top:0.75rem">
+                        <label for="github-decrypt-password">Password to decrypt</label>
+                        <input type="password" id="github-decrypt-password" placeholder="Enter password…" autocomplete="off">
+                    </div>
+                    <button class="btn btn-primary" id="btn-github-load-file" style="width:100%;margin-top:0.75rem">Load Selected File</button>
+                </div>
+                <div id="github-alert-wrap"></div>
+            </div>
+
+            <div class="card">
+                <h2>&#128274; Encrypt a Quiz File</h2>
+                <p style="color:var(--subtle);font-size:0.88rem;margin-bottom:1rem">Upload a YAML or JSON file, encrypt it with a password, and download a <strong>.bsq</strong> file. Share the .bsq publicly — nobody can read it without your password.</p>
+                <div class="upload-zone" id="encrypt-zone">
+                    <input type="file" id="encrypt-file-upload" accept=".yml,.yaml,.json">
+                    <div class="upload-zone-icon">&#128274;</div>
+                    <div class="upload-zone-text">Click to select file to encrypt</div>
                     <div class="upload-zone-hint">.yml, .yaml, or .json</div>
                 </div>
+                <div id="encrypt-controls" style="display:none;margin-top:0.75rem">
+                    <label for="encrypt-password">Encryption password</label>
+                    <input type="password" id="encrypt-password" placeholder="Choose a strong password…" autocomplete="new-password">
+                    <label for="encrypt-password2">Confirm password</label>
+                    <input type="password" id="encrypt-password2" placeholder="Confirm password…" autocomplete="new-password">
+                    <button class="btn btn-primary" id="btn-encrypt-download" style="width:100%">&#128229; Encrypt &amp; Download</button>
+                </div>
+                <div id="encrypt-alert-wrap"></div>
             </div>
 
             <div class="card">
@@ -2111,8 +2153,22 @@ function showOverlay(html, icon, duration) {
         const name = file.name;
         const isYaml = /\.(ya?ml)$/i.test(name);
         const isJson = /\.json$/i.test(name);
-        if (!isYaml && !isJson) {
-            showUploadAlert('Unsupported file type. Please use .yml, .yaml, or .json files.', 'error');
+        const isBsq  = /\.bsq$/i.test(name);
+
+        if (!isYaml && !isJson && !isBsq) {
+            showUploadAlert('Unsupported file type. Please use .yml, .yaml, .json, or .bsq files.', 'error');
+            return;
+        }
+
+        if (isBsq) {
+            var reader2 = new FileReader();
+            reader2.onload = function(e) {
+                window._pendingBsqText = e.target.result;
+                window._pendingBsqName = name;
+                document.getElementById('decrypt-prompt').style.display = '';
+                document.getElementById('decrypt-password').focus();
+            };
+            reader2.readAsText(file);
             return;
         }
 
@@ -2127,7 +2183,6 @@ function showOverlay(html, icon, duration) {
                     showUploadAlert('Invalid JSON: ' + err.message, 'error');
                 }
             } else {
-                // Load js-yaml from CDN if needed
                 if (typeof jsyaml !== 'undefined') {
                     parseYamlAndRegister(name, text);
                 } else {
@@ -2184,6 +2239,217 @@ function showOverlay(html, icon, duration) {
         sel.value = key;
         showUploadAlert('Loaded <strong>' + escHtml(name) + '</strong> with ' + data.length + ' questions.', 'success');
     }
+
+    window._registerUploadedQuiz = registerUploadedQuiz;
+
+    // Decrypt uploaded .bsq
+    document.getElementById('btn-decrypt-file').addEventListener('click', async function() {
+        var pwd = document.getElementById('decrypt-password').value;
+        if (!pwd) { showUploadAlert('Enter a password first.', 'error'); return; }
+        try {
+            var data = await bsqDecrypt(window._pendingBsqText, pwd);
+            document.getElementById('decrypt-prompt').style.display = 'none';
+            document.getElementById('decrypt-password').value = '';
+            registerUploadedQuiz(window._pendingBsqName.replace(/\.bsq$/i, '.json'), data);
+        } catch(e) {
+            showUploadAlert('Decryption failed — wrong password or corrupted file.', 'error');
+        }
+    });
+})();
+
+// ══════════════════════════════════════════════════════════════════
+// BSQ CRYPTO (AES-GCM + PBKDF2)
+// ══════════════════════════════════════════════════════════════════
+async function bsqDeriveKey(password, salt) {
+    var enc = new TextEncoder();
+    var km = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: salt, iterations: 200000, hash: 'SHA-256' },
+        km, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
+    );
+}
+function bsqB64Enc(buf) { return btoa(String.fromCharCode(...new Uint8Array(buf))); }
+function bsqB64Dec(str) { return Uint8Array.from(atob(str), c => c.charCodeAt(0)); }
+
+async function bsqEncrypt(plaintext, password) {
+    var salt = crypto.getRandomValues(new Uint8Array(16));
+    var iv   = crypto.getRandomValues(new Uint8Array(12));
+    var key  = await bsqDeriveKey(password, salt);
+    var ct   = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(plaintext));
+    return JSON.stringify({ v:1, salt: bsqB64Enc(salt), iv: bsqB64Enc(iv), data: bsqB64Enc(ct) });
+}
+
+async function bsqDecrypt(ciphertext, password) {
+    var obj = JSON.parse(ciphertext);
+    if (!obj.v || !obj.salt || !obj.iv || !obj.data) throw new Error('Not a valid .bsq file');
+    var key = await bsqDeriveKey(password, bsqB64Dec(obj.salt));
+    var pt  = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: bsqB64Dec(obj.iv) }, key, bsqB64Dec(obj.data));
+    var text = new TextDecoder().decode(pt);
+    var data;
+    try { data = JSON.parse(text); } catch(e) {
+        if (typeof jsyaml === 'undefined') {
+            await new Promise(function(res, rej) {
+                var s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js';
+                s.onload = res; s.onerror = rej; document.head.appendChild(s);
+            });
+        }
+        data = jsyaml.load(text);
+    }
+    if (!Array.isArray(data)) throw new Error('Decrypted content is not a question list');
+    return data;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// GITHUB LOADER
+// ══════════════════════════════════════════════════════════════════
+(function() {
+    var ghFiles = [];
+
+    function ghAlert(msg, type) {
+        var w = document.getElementById('github-alert-wrap');
+        w.innerHTML = '<div class="alert alert-' + type + '">' + msg + '</div>';
+        setTimeout(function() { w.innerHTML = ''; }, 7000);
+    }
+
+    function parseGithubUrl(url) {
+        var m = url.trim().match(/github\.com\/([^/]+)\/([^/]+)(?:\/tree\/([^/]+)(?:\/(.+))?)?/);
+        if (!m) return null;
+        return { owner: m[1], repo: m[2].replace(/\.git$/, ''), branch: m[3] || '', path: m[4] || '' };
+    }
+
+    async function fetchContents(owner, repo, path, branch) {
+        var url = 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + path;
+        if (branch) url += '?ref=' + encodeURIComponent(branch);
+        var res = await fetch(url);
+        if (!res.ok) throw new Error('GitHub API error ' + res.status + ' — is the repo public?');
+        var items = await res.json();
+        var files = [];
+        for (var item of items) {
+            if (item.type === 'file' && /\.(ya?ml|json|bsq)$/i.test(item.name)) {
+                files.push({ name: item.path, download_url: item.download_url, encrypted: /\.bsq$/i.test(item.name) });
+            } else if (item.type === 'dir') {
+                var sub = await fetchContents(owner, repo, item.path, branch);
+                files = files.concat(sub);
+            }
+        }
+        return files;
+    }
+
+    document.getElementById('btn-github-load').addEventListener('click', async function() {
+        var url = document.getElementById('github-url').value.trim();
+        if (!url) { ghAlert('Paste a GitHub URL first.', 'error'); return; }
+        var parsed = parseGithubUrl(url);
+        if (!parsed) { ghAlert('Could not parse URL — use https://github.com/user/repo format.', 'error'); return; }
+        this.textContent = 'Searching…'; this.disabled = true;
+        try {
+            ghFiles = await fetchContents(parsed.owner, parsed.repo, parsed.path, parsed.branch);
+            if (!ghFiles.length) { ghAlert('No compatible files found in that repo.', 'error'); return; }
+            var sel = document.getElementById('github-file-select');
+            sel.innerHTML = '';
+            ghFiles.forEach(function(f, i) {
+                var opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = f.name + (f.encrypted ? ' 🔒' : '');
+                sel.appendChild(opt);
+            });
+            document.getElementById('github-file-list').style.display = '';
+            document.getElementById('github-decrypt-prompt').style.display = ghFiles[0].encrypted ? '' : 'none';
+            ghAlert('Found ' + ghFiles.length + ' file' + (ghFiles.length !== 1 ? 's' : '') + '.', 'success');
+        } catch(e) { ghAlert(e.message, 'error'); }
+        finally { this.textContent = 'Browse Repo'; this.disabled = false; }
+    });
+
+    document.getElementById('github-file-select').addEventListener('change', function() {
+        var f = ghFiles[parseInt(this.value)];
+        document.getElementById('github-decrypt-prompt').style.display = f && f.encrypted ? '' : 'none';
+    });
+
+    document.getElementById('btn-github-load-file').addEventListener('click', async function() {
+        var idx = parseInt(document.getElementById('github-file-select').value);
+        var f = ghFiles[idx]; if (!f) return;
+        this.textContent = 'Loading…'; this.disabled = true;
+        try {
+            var res = await fetch(f.download_url);
+            if (!res.ok) throw new Error('Failed to fetch file');
+            var text = await res.text();
+            var data;
+            if (f.encrypted) {
+                var pwd = document.getElementById('github-decrypt-password').value;
+                if (!pwd) { ghAlert('Enter the password to decrypt this file.', 'error'); return; }
+                data = await bsqDecrypt(text, pwd);
+            } else if (/\.json$/i.test(f.name)) {
+                data = JSON.parse(text);
+            } else {
+                if (typeof jsyaml === 'undefined') {
+                    await new Promise(function(res, rej) {
+                        var s = document.createElement('script');
+                        s.src = 'https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js';
+                        s.onload = res; s.onerror = rej; document.head.appendChild(s);
+                    });
+                }
+                data = jsyaml.load(text);
+            }
+            window._registerUploadedQuiz(f.name.split('/').pop(), data);
+            ghAlert('Loaded <strong>' + escHtml(f.name) + '</strong> — ' + data.length + ' questions.', 'success');
+        } catch(e) { ghAlert('Error: ' + e.message, 'error'); }
+        finally { this.textContent = 'Load Selected File'; this.disabled = false; }
+    });
+})();
+
+// ══════════════════════════════════════════════════════════════════
+// ENCRYPT & DOWNLOAD
+// ══════════════════════════════════════════════════════════════════
+(function() {
+    var encZone  = document.getElementById('encrypt-zone');
+    var encInput = document.getElementById('encrypt-file-upload');
+    var encAlert = document.getElementById('encrypt-alert-wrap');
+    var pending  = null;
+
+    function alert2(msg, type) {
+        encAlert.innerHTML = '<div class="alert alert-' + type + '">' + msg + '</div>';
+        setTimeout(function() { encAlert.innerHTML = ''; }, 6000);
+    }
+
+    encZone.addEventListener('click', function() { encInput.click(); });
+    encZone.addEventListener('dragover', function(e) { e.preventDefault(); encZone.classList.add('dragover'); });
+    encZone.addEventListener('dragleave', function() { encZone.classList.remove('dragover'); });
+    encZone.addEventListener('drop', function(e) {
+        e.preventDefault(); encZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) setFile(e.dataTransfer.files[0]);
+    });
+    encInput.addEventListener('change', function() {
+        if (encInput.files.length) setFile(encInput.files[0]);
+        encInput.value = '';
+    });
+
+    function setFile(file) {
+        if (!/\.(ya?ml|json)$/i.test(file.name)) { alert2('Only .yml, .yaml, or .json files can be encrypted.', 'error'); return; }
+        pending = file;
+        encZone.querySelector('.upload-zone-text').textContent = file.name;
+        document.getElementById('encrypt-controls').style.display = '';
+    }
+
+    document.getElementById('btn-encrypt-download').addEventListener('click', async function() {
+        if (!pending) { alert2('Select a file first.', 'error'); return; }
+        var pwd  = document.getElementById('encrypt-password').value;
+        var pwd2 = document.getElementById('encrypt-password2').value;
+        if (!pwd)        { alert2('Enter a password.', 'error'); return; }
+        if (pwd !== pwd2) { alert2('Passwords do not match.', 'error'); return; }
+        this.textContent = 'Encrypting…'; this.disabled = true;
+        try {
+            var text = await pending.text();
+            var enc  = await bsqEncrypt(text, pwd);
+            var name = pending.name.replace(/\.(ya?ml|json)$/i, '') + '.bsq';
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([enc], { type: 'application/octet-stream' }));
+            a.download = name; a.click(); URL.revokeObjectURL(a.href);
+            alert2('Downloaded <strong>' + escHtml(name) + '</strong>', 'success');
+            document.getElementById('encrypt-password').value = '';
+            document.getElementById('encrypt-password2').value = '';
+        } catch(e) { alert2('Encryption failed: ' + e.message, 'error'); }
+        finally { this.textContent = '⬇ Encrypt & Download'; this.disabled = false; }
+    });
 })();
 
 // ══════════════════════════════════════════════════════════════════

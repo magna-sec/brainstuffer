@@ -1,17 +1,7 @@
 [
   {
-    "file": "crystal_palace.json",
-    "label": "Crystal Palace",
-    "count": 75
-  },
-  {
     "file": "generic_cyber.json",
     "label": "Generic Cyber",
     "count": 428
-  },
-  {
-    "file": "interview.json",
-    "label": "Interview",
-    "count": 100
   }
 ]
