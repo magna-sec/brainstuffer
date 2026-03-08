@@ -890,7 +890,7 @@
                 <h2>&#128279; Load from GitHub</h2>
                 <p style="color:var(--subtle);font-size:0.88rem;margin-bottom:1rem">Paste a public GitHub repo URL. BrainStuffer will find all compatible question files inside it.</p>
                 <label for="github-url">GitHub repository URL</label>
-                <input type="text" id="github-url" placeholder="https://github.com/user/repo" autocomplete="off" spellcheck="false">
+                <input type="text" id="github-url" placeholder="user/repo or https://github.com/user/repo" autocomplete="off" spellcheck="false">
                 <button class="btn btn-primary" id="btn-github-load" style="width:100%;margin-bottom:0.75rem">Browse Repo</button>
                 <div id="github-file-list" style="display:none">
                     <label>Files found</label>
@@ -1056,6 +1056,19 @@ function escHtml(s) {
     const d = document.createElement('div');
     d.textContent = s;
     return d.innerHTML;
+}
+
+// Safely parse JSON, repairing unescaped backslashes (e.g. Windows paths like C:\windows)
+function safeJsonParse(text) {
+    try {
+        return JSON.parse(text);
+    } catch(e) {
+        // Attempt to fix backslashes not followed by valid JSON escape chars
+        var fixed = text.replace(/"(?:[^"\\]|\\.)*"/g, function(m) {
+            return m.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
+        });
+        return JSON.parse(fixed);
+    }
 }
 
 // ── Page navigation ──────────────────────────────────────────────
@@ -1653,12 +1666,8 @@ function screenMelt() {
 
         const btn = document.createElement('button');
         btn.textContent = '\u2715  Stop Melt';
-        btn.style.cssText = [
-            'position:fixed;top:1rem;right:1rem;z-index:10000;',
-            'padding:.45rem 1.1rem;background:rgba(15,23,42,.92);',
-            'color:#e2e8f0;border:1px solid #475569;border-radius:8px;',
-            'cursor:pointer;font-size:.85rem;font-family:inherit;',
-        ].join('');
+        btn.className = 'btn btn-muted';
+        btn.style.cssText = 'position:fixed;top:1rem;right:1rem;z-index:10000;';
         document.documentElement.appendChild(btn);
 
         const delay = [Math.random() * 90 | 0];
@@ -1946,12 +1955,13 @@ function screenMelt() {
 // ══════════════════════════════════════════════════════════════════
 (function () {
     const words = [
-        'TCP/IP','subnet mask','OSI model','firewall','0x41414141','sudo !!',
-        'chmod 777','git blame','NULL ptr','RFC 1918','try harder','whoami',
-        'nmap -A','ROP chain','heap spray','XSS','SQLi','RTFM',
         'big brain','neurons!','knowledge!','wait what','404: skill',
-        '\u00af\\_(\u30c4)_/\u00af','oof','dunno lol','OSCP when?','CVE-????','stack smash',
-        'ping 8.8.8.8','grep -r','rm -rf ??','netcat','diff /dev/null',
+        '\u00af\\_(\u30c4)_/\u00af','oof','dunno lol','interesting!','think harder',
+        'eureka!','synapses!','remember!','learning!','aha moment',
+        'deep thoughts','brain go brrr','ponder this','wise words','almost!',
+        'so close!','think think','memory unlocked','brain cells','study more',
+        'curious?','fact check','did you know','mind blown','questions!',
+        'keep going','flashcard!','revision!','trivia time','knowledge++',
     ];
 
     const logo = document.getElementById('logo-link');
@@ -2199,7 +2209,7 @@ function showOverlay(html, icon, duration) {
             var text = e.target.result;
             if (isJson) {
                 try {
-                    var data = JSON.parse(text);
+                    var data = safeJsonParse(text);
                     registerUploadedQuiz(name, data);
                 } catch (err) {
                     showUploadAlert('Invalid JSON: ' + err.message, 'error');
@@ -2308,7 +2318,7 @@ async function bsqDecrypt(ciphertext, password) {
     var pt  = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: bsqB64Dec(obj.iv) }, key, bsqB64Dec(obj.data));
     var text = new TextDecoder().decode(pt);
     var data;
-    try { data = JSON.parse(text); } catch(e) {
+    try { data = safeJsonParse(text); } catch(e) {
         if (typeof jsyaml === 'undefined') {
             await new Promise(function(res, rej) {
                 var s = document.createElement('script');
@@ -2334,8 +2344,17 @@ async function bsqDecrypt(ciphertext, password) {
         setTimeout(function() { w.innerHTML = ''; }, 7000);
     }
 
-    function parseGithubUrl(url) {
-        var m = url.trim().match(/github\.com\/([^/]+)\/([^/]+)(?:\/tree\/([^/]+)(?:\/(.+))?)?/);
+    var SELF_REPO = 'magna-sec/brainstuffer';
+
+    function parseGithubUrl(raw) {
+        var url = raw.trim();
+        // "self" shortcut — loads this repo
+        if (url.toLowerCase() === 'self') url = 'https://github.com/' + SELF_REPO;
+        // Allow "user/repo" shorthand
+        if (/^[^/\s]+\/[^/\s]+$/.test(url)) url = 'https://github.com/' + url;
+        // Allow github.com/... without scheme
+        if (/^github\.com\//.test(url)) url = 'https://' + url;
+        var m = url.match(/github\.com\/([^/]+)\/([^/?\s]+)(?:\/tree\/([^/\s]+)(?:\/(.+))?)?/);
         if (!m) return null;
         return { owner: m[1], repo: m[2].replace(/\.git$/, ''), branch: m[3] || '', path: m[4] || '' };
     }
@@ -2401,7 +2420,7 @@ async function bsqDecrypt(ciphertext, password) {
                 if (!pwd) { ghAlert('Enter the password to decrypt this file.', 'error'); return; }
                 data = await bsqDecrypt(text, pwd);
             } else if (/\.json$/i.test(f.name)) {
-                data = JSON.parse(text);
+                data = safeJsonParse(text);
             } else {
                 if (typeof jsyaml === 'undefined') {
                     await new Promise(function(res, rej) {
