@@ -8,7 +8,7 @@ A client-side flashcard quiz app hosted on GitHub Pages. Load multiple-choice qu
 
 ## Live Site
 
-**https://magna-sec.github.io/brainstuffer/**
+**https://brainstuffer.co.uk**
 
 ## Features
 
