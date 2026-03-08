@@ -695,6 +695,28 @@
         .upload-zone-text strong { color: var(--accent); }
         .upload-zone-hint { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; }
 
+        /* ── Decrypt prompt ─────────────────────────────────────── */
+        .decrypt-prompt {
+            margin-top: 0.85rem;
+            padding: 1rem 1.1rem;
+            background: var(--bg2);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            box-shadow: 0 0 14px var(--glow);
+        }
+        .decrypt-prompt-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 0.65rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .decrypt-prompt input[type="password"] { margin-bottom: 0.65rem; }
+
         .home-btn-row {
             display: flex;
             gap: 0.65rem;
@@ -857,10 +879,10 @@
                     <div class="upload-zone-text">Click to browse or <strong>drag &amp; drop</strong></div>
                     <div class="upload-zone-hint">.yml, .yaml, .json, or .bsq (encrypted)</div>
                 </div>
-                <div id="decrypt-prompt" style="display:none;margin-top:0.75rem">
-                    <label for="decrypt-password">Password to decrypt</label>
-                    <input type="password" id="decrypt-password" placeholder="Enter password…" autocomplete="off">
-                    <button class="btn btn-primary" id="btn-decrypt-file" style="width:100%">Decrypt &amp; Load</button>
+                <div id="decrypt-prompt" class="decrypt-prompt" style="display:none">
+                    <div class="decrypt-prompt-title">&#128274; Encrypted file detected</div>
+                    <input type="password" id="decrypt-password" placeholder="Enter password to decrypt…" autocomplete="off">
+                    <button class="btn btn-primary" id="btn-decrypt-file" style="width:100%">Unlock &amp; Load</button>
                 </div>
             </div>
 
@@ -873,9 +895,9 @@
                 <div id="github-file-list" style="display:none">
                     <label>Files found</label>
                     <select id="github-file-select"></select>
-                    <div id="github-decrypt-prompt" style="display:none;margin-top:0.75rem">
-                        <label for="github-decrypt-password">Password to decrypt</label>
-                        <input type="password" id="github-decrypt-password" placeholder="Enter password…" autocomplete="off">
+                    <div id="github-decrypt-prompt" class="decrypt-prompt" style="display:none">
+                        <div class="decrypt-prompt-title">&#128274; Encrypted file detected</div>
+                        <input type="password" id="github-decrypt-password" placeholder="Enter password to decrypt…" autocomplete="off">
                     </div>
                     <button class="btn btn-primary" id="btn-github-load-file" style="width:100%;margin-top:0.75rem">Load Selected File</button>
                 </div>
