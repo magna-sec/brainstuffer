@@ -1,0 +1,50 @@
+I have a quiz file I need encrypting into a .bsq format for use with my BrainStuffer website (brainstuffer.co.uk).
+
+Please run the following Python code to encrypt it. The cryptography package is required — install it first with `pip install cryptography` if needed.
+
+The encryption uses AES-256-GCM with PBKDF2-SHA256 key derivation (200,000 iterations, random 16-byte salt, random 12-byte IV). The output is a JSON file with the keys: v, salt, iv, data — all binary fields base64 encoded.
+
+```python
+import json, os, base64
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+def encrypt_bsq(input_file, output_file, password):
+    with open(input_file, encoding='utf-8') as f:
+        plaintext = f.read()
+
+    salt = os.urandom(16)
+    iv   = os.urandom(12)
+    kdf  = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=200000)
+    key  = kdf.derive(password.encode())
+    ct   = AESGCM(key).encrypt(iv, plaintext.encode(), None)
+
+    result = json.dumps({
+        'v':    1,
+        'salt': base64.b64encode(salt).decode(),
+        'iv':   base64.b64encode(iv).decode(),
+        'data': base64.b64encode(ct).decode()
+    })
+
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(result)
+
+    print(f'Done: {output_file}')
+
+encrypt_bsq(
+    input_file  = '[INPUT FILE]',
+    output_file = '[OUTPUT FILE]',
+    password    = '[PASSWORD]'
+)
+```
+
+Please:
+1. Replace [INPUT FILE] with the path to my file
+2. Replace [OUTPUT FILE] with the same name but .bsq extension
+3. Replace [PASSWORD] with my password
+4. Run it and confirm the output file was created
+
+Here are my details:
+- Input file:
+- Password:
