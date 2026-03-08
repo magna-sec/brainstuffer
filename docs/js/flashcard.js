@@ -44,9 +44,6 @@ function fcShowCard() {
     // Delay back-face update so it's safely hidden before content changes
     setTimeout(function() {
         document.getElementById('fc-answer-text').textContent = correctAns;
-        const others = (q.answers || []).filter(a => String(a) !== correctAns);
-        document.getElementById('fc-other-answers').textContent =
-            others.length ? 'Other options: ' + others.join(' \u00b7 ') : '';
         card.style.transition = '';
     }, 120);
 

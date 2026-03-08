@@ -815,6 +815,8 @@ body.quiz-mode .brain-health {
 .fc-card.flipped {
     transform: rotateY(180deg);
 }
+/* Explicitly hide front contents when flipped — belt-and-braces for browsers that mishandle backface-visibility */
+.fc-card.flipped .fc-front { visibility: hidden; }
 .fc-face {
     position: absolute;
     width: 100%;
