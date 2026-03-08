@@ -1,0 +1,752 @@
+[
+  {
+    "question": "Who wrote 'Pride and Prejudice'?",
+    "answers": [
+      "Jane Austen",
+      "Charlotte Brontë",
+      "George Eliot",
+      "Emily Brontë"
+    ],
+    "correct": "Jane Austen"
+  },
+  {
+    "question": "Which novel opens with 'Call me Ishmael'?",
+    "answers": [
+      "Moby-Dick",
+      "Billy Budd",
+      "The Old Man and the Sea",
+      "Lord Jim"
+    ],
+    "correct": "Moby-Dick"
+  },
+  {
+    "question": "Who wrote 'Don Quixote'?",
+    "answers": [
+      "Miguel de Cervantes",
+      "Lope de Vega",
+      "Francisco de Quevedo",
+      "Calderón de la Barca"
+    ],
+    "correct": "Miguel de Cervantes"
+  },
+  {
+    "question": "In which year was 'Hamlet' believed to have been written?",
+    "answers": [
+      "1600–1601",
+      "1580–1581",
+      "1620–1621",
+      "1590–1591"
+    ],
+    "correct": "1600–1601"
+  },
+  {
+    "question": "Who wrote 'The Divine Comedy'?",
+    "answers": [
+      "Dante Alighieri",
+      "Francesco Petrarch",
+      "Giovanni Boccaccio",
+      "Virgil"
+    ],
+    "correct": "Dante Alighieri"
+  },
+  {
+    "question": "Which author created the character Sherlock Holmes?",
+    "answers": [
+      "Arthur Conan Doyle",
+      "Wilkie Collins",
+      "Edgar Allan Poe",
+      "G.K. Chesterton"
+    ],
+    "correct": "Arthur Conan Doyle"
+  },
+  {
+    "question": "Who wrote 'War and Peace'?",
+    "answers": [
+      "Leo Tolstoy",
+      "Fyodor Dostoevsky",
+      "Ivan Turgenev",
+      "Anton Chekhov"
+    ],
+    "correct": "Leo Tolstoy"
+  },
+  {
+    "question": "Which novel features the character Atticus Finch?",
+    "answers": [
+      "To Kill a Mockingbird",
+      "Of Mice and Men",
+      "The Grapes of Wrath",
+      "East of Eden"
+    ],
+    "correct": "To Kill a Mockingbird"
+  },
+  {
+    "question": "Who wrote 'Ulysses' (1922)?",
+    "answers": [
+      "James Joyce",
+      "Virginia Woolf",
+      "T.S. Eliot",
+      "D.H. Lawrence"
+    ],
+    "correct": "James Joyce"
+  },
+  {
+    "question": "Who wrote 'Crime and Punishment'?",
+    "answers": [
+      "Fyodor Dostoevsky",
+      "Leo Tolstoy",
+      "Nikolai Gogol",
+      "Alexander Pushkin"
+    ],
+    "correct": "Fyodor Dostoevsky"
+  },
+  {
+    "question": "Which literary movement did William Wordsworth and Samuel Taylor Coleridge belong to?",
+    "answers": [
+      "Romanticism",
+      "Realism",
+      "Modernism",
+      "Naturalism"
+    ],
+    "correct": "Romanticism"
+  },
+  {
+    "question": "Who wrote 'The Canterbury Tales'?",
+    "answers": [
+      "Geoffrey Chaucer",
+      "John Milton",
+      "Edmund Spenser",
+      "Sir Philip Sidney"
+    ],
+    "correct": "Geoffrey Chaucer"
+  },
+  {
+    "question": "What is the first name of Mr. Darcy in 'Pride and Prejudice'?",
+    "answers": [
+      "Fitzwilliam",
+      "Edward",
+      "George",
+      "William"
+    ],
+    "correct": "Fitzwilliam"
+  },
+  {
+    "question": "Who wrote 'Madame Bovary'?",
+    "answers": [
+      "Gustave Flaubert",
+      "Émile Zola",
+      "Victor Hugo",
+      "Honoré de Balzac"
+    ],
+    "correct": "Gustave Flaubert"
+  },
+  {
+    "question": "Which Shakespeare play features the character Iago?",
+    "answers": [
+      "Othello",
+      "Macbeth",
+      "King Lear",
+      "Hamlet"
+    ],
+    "correct": "Othello"
+  },
+  {
+    "question": "Who wrote 'One Hundred Years of Solitude'?",
+    "answers": [
+      "Gabriel García Márquez",
+      "Mario Vargas Llosa",
+      "Jorge Luis Borges",
+      "Pablo Neruda"
+    ],
+    "correct": "Gabriel García Márquez"
+  },
+  {
+    "question": "Which novel by Charles Dickens features the character Ebenezer Scrooge?",
+    "answers": [
+      "A Christmas Carol",
+      "Great Expectations",
+      "Oliver Twist",
+      "David Copperfield"
+    ],
+    "correct": "A Christmas Carol"
+  },
+  {
+    "question": "Who wrote 'Middlemarch'?",
+    "answers": [
+      "George Eliot",
+      "Jane Austen",
+      "Elizabeth Gaskell",
+      "Anthony Trollope"
+    ],
+    "correct": "George Eliot"
+  },
+  {
+    "question": "In which country was Franz Kafka born?",
+    "answers": [
+      "Bohemia (now Czech Republic)",
+      "Austria",
+      "Germany",
+      "Hungary"
+    ],
+    "correct": "Bohemia (now Czech Republic)"
+  },
+  {
+    "question": "Who wrote 'The Brothers Karamazov'?",
+    "answers": [
+      "Fyodor Dostoevsky",
+      "Leo Tolstoy",
+      "Ivan Turgenev",
+      "Maxim Gorky"
+    ],
+    "correct": "Fyodor Dostoevsky"
+  },
+  {
+    "question": "Which poet wrote 'The Waste Land'?",
+    "answers": [
+      "T.S. Eliot",
+      "Ezra Pound",
+      "W.B. Yeats",
+      "Wallace Stevens"
+    ],
+    "correct": "T.S. Eliot"
+  },
+  {
+    "question": "Who wrote 'Anna Karenina'?",
+    "answers": [
+      "Leo Tolstoy",
+      "Fyodor Dostoevsky",
+      "Ivan Turgenev",
+      "Boris Pasternak"
+    ],
+    "correct": "Leo Tolstoy"
+  },
+  {
+    "question": "Which of these novels was written by Herman Melville?",
+    "answers": [
+      "Moby-Dick",
+      "The Scarlet Letter",
+      "The Last of the Mohicans",
+      "Walden"
+    ],
+    "correct": "Moby-Dick"
+  },
+  {
+    "question": "Who wrote 'Beloved'?",
+    "answers": [
+      "Toni Morrison",
+      "Alice Walker",
+      "Maya Angelou",
+      "Zora Neale Hurston"
+    ],
+    "correct": "Toni Morrison"
+  },
+  {
+    "question": "Which literary period is associated with John Dryden and Alexander Pope?",
+    "answers": [
+      "Neoclassicism",
+      "Romanticism",
+      "Baroque",
+      "Enlightenment Realism"
+    ],
+    "correct": "Neoclassicism"
+  },
+  {
+    "question": "Who wrote 'The Picture of Dorian Gray'?",
+    "answers": [
+      "Oscar Wilde",
+      "Robert Louis Stevenson",
+      "Bram Stoker",
+      "Henry James"
+    ],
+    "correct": "Oscar Wilde"
+  },
+  {
+    "question": "Which Shakespeare play contains the line 'To be, or not to be'?",
+    "answers": [
+      "Hamlet",
+      "Macbeth",
+      "Othello",
+      "King Lear"
+    ],
+    "correct": "Hamlet"
+  },
+  {
+    "question": "Who wrote 'Frankenstein'?",
+    "answers": [
+      "Mary Shelley",
+      "Percy Bysshe Shelley",
+      "Lord Byron",
+      "Ann Radcliffe"
+    ],
+    "correct": "Mary Shelley"
+  },
+  {
+    "question": "Which novel by F. Scott Fitzgerald is set in the Jazz Age?",
+    "answers": [
+      "The Great Gatsby",
+      "Tender is the Night",
+      "This Side of Paradise",
+      "The Beautiful and Damned"
+    ],
+    "correct": "The Great Gatsby"
+  },
+  {
+    "question": "Who wrote 'Wuthering Heights'?",
+    "answers": [
+      "Emily Brontë",
+      "Charlotte Brontë",
+      "Anne Brontë",
+      "George Eliot"
+    ],
+    "correct": "Emily Brontë"
+  },
+  {
+    "question": "Which author wrote under the pen name 'George Orwell'?",
+    "answers": [
+      "Eric Arthur Blair",
+      "Herbert George Wells",
+      "Aldous Leonard Huxley",
+      "Jerome Klapka Jerome"
+    ],
+    "correct": "Eric Arthur Blair"
+  },
+  {
+    "question": "Who wrote 'The Iliad' and 'The Odyssey'?",
+    "answers": [
+      "Homer",
+      "Virgil",
+      "Sophocles",
+      "Hesiod"
+    ],
+    "correct": "Homer"
+  },
+  {
+    "question": "Which novel by Ernest Hemingway is set during the Spanish Civil War?",
+    "answers": [
+      "For Whom the Bell Tolls",
+      "A Farewell to Arms",
+      "The Sun Also Rises",
+      "Fiesta"
+    ],
+    "correct": "For Whom the Bell Tolls"
+  },
+  {
+    "question": "Who wrote 'The Stranger' (L'Étranger)?",
+    "answers": [
+      "Albert Camus",
+      "Jean-Paul Sartre",
+      "Simone de Beauvoir",
+      "André Gide"
+    ],
+    "correct": "Albert Camus"
+  },
+  {
+    "question": "Which literary movement is associated with stream-of-consciousness writing?",
+    "answers": [
+      "Modernism",
+      "Realism",
+      "Naturalism",
+      "Romanticism"
+    ],
+    "correct": "Modernism"
+  },
+  {
+    "question": "Who wrote 'Gulliver's Travels'?",
+    "answers": [
+      "Jonathan Swift",
+      "Daniel Defoe",
+      "Henry Fielding",
+      "Samuel Richardson"
+    ],
+    "correct": "Jonathan Swift"
+  },
+  {
+    "question": "Which Dickens novel features the character Miss Havisham?",
+    "answers": [
+      "Great Expectations",
+      "Bleak House",
+      "Dombey and Son",
+      "Little Dorrit"
+    ],
+    "correct": "Great Expectations"
+  },
+  {
+    "question": "Who wrote 'The Aeneid'?",
+    "answers": [
+      "Virgil",
+      "Homer",
+      "Ovid",
+      "Horace"
+    ],
+    "correct": "Virgil"
+  },
+  {
+    "question": "Which of these is a novel by Virginia Woolf?",
+    "answers": [
+      "Mrs Dalloway",
+      "The Mill on the Floss",
+      "Tess of the d'Urbervilles",
+      "The Way of All Flesh"
+    ],
+    "correct": "Mrs Dalloway"
+  },
+  {
+    "question": "Who wrote 'In Search of Lost Time' (À la recherche du temps perdu)?",
+    "answers": [
+      "Marcel Proust",
+      "Gustave Flaubert",
+      "Émile Zola",
+      "André Gide"
+    ],
+    "correct": "Marcel Proust"
+  },
+  {
+    "question": "Which poet wrote 'Ode to a Nightingale'?",
+    "answers": [
+      "John Keats",
+      "Percy Bysshe Shelley",
+      "Lord Byron",
+      "William Blake"
+    ],
+    "correct": "John Keats"
+  },
+  {
+    "question": "Who wrote 'Jane Eyre'?",
+    "answers": [
+      "Charlotte Brontë",
+      "Emily Brontë",
+      "George Eliot",
+      "Elizabeth Gaskell"
+    ],
+    "correct": "Charlotte Brontë"
+  },
+  {
+    "question": "Which ancient Greek playwright wrote 'Oedipus Rex'?",
+    "answers": [
+      "Sophocles",
+      "Aeschylus",
+      "Euripides",
+      "Aristophanes"
+    ],
+    "correct": "Sophocles"
+  },
+  {
+    "question": "Who wrote '1984'?",
+    "answers": [
+      "George Orwell",
+      "Aldous Huxley",
+      "H.G. Wells",
+      "Ray Bradbury"
+    ],
+    "correct": "George Orwell"
+  },
+  {
+    "question": "Which author wrote 'The Old Man and the Sea'?",
+    "answers": [
+      "Ernest Hemingway",
+      "John Steinbeck",
+      "William Faulkner",
+      "F. Scott Fitzgerald"
+    ],
+    "correct": "Ernest Hemingway"
+  },
+  {
+    "question": "Who wrote 'Paradise Lost'?",
+    "answers": [
+      "John Milton",
+      "John Donne",
+      "Edmund Spenser",
+      "Francis Bacon"
+    ],
+    "correct": "John Milton"
+  },
+  {
+    "question": "Which novel by Tolstoy is considered one of the first great novels?",
+    "answers": [
+      "War and Peace",
+      "Anna Karenina",
+      "Resurrection",
+      "The Death of Ivan Ilyich"
+    ],
+    "correct": "War and Peace"
+  },
+  {
+    "question": "Who wrote 'The Metamorphosis'?",
+    "answers": [
+      "Franz Kafka",
+      "Thomas Mann",
+      "Hermann Hesse",
+      "Stefan Zweig"
+    ],
+    "correct": "Franz Kafka"
+  },
+  {
+    "question": "Which American author wrote 'Leaves of Grass'?",
+    "answers": [
+      "Walt Whitman",
+      "Ralph Waldo Emerson",
+      "Henry David Thoreau",
+      "Emily Dickinson"
+    ],
+    "correct": "Walt Whitman"
+  },
+  {
+    "question": "Who wrote 'Sense and Sensibility'?",
+    "answers": [
+      "Jane Austen",
+      "George Eliot",
+      "Elizabeth Gaskell",
+      "Frances Burney"
+    ],
+    "correct": "Jane Austen"
+  },
+  {
+    "question": "Which Shakespeare play features witches and a Scottish king?",
+    "answers": [
+      "Macbeth",
+      "Hamlet",
+      "King Lear",
+      "Othello"
+    ],
+    "correct": "Macbeth"
+  },
+  {
+    "question": "Who wrote 'The Count of Monte Cristo'?",
+    "answers": [
+      "Alexandre Dumas",
+      "Victor Hugo",
+      "Honoré de Balzac",
+      "Stendhal"
+    ],
+    "correct": "Alexandre Dumas"
+  },
+  {
+    "question": "Which novel by Dostoevsky features the character Prince Myshkin?",
+    "answers": [
+      "The Idiot",
+      "The Brothers Karamazov",
+      "The Possessed",
+      "Crime and Punishment"
+    ],
+    "correct": "The Idiot"
+  },
+  {
+    "question": "Who wrote 'Invisible Man' (1952)?",
+    "answers": [
+      "Ralph Ellison",
+      "Richard Wright",
+      "James Baldwin",
+      "Langston Hughes"
+    ],
+    "correct": "Ralph Ellison"
+  },
+  {
+    "question": "Which literary movement did Émile Zola champion?",
+    "answers": [
+      "Naturalism",
+      "Symbolism",
+      "Realism",
+      "Surrealism"
+    ],
+    "correct": "Naturalism"
+  },
+  {
+    "question": "Who wrote 'Catch-22'?",
+    "answers": [
+      "Joseph Heller",
+      "Kurt Vonnegut",
+      "Ken Kesey",
+      "Norman Mailer"
+    ],
+    "correct": "Joseph Heller"
+  },
+  {
+    "question": "Which poet wrote 'The Road Not Taken'?",
+    "answers": [
+      "Robert Frost",
+      "Carl Sandburg",
+      "Edwin Arlington Robinson",
+      "Edgar Lee Masters"
+    ],
+    "correct": "Robert Frost"
+  },
+  {
+    "question": "Who wrote 'To the Lighthouse'?",
+    "answers": [
+      "Virginia Woolf",
+      "Katherine Mansfield",
+      "Dorothy Richardson",
+      "May Sinclair"
+    ],
+    "correct": "Virginia Woolf"
+  },
+  {
+    "question": "Which novel features the character Jay Gatsby?",
+    "answers": [
+      "The Great Gatsby",
+      "Tender is the Night",
+      "This Side of Paradise",
+      "The Sun Also Rises"
+    ],
+    "correct": "The Great Gatsby"
+  },
+  {
+    "question": "Who wrote 'Les Misérables'?",
+    "answers": [
+      "Victor Hugo",
+      "Alexandre Dumas",
+      "Gustave Flaubert",
+      "Honoré de Balzac"
+    ],
+    "correct": "Victor Hugo"
+  },
+  {
+    "question": "Which author created the character Hercule Poirot?",
+    "answers": [
+      "Agatha Christie",
+      "Dorothy L. Sayers",
+      "Ngaio Marsh",
+      "Margery Allingham"
+    ],
+    "correct": "Agatha Christie"
+  },
+  {
+    "question": "Who wrote 'Brave New World'?",
+    "answers": [
+      "Aldous Huxley",
+      "George Orwell",
+      "H.G. Wells",
+      "Evelyn Waugh"
+    ],
+    "correct": "Aldous Huxley"
+  },
+  {
+    "question": "Which poet wrote 'The Raven'?",
+    "answers": [
+      "Edgar Allan Poe",
+      "Walt Whitman",
+      "Henry Wadsworth Longfellow",
+      "Oliver Wendell Holmes"
+    ],
+    "correct": "Edgar Allan Poe"
+  },
+  {
+    "question": "Who wrote 'The Sun Also Rises'?",
+    "answers": [
+      "Ernest Hemingway",
+      "F. Scott Fitzgerald",
+      "John Dos Passos",
+      "Sinclair Lewis"
+    ],
+    "correct": "Ernest Hemingway"
+  },
+  {
+    "question": "Which novel by James Joyce is set over a single day in Dublin?",
+    "answers": [
+      "Ulysses",
+      "Dubliners",
+      "A Portrait of the Artist as a Young Man",
+      "Finnegans Wake"
+    ],
+    "correct": "Ulysses"
+  },
+  {
+    "question": "Who wrote 'The Trial' (Der Proceß)?",
+    "answers": [
+      "Franz Kafka",
+      "Thomas Mann",
+      "Hermann Hesse",
+      "Robert Musil"
+    ],
+    "correct": "Franz Kafka"
+  },
+  {
+    "question": "Which Greek poet wrote the 'Theogony'?",
+    "answers": [
+      "Hesiod",
+      "Homer",
+      "Pindar",
+      "Sappho"
+    ],
+    "correct": "Hesiod"
+  },
+  {
+    "question": "Who wrote 'Heart of Darkness'?",
+    "answers": [
+      "Joseph Conrad",
+      "Rudyard Kipling",
+      "H. Rider Haggard",
+      "Somerset Maugham"
+    ],
+    "correct": "Joseph Conrad"
+  },
+  {
+    "question": "Which of these is NOT a play by Anton Chekhov?",
+    "answers": [
+      "The Wild Duck",
+      "The Cherry Orchard",
+      "Three Sisters",
+      "Uncle Vanya"
+    ],
+    "correct": "The Wild Duck"
+  },
+  {
+    "question": "Who wrote 'The Grapes of Wrath'?",
+    "answers": [
+      "John Steinbeck",
+      "William Faulkner",
+      "Theodore Dreiser",
+      "Sinclair Lewis"
+    ],
+    "correct": "John Steinbeck"
+  },
+  {
+    "question": "Which author wrote 'Tess of the d'Urbervilles'?",
+    "answers": [
+      "Thomas Hardy",
+      "George Meredith",
+      "George Gissing",
+      "Anthony Trollope"
+    ],
+    "correct": "Thomas Hardy"
+  },
+  {
+    "question": "Who wrote 'Lolita'?",
+    "answers": [
+      "Vladimir Nabokov",
+      "Henry Miller",
+      "John Updike",
+      "Philip Roth"
+    ],
+    "correct": "Vladimir Nabokov"
+  },
+  {
+    "question": "Which Shakespeare comedy features the line 'All the world's a stage'?",
+    "answers": [
+      "As You Like It",
+      "A Midsummer Night's Dream",
+      "Twelfth Night",
+      "Much Ado About Nothing"
+    ],
+    "correct": "As You Like It"
+  },
+  {
+    "question": "Who wrote 'The Sound and the Fury'?",
+    "answers": [
+      "William Faulkner",
+      "John Steinbeck",
+      "Ernest Hemingway",
+      "Sherwood Anderson"
+    ],
+    "correct": "William Faulkner"
+  },
+  {
+    "question": "Which novel by Gabriel García Márquez uses magical realism most famously?",
+    "answers": [
+      "One Hundred Years of Solitude",
+      "Love in the Time of Cholera",
+      "Chronicle of a Death Foretold",
+      "The Autumn of the Patriarch"
+    ],
+    "correct": "One Hundred Years of Solitude"
+  }
+]

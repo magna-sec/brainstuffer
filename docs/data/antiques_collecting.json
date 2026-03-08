@@ -1,0 +1,702 @@
+[
+  {
+    "question": "What period is associated with cabriole legs and ornate carvings in furniture?",
+    "answers": [
+      "Queen Anne and Chippendale",
+      "Arts and Crafts",
+      "Bauhaus",
+      "Art Deco"
+    ],
+    "correct": "Queen Anne and Chippendale"
+  },
+  {
+    "question": "What does the Meissen mark look like on porcelain?",
+    "answers": [
+      "Two crossed blue swords",
+      "A crown with initials",
+      "A blue lion rampant",
+      "A star with letter M"
+    ],
+    "correct": "Two crossed blue swords"
+  },
+  {
+    "question": "What is hallmarking on silver?",
+    "answers": [
+      "A series of official marks guaranteeing silver content and origin",
+      "A maker's signature",
+      "A decorative engraving",
+      "An owner's monogram"
+    ],
+    "correct": "A series of official marks guaranteeing silver content and origin"
+  },
+  {
+    "question": "Which auction house is the oldest in the world?",
+    "answers": [
+      "Stockholms Auktionsverk (1674)",
+      "Sotheby's (1744)",
+      "Christie's (1766)",
+      "Bonhams (1793)"
+    ],
+    "correct": "Stockholms Auktionsverk (1674)"
+  },
+  {
+    "question": "What is Satsuma ware?",
+    "answers": [
+      "Japanese pottery with cream crackled glaze decorated with enamel and gold",
+      "Chinese blue and white porcelain",
+      "Korean celadon ceramics",
+      "Thai terracotta pottery"
+    ],
+    "correct": "Japanese pottery with cream crackled glaze decorated with enamel and gold"
+  },
+  {
+    "question": "What does 'patina' refer to in antiques?",
+    "answers": [
+      "A surface layer developed over time through aging and use",
+      "A type of varnish applied to furniture",
+      "The original paint on antiques",
+      "A decorative inlay technique"
+    ],
+    "correct": "A surface layer developed over time through aging and use"
+  },
+  {
+    "question": "Which English furniture maker is associated with the Rococo style in the 18th century?",
+    "answers": [
+      "Thomas Chippendale",
+      "George Hepplewhite",
+      "Thomas Sheraton",
+      "Robert Adam"
+    ],
+    "correct": "Thomas Chippendale"
+  },
+  {
+    "question": "What is a 'marriage' in antique collecting terminology?",
+    "answers": [
+      "Two pieces of furniture joined together that were not originally made as a pair",
+      "A piece passed down through a family",
+      "A piece restored with original materials",
+      "A documented provenance"
+    ],
+    "correct": "Two pieces of furniture joined together that were not originally made as a pair"
+  },
+  {
+    "question": "What is Wedgwood Jasperware?",
+    "answers": [
+      "Unglazed stoneware with colored body and white relief decoration",
+      "Blue and white transfer-printed pottery",
+      "Bone china with gilt decoration",
+      "Salt-glaze stoneware"
+    ],
+    "correct": "Unglazed stoneware with colored body and white relief decoration"
+  },
+  {
+    "question": "What is the lion passant hallmark on British silver?",
+    "answers": [
+      "A guarantee of sterling silver (92.5% purity)",
+      "A mark indicating London origin",
+      "A date letter",
+      "A maker's mark"
+    ],
+    "correct": "A guarantee of sterling silver (92.5% purity)"
+  },
+  {
+    "question": "Which furniture style features straight lines, tapered legs, and classical motifs?",
+    "answers": [
+      "Neoclassical (Hepplewhite/Sheraton)",
+      "Baroque",
+      "Rococo",
+      "Gothic Revival"
+    ],
+    "correct": "Neoclassical (Hepplewhite/Sheraton)"
+  },
+  {
+    "question": "What is Art Nouveau characterized by?",
+    "answers": [
+      "Organic, flowing lines inspired by natural forms",
+      "Geometric, angular designs",
+      "Classical Greek and Roman motifs",
+      "Industrial materials and modernism"
+    ],
+    "correct": "Organic, flowing lines inspired by natural forms"
+  },
+  {
+    "question": "What does 'sterling silver' mean?",
+    "answers": [
+      "92.5% pure silver with 7.5% alloy (usually copper)",
+      "99.9% pure silver",
+      "Silver plated on a base metal",
+      "80% silver"
+    ],
+    "correct": "92.5% pure silver with 7.5% alloy (usually copper)"
+  },
+  {
+    "question": "What is a majolica pottery?",
+    "answers": [
+      "Tin-glazed earthenware with colorful opaque decoration",
+      "Unglazed stoneware",
+      "Porcelain with blue underglaze",
+      "Salt-fired stoneware"
+    ],
+    "correct": "Tin-glazed earthenware with colorful opaque decoration"
+  },
+  {
+    "question": "Which famous collection of antiquities is housed in the British Museum?",
+    "answers": [
+      "The Elgin Marbles (Parthenon sculptures)",
+      "The Rosetta Stone (also British Museum)",
+      "The Elgin Marbles and Rosetta Stone are both there",
+      "The Terracotta Army"
+    ],
+    "correct": "The Elgin Marbles and Rosetta Stone are both there"
+  },
+  {
+    "question": "What is a commode in antique furniture?",
+    "answers": [
+      "A chest of drawers or low cabinet, originally a French form",
+      "A toilet",
+      "A writing desk",
+      "A dressing table"
+    ],
+    "correct": "A chest of drawers or low cabinet, originally a French form"
+  },
+  {
+    "question": "What is ormolu?",
+    "answers": [
+      "Gilded bronze or brass used decoratively on furniture",
+      "A type of marble inlay",
+      "A gilded porcelain technique",
+      "A lacquer finish from Asia"
+    ],
+    "correct": "Gilded bronze or brass used decoratively on furniture"
+  },
+  {
+    "question": "Which pottery company produced 'Blue Willow' pattern?",
+    "answers": [
+      "Spode (popularized it, c.1790)",
+      "Wedgwood",
+      "Royal Doulton",
+      "Minton"
+    ],
+    "correct": "Spode (popularized it, c.1790)"
+  },
+  {
+    "question": "What is a 'sleeper' in antique auction terminology?",
+    "answers": [
+      "An undervalued item that sells below its true worth",
+      "A piece hidden in storage for decades",
+      "An item with hidden damage",
+      "A reproduction piece"
+    ],
+    "correct": "An undervalued item that sells below its true worth"
+  },
+  {
+    "question": "What is transfer printing in ceramics?",
+    "answers": [
+      "Applying a design from engraved copper plate via tissue paper to pottery",
+      "Hand painting with a brush",
+      "Stenciling a design",
+      "Screen printing on clay"
+    ],
+    "correct": "Applying a design from engraved copper plate via tissue paper to pottery"
+  },
+  {
+    "question": "Which English pottery town is famous for its ceramic industry?",
+    "answers": [
+      "Stoke-on-Trent",
+      "Coventry",
+      "Birmingham",
+      "Sheffield"
+    ],
+    "correct": "Stoke-on-Trent"
+  },
+  {
+    "question": "What is marquetry in furniture?",
+    "answers": [
+      "Decorative inlay of thin pieces of wood, ivory, or other materials",
+      "A type of wood carving",
+      "A painting on wood",
+      "A brass inlay technique"
+    ],
+    "correct": "Decorative inlay of thin pieces of wood, ivory, or other materials"
+  },
+  {
+    "question": "What does 'provenance' mean in the art and antiques world?",
+    "answers": [
+      "The documented history of ownership of an object",
+      "The geographic origin of materials",
+      "The maker's certificate",
+      "The restoration history"
+    ],
+    "correct": "The documented history of ownership of an object"
+  },
+  {
+    "question": "What is cloisonne enamel?",
+    "answers": [
+      "Enamel work using fine wire partitions to separate different colors",
+      "Painted enamel on metal",
+      "Guilloche enamel on gold",
+      "Champlevé enamel with sunken cells"
+    ],
+    "correct": "Enamel work using fine wire partitions to separate different colors"
+  },
+  {
+    "question": "Which American auction house is headquartered in New York?",
+    "answers": [
+      "Sotheby's and Christie's both have major New York operations",
+      "Bonhams",
+      "Skinner",
+      "Heritage Auctions"
+    ],
+    "correct": "Sotheby's and Christie's both have major New York operations"
+  },
+  {
+    "question": "What is Tiffany glass associated with?",
+    "answers": [
+      "Art Nouveau stained glass lamps and windows by Louis Comfort Tiffany",
+      "Cut crystal glassware",
+      "Bohemian colored glass",
+      "Venetian blown glass"
+    ],
+    "correct": "Art Nouveau stained glass lamps and windows by Louis Comfort Tiffany"
+  },
+  {
+    "question": "What is a tallboy in antique furniture?",
+    "answers": [
+      "A tall chest of drawers in two sections",
+      "A grandfather clock",
+      "A tall narrow cabinet",
+      "A high-backed chair"
+    ],
+    "correct": "A tall chest of drawers in two sections"
+  },
+  {
+    "question": "What is the Staffordshire figurine?",
+    "answers": [
+      "Earthenware figures made in the Staffordshire Potteries from the late 18th century onward",
+      "Fine porcelain figures from Royal Doulton",
+      "Ceramic animals from the Royal Worcester factory",
+      "Bisque porcelain figurines"
+    ],
+    "correct": "Earthenware figures made in the Staffordshire Potteries from the late 18th century onward"
+  },
+  {
+    "question": "What is coin silver in American silversmithing?",
+    "answers": [
+      "Silver made from melted coins at approximately 90% purity",
+      "Sterling silver (92.5%)",
+      "Fine silver (99.9%)",
+      "Silver plate"
+    ],
+    "correct": "Silver made from melted coins at approximately 90% purity"
+  },
+  {
+    "question": "What is a davenport desk?",
+    "answers": [
+      "A small desk with a sloping top and side drawers",
+      "A large writing table",
+      "A roll-top desk",
+      "A partners desk"
+    ],
+    "correct": "A small desk with a sloping top and side drawers"
+  },
+  {
+    "question": "What does 'blanc de chine' refer to?",
+    "answers": [
+      "White Chinese porcelain from Dehua, Fujian province",
+      "White French porcelain from Sevres",
+      "White Wedgwood pottery",
+      "Any unpainted white ceramic"
+    ],
+    "correct": "White Chinese porcelain from Dehua, Fujian province"
+  },
+  {
+    "question": "What is a bergere chair?",
+    "answers": [
+      "An upholstered armchair with enclosed upholstered sides",
+      "A French gilt chair",
+      "A rocking chair",
+      "A high-backed throne chair"
+    ],
+    "correct": "An upholstered armchair with enclosed upholstered sides"
+  },
+  {
+    "question": "What does 'EPNS' stand for on silverware?",
+    "answers": [
+      "Electro Plated Nickel Silver",
+      "Extra Pure Natural Silver",
+      "English Pewter and Nickel Society",
+      "Enameled Plate with Nickel Substrate"
+    ],
+    "correct": "Electro Plated Nickel Silver"
+  },
+  {
+    "question": "What period is the 'Empire style' furniture associated with?",
+    "answers": [
+      "Napoleonic France (early 19th century)",
+      "The Second Empire of Napoleon III",
+      "Georgian England",
+      "Victorian Era"
+    ],
+    "correct": "Napoleonic France (early 19th century)"
+  },
+  {
+    "question": "What is Delftware?",
+    "answers": [
+      "Dutch tin-glazed earthenware typically decorated in blue and white",
+      "German salt-glazed stoneware",
+      "English bone china",
+      "Belgian crystal glass"
+    ],
+    "correct": "Dutch tin-glazed earthenware typically decorated in blue and white"
+  },
+  {
+    "question": "What is a 'buyer's premium' at auction?",
+    "answers": [
+      "An additional percentage fee paid by the buyer on top of the hammer price",
+      "The fee paid to register as a bidder",
+      "The shipping fee for a purchased item",
+      "Insurance on a purchased lot"
+    ],
+    "correct": "An additional percentage fee paid by the buyer on top of the hammer price"
+  },
+  {
+    "question": "What is papier-mache furniture associated with in Victorian collecting?",
+    "answers": [
+      "Black lacquered furniture with mother-of-pearl inlay, popular in the mid-19th century",
+      "Cheap reproduction furniture",
+      "Children's furniture",
+      "Garden furniture"
+    ],
+    "correct": "Black lacquered furniture with mother-of-pearl inlay, popular in the mid-19th century"
+  },
+  {
+    "question": "What is Derby porcelain?",
+    "answers": [
+      "Fine English porcelain made in Derby from the mid-18th century",
+      "A type of Staffordshire earthenware",
+      "German Meissen-style porcelain",
+      "Irish Belleek porcelain"
+    ],
+    "correct": "Fine English porcelain made in Derby from the mid-18th century"
+  },
+  {
+    "question": "What is chinoiserie?",
+    "answers": [
+      "A European decorative style inspired by and imitating Asian art",
+      "Genuine Chinese art and antiques",
+      "Japanese lacquerware",
+      "Chinese export porcelain for Europe"
+    ],
+    "correct": "A European decorative style inspired by and imitating Asian art"
+  },
+  {
+    "question": "What is a Welsh dresser?",
+    "answers": [
+      "A kitchen furniture piece with a base of drawers and cupboards topped by open shelves",
+      "A dressing table from Wales",
+      "A wardrobe with mirror",
+      "A linen chest"
+    ],
+    "correct": "A kitchen furniture piece with a base of drawers and cupboards topped by open shelves"
+  },
+  {
+    "question": "What is vernis martin?",
+    "answers": [
+      "A French lacquer technique imitating Asian lacquer, used in 18th-century furniture",
+      "A type of wood veneer",
+      "A gilding technique",
+      "A marquetry style"
+    ],
+    "correct": "A French lacquer technique imitating Asian lacquer, used in 18th-century furniture"
+  },
+  {
+    "question": "Which ceramics factory produced the famous 'Imari' pattern?",
+    "answers": [
+      "Arita kilns (Nabeshima domain, Japan)",
+      "Wedgwood",
+      "Meissen",
+      "Sevres"
+    ],
+    "correct": "Arita kilns (Nabeshima domain, Japan)"
+  },
+  {
+    "question": "What is a Canterbury in Victorian furniture?",
+    "answers": [
+      "A stand for holding sheet music or magazines",
+      "A type of wardrobe",
+      "A prayer stand",
+      "A decorative plant stand"
+    ],
+    "correct": "A stand for holding sheet music or magazines"
+  },
+  {
+    "question": "What is the term for furniture made between roughly 1714 and 1830 in England?",
+    "answers": [
+      "Georgian",
+      "Victorian",
+      "Edwardian",
+      "Regency"
+    ],
+    "correct": "Georgian"
+  },
+  {
+    "question": "What is celadon glaze?",
+    "answers": [
+      "A pale green glaze used in Chinese and Korean ceramics",
+      "A bright turquoise glaze",
+      "An opaque white glaze",
+      "A crackled gray glaze"
+    ],
+    "correct": "A pale green glaze used in Chinese and Korean ceramics"
+  },
+  {
+    "question": "What does 'reserve price' mean at auction?",
+    "answers": [
+      "The minimum price below which the seller will not sell",
+      "The starting bid set by the auctioneer",
+      "The estimated value of the lot",
+      "The buyer's premium threshold"
+    ],
+    "correct": "The minimum price below which the seller will not sell"
+  },
+  {
+    "question": "What is Art Deco characterized by?",
+    "answers": [
+      "Geometric shapes, bold colors, and streamlined, machine-age design",
+      "Organic flowing natural forms",
+      "Classical revival motifs",
+      "Handcrafted rustic design"
+    ],
+    "correct": "Geometric shapes, bold colors, and streamlined, machine-age design"
+  },
+  {
+    "question": "What is a secretaire (or secretary) in antique furniture?",
+    "answers": [
+      "A writing cabinet with a fall-front that opens to reveal a writing surface and interior",
+      "A low chest of drawers",
+      "A narrow console table",
+      "A type of wardrobe"
+    ],
+    "correct": "A writing cabinet with a fall-front that opens to reveal a writing surface and interior"
+  },
+  {
+    "question": "What is Sèvres porcelain?",
+    "answers": [
+      "Fine French royal porcelain made at the Sèvres factory near Paris",
+      "Belgian crystal",
+      "Dutch Delftware",
+      "English bone china"
+    ],
+    "correct": "Fine French royal porcelain made at the Sèvres factory near Paris"
+  },
+  {
+    "question": "What is a 'sleeper' lot in auction parlance?",
+    "answers": [
+      "A lot that is undervalued or unrecognized by most bidders",
+      "A lot with no reserve price",
+      "An item that has been in storage",
+      "A lot with disputed provenance"
+    ],
+    "correct": "A lot that is undervalued or unrecognized by most bidders"
+  },
+  {
+    "question": "What is parquetry in furniture?",
+    "answers": [
+      "Geometric mosaic wood inlay, as opposed to pictorial marquetry",
+      "A type of parquet flooring only",
+      "Carved wooden panels",
+      "Painted wooden surfaces"
+    ],
+    "correct": "Geometric mosaic wood inlay, as opposed to pictorial marquetry"
+  },
+  {
+    "question": "What is the Arts and Crafts movement in decorative arts?",
+    "answers": [
+      "A late 19th-century movement valuing handcraft over industrialization, inspired by medieval traditions",
+      "An art school movement from the 1920s",
+      "A revival of classical decorative forms",
+      "An American pottery movement only"
+    ],
+    "correct": "A late 19th-century movement valuing handcraft over industrialization, inspired by medieval traditions"
+  },
+  {
+    "question": "What is a jardiniere?",
+    "answers": [
+      "An ornamental stand or container for displaying plants or flowers",
+      "A type of ceramic jug",
+      "A French armchair",
+      "A decorative mirror frame"
+    ],
+    "correct": "An ornamental stand or container for displaying plants or flowers"
+  },
+  {
+    "question": "What does the anchor mark signify on English pottery?",
+    "answers": [
+      "Chelsea porcelain (one period of marks used an anchor)",
+      "Royal Worcester",
+      "Minton",
+      "Spode"
+    ],
+    "correct": "Chelsea porcelain (one period of marks used an anchor)"
+  },
+  {
+    "question": "What is a 'marriage' in the context of silver?",
+    "answers": [
+      "Two pieces of silver that were not originally made together but have been combined",
+      "A silver piece passed through a family",
+      "A hallmarked piece of matching flatware",
+      "A documented piece with original receipts"
+    ],
+    "correct": "Two pieces of silver that were not originally made together but have been combined"
+  },
+  {
+    "question": "What is Parian ware?",
+    "answers": [
+      "A type of white unglazed porcelain resembling marble, used for figurines",
+      "A type of Greek earthenware",
+      "Stoneware from the Parian island tradition",
+      "Bisque porcelain figurines with painted decoration"
+    ],
+    "correct": "A type of white unglazed porcelain resembling marble, used for figurines"
+  },
+  {
+    "question": "Which English factory is credited with inventing bone china?",
+    "answers": [
+      "Spode (Josiah Spode II perfected the formula)",
+      "Wedgwood",
+      "Royal Worcester",
+      "Derby"
+    ],
+    "correct": "Spode (Josiah Spode II perfected the formula)"
+  },
+  {
+    "question": "What is a lowboy in antique furniture?",
+    "answers": [
+      "A low dressing table or side table with drawers",
+      "A tall chest on legs",
+      "A low settee",
+      "A side cabinet"
+    ],
+    "correct": "A low dressing table or side table with drawers"
+  },
+  {
+    "question": "What is the difference between earthenware and stoneware?",
+    "answers": [
+      "Stoneware is fired at higher temperatures and is denser and less porous than earthenware",
+      "Earthenware is harder than stoneware",
+      "Stoneware always has a glaze",
+      "Earthenware is used only for cooking"
+    ],
+    "correct": "Stoneware is fired at higher temperatures and is denser and less porous than earthenware"
+  },
+  {
+    "question": "What is a girandole?",
+    "answers": [
+      "A branched candleholder or a circular convex mirror with candle brackets",
+      "A type of clock",
+      "A French commode style",
+      "A silver epergne"
+    ],
+    "correct": "A branched candleholder or a circular convex mirror with candle brackets"
+  },
+  {
+    "question": "What does 'hammer price' mean at auction?",
+    "answers": [
+      "The final bid price at which the auctioneer's hammer falls, before buyer's premium",
+      "The total price including all fees",
+      "The seller's opening price",
+      "The reserve price"
+    ],
+    "correct": "The final bid price at which the auctioneer's hammer falls, before buyer's premium"
+  },
+  {
+    "question": "What is baccarat crystal?",
+    "answers": [
+      "Fine French crystal glassware made in Baccarat, Lorraine, since 1764",
+      "Italian Murano glass",
+      "Irish Waterford crystal",
+      "Bohemian crystal glass"
+    ],
+    "correct": "Fine French crystal glassware made in Baccarat, Lorraine, since 1764"
+  },
+  {
+    "question": "What is a 'flea market find' term for an unexpected valuable item?",
+    "answers": [
+      "A discovery or sleeper",
+      "A fake",
+      "A forgery",
+      "A reproduction"
+    ],
+    "correct": "A discovery or sleeper"
+  },
+  {
+    "question": "What is the 'Aesthetic Movement' in decorative arts?",
+    "answers": [
+      "An 1870s-1880s British movement emphasizing art for art's sake and Japanese-influenced design",
+      "A French Art Nouveau precursor",
+      "A German Biedermeier revival",
+      "An American Arts and Crafts subset"
+    ],
+    "correct": "An 1870s-1880s British movement emphasizing art for art's sake and Japanese-influenced design"
+  },
+  {
+    "question": "What is a Daum vase known for?",
+    "answers": [
+      "French Art Nouveau and Art Deco cameo glass from Nancy",
+      "German Jugendstil glass",
+      "English pressed glass",
+      "Venetian millefiori glass"
+    ],
+    "correct": "French Art Nouveau and Art Deco cameo glass from Nancy"
+  },
+  {
+    "question": "What is the difference between antique and vintage?",
+    "answers": [
+      "Antique is typically 100+ years old; vintage is usually 20-99 years old",
+      "They are the same thing",
+      "Vintage is older than antique",
+      "Antique means hand-made; vintage means mass-produced"
+    ],
+    "correct": "Antique is typically 100+ years old; vintage is usually 20-99 years old"
+  },
+  {
+    "question": "What is a teapoy?",
+    "answers": [
+      "A small three-legged stand for a tea caddy",
+      "A type of teapot",
+      "A Chinese tea ceremony item",
+      "A silver tea urn stand"
+    ],
+    "correct": "A small three-legged stand for a tea caddy"
+  },
+  {
+    "question": "What is Japanese lacquerware called?",
+    "answers": [
+      "Urushi lacquer (the general term) or specifically Maki-e for gold/silver decorated lacquer",
+      "Cloisonne",
+      "Satsuma",
+      "Imari"
+    ],
+    "correct": "Urushi lacquer (the general term) or specifically Maki-e for gold/silver decorated lacquer"
+  },
+  {
+    "question": "What is the 'Omega' mark associated with in clocks?",
+    "answers": [
+      "Omega is a Swiss watch manufacturer known for precision timepieces",
+      "A mark on English grandfather clocks",
+      "A quality mark for French mantel clocks",
+      "A German clock-making guild mark"
+    ],
+    "correct": "Omega is a Swiss watch manufacturer known for precision timepieces"
+  },
+  {
+    "question": "What is a whatnot in Victorian furniture?",
+    "answers": [
+      "A freestanding set of open shelves for displaying ornaments and curiosities",
+      "A mystery cabinet",
+      "A decorative fireplace screen",
+      "A multi-purpose storage ottoman"
+    ],
+    "correct": "A freestanding set of open shelves for displaying ornaments and curiosities"
+  }
+]

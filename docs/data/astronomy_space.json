@@ -1,0 +1,762 @@
+[
+  {
+    "question": "Which planet is known as the Red Planet?",
+    "answers": [
+      "Mars",
+      "Jupiter",
+      "Saturn",
+      "Mercury"
+    ],
+    "correct": "Mars"
+  },
+  {
+    "question": "What is the name of the first artificial satellite launched into space?",
+    "answers": [
+      "Sputnik 1",
+      "Explorer 1",
+      "Vanguard 1",
+      "Luna 1"
+    ],
+    "correct": "Sputnik 1"
+  },
+  {
+    "question": "Which planet has the most moons in the solar system?",
+    "answers": [
+      "Saturn",
+      "Jupiter",
+      "Uranus",
+      "Neptune"
+    ],
+    "correct": "Saturn"
+  },
+  {
+    "question": "What is a light-year?",
+    "answers": [
+      "The distance light travels in one year",
+      "The time light takes to reach Earth from the Sun",
+      "A unit of time",
+      "The age of a star"
+    ],
+    "correct": "The distance light travels in one year"
+  },
+  {
+    "question": "Who was the first human in space?",
+    "answers": [
+      "Yuri Gagarin",
+      "Alan Shepard",
+      "John Glenn",
+      "Valentina Tereshkova"
+    ],
+    "correct": "Yuri Gagarin"
+  },
+  {
+    "question": "What is the name of the galaxy that contains our solar system?",
+    "answers": [
+      "Milky Way",
+      "Andromeda",
+      "Triangulum",
+      "Messier 87"
+    ],
+    "correct": "Milky Way"
+  },
+  {
+    "question": "Which space telescope was launched in 1990?",
+    "answers": [
+      "Hubble Space Telescope",
+      "James Webb Space Telescope",
+      "Chandra X-ray Observatory",
+      "Spitzer Space Telescope"
+    ],
+    "correct": "Hubble Space Telescope"
+  },
+  {
+    "question": "What is the largest planet in the solar system?",
+    "answers": [
+      "Jupiter",
+      "Saturn",
+      "Neptune",
+      "Uranus"
+    ],
+    "correct": "Jupiter"
+  },
+  {
+    "question": "What is the term for the point in a planet's orbit closest to the Sun?",
+    "answers": [
+      "Perihelion",
+      "Aphelion",
+      "Apogee",
+      "Perigee"
+    ],
+    "correct": "Perihelion"
+  },
+  {
+    "question": "Which mission first landed humans on the Moon?",
+    "answers": [
+      "Apollo 11",
+      "Apollo 12",
+      "Apollo 8",
+      "Apollo 10"
+    ],
+    "correct": "Apollo 11"
+  },
+  {
+    "question": "What is the closest star to Earth (other than the Sun)?",
+    "answers": [
+      "Proxima Centauri",
+      "Alpha Centauri A",
+      "Barnard's Star",
+      "Sirius"
+    ],
+    "correct": "Proxima Centauri"
+  },
+  {
+    "question": "What causes a solar eclipse?",
+    "answers": [
+      "The Moon passes between Earth and the Sun",
+      "Earth passes between the Moon and the Sun",
+      "The Sun passes between Earth and the Moon",
+      "Earth's shadow falls on the Moon"
+    ],
+    "correct": "The Moon passes between Earth and the Sun"
+  },
+  {
+    "question": "Which planet has rings visible from Earth?",
+    "answers": [
+      "Saturn",
+      "Jupiter",
+      "Uranus",
+      "Neptune"
+    ],
+    "correct": "Saturn"
+  },
+  {
+    "question": "What is a pulsar?",
+    "answers": [
+      "A rapidly rotating neutron star emitting pulses of radiation",
+      "A type of quasar",
+      "A star that pulsates in brightness",
+      "A binary star system"
+    ],
+    "correct": "A rapidly rotating neutron star emitting pulses of radiation"
+  },
+  {
+    "question": "What is the Hubble constant?",
+    "answers": [
+      "The rate at which the universe is expanding",
+      "The speed of light in space",
+      "The gravitational constant",
+      "The age of the universe"
+    ],
+    "correct": "The rate at which the universe is expanding"
+  },
+  {
+    "question": "Which space agency launched the Voyager probes?",
+    "answers": [
+      "NASA",
+      "ESA",
+      "Roscosmos",
+      "JAXA"
+    ],
+    "correct": "NASA"
+  },
+  {
+    "question": "What is the smallest planet in the solar system?",
+    "answers": [
+      "Mercury",
+      "Mars",
+      "Venus",
+      "Earth"
+    ],
+    "correct": "Mercury"
+  },
+  {
+    "question": "What is dark matter?",
+    "answers": [
+      "A form of matter that does not interact with electromagnetic force but has gravitational effects",
+      "Matter in black holes",
+      "Anti-matter particles",
+      "Invisible gas in space"
+    ],
+    "correct": "A form of matter that does not interact with electromagnetic force but has gravitational effects"
+  },
+  {
+    "question": "Which constellation contains the North Star (Polaris)?",
+    "answers": [
+      "Ursa Minor",
+      "Ursa Major",
+      "Cassiopeia",
+      "Cepheus"
+    ],
+    "correct": "Ursa Minor"
+  },
+  {
+    "question": "What is the Big Bang theory?",
+    "answers": [
+      "The universe began from an extremely hot and dense state approximately 13.8 billion years ago",
+      "The universe exploded from a central point",
+      "Stars were created by explosions",
+      "The universe cycles through expansion and contraction"
+    ],
+    "correct": "The universe began from an extremely hot and dense state approximately 13.8 billion years ago"
+  },
+  {
+    "question": "Which planet rotates on its side (axial tilt of ~98 degrees)?",
+    "answers": [
+      "Uranus",
+      "Venus",
+      "Neptune",
+      "Saturn"
+    ],
+    "correct": "Uranus"
+  },
+  {
+    "question": "What is the event horizon of a black hole?",
+    "answers": [
+      "The boundary beyond which nothing can escape the black hole's gravity",
+      "The center of a black hole",
+      "The outer atmosphere of a black hole",
+      "Where stars begin to collapse"
+    ],
+    "correct": "The boundary beyond which nothing can escape the black hole's gravity"
+  },
+  {
+    "question": "What is the name of Mars's largest volcano?",
+    "answers": [
+      "Olympus Mons",
+      "Mons Huygens",
+      "Mauna Kea",
+      "Maxwell Montes"
+    ],
+    "correct": "Olympus Mons"
+  },
+  {
+    "question": "Who proposed the heliocentric model of the solar system?",
+    "answers": [
+      "Nicolaus Copernicus",
+      "Galileo Galilei",
+      "Johannes Kepler",
+      "Tycho Brahe"
+    ],
+    "correct": "Nicolaus Copernicus"
+  },
+  {
+    "question": "What is the International Space Station's orbital altitude approximately?",
+    "answers": [
+      "400 km",
+      "200 km",
+      "1000 km",
+      "600 km"
+    ],
+    "correct": "400 km"
+  },
+  {
+    "question": "Which planet has a storm known as the Great Red Spot?",
+    "answers": [
+      "Jupiter",
+      "Saturn",
+      "Neptune",
+      "Uranus"
+    ],
+    "correct": "Jupiter"
+  },
+  {
+    "question": "What is a nebula?",
+    "answers": [
+      "A cloud of gas and dust in space",
+      "A type of galaxy",
+      "A dead star",
+      "A comet tail"
+    ],
+    "correct": "A cloud of gas and dust in space"
+  },
+  {
+    "question": "What constellation is associated with the zodiac sign Orion?",
+    "answers": [
+      "Orion is not a zodiac constellation; it is a distinct constellation",
+      "Orion is in Gemini",
+      "Orion corresponds to Sagittarius",
+      "Orion is part of Taurus"
+    ],
+    "correct": "Orion is not a zodiac constellation; it is a distinct constellation"
+  },
+  {
+    "question": "What is the term for the study of the universe as a whole?",
+    "answers": [
+      "Cosmology",
+      "Astronomy",
+      "Astrophysics",
+      "Astrometry"
+    ],
+    "correct": "Cosmology"
+  },
+  {
+    "question": "Which planet is closest to the Sun?",
+    "answers": [
+      "Mercury",
+      "Venus",
+      "Earth",
+      "Mars"
+    ],
+    "correct": "Mercury"
+  },
+  {
+    "question": "What is the Chandrasekhar limit?",
+    "answers": [
+      "The maximum mass of a stable white dwarf star (~1.4 solar masses)",
+      "The maximum size of a neutron star",
+      "The minimum mass to form a black hole",
+      "The limit of observable universe"
+    ],
+    "correct": "The maximum mass of a stable white dwarf star (~1.4 solar masses)"
+  },
+  {
+    "question": "What was the first space shuttle to fly in space?",
+    "answers": [
+      "Columbia",
+      "Challenger",
+      "Discovery",
+      "Atlantis"
+    ],
+    "correct": "Columbia"
+  },
+  {
+    "question": "What is cosmic microwave background radiation?",
+    "answers": [
+      "Thermal radiation left over from the early universe (Big Bang)",
+      "Radiation from the Sun's corona",
+      "Gamma ray bursts",
+      "Radiation from pulsars"
+    ],
+    "correct": "Thermal radiation left over from the early universe (Big Bang)"
+  },
+  {
+    "question": "Which moon of Jupiter is the largest moon in the solar system?",
+    "answers": [
+      "Ganymede",
+      "Titan",
+      "Callisto",
+      "Io"
+    ],
+    "correct": "Ganymede"
+  },
+  {
+    "question": "What spacecraft made the first flyby of Pluto?",
+    "answers": [
+      "New Horizons",
+      "Voyager 2",
+      "Cassini",
+      "Pioneer 10"
+    ],
+    "correct": "New Horizons"
+  },
+  {
+    "question": "What is the term for a star that has used up all its fuel and collapsed?",
+    "answers": [
+      "White dwarf (for sun-sized stars)",
+      "Red giant",
+      "Supernova remnant",
+      "Neutron star"
+    ],
+    "correct": "White dwarf (for sun-sized stars)"
+  },
+  {
+    "question": "How long does light from the Sun take to reach Earth?",
+    "answers": [
+      "About 8 minutes",
+      "About 1 minute",
+      "About 30 minutes",
+      "About 1 second"
+    ],
+    "correct": "About 8 minutes"
+  },
+  {
+    "question": "What is the most abundant element in the Sun?",
+    "answers": [
+      "Hydrogen",
+      "Helium",
+      "Carbon",
+      "Oxygen"
+    ],
+    "correct": "Hydrogen"
+  },
+  {
+    "question": "Which space probe is the farthest from Earth?",
+    "answers": [
+      "Voyager 1",
+      "Voyager 2",
+      "New Horizons",
+      "Pioneer 10"
+    ],
+    "correct": "Voyager 1"
+  },
+  {
+    "question": "What is the summer solstice in the Northern Hemisphere?",
+    "answers": [
+      "The longest day of the year, around June 21",
+      "The shortest day of the year",
+      "An equinox",
+      "The day when Earth is closest to the Sun"
+    ],
+    "correct": "The longest day of the year, around June 21"
+  },
+  {
+    "question": "Which planet has the fastest winds in the solar system?",
+    "answers": [
+      "Neptune",
+      "Jupiter",
+      "Saturn",
+      "Uranus"
+    ],
+    "correct": "Neptune"
+  },
+  {
+    "question": "What is the Oort Cloud?",
+    "answers": [
+      "A theoretical cloud of icy bodies surrounding the solar system",
+      "A cloud of gas around a star",
+      "The outer asteroid belt",
+      "A debris field around Jupiter"
+    ],
+    "correct": "A theoretical cloud of icy bodies surrounding the solar system"
+  },
+  {
+    "question": "What was the Hubble Space Telescope's initial flaw?",
+    "answers": [
+      "Spherical aberration in the primary mirror",
+      "A damaged solar panel",
+      "Incorrect orbit",
+      "Computer failure"
+    ],
+    "correct": "Spherical aberration in the primary mirror"
+  },
+  {
+    "question": "Which is the hottest planet in our solar system?",
+    "answers": [
+      "Venus",
+      "Mercury",
+      "Jupiter",
+      "Mars"
+    ],
+    "correct": "Venus"
+  },
+  {
+    "question": "What does JWST stand for?",
+    "answers": [
+      "James Webb Space Telescope",
+      "John Walter Space Telescope",
+      "Joint Wide-field Space Telescope",
+      "Johnson Webb Space Telescope"
+    ],
+    "correct": "James Webb Space Telescope"
+  },
+  {
+    "question": "What is the IAU (International Astronomical Union) famous for in 2006?",
+    "answers": [
+      "Reclassifying Pluto as a dwarf planet",
+      "Naming all known exoplanets",
+      "Establishing the definition of a galaxy",
+      "Launching the first international space mission"
+    ],
+    "correct": "Reclassifying Pluto as a dwarf planet"
+  },
+  {
+    "question": "Which constellation contains the star Betelgeuse?",
+    "answers": [
+      "Orion",
+      "Canis Major",
+      "Taurus",
+      "Gemini"
+    ],
+    "correct": "Orion"
+  },
+  {
+    "question": "What is a quasar?",
+    "answers": [
+      "An extremely luminous active galactic nucleus powered by a supermassive black hole",
+      "A type of star",
+      "A pair of neutron stars",
+      "A bright nebula"
+    ],
+    "correct": "An extremely luminous active galactic nucleus powered by a supermassive black hole"
+  },
+  {
+    "question": "What is the name of the phenomenon where a massive object bends light?",
+    "answers": [
+      "Gravitational lensing",
+      "Gravitational redshift",
+      "Frame dragging",
+      "Gravitational wave"
+    ],
+    "correct": "Gravitational lensing"
+  },
+  {
+    "question": "Which planet has a moon called Titan with a thick atmosphere?",
+    "answers": [
+      "Saturn",
+      "Jupiter",
+      "Uranus",
+      "Neptune"
+    ],
+    "correct": "Saturn"
+  },
+  {
+    "question": "What is the Asteroid Belt located between?",
+    "answers": [
+      "Mars and Jupiter",
+      "Earth and Mars",
+      "Jupiter and Saturn",
+      "Saturn and Uranus"
+    ],
+    "correct": "Mars and Jupiter"
+  },
+  {
+    "question": "What is the term for planets outside our solar system?",
+    "answers": [
+      "Exoplanets",
+      "Rogue planets",
+      "Protoplanets",
+      "Dwarf planets"
+    ],
+    "correct": "Exoplanets"
+  },
+  {
+    "question": "Who was the first woman in space?",
+    "answers": [
+      "Valentina Tereshkova",
+      "Sally Ride",
+      "Svetlana Savitskaya",
+      "Eileen Collins"
+    ],
+    "correct": "Valentina Tereshkova"
+  },
+  {
+    "question": "What causes the seasons on Earth?",
+    "answers": [
+      "Earth's axial tilt (23.5 degrees)",
+      "Earth's varying distance from the Sun",
+      "Solar activity cycles",
+      "The Moon's gravitational pull"
+    ],
+    "correct": "Earth's axial tilt (23.5 degrees)"
+  },
+  {
+    "question": "Which planet has the shortest day in the solar system?",
+    "answers": [
+      "Jupiter",
+      "Saturn",
+      "Neptune",
+      "Uranus"
+    ],
+    "correct": "Jupiter"
+  },
+  {
+    "question": "What is the solar wind?",
+    "answers": [
+      "A stream of charged particles emitted from the Sun's corona",
+      "The pressure of sunlight on objects in space",
+      "The rotation of the Sun",
+      "Coronal mass ejections only"
+    ],
+    "correct": "A stream of charged particles emitted from the Sun's corona"
+  },
+  {
+    "question": "What was Galileo's contribution to astronomy?",
+    "answers": [
+      "He used a telescope to discover Jupiter's moons and support the heliocentric model",
+      "He proposed the heliocentric model",
+      "He calculated planetary orbits mathematically",
+      "He discovered gravity"
+    ],
+    "correct": "He used a telescope to discover Jupiter's moons and support the heliocentric model"
+  },
+  {
+    "question": "What is the name of the first Mars rover?",
+    "answers": [
+      "Sojourner",
+      "Spirit",
+      "Opportunity",
+      "Curiosity"
+    ],
+    "correct": "Sojourner"
+  },
+  {
+    "question": "What is a binary star system?",
+    "answers": [
+      "Two stars orbiting a common center of mass",
+      "A star with two planetary systems",
+      "A double supernova",
+      "Two galaxies merging"
+    ],
+    "correct": "Two stars orbiting a common center of mass"
+  },
+  {
+    "question": "Which space mission first orbited another planet (Mars) in 1971?",
+    "answers": [
+      "Mariner 9",
+      "Viking 1",
+      "Mars 2",
+      "Pioneer Mars"
+    ],
+    "correct": "Mariner 9"
+  },
+  {
+    "question": "What is the difference between a meteor and a meteorite?",
+    "answers": [
+      "A meteor burns in the atmosphere; a meteorite reaches the ground",
+      "A meteor is larger than a meteorite",
+      "A meteor is rocky; a meteorite is icy",
+      "There is no difference"
+    ],
+    "correct": "A meteor burns in the atmosphere; a meteorite reaches the ground"
+  },
+  {
+    "question": "What is the Kuiper Belt?",
+    "answers": [
+      "A region of the solar system beyond Neptune containing small icy bodies",
+      "The asteroid belt between Mars and Jupiter",
+      "A ring system around Saturn",
+      "The outer boundary of the heliosphere"
+    ],
+    "correct": "A region of the solar system beyond Neptune containing small icy bodies"
+  },
+  {
+    "question": "Who proposed the theory of stellar nucleosynthesis?",
+    "answers": [
+      "Fred Hoyle",
+      "Edwin Hubble",
+      "Hans Bethe",
+      "George Gamow"
+    ],
+    "correct": "Fred Hoyle"
+  },
+  {
+    "question": "What is the name of the boundary where the solar wind meets interstellar space?",
+    "answers": [
+      "Heliopause",
+      "Magnetopause",
+      "Tropopause",
+      "Chromosphere"
+    ],
+    "correct": "Heliopause"
+  },
+  {
+    "question": "What is the term for the apparent shift in star positions due to Earth's orbit?",
+    "answers": [
+      "Stellar parallax",
+      "Proper motion",
+      "Precession",
+      "Aberration"
+    ],
+    "correct": "Stellar parallax"
+  },
+  {
+    "question": "Which organization runs the European Space Agency?",
+    "answers": [
+      "ESA is an intergovernmental organization of 22 member states",
+      "The European Union",
+      "NATO",
+      "The United Nations"
+    ],
+    "correct": "ESA is an intergovernmental organization of 22 member states"
+  },
+  {
+    "question": "What discovered that the universe is expanding?",
+    "answers": [
+      "Edwin Hubble's observations of galaxy redshifts",
+      "Einstein's general relativity",
+      "The Big Bang model",
+      "Radio telescope surveys"
+    ],
+    "correct": "Edwin Hubble's observations of galaxy redshifts"
+  },
+  {
+    "question": "What is the difference between a comet and an asteroid?",
+    "answers": [
+      "Comets are icy bodies that develop tails near the Sun; asteroids are rocky bodies",
+      "Comets are larger than asteroids",
+      "Asteroids orbit the Sun; comets orbit planets",
+      "They are the same thing"
+    ],
+    "correct": "Comets are icy bodies that develop tails near the Sun; asteroids are rocky bodies"
+  },
+  {
+    "question": "What is the surface temperature of the Sun's core approximately?",
+    "answers": [
+      "15 million degrees C",
+      "5,500 degrees C",
+      "1 million degrees C",
+      "50,000 degrees C"
+    ],
+    "correct": "15 million degrees C"
+  },
+  {
+    "question": "Who discovered Uranus?",
+    "answers": [
+      "William Herschel",
+      "Johann Bode",
+      "Charles Messier",
+      "Giovanni Cassini"
+    ],
+    "correct": "William Herschel"
+  },
+  {
+    "question": "What is the principal reason stars appear to twinkle?",
+    "answers": [
+      "Atmospheric turbulence",
+      "The star's own pulsation",
+      "The rotation of Earth",
+      "Gravitational lensing"
+    ],
+    "correct": "Atmospheric turbulence"
+  },
+  {
+    "question": "What is the approximate age of the universe?",
+    "answers": [
+      "13.8 billion years",
+      "4.5 billion years",
+      "7 billion years",
+      "20 billion years"
+    ],
+    "correct": "13.8 billion years"
+  },
+  {
+    "question": "Which planet was discovered by mathematical predictions before observation?",
+    "answers": [
+      "Neptune",
+      "Uranus",
+      "Pluto",
+      "Saturn"
+    ],
+    "correct": "Neptune"
+  },
+  {
+    "question": "What does the Hertzsprung-Russell diagram plot?",
+    "answers": [
+      "Star luminosity vs. surface temperature",
+      "Star mass vs. radius",
+      "Star age vs. mass",
+      "Planet size vs. orbital period"
+    ],
+    "correct": "Star luminosity vs. surface temperature"
+  },
+  {
+    "question": "What is the name of the first probe to leave the solar system?",
+    "answers": [
+      "Voyager 1",
+      "Pioneer 10",
+      "Voyager 2",
+      "New Horizons"
+    ],
+    "correct": "Voyager 1"
+  },
+  {
+    "question": "What is the zodiacal light?",
+    "answers": [
+      "A faint glow caused by sunlight reflecting off interplanetary dust",
+      "The aurora borealis",
+      "Light from distant galaxies",
+      "The Milky Way's glow"
+    ],
+    "correct": "A faint glow caused by sunlight reflecting off interplanetary dust"
+  }
+]

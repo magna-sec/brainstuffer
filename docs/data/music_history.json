@@ -1,0 +1,752 @@
+[
+  {
+    "question": "Who composed the 'Four Seasons'?",
+    "answers": [
+      "Antonio Vivaldi",
+      "Johann Sebastian Bach",
+      "George Frideric Handel",
+      "Arcangelo Corelli"
+    ],
+    "correct": "Antonio Vivaldi"
+  },
+  {
+    "question": "How many symphonies did Beethoven compose?",
+    "answers": [
+      "9",
+      "7",
+      "10",
+      "8"
+    ],
+    "correct": "9"
+  },
+  {
+    "question": "Which instrument is Yo-Yo Ma famous for playing?",
+    "answers": [
+      "Cello",
+      "Violin",
+      "Viola",
+      "Double bass"
+    ],
+    "correct": "Cello"
+  },
+  {
+    "question": "What does 'forte' mean in music?",
+    "answers": [
+      "Loud",
+      "Soft",
+      "Fast",
+      "Slow"
+    ],
+    "correct": "Loud"
+  },
+  {
+    "question": "Who wrote the opera 'The Magic Flute'?",
+    "answers": [
+      "Wolfgang Amadeus Mozart",
+      "Ludwig van Beethoven",
+      "Franz Schubert",
+      "Joseph Haydn"
+    ],
+    "correct": "Wolfgang Amadeus Mozart"
+  },
+  {
+    "question": "What is a pentatonic scale?",
+    "answers": [
+      "A scale with five notes per octave",
+      "A scale with seven notes",
+      "A chromatic scale",
+      "A scale used only in jazz"
+    ],
+    "correct": "A scale with five notes per octave"
+  },
+  {
+    "question": "Which Beatles album was released in 1967 and is considered a landmark?",
+    "answers": [
+      "Sgt. Pepper's Lonely Hearts Club Band",
+      "Abbey Road",
+      "Revolver",
+      "Rubber Soul"
+    ],
+    "correct": "Sgt. Pepper's Lonely Hearts Club Band"
+  },
+  {
+    "question": "What is the time signature 3/4 also known as?",
+    "answers": [
+      "Waltz time",
+      "March time",
+      "Common time",
+      "Cut time"
+    ],
+    "correct": "Waltz time"
+  },
+  {
+    "question": "Who composed 'The Rite of Spring'?",
+    "answers": [
+      "Igor Stravinsky",
+      "Claude Debussy",
+      "Sergei Rachmaninoff",
+      "Bela Bartok"
+    ],
+    "correct": "Igor Stravinsky"
+  },
+  {
+    "question": "Which country is the origin of Flamenco music?",
+    "answers": [
+      "Spain",
+      "Portugal",
+      "Argentina",
+      "Mexico"
+    ],
+    "correct": "Spain"
+  },
+  {
+    "question": "What does 'allegro' mean in music?",
+    "answers": [
+      "Fast and lively",
+      "Slow and stately",
+      "Moderate speed",
+      "Very slow"
+    ],
+    "correct": "Fast and lively"
+  },
+  {
+    "question": "Who composed the opera 'La Traviata'?",
+    "answers": [
+      "Giuseppe Verdi",
+      "Giacomo Puccini",
+      "Wolfgang Amadeus Mozart",
+      "Gaetano Donizetti"
+    ],
+    "correct": "Giuseppe Verdi"
+  },
+  {
+    "question": "How many strings does a standard guitar have?",
+    "answers": [
+      "6",
+      "4",
+      "8",
+      "7"
+    ],
+    "correct": "6"
+  },
+  {
+    "question": "What is the musical period known for Bach and Handel?",
+    "answers": [
+      "Baroque",
+      "Classical",
+      "Romantic",
+      "Renaissance"
+    ],
+    "correct": "Baroque"
+  },
+  {
+    "question": "Who is known as the King of Rock and Roll?",
+    "answers": [
+      "Elvis Presley",
+      "Chuck Berry",
+      "Jerry Lee Lewis",
+      "Little Richard"
+    ],
+    "correct": "Elvis Presley"
+  },
+  {
+    "question": "What is counterpoint in music?",
+    "answers": [
+      "The technique of combining two or more melodic lines simultaneously",
+      "The art of writing harmonies",
+      "A technique for writing bass lines",
+      "The use of contrasting dynamics"
+    ],
+    "correct": "The technique of combining two or more melodic lines simultaneously"
+  },
+  {
+    "question": "Who composed 'Swan Lake'?",
+    "answers": [
+      "Pyotr Ilyich Tchaikovsky",
+      "Sergei Prokofiev",
+      "Igor Stravinsky",
+      "Nikolai Rimsky-Korsakov"
+    ],
+    "correct": "Pyotr Ilyich Tchaikovsky"
+  },
+  {
+    "question": "Which musical instrument has keys, pedals, and strings inside?",
+    "answers": [
+      "Piano",
+      "Harpsichord",
+      "Organ",
+      "Clavichord"
+    ],
+    "correct": "Piano"
+  },
+  {
+    "question": "What is jazz improvisation?",
+    "answers": [
+      "Creating spontaneous melodic variations while maintaining harmonic structure",
+      "Randomly playing notes",
+      "Playing written solos from memory",
+      "Playing very fast passages"
+    ],
+    "correct": "Creating spontaneous melodic variations while maintaining harmonic structure"
+  },
+  {
+    "question": "Who wrote the opera 'La Boheme'?",
+    "answers": [
+      "Giacomo Puccini",
+      "Giuseppe Verdi",
+      "Gaetano Donizetti",
+      "Gioachino Rossini"
+    ],
+    "correct": "Giacomo Puccini"
+  },
+  {
+    "question": "What is a chord?",
+    "answers": [
+      "Three or more notes played simultaneously",
+      "Two notes played together",
+      "A scale pattern",
+      "A melodic motif"
+    ],
+    "correct": "Three or more notes played simultaneously"
+  },
+  {
+    "question": "Which band released 'Dark Side of the Moon' in 1973?",
+    "answers": [
+      "Pink Floyd",
+      "Led Zeppelin",
+      "Yes",
+      "Genesis"
+    ],
+    "correct": "Pink Floyd"
+  },
+  {
+    "question": "What does 'pianissimo' (pp) mean in music?",
+    "answers": [
+      "Very soft",
+      "Very loud",
+      "Moderately soft",
+      "As soft as possible"
+    ],
+    "correct": "Very soft"
+  },
+  {
+    "question": "Who composed the '1812 Overture'?",
+    "answers": [
+      "Pyotr Ilyich Tchaikovsky",
+      "Ludwig van Beethoven",
+      "Hector Berlioz",
+      "Nikolai Rimsky-Korsakov"
+    ],
+    "correct": "Pyotr Ilyich Tchaikovsky"
+  },
+  {
+    "question": "What is the lowest singing voice in classical music?",
+    "answers": [
+      "Bass",
+      "Baritone",
+      "Tenor",
+      "Countertenor"
+    ],
+    "correct": "Bass"
+  },
+  {
+    "question": "Which composer was deaf for much of his career?",
+    "answers": [
+      "Ludwig van Beethoven",
+      "Franz Schubert",
+      "Robert Schumann",
+      "Bedrich Smetana"
+    ],
+    "correct": "Ludwig van Beethoven"
+  },
+  {
+    "question": "What is the dominant note in a C major scale?",
+    "answers": [
+      "G",
+      "D",
+      "E",
+      "F"
+    ],
+    "correct": "G"
+  },
+  {
+    "question": "Who is the lead singer of the Rolling Stones?",
+    "answers": [
+      "Mick Jagger",
+      "Keith Richards",
+      "Charlie Watts",
+      "Ronnie Wood"
+    ],
+    "correct": "Mick Jagger"
+  },
+  {
+    "question": "What is a fugue?",
+    "answers": [
+      "A contrapuntal composition based on a theme developed through imitation",
+      "A type of dance",
+      "A free-form improvisation",
+      "A theme and variations structure"
+    ],
+    "correct": "A contrapuntal composition based on a theme developed through imitation"
+  },
+  {
+    "question": "Which Romantic-era composer wrote the 'Trout Quintet'?",
+    "answers": [
+      "Franz Schubert",
+      "Johannes Brahms",
+      "Robert Schumann",
+      "Felix Mendelssohn"
+    ],
+    "correct": "Franz Schubert"
+  },
+  {
+    "question": "What is the standard number of keys on a piano?",
+    "answers": [
+      "88",
+      "76",
+      "84",
+      "92"
+    ],
+    "correct": "88"
+  },
+  {
+    "question": "Which music genre originated in New Orleans in the early 20th century?",
+    "answers": [
+      "Jazz",
+      "Blues",
+      "Ragtime",
+      "Soul"
+    ],
+    "correct": "Jazz"
+  },
+  {
+    "question": "Who composed 'Pictures at an Exhibition'?",
+    "answers": [
+      "Modest Mussorgsky",
+      "Nikolai Rimsky-Korsakov",
+      "Alexander Borodin",
+      "Pyotr Tchaikovsky"
+    ],
+    "correct": "Modest Mussorgsky"
+  },
+  {
+    "question": "What is a sonata form?",
+    "answers": [
+      "A musical structure with exposition, development, and recapitulation",
+      "A form for solo instruments only",
+      "A three-movement structure",
+      "A form associated with the Baroque period"
+    ],
+    "correct": "A musical structure with exposition, development, and recapitulation"
+  },
+  {
+    "question": "Which band was formed by Robert Plant and Jimmy Page?",
+    "answers": [
+      "Led Zeppelin",
+      "Deep Purple",
+      "Black Sabbath",
+      "The Who"
+    ],
+    "correct": "Led Zeppelin"
+  },
+  {
+    "question": "What does 'a cappella' mean?",
+    "answers": [
+      "Singing without instrumental accompaniment",
+      "Singing softly",
+      "Singing very high notes",
+      "An Italian style of choral singing"
+    ],
+    "correct": "Singing without instrumental accompaniment"
+  },
+  {
+    "question": "Who composed 'Messiah' (the oratorio)?",
+    "answers": [
+      "George Frideric Handel",
+      "Johann Sebastian Bach",
+      "Henry Purcell",
+      "Antonio Vivaldi"
+    ],
+    "correct": "George Frideric Handel"
+  },
+  {
+    "question": "How many notes are in a standard Western chromatic scale?",
+    "answers": [
+      "12",
+      "7",
+      "8",
+      "10"
+    ],
+    "correct": "12"
+  },
+  {
+    "question": "Which genre of music is associated with artists like Robert Johnson and B.B. King?",
+    "answers": [
+      "Blues",
+      "Jazz",
+      "Gospel",
+      "Rhythm and Blues"
+    ],
+    "correct": "Blues"
+  },
+  {
+    "question": "Who composed 'The Planets' suite?",
+    "answers": [
+      "Gustav Holst",
+      "Edward Elgar",
+      "Ralph Vaughan Williams",
+      "Frederick Delius"
+    ],
+    "correct": "Gustav Holst"
+  },
+  {
+    "question": "What is the main difference between major and minor keys?",
+    "answers": [
+      "Minor keys have a flattened third degree giving a darker sound",
+      "Minor keys are played faster",
+      "Major keys have more notes",
+      "Minor keys use sharps only"
+    ],
+    "correct": "Minor keys have a flattened third degree giving a darker sound"
+  },
+  {
+    "question": "Who is known as the 'King of Pop'?",
+    "answers": [
+      "Michael Jackson",
+      "Prince",
+      "David Bowie",
+      "Stevie Wonder"
+    ],
+    "correct": "Michael Jackson"
+  },
+  {
+    "question": "What musical term means 'gradually slowing down'?",
+    "answers": [
+      "Ritardando",
+      "Accelerando",
+      "Rallentando",
+      "Rubato"
+    ],
+    "correct": "Ritardando"
+  },
+  {
+    "question": "Which composer wrote the 'Well-Tempered Clavier'?",
+    "answers": [
+      "Johann Sebastian Bach",
+      "George Frideric Handel",
+      "Domenico Scarlatti",
+      "Antonio Vivaldi"
+    ],
+    "correct": "Johann Sebastian Bach"
+  },
+  {
+    "question": "What is reggae music associated with?",
+    "answers": [
+      "Jamaica",
+      "Trinidad",
+      "Cuba",
+      "Haiti"
+    ],
+    "correct": "Jamaica"
+  },
+  {
+    "question": "Who composed 'Bolero'?",
+    "answers": [
+      "Maurice Ravel",
+      "Claude Debussy",
+      "Erik Satie",
+      "Gabriel Faure"
+    ],
+    "correct": "Maurice Ravel"
+  },
+  {
+    "question": "What is the term for a gradual increase in tempo?",
+    "answers": [
+      "Accelerando",
+      "Ritardando",
+      "Crescendo",
+      "Rubato"
+    ],
+    "correct": "Accelerando"
+  },
+  {
+    "question": "Which composer is associated with the Romantic opera 'Tristan und Isolde'?",
+    "answers": [
+      "Richard Wagner",
+      "Giuseppe Verdi",
+      "Giacomo Puccini",
+      "Johannes Brahms"
+    ],
+    "correct": "Richard Wagner"
+  },
+  {
+    "question": "What is a leitmotif?",
+    "answers": [
+      "A recurring musical theme associated with a character or idea",
+      "The main theme of a symphony",
+      "A bass line pattern",
+      "A type of bridge in a song"
+    ],
+    "correct": "A recurring musical theme associated with a character or idea"
+  },
+  {
+    "question": "Which instrument is Itzhak Perlman famous for?",
+    "answers": [
+      "Violin",
+      "Cello",
+      "Viola",
+      "Piano"
+    ],
+    "correct": "Violin"
+  },
+  {
+    "question": "Who composed 'Clair de Lune'?",
+    "answers": [
+      "Claude Debussy",
+      "Maurice Ravel",
+      "Erik Satie",
+      "Gabriel Faure"
+    ],
+    "correct": "Claude Debussy"
+  },
+  {
+    "question": "What is the lowest note on a standard piano?",
+    "answers": [
+      "A0",
+      "C1",
+      "F0",
+      "B0"
+    ],
+    "correct": "A0"
+  },
+  {
+    "question": "Which musical era came after the Baroque period?",
+    "answers": [
+      "Classical",
+      "Romantic",
+      "Renaissance",
+      "Impressionist"
+    ],
+    "correct": "Classical"
+  },
+  {
+    "question": "Who wrote the song 'Imagine'?",
+    "answers": [
+      "John Lennon",
+      "Paul McCartney",
+      "Ringo Starr",
+      "George Harrison"
+    ],
+    "correct": "John Lennon"
+  },
+  {
+    "question": "What is a cadenza in classical music?",
+    "answers": [
+      "A solo passage near the end of a movement where the soloist can display virtuosity",
+      "The closing chords of a piece",
+      "A type of ornament",
+      "The opening theme"
+    ],
+    "correct": "A solo passage near the end of a movement where the soloist can display virtuosity"
+  },
+  {
+    "question": "Which composer wrote the opera 'Don Giovanni'?",
+    "answers": [
+      "Wolfgang Amadeus Mozart",
+      "Christoph Willibald Gluck",
+      "Joseph Haydn",
+      "Antonio Salieri"
+    ],
+    "correct": "Wolfgang Amadeus Mozart"
+  },
+  {
+    "question": "What is hip-hop's birthplace considered to be?",
+    "answers": [
+      "The Bronx, New York City",
+      "Los Angeles",
+      "Atlanta",
+      "Chicago"
+    ],
+    "correct": "The Bronx, New York City"
+  },
+  {
+    "question": "What is the term for music that follows no key or tonal center?",
+    "answers": [
+      "Atonal",
+      "Polytonal",
+      "Modal",
+      "Chromatic"
+    ],
+    "correct": "Atonal"
+  },
+  {
+    "question": "Who is known for pioneering the use of prepared piano?",
+    "answers": [
+      "John Cage",
+      "Erik Satie",
+      "Charles Ives",
+      "Edgard Varese"
+    ],
+    "correct": "John Cage"
+  },
+  {
+    "question": "Which orchestra is considered one of the world's oldest, founded in 1842?",
+    "answers": [
+      "Vienna Philharmonic",
+      "Berlin Philharmonic",
+      "Royal Philharmonic",
+      "Boston Symphony"
+    ],
+    "correct": "Vienna Philharmonic"
+  },
+  {
+    "question": "What is a suite in classical music?",
+    "answers": [
+      "A collection of instrumental pieces meant to be performed in sequence",
+      "A type of symphony",
+      "A solo piece",
+      "A set of variations"
+    ],
+    "correct": "A collection of instrumental pieces meant to be performed in sequence"
+  },
+  {
+    "question": "Who invented the saxophone?",
+    "answers": [
+      "Adolphe Sax",
+      "Johann Heinrich Schediwy",
+      "Charles Wheatstone",
+      "Theobald Boehm"
+    ],
+    "correct": "Adolphe Sax"
+  },
+  {
+    "question": "What does 'vivace' mean in musical tempo markings?",
+    "answers": [
+      "Lively and fast",
+      "Very slow",
+      "Moderately slow",
+      "Walking pace"
+    ],
+    "correct": "Lively and fast"
+  },
+  {
+    "question": "Which composer is known as the 'Waltz King'?",
+    "answers": [
+      "Johann Strauss II",
+      "Johann Strauss I",
+      "Franz Lehar",
+      "Carl Zeller"
+    ],
+    "correct": "Johann Strauss II"
+  },
+  {
+    "question": "What is the function of a bridge in a popular song?",
+    "answers": [
+      "To provide contrast and variation before the final chorus",
+      "To introduce the main theme",
+      "To end the song",
+      "To repeat the verse"
+    ],
+    "correct": "To provide contrast and variation before the final chorus"
+  },
+  {
+    "question": "Who composed 'Symphony No. 9 in D minor' (Choral Symphony)?",
+    "answers": [
+      "Ludwig van Beethoven",
+      "Franz Schubert",
+      "Johannes Brahms",
+      "Anton Bruckner"
+    ],
+    "correct": "Ludwig van Beethoven"
+  },
+  {
+    "question": "What is the term for two notes played simultaneously a half step apart creating tension?",
+    "answers": [
+      "Dissonance",
+      "Consonance",
+      "Harmony",
+      "Suspension"
+    ],
+    "correct": "Dissonance"
+  },
+  {
+    "question": "Which music festival is held annually in Glastonbury, England?",
+    "answers": [
+      "Glastonbury Festival",
+      "Reading Festival",
+      "Isle of Wight Festival",
+      "Latitude Festival"
+    ],
+    "correct": "Glastonbury Festival"
+  },
+  {
+    "question": "What is a toccata?",
+    "answers": [
+      "A virtuosic keyboard composition demonstrating technical skill",
+      "A slow, meditative piece",
+      "A dance form",
+      "A type of theme and variations"
+    ],
+    "correct": "A virtuosic keyboard composition demonstrating technical skill"
+  },
+  {
+    "question": "Who composed 'Rhapsody in Blue'?",
+    "answers": [
+      "George Gershwin",
+      "Leonard Bernstein",
+      "Aaron Copland",
+      "Samuel Barber"
+    ],
+    "correct": "George Gershwin"
+  },
+  {
+    "question": "What is the oldest known musical instrument?",
+    "answers": [
+      "Bone flute (vulture bone flute ~40,000 years old)",
+      "Drum",
+      "Lyre",
+      "Horn"
+    ],
+    "correct": "Bone flute (vulture bone flute ~40,000 years old)"
+  },
+  {
+    "question": "What term describes a gradual increase in volume?",
+    "answers": [
+      "Crescendo",
+      "Decrescendo",
+      "Sforzando",
+      "Fortissimo"
+    ],
+    "correct": "Crescendo"
+  },
+  {
+    "question": "Which composer wrote 'Peer Gynt'?",
+    "answers": [
+      "Edvard Grieg",
+      "Jean Sibelius",
+      "Carl Nielsen",
+      "Franz Berwald"
+    ],
+    "correct": "Edvard Grieg"
+  },
+  {
+    "question": "What is the treble clef also known as?",
+    "answers": [
+      "G clef",
+      "F clef",
+      "C clef",
+      "Alto clef"
+    ],
+    "correct": "G clef"
+  },
+  {
+    "question": "Which decade saw the rise of punk rock?",
+    "answers": [
+      "1970s",
+      "1960s",
+      "1980s",
+      "1990s"
+    ],
+    "correct": "1970s"
+  }
+]

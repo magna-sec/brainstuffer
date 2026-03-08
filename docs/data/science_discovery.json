@@ -1,0 +1,742 @@
+[
+  {
+    "question": "What is the chemical symbol for gold?",
+    "answers": [
+      "Au",
+      "Ag",
+      "Fe",
+      "Pb"
+    ],
+    "correct": "Au"
+  },
+  {
+    "question": "Who proposed the theory of general relativity?",
+    "answers": [
+      "Albert Einstein",
+      "Isaac Newton",
+      "Niels Bohr",
+      "Max Planck"
+    ],
+    "correct": "Albert Einstein"
+  },
+  {
+    "question": "What is the atomic number of carbon?",
+    "answers": [
+      "6",
+      "8",
+      "12",
+      "14"
+    ],
+    "correct": "6"
+  },
+  {
+    "question": "Which scientist discovered penicillin?",
+    "answers": [
+      "Alexander Fleming",
+      "Louis Pasteur",
+      "Robert Koch",
+      "Joseph Lister"
+    ],
+    "correct": "Alexander Fleming"
+  },
+  {
+    "question": "What is the speed of light in a vacuum (approximately)?",
+    "answers": [
+      "3 x 10^8 m/s",
+      "3 x 10^6 m/s",
+      "3 x 10^10 m/s",
+      "3 x 10^4 m/s"
+    ],
+    "correct": "3 x 10^8 m/s"
+  },
+  {
+    "question": "Who developed the polio vaccine?",
+    "answers": [
+      "Jonas Salk",
+      "Albert Sabin",
+      "Louis Pasteur",
+      "Edward Jenner"
+    ],
+    "correct": "Jonas Salk"
+  },
+  {
+    "question": "What is Newton's second law of motion?",
+    "answers": [
+      "F = ma",
+      "E = mc2",
+      "PV = nRT",
+      "F = mv2/r"
+    ],
+    "correct": "F = ma"
+  },
+  {
+    "question": "Which element has the atomic symbol Fe?",
+    "answers": [
+      "Iron",
+      "Fluorine",
+      "Francium",
+      "Fermium"
+    ],
+    "correct": "Iron"
+  },
+  {
+    "question": "Who discovered the structure of DNA alongside Watson?",
+    "answers": [
+      "Francis Crick",
+      "Rosalind Franklin",
+      "Linus Pauling",
+      "Maurice Wilkins"
+    ],
+    "correct": "Francis Crick"
+  },
+  {
+    "question": "What is the powerhouse of the cell?",
+    "answers": [
+      "Mitochondria",
+      "Nucleus",
+      "Ribosome",
+      "Golgi apparatus"
+    ],
+    "correct": "Mitochondria"
+  },
+  {
+    "question": "Which scientist formulated the law of gravitation?",
+    "answers": [
+      "Isaac Newton",
+      "Galileo Galilei",
+      "Johannes Kepler",
+      "Tycho Brahe"
+    ],
+    "correct": "Isaac Newton"
+  },
+  {
+    "question": "What does DNA stand for?",
+    "answers": [
+      "Deoxyribonucleic acid",
+      "Dinitrogen adenine",
+      "Deoxyribose nuclease acid",
+      "Dinuclear adenosine"
+    ],
+    "correct": "Deoxyribonucleic acid"
+  },
+  {
+    "question": "Which gas makes up the majority of Earth's atmosphere?",
+    "answers": [
+      "Nitrogen",
+      "Oxygen",
+      "Carbon dioxide",
+      "Argon"
+    ],
+    "correct": "Nitrogen"
+  },
+  {
+    "question": "Who won the first Nobel Prize in Physics (1901)?",
+    "answers": [
+      "Wilhelm Rontgen",
+      "Henri Becquerel",
+      "Lord Rayleigh",
+      "Philipp Lenard"
+    ],
+    "correct": "Wilhelm Rontgen"
+  },
+  {
+    "question": "What is the pH of pure water at 25 degrees C?",
+    "answers": [
+      "7",
+      "6",
+      "8",
+      "5"
+    ],
+    "correct": "7"
+  },
+  {
+    "question": "Who proposed the heliocentric model of the solar system in 1543?",
+    "answers": [
+      "Nicolaus Copernicus",
+      "Galileo Galilei",
+      "Johannes Kepler",
+      "Tycho Brahe"
+    ],
+    "correct": "Nicolaus Copernicus"
+  },
+  {
+    "question": "What is the chemical formula for water?",
+    "answers": [
+      "H2O",
+      "H2O2",
+      "HO2",
+      "H3O"
+    ],
+    "correct": "H2O"
+  },
+  {
+    "question": "Which experiment demonstrated that the atom has a nucleus?",
+    "answers": [
+      "Rutherford gold foil experiment",
+      "Millikan oil drop experiment",
+      "Thomson cathode ray experiment",
+      "Davisson-Germer experiment"
+    ],
+    "correct": "Rutherford gold foil experiment"
+  },
+  {
+    "question": "What is Avogadro's number (approximately)?",
+    "answers": [
+      "6.022 x 10^23",
+      "6.022 x 10^24",
+      "6.022 x 10^22",
+      "6.626 x 10^-34"
+    ],
+    "correct": "6.022 x 10^23"
+  },
+  {
+    "question": "Which scientist developed the theory of evolution by natural selection?",
+    "answers": [
+      "Charles Darwin",
+      "Alfred Russel Wallace",
+      "Jean-Baptiste Lamarck",
+      "Gregor Mendel"
+    ],
+    "correct": "Charles Darwin"
+  },
+  {
+    "question": "Who discovered radioactivity?",
+    "answers": [
+      "Henri Becquerel",
+      "Marie Curie",
+      "Ernest Rutherford",
+      "Wilhelm Rontgen"
+    ],
+    "correct": "Henri Becquerel"
+  },
+  {
+    "question": "What is the strongest force in nature at subatomic scales?",
+    "answers": [
+      "Strong nuclear force",
+      "Electromagnetic force",
+      "Weak nuclear force",
+      "Gravity"
+    ],
+    "correct": "Strong nuclear force"
+  },
+  {
+    "question": "Which law states pressure and volume of an ideal gas are inversely proportional at constant temperature?",
+    "answers": [
+      "Boyle's Law",
+      "Charles's Law",
+      "Gay-Lussac's Law",
+      "Dalton's Law"
+    ],
+    "correct": "Boyle's Law"
+  },
+  {
+    "question": "Who discovered X-rays?",
+    "answers": [
+      "Wilhelm Rontgen",
+      "Henri Becquerel",
+      "Marie Curie",
+      "Ernest Rutherford"
+    ],
+    "correct": "Wilhelm Rontgen"
+  },
+  {
+    "question": "What is the SI unit of electrical resistance?",
+    "answers": [
+      "Ohm",
+      "Ampere",
+      "Volt",
+      "Watt"
+    ],
+    "correct": "Ohm"
+  },
+  {
+    "question": "Which scientist developed the rabies vaccine?",
+    "answers": [
+      "Louis Pasteur",
+      "Robert Koch",
+      "Joseph Lister",
+      "Alexander Fleming"
+    ],
+    "correct": "Louis Pasteur"
+  },
+  {
+    "question": "What is the Heisenberg Uncertainty Principle?",
+    "answers": [
+      "Cannot simultaneously know exact position and momentum",
+      "Energy is quantized in discrete packets",
+      "Matter and energy are interchangeable",
+      "Opposite charges attract"
+    ],
+    "correct": "Cannot simultaneously know exact position and momentum"
+  },
+  {
+    "question": "Which gas is produced by photosynthesis?",
+    "answers": [
+      "Oxygen",
+      "Carbon dioxide",
+      "Nitrogen",
+      "Hydrogen"
+    ],
+    "correct": "Oxygen"
+  },
+  {
+    "question": "Who coined the term cell to describe biological cells?",
+    "answers": [
+      "Robert Hooke",
+      "Antonie van Leeuwenhoek",
+      "Rudolf Virchow",
+      "Matthias Schleiden"
+    ],
+    "correct": "Robert Hooke"
+  },
+  {
+    "question": "What is the chemical symbol for potassium?",
+    "answers": [
+      "K",
+      "P",
+      "Po",
+      "Pt"
+    ],
+    "correct": "K"
+  },
+  {
+    "question": "Which planet did Galileo observe moons around in 1610?",
+    "answers": [
+      "Jupiter",
+      "Saturn",
+      "Mars",
+      "Venus"
+    ],
+    "correct": "Jupiter"
+  },
+  {
+    "question": "What does the second law of thermodynamics state?",
+    "answers": [
+      "Entropy of an isolated system tends to increase",
+      "Energy cannot be created or destroyed",
+      "Every action has an equal opposite reaction",
+      "Pressure and volume are inversely proportional"
+    ],
+    "correct": "Entropy of an isolated system tends to increase"
+  },
+  {
+    "question": "Who developed the periodic table?",
+    "answers": [
+      "Dmitri Mendeleev",
+      "John Newlands",
+      "Antoine Lavoisier",
+      "Julius Lothar Meyer"
+    ],
+    "correct": "Dmitri Mendeleev"
+  },
+  {
+    "question": "What is the process by which plants make food using sunlight?",
+    "answers": [
+      "Photosynthesis",
+      "Respiration",
+      "Transpiration",
+      "Osmosis"
+    ],
+    "correct": "Photosynthesis"
+  },
+  {
+    "question": "What is the unit of frequency?",
+    "answers": [
+      "Hertz",
+      "Joule",
+      "Newton",
+      "Pascal"
+    ],
+    "correct": "Hertz"
+  },
+  {
+    "question": "Who published On the Origin of Species in 1859?",
+    "answers": [
+      "Charles Darwin",
+      "Alfred Russel Wallace",
+      "Thomas Henry Huxley",
+      "Herbert Spencer"
+    ],
+    "correct": "Charles Darwin"
+  },
+  {
+    "question": "What is the chemical symbol for sodium?",
+    "answers": [
+      "Na",
+      "So",
+      "S",
+      "Sn"
+    ],
+    "correct": "Na"
+  },
+  {
+    "question": "Which type of radiation has the greatest penetrating power?",
+    "answers": [
+      "Gamma rays",
+      "Beta particles",
+      "Alpha particles",
+      "Neutrons"
+    ],
+    "correct": "Gamma rays"
+  },
+  {
+    "question": "What did Marie Curie discover?",
+    "answers": [
+      "Polonium and Radium",
+      "Uranium and Thorium",
+      "Radium only",
+      "Thorium and Polonium"
+    ],
+    "correct": "Polonium and Radium"
+  },
+  {
+    "question": "Which scientist won the Nobel Prize in Physics for the photoelectric effect?",
+    "answers": [
+      "Albert Einstein",
+      "Max Planck",
+      "Niels Bohr",
+      "Werner Heisenberg"
+    ],
+    "correct": "Albert Einstein"
+  },
+  {
+    "question": "What is the human body's largest organ?",
+    "answers": [
+      "Skin",
+      "Liver",
+      "Brain",
+      "Lungs"
+    ],
+    "correct": "Skin"
+  },
+  {
+    "question": "Who discovered the electron?",
+    "answers": [
+      "J.J. Thomson",
+      "Ernest Rutherford",
+      "Niels Bohr",
+      "Robert Millikan"
+    ],
+    "correct": "J.J. Thomson"
+  },
+  {
+    "question": "Which bone is the longest in the human body?",
+    "answers": [
+      "Femur",
+      "Tibia",
+      "Humerus",
+      "Fibula"
+    ],
+    "correct": "Femur"
+  },
+  {
+    "question": "What is the chemical formula for table salt?",
+    "answers": [
+      "NaCl",
+      "KCl",
+      "CaCl2",
+      "MgCl2"
+    ],
+    "correct": "NaCl"
+  },
+  {
+    "question": "What does E = mc2 represent?",
+    "answers": [
+      "Mass-energy equivalence",
+      "Force equals mass times acceleration",
+      "Energy of a photon",
+      "Kinetic energy formula"
+    ],
+    "correct": "Mass-energy equivalence"
+  },
+  {
+    "question": "Which organ produces insulin?",
+    "answers": [
+      "Pancreas",
+      "Liver",
+      "Kidney",
+      "Spleen"
+    ],
+    "correct": "Pancreas"
+  },
+  {
+    "question": "Who is credited with inventing the telephone?",
+    "answers": [
+      "Alexander Graham Bell",
+      "Elisha Gray",
+      "Thomas Edison",
+      "Nikola Tesla"
+    ],
+    "correct": "Alexander Graham Bell"
+  },
+  {
+    "question": "What is the chemical symbol for lead?",
+    "answers": [
+      "Pb",
+      "Le",
+      "Ld",
+      "Pl"
+    ],
+    "correct": "Pb"
+  },
+  {
+    "question": "What is the process by which a solid turns directly into a gas?",
+    "answers": [
+      "Sublimation",
+      "Evaporation",
+      "Condensation",
+      "Deposition"
+    ],
+    "correct": "Sublimation"
+  },
+  {
+    "question": "Which blood type is the universal donor?",
+    "answers": [
+      "O negative",
+      "O positive",
+      "AB negative",
+      "AB positive"
+    ],
+    "correct": "O negative"
+  },
+  {
+    "question": "What is the most abundant element in the universe?",
+    "answers": [
+      "Hydrogen",
+      "Helium",
+      "Oxygen",
+      "Carbon"
+    ],
+    "correct": "Hydrogen"
+  },
+  {
+    "question": "Who discovered the neutron?",
+    "answers": [
+      "James Chadwick",
+      "Ernest Rutherford",
+      "Niels Bohr",
+      "Enrico Fermi"
+    ],
+    "correct": "James Chadwick"
+  },
+  {
+    "question": "What type of bond involves sharing of electrons between atoms?",
+    "answers": [
+      "Covalent bond",
+      "Ionic bond",
+      "Metallic bond",
+      "Hydrogen bond"
+    ],
+    "correct": "Covalent bond"
+  },
+  {
+    "question": "What is the term for minimum energy needed to start a chemical reaction?",
+    "answers": [
+      "Activation energy",
+      "Enthalpy",
+      "Gibbs free energy",
+      "Bond dissociation energy"
+    ],
+    "correct": "Activation energy"
+  },
+  {
+    "question": "Which organ is responsible for filtering blood?",
+    "answers": [
+      "Kidney",
+      "Liver",
+      "Spleen",
+      "Pancreas"
+    ],
+    "correct": "Kidney"
+  },
+  {
+    "question": "What does a catalyst do in a chemical reaction?",
+    "answers": [
+      "Lowers the activation energy",
+      "Increases the temperature",
+      "Adds itself to the products",
+      "Increases the activation energy"
+    ],
+    "correct": "Lowers the activation energy"
+  },
+  {
+    "question": "Which element is liquid at room temperature besides mercury?",
+    "answers": [
+      "Bromine",
+      "Cesium",
+      "Gallium",
+      "Francium"
+    ],
+    "correct": "Bromine"
+  },
+  {
+    "question": "What protein carries oxygen in red blood cells?",
+    "answers": [
+      "Hemoglobin",
+      "Myoglobin",
+      "Albumin",
+      "Fibrinogen"
+    ],
+    "correct": "Hemoglobin"
+  },
+  {
+    "question": "Who proposed the quantum model of the atom with discrete energy levels?",
+    "answers": [
+      "Niels Bohr",
+      "Erwin Schrodinger",
+      "Werner Heisenberg",
+      "Max Planck"
+    ],
+    "correct": "Niels Bohr"
+  },
+  {
+    "question": "What is the phenomenon where light bends around an obstacle?",
+    "answers": [
+      "Diffraction",
+      "Refraction",
+      "Reflection",
+      "Dispersion"
+    ],
+    "correct": "Diffraction"
+  },
+  {
+    "question": "Which acid is found in the stomach?",
+    "answers": [
+      "Hydrochloric acid",
+      "Sulfuric acid",
+      "Nitric acid",
+      "Acetic acid"
+    ],
+    "correct": "Hydrochloric acid"
+  },
+  {
+    "question": "Who developed the germ theory of disease?",
+    "answers": [
+      "Louis Pasteur",
+      "Robert Koch",
+      "Joseph Lister",
+      "Ignaz Semmelweis"
+    ],
+    "correct": "Louis Pasteur"
+  },
+  {
+    "question": "What is the term for the number of protons in an atom nucleus?",
+    "answers": [
+      "Atomic number",
+      "Mass number",
+      "Atomic mass",
+      "Isotope number"
+    ],
+    "correct": "Atomic number"
+  },
+  {
+    "question": "What is the half-life of Carbon-14?",
+    "answers": [
+      "5,730 years",
+      "1,620 years",
+      "14,000 years",
+      "3,200 years"
+    ],
+    "correct": "5,730 years"
+  },
+  {
+    "question": "Which scientist first used a microscope to observe microorganisms?",
+    "answers": [
+      "Antonie van Leeuwenhoek",
+      "Robert Hooke",
+      "Louis Pasteur",
+      "Robert Koch"
+    ],
+    "correct": "Antonie van Leeuwenhoek"
+  },
+  {
+    "question": "What is the SI unit of force?",
+    "answers": [
+      "Newton",
+      "Joule",
+      "Pascal",
+      "Watt"
+    ],
+    "correct": "Newton"
+  },
+  {
+    "question": "What is the chemical symbol for silver?",
+    "answers": [
+      "Ag",
+      "Si",
+      "Au",
+      "Sr"
+    ],
+    "correct": "Ag"
+  },
+  {
+    "question": "What law relates current, voltage, and resistance in a circuit?",
+    "answers": [
+      "Ohm's Law",
+      "Faraday's Law",
+      "Ampere's Law",
+      "Kirchhoff's Law"
+    ],
+    "correct": "Ohm's Law"
+  },
+  {
+    "question": "What is the approximate temperature of the Sun's surface?",
+    "answers": [
+      "5,500 degrees C",
+      "1,000 degrees C",
+      "15,000 degrees C",
+      "500 degrees C"
+    ],
+    "correct": "5,500 degrees C"
+  },
+  {
+    "question": "Which vitamin is produced when skin is exposed to sunlight?",
+    "answers": [
+      "Vitamin D",
+      "Vitamin A",
+      "Vitamin C",
+      "Vitamin B12"
+    ],
+    "correct": "Vitamin D"
+  },
+  {
+    "question": "Who first described black holes mathematically?",
+    "answers": [
+      "Karl Schwarzschild",
+      "Albert Einstein",
+      "Stephen Hawking",
+      "John Wheeler"
+    ],
+    "correct": "Karl Schwarzschild"
+  },
+  {
+    "question": "Which part of the brain controls balance and coordination?",
+    "answers": [
+      "Cerebellum",
+      "Cerebrum",
+      "Medulla oblongata",
+      "Hypothalamus"
+    ],
+    "correct": "Cerebellum"
+  },
+  {
+    "question": "What is the chemical formula for ammonia?",
+    "answers": [
+      "NH3",
+      "N2H4",
+      "NO2",
+      "N2O"
+    ],
+    "correct": "NH3"
+  },
+  {
+    "question": "What scale is used to measure earthquake magnitude?",
+    "answers": [
+      "Richter scale",
+      "Beaufort scale",
+      "Mohs scale",
+      "Fujita scale"
+    ],
+    "correct": "Richter scale"
+  }
+]

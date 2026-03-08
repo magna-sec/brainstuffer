@@ -1,0 +1,992 @@
+[
+  {
+    "question": "In what year did World War I begin?",
+    "answers": [
+      "1914",
+      "1912",
+      "1916",
+      "1918"
+    ],
+    "correct": "1914"
+  },
+  {
+    "question": "Who was the first Emperor of Rome?",
+    "answers": [
+      "Augustus",
+      "Julius Caesar",
+      "Nero",
+      "Caligula"
+    ],
+    "correct": "Augustus"
+  },
+  {
+    "question": "The Battle of Hastings took place in which year?",
+    "answers": [
+      "1066",
+      "1086",
+      "1046",
+      "1076"
+    ],
+    "correct": "1066"
+  },
+  {
+    "question": "Who led the Cuban Revolution?",
+    "answers": [
+      "Fidel Castro",
+      "Che Guevara",
+      "Raul Castro",
+      "Fulgencio Batista"
+    ],
+    "correct": "Fidel Castro"
+  },
+  {
+    "question": "Which empire was known as the 'Empire on which the sun never sets'?",
+    "answers": [
+      "British Empire",
+      "Spanish Empire",
+      "Mongol Empire",
+      "Ottoman Empire"
+    ],
+    "correct": "British Empire"
+  },
+  {
+    "question": "The French Revolution began in which year?",
+    "answers": [
+      "1789",
+      "1776",
+      "1799",
+      "1783"
+    ],
+    "correct": "1789"
+  },
+  {
+    "question": "Who was the first President of the United States?",
+    "answers": [
+      "George Washington",
+      "John Adams",
+      "Thomas Jefferson",
+      "Benjamin Franklin"
+    ],
+    "correct": "George Washington"
+  },
+  {
+    "question": "Which treaty ended World War I?",
+    "answers": [
+      "Treaty of Versailles",
+      "Treaty of Paris",
+      "Treaty of Ghent",
+      "Treaty of Utrecht"
+    ],
+    "correct": "Treaty of Versailles"
+  },
+  {
+    "question": "In what year did the Berlin Wall fall?",
+    "answers": [
+      "1989",
+      "1991",
+      "1987",
+      "1985"
+    ],
+    "correct": "1989"
+  },
+  {
+    "question": "Who was the Egyptian pharaoh during the Exodus according to tradition?",
+    "answers": [
+      "Ramesses II",
+      "Tutankhamun",
+      "Akhenaten",
+      "Thutmose III"
+    ],
+    "correct": "Ramesses II"
+  },
+  {
+    "question": "The Magna Carta was signed in which year?",
+    "answers": [
+      "1215",
+      "1185",
+      "1265",
+      "1305"
+    ],
+    "correct": "1215"
+  },
+  {
+    "question": "Which dynasty built the Great Wall of China originally?",
+    "answers": [
+      "Qin dynasty",
+      "Han dynasty",
+      "Ming dynasty",
+      "Tang dynasty"
+    ],
+    "correct": "Qin dynasty"
+  },
+  {
+    "question": "Who assassinated Archduke Franz Ferdinand in 1914?",
+    "answers": [
+      "Gavrilo Princip",
+      "Dragutin Dimitrijevic",
+      "Mehmed Talat",
+      "Nikola Pasic"
+    ],
+    "correct": "Gavrilo Princip"
+  },
+  {
+    "question": "The Roman Empire officially split into East and West in which year?",
+    "answers": [
+      "285 AD",
+      "313 AD",
+      "395 AD",
+      "476 AD"
+    ],
+    "correct": "395 AD"
+  },
+  {
+    "question": "Who was the first person to circumnavigate the globe?",
+    "answers": [
+      "Ferdinand Magellan's expedition (completed by Elcano)",
+      "Christopher Columbus",
+      "Vasco da Gama",
+      "Francis Drake"
+    ],
+    "correct": "Ferdinand Magellan's expedition (completed by Elcano)"
+  },
+  {
+    "question": "The Mongol Empire was founded by whom?",
+    "answers": [
+      "Genghis Khan",
+      "Kublai Khan",
+      "Timur",
+      "Ogedei Khan"
+    ],
+    "correct": "Genghis Khan"
+  },
+  {
+    "question": "In which year did the American Civil War begin?",
+    "answers": [
+      "1861",
+      "1859",
+      "1863",
+      "1865"
+    ],
+    "correct": "1861"
+  },
+  {
+    "question": "Which city was the capital of the Byzantine Empire?",
+    "answers": [
+      "Constantinople",
+      "Athens",
+      "Alexandria",
+      "Antioch"
+    ],
+    "correct": "Constantinople"
+  },
+  {
+    "question": "Who was Napoleon Bonaparte defeated by at the Battle of Waterloo?",
+    "answers": [
+      "Duke of Wellington and Blucher",
+      "Duke of Wellington alone",
+      "Tsar Alexander I",
+      "Viscount Castlereagh"
+    ],
+    "correct": "Duke of Wellington and Blucher"
+  },
+  {
+    "question": "The Bolshevik Revolution occurred in which year?",
+    "answers": [
+      "1917",
+      "1905",
+      "1914",
+      "1921"
+    ],
+    "correct": "1917"
+  },
+  {
+    "question": "Which ancient wonder of the world still exists today?",
+    "answers": [
+      "The Great Pyramid of Giza",
+      "The Colossus of Rhodes",
+      "The Hanging Gardens of Babylon",
+      "The Lighthouse of Alexandria"
+    ],
+    "correct": "The Great Pyramid of Giza"
+  },
+  {
+    "question": "Who was the last Tsar of Russia?",
+    "answers": [
+      "Nicholas II",
+      "Alexander III",
+      "Nicholas I",
+      "Alexander II"
+    ],
+    "correct": "Nicholas II"
+  },
+  {
+    "question": "The D-Day landings took place on which date?",
+    "answers": [
+      "June 6, 1944",
+      "June 6, 1943",
+      "May 8, 1945",
+      "September 1, 1939"
+    ],
+    "correct": "June 6, 1944"
+  },
+  {
+    "question": "Which empire ruled India before British colonization in most regions?",
+    "answers": [
+      "Mughal Empire",
+      "Maratha Empire",
+      "Delhi Sultanate",
+      "Gupta Empire"
+    ],
+    "correct": "Mughal Empire"
+  },
+  {
+    "question": "Who was the first woman to win a Nobel Prize?",
+    "answers": [
+      "Marie Curie",
+      "Bertha von Suttner",
+      "Jane Addams",
+      "Pearl Buck"
+    ],
+    "correct": "Marie Curie"
+  },
+  {
+    "question": "In what year did the Soviet Union dissolve?",
+    "answers": [
+      "1991",
+      "1989",
+      "1985",
+      "1993"
+    ],
+    "correct": "1991"
+  },
+  {
+    "question": "Which battle is considered the turning point of World War II on the Eastern Front?",
+    "answers": [
+      "Battle of Stalingrad",
+      "Battle of Kursk",
+      "Battle of Moscow",
+      "Siege of Leningrad"
+    ],
+    "correct": "Battle of Stalingrad"
+  },
+  {
+    "question": "Who was the first Emperor of China?",
+    "answers": [
+      "Qin Shi Huang",
+      "Liu Bang",
+      "Emperor Wu",
+      "Emperor Yao"
+    ],
+    "correct": "Qin Shi Huang"
+  },
+  {
+    "question": "The Renaissance began in which country?",
+    "answers": [
+      "Italy",
+      "France",
+      "Germany",
+      "England"
+    ],
+    "correct": "Italy"
+  },
+  {
+    "question": "Which year did India gain independence from Britain?",
+    "answers": [
+      "1947",
+      "1945",
+      "1950",
+      "1942"
+    ],
+    "correct": "1947"
+  },
+  {
+    "question": "Who built the Taj Mahal?",
+    "answers": [
+      "Shah Jahan",
+      "Akbar",
+      "Aurangzeb",
+      "Humayun"
+    ],
+    "correct": "Shah Jahan"
+  },
+  {
+    "question": "The Hundred Years War was fought between which two countries?",
+    "answers": [
+      "England and France",
+      "England and Spain",
+      "France and Germany",
+      "England and Scotland"
+    ],
+    "correct": "England and France"
+  },
+  {
+    "question": "Who delivered the Gettysburg Address?",
+    "answers": [
+      "Abraham Lincoln",
+      "Ulysses S. Grant",
+      "Frederick Douglass",
+      "William Seward"
+    ],
+    "correct": "Abraham Lincoln"
+  },
+  {
+    "question": "In which year was the Declaration of Independence signed?",
+    "answers": [
+      "1776",
+      "1775",
+      "1783",
+      "1781"
+    ],
+    "correct": "1776"
+  },
+  {
+    "question": "Which pharaoh's tomb was discovered by Howard Carter in 1922?",
+    "answers": [
+      "Tutankhamun",
+      "Ramesses II",
+      "Amenhotep III",
+      "Akhenaten"
+    ],
+    "correct": "Tutankhamun"
+  },
+  {
+    "question": "The Ottoman Empire was based in which city?",
+    "answers": [
+      "Constantinople (Istanbul)",
+      "Cairo",
+      "Baghdad",
+      "Damascus"
+    ],
+    "correct": "Constantinople (Istanbul)"
+  },
+  {
+    "question": "Who was the first Chancellor of unified Germany in 1871?",
+    "answers": [
+      "Otto von Bismarck",
+      "Kaiser Wilhelm I",
+      "Helmuth von Moltke",
+      "Alfred von Schlieffen"
+    ],
+    "correct": "Otto von Bismarck"
+  },
+  {
+    "question": "The Korean War armistice was signed in which year?",
+    "answers": [
+      "1953",
+      "1950",
+      "1952",
+      "1955"
+    ],
+    "correct": "1953"
+  },
+  {
+    "question": "Which civilization built Machu Picchu?",
+    "answers": [
+      "Inca",
+      "Aztec",
+      "Maya",
+      "Tiwanaku"
+    ],
+    "correct": "Inca"
+  },
+  {
+    "question": "Who was the leader of Nazi Germany?",
+    "answers": [
+      "Adolf Hitler",
+      "Heinrich Himmler",
+      "Hermann Goering",
+      "Joseph Goebbels"
+    ],
+    "correct": "Adolf Hitler"
+  },
+  {
+    "question": "The Crusades were primarily aimed at capturing which city?",
+    "answers": [
+      "Jerusalem",
+      "Constantinople",
+      "Alexandria",
+      "Antioch"
+    ],
+    "correct": "Jerusalem"
+  },
+  {
+    "question": "In which year did Mao Zedong proclaim the People's Republic of China?",
+    "answers": [
+      "1949",
+      "1945",
+      "1950",
+      "1947"
+    ],
+    "correct": "1949"
+  },
+  {
+    "question": "Who was the British Prime Minister during most of World War II?",
+    "answers": [
+      "Winston Churchill",
+      "Neville Chamberlain",
+      "Clement Attlee",
+      "Anthony Eden"
+    ],
+    "correct": "Winston Churchill"
+  },
+  {
+    "question": "The Peloponnesian War was fought between which two city-states?",
+    "answers": [
+      "Athens and Sparta",
+      "Athens and Corinth",
+      "Sparta and Thebes",
+      "Corinth and Sparta"
+    ],
+    "correct": "Athens and Sparta"
+  },
+  {
+    "question": "In what year did apartheid officially end in South Africa?",
+    "answers": [
+      "1994",
+      "1990",
+      "1991",
+      "1996"
+    ],
+    "correct": "1994"
+  },
+  {
+    "question": "Who was the first woman Prime Minister of the United Kingdom?",
+    "answers": [
+      "Margaret Thatcher",
+      "Theresa May",
+      "Barbara Castle",
+      "Shirley Williams"
+    ],
+    "correct": "Margaret Thatcher"
+  },
+  {
+    "question": "The Byzantine Empire fell to the Ottomans in which year?",
+    "answers": [
+      "1453",
+      "1389",
+      "1204",
+      "1492"
+    ],
+    "correct": "1453"
+  },
+  {
+    "question": "Who invented the printing press in Europe around 1440?",
+    "answers": [
+      "Johannes Gutenberg",
+      "William Caxton",
+      "Aldus Manutius",
+      "Robert Estienne"
+    ],
+    "correct": "Johannes Gutenberg"
+  },
+  {
+    "question": "Which ancient Greek city-state was known for its military culture?",
+    "answers": [
+      "Sparta",
+      "Athens",
+      "Corinth",
+      "Thebes"
+    ],
+    "correct": "Sparta"
+  },
+  {
+    "question": "The Vietnam War ended in which year?",
+    "answers": [
+      "1975",
+      "1973",
+      "1970",
+      "1969"
+    ],
+    "correct": "1975"
+  },
+  {
+    "question": "Who was the first Prime Minister of Israel?",
+    "answers": [
+      "David Ben-Gurion",
+      "Moshe Sharett",
+      "Levi Eshkol",
+      "Golda Meir"
+    ],
+    "correct": "David Ben-Gurion"
+  },
+  {
+    "question": "Which empire was ruled by Suleiman the Magnificent?",
+    "answers": [
+      "Ottoman Empire",
+      "Safavid Empire",
+      "Mughal Empire",
+      "Byzantine Empire"
+    ],
+    "correct": "Ottoman Empire"
+  },
+  {
+    "question": "The signing of the Armistice ending WWI occurred on which date?",
+    "answers": [
+      "November 11, 1918",
+      "November 11, 1919",
+      "October 11, 1918",
+      "December 11, 1918"
+    ],
+    "correct": "November 11, 1918"
+  },
+  {
+    "question": "Who was the last Aztec Emperor?",
+    "answers": [
+      "Cuauhtemoc",
+      "Montezuma II",
+      "Ahuizotl",
+      "Itzcoatl"
+    ],
+    "correct": "Cuauhtemoc"
+  },
+  {
+    "question": "The Meiji Restoration occurred in which country?",
+    "answers": [
+      "Japan",
+      "China",
+      "Korea",
+      "Vietnam"
+    ],
+    "correct": "Japan"
+  },
+  {
+    "question": "Which explorer first reached the Americas from Europe in 1492?",
+    "answers": [
+      "Christopher Columbus",
+      "Amerigo Vespucci",
+      "John Cabot",
+      "Leif Erikson"
+    ],
+    "correct": "Christopher Columbus"
+  },
+  {
+    "question": "The Thirty Years War was primarily fought in which region?",
+    "answers": [
+      "Holy Roman Empire (Central Europe)",
+      "France and Spain",
+      "Italy",
+      "England and the Netherlands"
+    ],
+    "correct": "Holy Roman Empire (Central Europe)"
+  },
+  {
+    "question": "Who was the Queen of England during the defeat of the Spanish Armada?",
+    "answers": [
+      "Elizabeth I",
+      "Mary I",
+      "Mary Queen of Scots",
+      "Anne Boleyn"
+    ],
+    "correct": "Elizabeth I"
+  },
+  {
+    "question": "In what year did Japan attack Pearl Harbor?",
+    "answers": [
+      "1941",
+      "1939",
+      "1942",
+      "1943"
+    ],
+    "correct": "1941"
+  },
+  {
+    "question": "Who was the first President of the Republic of Turkey?",
+    "answers": [
+      "Mustafa Kemal Ataturk",
+      "Ismet Inonu",
+      "Celal Bayar",
+      "Adnan Menderes"
+    ],
+    "correct": "Mustafa Kemal Ataturk"
+  },
+  {
+    "question": "The Black Death pandemic peaked in Europe in which decade?",
+    "answers": [
+      "1340s-1350s",
+      "1300s-1310s",
+      "1360s-1370s",
+      "1280s-1290s"
+    ],
+    "correct": "1340s-1350s"
+  },
+  {
+    "question": "Which battle ended the Napoleonic Wars?",
+    "answers": [
+      "Battle of Waterloo",
+      "Battle of Leipzig",
+      "Battle of Borodino",
+      "Battle of Austerlitz"
+    ],
+    "correct": "Battle of Waterloo"
+  },
+  {
+    "question": "Who wrote 'The Communist Manifesto'?",
+    "answers": [
+      "Karl Marx and Friedrich Engels",
+      "Karl Marx alone",
+      "Friedrich Engels alone",
+      "Vladimir Lenin"
+    ],
+    "correct": "Karl Marx and Friedrich Engels"
+  },
+  {
+    "question": "The Iranian Revolution occurred in which year?",
+    "answers": [
+      "1979",
+      "1977",
+      "1981",
+      "1975"
+    ],
+    "correct": "1979"
+  },
+  {
+    "question": "Which civilization created the first known writing system?",
+    "answers": [
+      "Sumerians",
+      "Egyptians",
+      "Chinese",
+      "Phoenicians"
+    ],
+    "correct": "Sumerians"
+  },
+  {
+    "question": "The Spanish-American War ended with which treaty?",
+    "answers": [
+      "Treaty of Paris (1898)",
+      "Treaty of Madrid",
+      "Treaty of Havana",
+      "Treaty of Versailles"
+    ],
+    "correct": "Treaty of Paris (1898)"
+  },
+  {
+    "question": "Who was the first female Pharaoh of Egypt?",
+    "answers": [
+      "Hatshepsut",
+      "Cleopatra VII",
+      "Nefertiti",
+      "Ankhesenamun"
+    ],
+    "correct": "Hatshepsut"
+  },
+  {
+    "question": "In which year did the United States enter World War I?",
+    "answers": [
+      "1917",
+      "1914",
+      "1916",
+      "1918"
+    ],
+    "correct": "1917"
+  },
+  {
+    "question": "The Roman Republic transitioned to the Roman Empire in which approximate year?",
+    "answers": [
+      "27 BC",
+      "44 BC",
+      "100 BC",
+      "14 AD"
+    ],
+    "correct": "27 BC"
+  },
+  {
+    "question": "Who led the Indian independence movement through nonviolent resistance?",
+    "answers": [
+      "Mahatma Gandhi",
+      "Jawaharlal Nehru",
+      "Subhas Chandra Bose",
+      "Bal Gangadhar Tilak"
+    ],
+    "correct": "Mahatma Gandhi"
+  },
+  {
+    "question": "The Rwandan genocide occurred in which year?",
+    "answers": [
+      "1994",
+      "1990",
+      "1996",
+      "1992"
+    ],
+    "correct": "1994"
+  },
+  {
+    "question": "Which European nation first colonized Brazil?",
+    "answers": [
+      "Portugal",
+      "Spain",
+      "France",
+      "Netherlands"
+    ],
+    "correct": "Portugal"
+  },
+  {
+    "question": "What was the name of the alliance between Germany, Austria-Hungary, and Italy in WWI?",
+    "answers": [
+      "Triple Alliance",
+      "Triple Entente",
+      "Central Powers",
+      "Axis Powers"
+    ],
+    "correct": "Triple Alliance"
+  },
+  {
+    "question": "Who was the first person to walk on the Moon?",
+    "answers": [
+      "Neil Armstrong",
+      "Buzz Aldrin",
+      "Yuri Gagarin",
+      "Alan Shepard"
+    ],
+    "correct": "Neil Armstrong"
+  },
+  {
+    "question": "The Suez Canal was opened in which year?",
+    "answers": [
+      "1869",
+      "1859",
+      "1879",
+      "1849"
+    ],
+    "correct": "1869"
+  },
+  {
+    "question": "Which dynasty ruled China during the construction of most of the current Great Wall?",
+    "answers": [
+      "Ming dynasty",
+      "Qin dynasty",
+      "Han dynasty",
+      "Yuan dynasty"
+    ],
+    "correct": "Ming dynasty"
+  },
+  {
+    "question": "The Cuban Missile Crisis occurred in which year?",
+    "answers": [
+      "1962",
+      "1960",
+      "1963",
+      "1961"
+    ],
+    "correct": "1962"
+  },
+  {
+    "question": "Who was the first European to reach India by sea?",
+    "answers": [
+      "Vasco da Gama",
+      "Ferdinand Magellan",
+      "Bartolomeu Dias",
+      "Pedro Cabral"
+    ],
+    "correct": "Vasco da Gama"
+  },
+  {
+    "question": "The partition of Korea along the 38th parallel occurred after which war?",
+    "answers": [
+      "World War II",
+      "Korean War",
+      "Vietnam War",
+      "Sino-Japanese War"
+    ],
+    "correct": "World War II"
+  },
+  {
+    "question": "Who commanded the Allied forces on D-Day?",
+    "answers": [
+      "Dwight D. Eisenhower",
+      "Bernard Montgomery",
+      "George Patton",
+      "Omar Bradley"
+    ],
+    "correct": "Dwight D. Eisenhower"
+  },
+  {
+    "question": "Which treaty ended the Thirty Years War?",
+    "answers": [
+      "Peace of Westphalia",
+      "Treaty of Utrecht",
+      "Peace of Augsburg",
+      "Treaty of Pyrenees"
+    ],
+    "correct": "Peace of Westphalia"
+  },
+  {
+    "question": "Cleopatra was the last ruler of which dynasty?",
+    "answers": [
+      "Ptolemaic dynasty",
+      "Macedonian dynasty",
+      "Lagid dynasty",
+      "Seleucid dynasty"
+    ],
+    "correct": "Ptolemaic dynasty"
+  },
+  {
+    "question": "The Spanish Civil War began in which year?",
+    "answers": [
+      "1936",
+      "1934",
+      "1938",
+      "1932"
+    ],
+    "correct": "1936"
+  },
+  {
+    "question": "Who was the first Secretary-General of the United Nations?",
+    "answers": [
+      "Trygve Lie",
+      "Dag Hammarskjold",
+      "U Thant",
+      "Kurt Waldheim"
+    ],
+    "correct": "Trygve Lie"
+  },
+  {
+    "question": "The ancient city of Carthage was located in which modern country?",
+    "answers": [
+      "Tunisia",
+      "Libya",
+      "Algeria",
+      "Morocco"
+    ],
+    "correct": "Tunisia"
+  },
+  {
+    "question": "Which revolution began with the storming of the Bastille?",
+    "answers": [
+      "French Revolution",
+      "American Revolution",
+      "Russian Revolution",
+      "Industrial Revolution"
+    ],
+    "correct": "French Revolution"
+  },
+  {
+    "question": "The Marshall Plan was a US aid program for which region after WWII?",
+    "answers": [
+      "Western Europe",
+      "Eastern Europe",
+      "Asia",
+      "Latin America"
+    ],
+    "correct": "Western Europe"
+  },
+  {
+    "question": "Who was the first ruler to unite Upper and Lower Egypt?",
+    "answers": [
+      "Narmer (Menes)",
+      "Khufu",
+      "Ramesses II",
+      "Thutmose I"
+    ],
+    "correct": "Narmer (Menes)"
+  },
+  {
+    "question": "The Tokugawa shogunate ruled which country?",
+    "answers": [
+      "Japan",
+      "China",
+      "Korea",
+      "Vietnam"
+    ],
+    "correct": "Japan"
+  },
+  {
+    "question": "When was the state of Israel declared?",
+    "answers": [
+      "1948",
+      "1947",
+      "1949",
+      "1950"
+    ],
+    "correct": "1948"
+  },
+  {
+    "question": "What was the name of the ship that sank in 1912?",
+    "answers": [
+      "Titanic",
+      "Lusitania",
+      "Britannic",
+      "Olympic"
+    ],
+    "correct": "Titanic"
+  },
+  {
+    "question": "Who was the dominant leader of the Soviet Union after Stalin?",
+    "answers": [
+      "Nikita Khrushchev",
+      "Leonid Brezhnev",
+      "Georgy Malenkov",
+      "Vyacheslav Molotov"
+    ],
+    "correct": "Nikita Khrushchev"
+  },
+  {
+    "question": "The Aztec Empire was conquered by which Spanish conquistador?",
+    "answers": [
+      "Hernan Cortes",
+      "Francisco Pizarro",
+      "Juan de Grijalva",
+      "Diego Velazquez"
+    ],
+    "correct": "Hernan Cortes"
+  },
+  {
+    "question": "In which year did the Great Fire of London occur?",
+    "answers": [
+      "1666",
+      "1656",
+      "1676",
+      "1636"
+    ],
+    "correct": "1666"
+  },
+  {
+    "question": "The League of Nations was established after which war?",
+    "answers": [
+      "World War I",
+      "World War II",
+      "Franco-Prussian War",
+      "Crimean War"
+    ],
+    "correct": "World War I"
+  },
+  {
+    "question": "Who was the first female Prime Minister of India?",
+    "answers": [
+      "Indira Gandhi",
+      "Sonia Gandhi",
+      "Pratibha Patil",
+      "Sarojini Naidu"
+    ],
+    "correct": "Indira Gandhi"
+  },
+  {
+    "question": "The Battle of Thermopylae involved which Greek city-state holding off Persia?",
+    "answers": [
+      "Sparta",
+      "Athens",
+      "Corinth",
+      "Thebes"
+    ],
+    "correct": "Sparta"
+  },
+  {
+    "question": "The first successful powered airplane flight was in which year?",
+    "answers": [
+      "1903",
+      "1905",
+      "1900",
+      "1910"
+    ],
+    "correct": "1903"
+  },
+  {
+    "question": "Which empire did Alexander the Great create?",
+    "answers": [
+      "Macedonian Empire",
+      "Persian Empire",
+      "Greek Empire",
+      "Roman Empire"
+    ],
+    "correct": "Macedonian Empire"
+  }
+]

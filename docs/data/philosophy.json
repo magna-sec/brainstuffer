@@ -1,0 +1,592 @@
+[
+  {
+    "question": "Who is known as the father of Western philosophy?",
+    "answers": [
+      "Socrates",
+      "Plato",
+      "Aristotle",
+      "Thales"
+    ],
+    "correct": "Socrates"
+  },
+  {
+    "question": "Which philosopher wrote 'The Republic'?",
+    "answers": [
+      "Plato",
+      "Aristotle",
+      "Socrates",
+      "Xenophon"
+    ],
+    "correct": "Plato"
+  },
+  {
+    "question": "What is the term for the philosophical study of existence and being?",
+    "answers": [
+      "Ontology",
+      "Epistemology",
+      "Ethics",
+      "Metaphysics"
+    ],
+    "correct": "Ontology"
+  },
+  {
+    "question": "Who wrote 'Critique of Pure Reason'?",
+    "answers": [
+      "Immanuel Kant",
+      "David Hume",
+      "John Locke",
+      "Rene Descartes"
+    ],
+    "correct": "Immanuel Kant"
+  },
+  {
+    "question": "What is Descartes' famous philosophical statement?",
+    "answers": [
+      "Cogito ergo sum (I think therefore I am)",
+      "I doubt therefore I am not",
+      "To be is to be perceived",
+      "Man is the measure of all things"
+    ],
+    "correct": "Cogito ergo sum (I think therefore I am)"
+  },
+  {
+    "question": "Which philosophical school holds that pleasure is the highest good?",
+    "answers": [
+      "Epicureanism",
+      "Stoicism",
+      "Cynicism",
+      "Hedonism"
+    ],
+    "correct": "Epicureanism"
+  },
+  {
+    "question": "Who wrote 'Leviathan'?",
+    "answers": [
+      "Thomas Hobbes",
+      "John Locke",
+      "Jean-Jacques Rousseau",
+      "John Stuart Mill"
+    ],
+    "correct": "Thomas Hobbes"
+  },
+  {
+    "question": "What is the philosophical problem of other minds?",
+    "answers": [
+      "How we can know other minds exist and have subjective experience",
+      "Whether the mind is separate from the body",
+      "Whether free will exists",
+      "How we acquire knowledge"
+    ],
+    "correct": "How we can know other minds exist and have subjective experience"
+  },
+  {
+    "question": "Who argued that knowledge comes from experience (tabula rasa)?",
+    "answers": [
+      "John Locke",
+      "Rene Descartes",
+      "Gottfried Leibniz",
+      "Immanuel Kant"
+    ],
+    "correct": "John Locke"
+  },
+  {
+    "question": "What is the Trolley Problem designed to illustrate?",
+    "answers": [
+      "Ethical dilemmas in utilitarian vs deontological thinking",
+      "The nature of free will",
+      "The problem of induction",
+      "Social contract theory"
+    ],
+    "correct": "Ethical dilemmas in utilitarian vs deontological thinking"
+  },
+  {
+    "question": "Who wrote 'Thus Spoke Zarathustra'?",
+    "answers": [
+      "Friedrich Nietzsche",
+      "Arthur Schopenhauer",
+      "Soren Kierkegaard",
+      "Martin Heidegger"
+    ],
+    "correct": "Friedrich Nietzsche"
+  },
+  {
+    "question": "What is epistemology the study of?",
+    "answers": [
+      "Knowledge and justified belief",
+      "Beauty and aesthetics",
+      "Moral values",
+      "The nature of being"
+    ],
+    "correct": "Knowledge and justified belief"
+  },
+  {
+    "question": "Who developed the concept of the categorical imperative?",
+    "answers": [
+      "Immanuel Kant",
+      "John Stuart Mill",
+      "Jeremy Bentham",
+      "G.W.F. Hegel"
+    ],
+    "correct": "Immanuel Kant"
+  },
+  {
+    "question": "Which philosopher proposed the social contract theory most famously?",
+    "answers": [
+      "Jean-Jacques Rousseau",
+      "Thomas Hobbes",
+      "John Locke",
+      "David Hume"
+    ],
+    "correct": "Jean-Jacques Rousseau"
+  },
+  {
+    "question": "What is the Socratic method?",
+    "answers": [
+      "Questioning to stimulate critical thinking and illuminate ideas",
+      "Learning by rote memorization",
+      "Empirical observation",
+      "Deductive logical proofs"
+    ],
+    "correct": "Questioning to stimulate critical thinking and illuminate ideas"
+  },
+  {
+    "question": "Who wrote 'Being and Time' (Sein und Zeit)?",
+    "answers": [
+      "Martin Heidegger",
+      "Edmund Husserl",
+      "Jean-Paul Sartre",
+      "Maurice Merleau-Ponty"
+    ],
+    "correct": "Martin Heidegger"
+  },
+  {
+    "question": "What is utilitarianism?",
+    "answers": [
+      "The greatest good for the greatest number",
+      "Virtue as the highest good",
+      "Duty determines morality",
+      "Self-interest drives all action"
+    ],
+    "correct": "The greatest good for the greatest number"
+  },
+  {
+    "question": "Who founded Stoicism?",
+    "answers": [
+      "Zeno of Citium",
+      "Epictetus",
+      "Marcus Aurelius",
+      "Seneca"
+    ],
+    "correct": "Zeno of Citium"
+  },
+  {
+    "question": "What is Plato's Allegory of the Cave meant to illustrate?",
+    "answers": [
+      "The difference between perception and reality",
+      "The nature of the soul",
+      "The ideal state",
+      "The origin of knowledge"
+    ],
+    "correct": "The difference between perception and reality"
+  },
+  {
+    "question": "Who wrote 'The Prince'?",
+    "answers": [
+      "Niccolo Machiavelli",
+      "Dante Alighieri",
+      "Thomas More",
+      "Francis Bacon"
+    ],
+    "correct": "Niccolo Machiavelli"
+  },
+  {
+    "question": "What is the problem of evil in philosophy of religion?",
+    "answers": [
+      "How evil can exist if God is all-good and all-powerful",
+      "Whether Satan is real",
+      "Why humans choose evil",
+      "The nature of sin"
+    ],
+    "correct": "How evil can exist if God is all-good and all-powerful"
+  },
+  {
+    "question": "Who argued 'To be is to be perceived' (esse est percipi)?",
+    "answers": [
+      "George Berkeley",
+      "John Locke",
+      "David Hume",
+      "Immanuel Kant"
+    ],
+    "correct": "George Berkeley"
+  },
+  {
+    "question": "What is existentialism primarily concerned with?",
+    "answers": [
+      "Individual freedom, choice, and responsibility",
+      "Universal moral laws",
+      "The nature of reality",
+      "Social structures"
+    ],
+    "correct": "Individual freedom, choice, and responsibility"
+  },
+  {
+    "question": "Who wrote 'Meditations on First Philosophy'?",
+    "answers": [
+      "Rene Descartes",
+      "John Locke",
+      "Baruch Spinoza",
+      "Gottfried Leibniz"
+    ],
+    "correct": "Rene Descartes"
+  },
+  {
+    "question": "What is the Platonic form?",
+    "answers": [
+      "An abstract ideal of which physical things are imperfect copies",
+      "A mathematical shape",
+      "A type of argument",
+      "A political structure"
+    ],
+    "correct": "An abstract ideal of which physical things are imperfect copies"
+  },
+  {
+    "question": "Who is the founder of pragmatism?",
+    "answers": [
+      "William James",
+      "Charles Sanders Peirce",
+      "John Dewey",
+      "Richard Rorty"
+    ],
+    "correct": "Charles Sanders Peirce"
+  },
+  {
+    "question": "What does Nietzsche mean by the Ubermensch?",
+    "answers": [
+      "An individual who creates their own values beyond conventional morality",
+      "A superhuman with physical powers",
+      "A perfect ruler",
+      "A religious saint"
+    ],
+    "correct": "An individual who creates their own values beyond conventional morality"
+  },
+  {
+    "question": "Who wrote 'A Treatise of Human Nature'?",
+    "answers": [
+      "David Hume",
+      "John Locke",
+      "George Berkeley",
+      "Thomas Reid"
+    ],
+    "correct": "David Hume"
+  },
+  {
+    "question": "What is the philosophical position that reality is fundamentally mental?",
+    "answers": [
+      "Idealism",
+      "Materialism",
+      "Dualism",
+      "Monism"
+    ],
+    "correct": "Idealism"
+  },
+  {
+    "question": "Who proposed the veil of ignorance thought experiment?",
+    "answers": [
+      "John Rawls",
+      "Robert Nozick",
+      "Michael Sandel",
+      "Jurgen Habermas"
+    ],
+    "correct": "John Rawls"
+  },
+  {
+    "question": "What is the problem of induction?",
+    "answers": [
+      "We cannot logically justify conclusions about the future based on past experience",
+      "How we count infinite things",
+      "Why some arguments are invalid",
+      "The difficulty of defining concepts precisely"
+    ],
+    "correct": "We cannot logically justify conclusions about the future based on past experience"
+  },
+  {
+    "question": "Who wrote 'The Nicomachean Ethics'?",
+    "answers": [
+      "Aristotle",
+      "Plato",
+      "Socrates",
+      "Epicurus"
+    ],
+    "correct": "Aristotle"
+  },
+  {
+    "question": "What is the ship of Theseus paradox about?",
+    "answers": [
+      "Whether an object that has had all its parts replaced remains the same object",
+      "Whether a ship can float",
+      "The nature of navigation",
+      "Theseus and Athens"
+    ],
+    "correct": "Whether an object that has had all its parts replaced remains the same object"
+  },
+  {
+    "question": "Who developed the idea of the will to power?",
+    "answers": [
+      "Friedrich Nietzsche",
+      "Arthur Schopenhauer",
+      "G.W.F. Hegel",
+      "Karl Marx"
+    ],
+    "correct": "Friedrich Nietzsche"
+  },
+  {
+    "question": "What is deontological ethics?",
+    "answers": [
+      "Ethics based on rules and duties regardless of consequences",
+      "Ethics based on outcomes",
+      "Ethics based on character",
+      "Ethics based on social contracts"
+    ],
+    "correct": "Ethics based on rules and duties regardless of consequences"
+  },
+  {
+    "question": "Who wrote 'Phenomenology of Spirit'?",
+    "answers": [
+      "G.W.F. Hegel",
+      "Karl Marx",
+      "Immanuel Kant",
+      "Johann Fichte"
+    ],
+    "correct": "G.W.F. Hegel"
+  },
+  {
+    "question": "What is the mind-body problem?",
+    "answers": [
+      "How the mental and physical are related",
+      "Whether minds are mortal",
+      "How the brain works",
+      "Whether animals have minds"
+    ],
+    "correct": "How the mental and physical are related"
+  },
+  {
+    "question": "Who argued that virtue is knowledge?",
+    "answers": [
+      "Socrates",
+      "Plato",
+      "Aristotle",
+      "Epicurus"
+    ],
+    "correct": "Socrates"
+  },
+  {
+    "question": "What does 'a priori' mean in philosophy?",
+    "answers": [
+      "Knowledge independent of experience",
+      "Knowledge derived from experience",
+      "Knowledge from observation",
+      "Knowledge from authority"
+    ],
+    "correct": "Knowledge independent of experience"
+  },
+  {
+    "question": "Who wrote 'An Enquiry Concerning Human Understanding'?",
+    "answers": [
+      "David Hume",
+      "John Locke",
+      "George Berkeley",
+      "Immanuel Kant"
+    ],
+    "correct": "David Hume"
+  },
+  {
+    "question": "What is solipsism?",
+    "answers": [
+      "The view that only one's own mind is certain to exist",
+      "The belief that all is one",
+      "The view that nothing exists",
+      "Extreme selfishness"
+    ],
+    "correct": "The view that only one's own mind is certain to exist"
+  },
+  {
+    "question": "Which philosopher developed the dialectical method of thesis-antithesis-synthesis?",
+    "answers": [
+      "G.W.F. Hegel",
+      "Karl Marx",
+      "Johann Fichte",
+      "Friedrich Schelling"
+    ],
+    "correct": "G.W.F. Hegel"
+  },
+  {
+    "question": "What is the Chinese Room argument designed to show?",
+    "answers": [
+      "Syntax (symbol manipulation) is not sufficient for semantics (understanding)",
+      "Computers can think",
+      "Language is relative",
+      "Minds are machines"
+    ],
+    "correct": "Syntax (symbol manipulation) is not sufficient for semantics (understanding)"
+  },
+  {
+    "question": "Who is associated with the phrase 'God is dead'?",
+    "answers": [
+      "Friedrich Nietzsche",
+      "Jean-Paul Sartre",
+      "Albert Camus",
+      "Soren Kierkegaard"
+    ],
+    "correct": "Friedrich Nietzsche"
+  },
+  {
+    "question": "What is the original position in John Rawls' theory?",
+    "answers": [
+      "A hypothetical standpoint behind a veil of ignorance to choose just principles",
+      "The starting position in a debate",
+      "The first principle of justice",
+      "The natural state of humans"
+    ],
+    "correct": "A hypothetical standpoint behind a veil of ignorance to choose just principles"
+  },
+  {
+    "question": "Who founded analytic philosophy?",
+    "answers": [
+      "Gottlob Frege and Bertrand Russell",
+      "Ludwig Wittgenstein alone",
+      "George Edward Moore",
+      "Alfred Ayer"
+    ],
+    "correct": "Gottlob Frege and Bertrand Russell"
+  },
+  {
+    "question": "What is the teleological argument for God's existence?",
+    "answers": [
+      "The universe shows design suggesting a designer",
+      "God must exist as the first cause",
+      "God is the greatest conceivable being",
+      "Moral facts require God as their grounding"
+    ],
+    "correct": "The universe shows design suggesting a designer"
+  },
+  {
+    "question": "Who wrote 'Tractatus Logico-Philosophicus'?",
+    "answers": [
+      "Ludwig Wittgenstein",
+      "Bertrand Russell",
+      "Gottlob Frege",
+      "G.E. Moore"
+    ],
+    "correct": "Ludwig Wittgenstein"
+  },
+  {
+    "question": "What is virtue ethics focused on?",
+    "answers": [
+      "Character and virtues of the moral agent",
+      "The consequences of actions",
+      "Moral rules and duties",
+      "Social contracts"
+    ],
+    "correct": "Character and virtues of the moral agent"
+  },
+  {
+    "question": "Who argued for tabula rasa in epistemology?",
+    "answers": [
+      "John Locke",
+      "Immanuel Kant",
+      "Gottfried Leibniz",
+      "Baruch Spinoza"
+    ],
+    "correct": "John Locke"
+  },
+  {
+    "question": "What is absurdism in philosophy?",
+    "answers": [
+      "The conflict between human desire for meaning and the universe's silence",
+      "The belief that nothing exists",
+      "Extreme skepticism",
+      "The view that all morality is absurd"
+    ],
+    "correct": "The conflict between human desire for meaning and the universe's silence"
+  },
+  {
+    "question": "Who wrote 'The Second Sex'?",
+    "answers": [
+      "Simone de Beauvoir",
+      "Simone Weil",
+      "Hannah Arendt",
+      "Iris Murdoch"
+    ],
+    "correct": "Simone de Beauvoir"
+  },
+  {
+    "question": "What is naturalistic fallacy?",
+    "answers": [
+      "Deriving ought from is (deriving moral claims from natural facts)",
+      "Assuming nature is always good",
+      "Confusing natural with supernatural",
+      "Arguing from nature against ethics"
+    ],
+    "correct": "Deriving ought from is (deriving moral claims from natural facts)"
+  },
+  {
+    "question": "Which philosopher is associated with the categorical imperative?",
+    "answers": [
+      "Immanuel Kant",
+      "John Stuart Mill",
+      "Jeremy Bentham",
+      "David Hume"
+    ],
+    "correct": "Immanuel Kant"
+  },
+  {
+    "question": "What does Occam's Razor state?",
+    "answers": [
+      "Do not multiply entities beyond necessity",
+      "The simplest argument wins",
+      "Nature abhors a vacuum",
+      "Knowledge requires proof"
+    ],
+    "correct": "Do not multiply entities beyond necessity"
+  },
+  {
+    "question": "Who founded the school of Cynicism in ancient philosophy?",
+    "answers": [
+      "Antisthenes",
+      "Diogenes of Sinope",
+      "Crates of Thebes",
+      "Socrates"
+    ],
+    "correct": "Antisthenes"
+  },
+  {
+    "question": "What is compatibilism in the free will debate?",
+    "answers": [
+      "Free will and determinism are compatible",
+      "Free will does not exist",
+      "Determinism is false",
+      "We cannot know if free will exists"
+    ],
+    "correct": "Free will and determinism are compatible"
+  },
+  {
+    "question": "Who wrote 'The Birth of Tragedy'?",
+    "answers": [
+      "Friedrich Nietzsche",
+      "Arthur Schopenhauer",
+      "Richard Wagner",
+      "Jakob Burckhardt"
+    ],
+    "correct": "Friedrich Nietzsche"
+  },
+  {
+    "question": "What is fallibilism in epistemology?",
+    "answers": [
+      "All beliefs could in principle be wrong",
+      "We know nothing with certainty",
+      "Evidence is always fallible",
+      "Logic can contain errors"
+    ],
+    "correct": "All beliefs could in principle be wrong"
+  }
+]

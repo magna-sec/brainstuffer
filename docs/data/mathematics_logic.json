@@ -1,0 +1,502 @@
+[
+  {
+    "question": "What is the value of pi (to 4 decimal places)?",
+    "answers": [
+      "3.1416",
+      "3.1415",
+      "3.1417",
+      "3.1414"
+    ],
+    "correct": "3.1416"
+  },
+  {
+    "question": "Who is known as the Prince of Mathematics?",
+    "answers": [
+      "Carl Friedrich Gauss",
+      "Leonhard Euler",
+      "Archimedes",
+      "Isaac Newton"
+    ],
+    "correct": "Carl Friedrich Gauss"
+  },
+  {
+    "question": "What is the Pythagorean theorem?",
+    "answers": [
+      "a2 + b2 = c2",
+      "a + b = c",
+      "a2 - b2 = c2",
+      "a3 + b3 = c3"
+    ],
+    "correct": "a2 + b2 = c2"
+  },
+  {
+    "question": "Who proved Fermat's Last Theorem in 1994?",
+    "answers": [
+      "Andrew Wiles",
+      "Pierre de Fermat",
+      "Gerd Faltings",
+      "Ken Ribet"
+    ],
+    "correct": "Andrew Wiles"
+  },
+  {
+    "question": "What is the only even prime number?",
+    "answers": [
+      "2",
+      "0",
+      "4",
+      "6"
+    ],
+    "correct": "2"
+  },
+  {
+    "question": "What does the Fibonacci sequence begin with?",
+    "answers": [
+      "0, 1, 1, 2, 3, 5",
+      "1, 1, 2, 3, 5, 8",
+      "0, 1, 2, 3, 5, 8",
+      "1, 2, 3, 5, 8, 13"
+    ],
+    "correct": "0, 1, 1, 2, 3, 5"
+  },
+  {
+    "question": "What is the sum of angles in a triangle?",
+    "answers": [
+      "180 degrees",
+      "360 degrees",
+      "90 degrees",
+      "270 degrees"
+    ],
+    "correct": "180 degrees"
+  },
+  {
+    "question": "Who invented calculus (independently)?",
+    "answers": [
+      "Newton and Leibniz",
+      "Archimedes and Euclid",
+      "Descartes and Pascal",
+      "Euler and Gauss"
+    ],
+    "correct": "Newton and Leibniz"
+  },
+  {
+    "question": "What is Euler's identity?",
+    "answers": [
+      "e^(i*pi) + 1 = 0",
+      "e^(pi) = 1",
+      "i^2 = -1",
+      "e^i = cos + i*sin"
+    ],
+    "correct": "e^(i*pi) + 1 = 0"
+  },
+  {
+    "question": "What is the square root of 144?",
+    "answers": [
+      "12",
+      "11",
+      "13",
+      "14"
+    ],
+    "correct": "12"
+  },
+  {
+    "question": "In which number system is 1000 equal to 8 in decimal?",
+    "answers": [
+      "Binary (base 2)",
+      "Octal (base 8)",
+      "Hexadecimal (base 16)",
+      "Quaternary (base 4)"
+    ],
+    "correct": "Binary (base 2)"
+  },
+  {
+    "question": "What is the formula for the area of a circle?",
+    "answers": [
+      "pi * r^2",
+      "2 * pi * r",
+      "pi * d",
+      "2 * pi * r^2"
+    ],
+    "correct": "pi * r^2"
+  },
+  {
+    "question": "Who wrote the foundational work 'Elements' on geometry?",
+    "answers": [
+      "Euclid",
+      "Archimedes",
+      "Pythagoras",
+      "Thales"
+    ],
+    "correct": "Euclid"
+  },
+  {
+    "question": "What is the derivative of sin(x)?",
+    "answers": [
+      "cos(x)",
+      "-cos(x)",
+      "-sin(x)",
+      "tan(x)"
+    ],
+    "correct": "cos(x)"
+  },
+  {
+    "question": "What is 7 factorial (7!)?",
+    "answers": [
+      "5040",
+      "720",
+      "40320",
+      "2520"
+    ],
+    "correct": "5040"
+  },
+  {
+    "question": "The Goldbach Conjecture states that every even integer greater than 2 is?",
+    "answers": [
+      "The sum of two prime numbers",
+      "Divisible by a prime number",
+      "A product of two odd numbers",
+      "The difference of two squares"
+    ],
+    "correct": "The sum of two prime numbers"
+  },
+  {
+    "question": "What is the 10th Fibonacci number (starting 1, 1, 2, 3, ...)?",
+    "answers": [
+      "55",
+      "34",
+      "89",
+      "21"
+    ],
+    "correct": "55"
+  },
+  {
+    "question": "What is the definition of a prime number?",
+    "answers": [
+      "A number divisible only by 1 and itself",
+      "An odd number greater than 1",
+      "A number with no factors",
+      "A number not divisible by 2"
+    ],
+    "correct": "A number divisible only by 1 and itself"
+  },
+  {
+    "question": "What is the Riemann Hypothesis concerned with?",
+    "answers": [
+      "The distribution of prime numbers",
+      "The solution to polynomial equations",
+      "The sum of infinite series",
+      "The nature of irrational numbers"
+    ],
+    "correct": "The distribution of prime numbers"
+  },
+  {
+    "question": "In a normal distribution, what percentage of data falls within one standard deviation?",
+    "answers": [
+      "68%",
+      "95%",
+      "99.7%",
+      "50%"
+    ],
+    "correct": "68%"
+  },
+  {
+    "question": "What is the formula for compound interest?",
+    "answers": [
+      "A = P(1 + r/n)^(nt)",
+      "A = P + Prt",
+      "A = P * e^(rt)",
+      "A = P(1 + r)^t"
+    ],
+    "correct": "A = P(1 + r/n)^(nt)"
+  },
+  {
+    "question": "Who developed the concept of imaginary numbers?",
+    "answers": [
+      "Gerolamo Cardano",
+      "Rene Descartes",
+      "Leonhard Euler",
+      "Carl Gauss"
+    ],
+    "correct": "Gerolamo Cardano"
+  },
+  {
+    "question": "What is the integral of 1/x dx?",
+    "answers": [
+      "ln|x| + C",
+      "x^(-2) + C",
+      "1/x^2 + C",
+      "-1/x^2 + C"
+    ],
+    "correct": "ln|x| + C"
+  },
+  {
+    "question": "What does P vs NP problem ask?",
+    "answers": [
+      "Whether every problem verifiable in polynomial time is also solvable in polynomial time",
+      "Whether prime numbers follow a pattern",
+      "Whether all infinite series converge",
+      "Whether computation can be done infinitely fast"
+    ],
+    "correct": "Whether every problem verifiable in polynomial time is also solvable in polynomial time"
+  },
+  {
+    "question": "What is the number of sides on a dodecagon?",
+    "answers": [
+      "12",
+      "10",
+      "14",
+      "8"
+    ],
+    "correct": "12"
+  },
+  {
+    "question": "Who formulated the incompleteness theorems?",
+    "answers": [
+      "Kurt Godel",
+      "Bertrand Russell",
+      "David Hilbert",
+      "Alfred North Whitehead"
+    ],
+    "correct": "Kurt Godel"
+  },
+  {
+    "question": "What is the binary representation of the decimal number 10?",
+    "answers": [
+      "1010",
+      "1001",
+      "1100",
+      "0110"
+    ],
+    "correct": "1010"
+  },
+  {
+    "question": "What is the value of 0 factorial (0!)?",
+    "answers": [
+      "1",
+      "0",
+      "Undefined",
+      "Infinity"
+    ],
+    "correct": "1"
+  },
+  {
+    "question": "Which branch of mathematics studies shapes, sizes, and properties of space?",
+    "answers": [
+      "Geometry",
+      "Algebra",
+      "Calculus",
+      "Topology"
+    ],
+    "correct": "Geometry"
+  },
+  {
+    "question": "What is the name of the theorem that states there are infinitely many prime numbers?",
+    "answers": [
+      "Euclid's theorem",
+      "Fermat's theorem",
+      "Euler's theorem",
+      "Prime number theorem"
+    ],
+    "correct": "Euclid's theorem"
+  },
+  {
+    "question": "In logic, what is a tautology?",
+    "answers": [
+      "A statement that is always true",
+      "A statement that is always false",
+      "A statement that is sometimes true",
+      "A statement with no truth value"
+    ],
+    "correct": "A statement that is always true"
+  },
+  {
+    "question": "What is the Monty Hall problem about?",
+    "answers": [
+      "A probability puzzle about switching doors",
+      "A game theory paradox",
+      "A logical contradiction",
+      "A statistics sampling problem"
+    ],
+    "correct": "A probability puzzle about switching doors"
+  },
+  {
+    "question": "What is the formula for the volume of a sphere?",
+    "answers": [
+      "(4/3) * pi * r^3",
+      "pi * r^2 * h",
+      "4 * pi * r^2",
+      "(1/3) * pi * r^2 * h"
+    ],
+    "correct": "(4/3) * pi * r^3"
+  },
+  {
+    "question": "Who introduced the concept of sets to mathematics?",
+    "answers": [
+      "Georg Cantor",
+      "Giuseppe Peano",
+      "Richard Dedekind",
+      "Gottlob Frege"
+    ],
+    "correct": "Georg Cantor"
+  },
+  {
+    "question": "What is the Golden Ratio (approximately)?",
+    "answers": [
+      "1.618",
+      "1.414",
+      "1.732",
+      "2.718"
+    ],
+    "correct": "1.618"
+  },
+  {
+    "question": "What is the largest known category of numbers called?",
+    "answers": [
+      "Transfinite numbers",
+      "Real numbers",
+      "Complex numbers",
+      "Hyperreal numbers"
+    ],
+    "correct": "Transfinite numbers"
+  },
+  {
+    "question": "What does the Four Color Theorem state?",
+    "answers": [
+      "Any map can be colored with 4 colors so no adjacent regions share a color",
+      "A polygon has at most 4 sides",
+      "4 is the largest prime that divides all even numbers",
+      "Every equation has at most 4 roots"
+    ],
+    "correct": "Any map can be colored with 4 colors so no adjacent regions share a color"
+  },
+  {
+    "question": "What is a perfect number?",
+    "answers": [
+      "A number equal to the sum of its proper divisors",
+      "A number with no prime factors",
+      "A number divisible by all integers up to its square root",
+      "A number that is also a square"
+    ],
+    "correct": "A number equal to the sum of its proper divisors"
+  },
+  {
+    "question": "What is the Halting Problem in computer science and logic?",
+    "answers": [
+      "It is undecidable whether a program will halt or run forever",
+      "A problem that takes infinite time to solve",
+      "A problem with no logical solution",
+      "The problem of finding the fastest algorithm"
+    ],
+    "correct": "It is undecidable whether a program will halt or run forever"
+  },
+  {
+    "question": "What is the standard deviation a measure of?",
+    "answers": [
+      "Spread or dispersion of data",
+      "Central tendency",
+      "Total sum of values",
+      "Range of values"
+    ],
+    "correct": "Spread or dispersion of data"
+  },
+  {
+    "question": "Which famous problem involves coloring maps with minimum colors?",
+    "answers": [
+      "Four Color Theorem",
+      "Graph Coloring Problem",
+      "Planar Graph Problem",
+      "Chromatic Polynomial"
+    ],
+    "correct": "Four Color Theorem"
+  },
+  {
+    "question": "What is the next prime number after 7?",
+    "answers": [
+      "11",
+      "9",
+      "10",
+      "13"
+    ],
+    "correct": "11"
+  },
+  {
+    "question": "What is Bayes' theorem used to calculate?",
+    "answers": [
+      "Conditional probability",
+      "Standard deviation",
+      "Correlation coefficient",
+      "Expected value"
+    ],
+    "correct": "Conditional probability"
+  },
+  {
+    "question": "What is the formula for the circumference of a circle?",
+    "answers": [
+      "2 * pi * r",
+      "pi * r^2",
+      "pi * d^2",
+      "4 * pi * r"
+    ],
+    "correct": "2 * pi * r"
+  },
+  {
+    "question": "Who developed Boolean algebra?",
+    "answers": [
+      "George Boole",
+      "Gottlob Frege",
+      "Bertrand Russell",
+      "Augustus De Morgan"
+    ],
+    "correct": "George Boole"
+  },
+  {
+    "question": "What is the mathematical term for a statement that cannot be proved or disproved within a system?",
+    "answers": [
+      "Undecidable",
+      "Inconsistent",
+      "Paradoxical",
+      "Axiom"
+    ],
+    "correct": "Undecidable"
+  },
+  {
+    "question": "What is the value of the natural logarithm base e?",
+    "answers": [
+      "2.71828",
+      "3.14159",
+      "1.61803",
+      "1.41421"
+    ],
+    "correct": "2.71828"
+  },
+  {
+    "question": "What is the sum of the first 100 positive integers?",
+    "answers": [
+      "5050",
+      "4950",
+      "5100",
+      "5000"
+    ],
+    "correct": "5050"
+  },
+  {
+    "question": "What is the name for a number that can be expressed as the ratio of two integers?",
+    "answers": [
+      "Rational number",
+      "Real number",
+      "Algebraic number",
+      "Natural number"
+    ],
+    "correct": "Rational number"
+  },
+  {
+    "question": "What is the largest prime number less than 20?",
+    "answers": [
+      "19",
+      "17",
+      "18",
+      "16"
+    ],
+    "correct": "19"
+  }
+]

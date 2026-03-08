@@ -1,7 +1,52 @@
 [
   {
-    "file": "generic_cyber.json",
+    "file": "cyber.json",
     "label": "Generic Cyber",
     "count": 428
+  },
+  {
+    "file": "classic_literature.json",
+    "label": "Classic Literature & Authors",
+    "count": 75
+  },
+  {
+    "file": "science_discovery.json",
+    "label": "Science & Discovery",
+    "count": 74
+  },
+  {
+    "file": "world_history.json",
+    "label": "World History",
+    "count": 99
+  },
+  {
+    "file": "geography.json",
+    "label": "Geography",
+    "count": 78
+  },
+  {
+    "file": "mathematics_logic.json",
+    "label": "Mathematics & Logic",
+    "count": 50
+  },
+  {
+    "file": "philosophy.json",
+    "label": "Philosophy",
+    "count": 59
+  },
+  {
+    "file": "astronomy_space.json",
+    "label": "Astronomy & Space",
+    "count": 76
+  },
+  {
+    "file": "music_history.json",
+    "label": "Music Theory & History",
+    "count": 75
+  },
+  {
+    "file": "antiques_collecting.json",
+    "label": "Antiques & Collecting",
+    "count": 70
   }
 ]
