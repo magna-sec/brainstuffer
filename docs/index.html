@@ -184,7 +184,7 @@
             letter-spacing: normal;
         }
 
-        select, input[type="text"], input[type="number"], textarea {
+        select, input[type="text"], input[type="number"], input[type="password"], textarea {
             width: 100%;
             padding: 0.65rem 0.9rem;
             background: var(--bg2);
@@ -1014,7 +1014,7 @@
         </div>
 
         <footer id="footer-quip">brainstuffer</footer>
-        <div style="text-align:center;color:var(--muted);font-size:0.7rem;opacity:0.4;margin-top:0.35rem">v1.1</div>
+        <div style="text-align:center;color:var(--muted);font-size:0.7rem;opacity:0.4;margin-top:0.35rem">v1.11</div>
     </div>
 
 <script>
@@ -2588,6 +2588,24 @@ function checkHash() {
     }
 }
 window.addEventListener('hashchange', checkHash);
+
+// ══════════════════════════════════════════════════════════════════
+// iOS ZOOM RESET — reset viewport scale after any input loses focus
+// ══════════════════════════════════════════════════════════════════
+(function() {
+    var viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (!viewportMeta) return;
+    var baseContent = viewportMeta.getAttribute('content');
+    document.addEventListener('focusout', function(e) {
+        var tag = e.target && e.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+            viewportMeta.setAttribute('content', baseContent + ', maximum-scale=1');
+            requestAnimationFrame(function() {
+                viewportMeta.setAttribute('content', baseContent);
+            });
+        }
+    }, { passive: true });
+})();
 
 // ══════════════════════════════════════════════════════════════════
 // INIT
