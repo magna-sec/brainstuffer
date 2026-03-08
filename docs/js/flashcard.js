@@ -8,22 +8,24 @@ let fcTotal = 0;       // total cards this session
 let fcFlipped = false; // current card face
 
 function startFlashcards() {
-    if (!store) return;
+    if (!store) { console.warn('[FC] store is null, aborting'); return; }
+    console.log('[FC] starting for', store.filename);
     loadQuizData(store.filename).then(function(questions) {
-        if (!questions || !questions.length) return;
+        console.log('[FC] loaded', questions && questions.length, 'questions');
+        if (!questions || !questions.length) { console.warn('[FC] no questions loaded'); return; }
         const amount = parseInt(document.getElementById('amount').value) || 0;
         const n = (amount && amount < questions.length) ? amount : questions.length;
         fcDeck = shuffle(questions).slice(0, n);
         fcTotal = fcDeck.length;
         fcDone = 0;
+        console.log('[FC] deck ready, showing', fcTotal, 'cards');
         showPage('flashcard');
         fcShowCard();
-    });
+    }).catch(function(e) { console.error('[FC] loadQuizData error', e); });
 }
 
 function fcShowCard() {
     const card = document.getElementById('fc-card');
-    card.classList.remove('flipped');
     fcFlipped = false;
 
     if (!fcDeck.length) {
@@ -32,13 +34,21 @@ function fcShowCard() {
     }
 
     const q = fcDeck[0];
-    document.getElementById('fc-question-text').textContent = q.question;
-    document.getElementById('fc-answer-text').textContent = String(q.answers[0]);
+    const correctAns = (q.correct !== undefined && q.correct !== null) ? String(q.correct) : String((q.answers || [])[0]);
 
-    // Show other options greyed out for context
-    const others = (q.answers || []).slice(1);
-    const otherEl = document.getElementById('fc-other-answers');
-    otherEl.textContent = others.length ? 'Other options: ' + others.join(' \u00b7 ') : '';
+    // Snap to front instantly, update front face immediately
+    card.style.transition = 'none';
+    card.classList.remove('flipped');
+    document.getElementById('fc-question-text').textContent = q.question;
+
+    // Delay back-face update so it's safely hidden before content changes
+    setTimeout(function() {
+        document.getElementById('fc-answer-text').textContent = correctAns;
+        const others = (q.answers || []).filter(a => String(a) !== correctAns);
+        document.getElementById('fc-other-answers').textContent =
+            others.length ? 'Other options: ' + others.join(' \u00b7 ') : '';
+        card.style.transition = '';
+    }, 120);
 
     fcUpdateProgress();
 }
