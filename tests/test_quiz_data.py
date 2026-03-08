@@ -184,3 +184,74 @@ class TestHTML:
             "Unsafe innerHTML string concatenation found for answer value attribute — "
             "use DOM methods (input.value = ans) instead."
         )
+
+
+# ── File structure ────────────────────────────────────────────────────────────
+
+JS_DIR = DOCS / "js"
+CSS_DIR = DOCS / "css"
+
+EXPECTED_JS_FILES = [
+    "state.js",
+    "utils.js",
+    "crypto.js",
+    "loader.js",
+    "quiz.js",
+    "flashcard.js",
+    "ui.js",
+    "upload.js",
+    "github.js",
+    "encrypt.js",
+    "main.js",
+]
+
+
+class TestFileStructure:
+    def test_js_files_exist(self):
+        for fname in EXPECTED_JS_FILES:
+            path = JS_DIR / fname
+            assert path.exists(), f"Expected JS file missing: docs/js/{fname}"
+
+    def test_css_file_exists(self):
+        assert (CSS_DIR / "style.css").exists(), "docs/css/style.css not found"
+
+    def test_index_references_js_files(self):
+        html = INDEX.read_text(encoding="utf-8")
+        for fname in ["state.js", "quiz.js", "flashcard.js", "ui.js", "main.js"]:
+            assert f'src="js/{fname}"' in html, (
+                f'index.html does not reference js/{fname}'
+            )
+
+    def test_index_references_css(self):
+        html = INDEX.read_text(encoding="utf-8")
+        assert 'href="css/style.css"' in html, (
+            "index.html does not reference css/style.css"
+        )
+
+    def test_flashcard_js_exists(self):
+        fc = JS_DIR / "flashcard.js"
+        assert fc.exists(), "docs/js/flashcard.js not found"
+        content = fc.read_text(encoding="utf-8")
+        assert "startFlashcards" in content, (
+            "flashcard.js does not contain 'startFlashcards'"
+        )
+
+    def test_no_inline_script_blocks(self):
+        """
+        index.html must not contain large inline <script> blocks.
+        A <script> tag with more than 50 lines of JS is considered 'large'.
+        """
+        html = INDEX.read_text(encoding="utf-8")
+        import re
+        # Find all script blocks (non-src script tags)
+        script_blocks = re.findall(
+            r'<script(?![^>]*\bsrc\b)[^>]*>(.*?)</script>',
+            html,
+            re.DOTALL | re.IGNORECASE,
+        )
+        for i, block in enumerate(script_blocks):
+            line_count = len(block.strip().splitlines())
+            assert line_count <= 50, (
+                f"index.html contains inline <script> block #{i+1} with {line_count} lines "
+                f"(max allowed: 50). Move JS to an external file."
+            )
