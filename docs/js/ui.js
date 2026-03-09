@@ -682,6 +682,85 @@ function screenMelt() {
 (function () {
     const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
     let pos = 0;
+
+    function hadoukenExorcise(badge, onComplete) {
+        const rect = badge.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top  + rect.height / 2;
+
+        // Spawn orb off the left edge at badge height
+        const orb = document.createElement('div');
+        orb.style.cssText = 'position:fixed;left:-70px;top:' + (cy - 18) + 'px;width:36px;height:36px;'
+            + 'border-radius:50%;pointer-events:none;z-index:9998;'
+            + 'background:radial-gradient(circle,#fff 0%,#38bdf8 45%,#818cf8 80%,transparent 100%);'
+            + 'box-shadow:0 0 18px 8px #38bdf8,0 0 36px 16px #818cf8;transform:scaleX(1.5);';
+        document.body.appendChild(orb);
+
+        requestAnimationFrame(function() {
+            orb.style.transition = 'left 0.32s cubic-bezier(.55,0,1,1)';
+            orb.style.left = (cx - 18) + 'px';
+        });
+
+        setTimeout(function() {
+            orb.remove();
+
+            // Radial impact flash
+            const flash = document.createElement('div');
+            flash.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9997;opacity:1;'
+                + 'background:radial-gradient(circle at ' + cx + 'px ' + cy + 'px,'
+                + 'rgba(255,255,255,0.85) 0%,rgba(56,189,248,0.55) 25%,rgba(129,140,248,0.25) 50%,transparent 72%);';
+            document.body.appendChild(flash);
+            requestAnimationFrame(function() {
+                flash.style.transition = 'opacity 0.38s ease-out';
+                flash.style.opacity = '0';
+            });
+            setTimeout(function() { flash.remove(); }, 420);
+
+            // Screen shake
+            document.body.classList.add('screen-shake');
+            setTimeout(function() { document.body.classList.remove('screen-shake'); }, 500);
+
+            // Particle burst
+            for (var i = 0; i < 14; i++) {
+                (function(idx) {
+                    var p = document.createElement('div');
+                    var angle = (idx / 14) * Math.PI * 2;
+                    var dist  = 38 + Math.random() * 55;
+                    var size  = 4 + Math.random() * 5;
+                    p.style.cssText = 'position:fixed;left:' + cx + 'px;top:' + cy + 'px;'
+                        + 'width:' + size + 'px;height:' + size + 'px;border-radius:50%;pointer-events:none;z-index:9998;'
+                        + 'background:' + (Math.random() > 0.5 ? '#38bdf8' : '#818cf8') + ';'
+                        + 'transform:translate(-50%,-50%);';
+                    document.body.appendChild(p);
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            p.style.transition = 'transform 0.5s cubic-bezier(.2,.8,.3,1),opacity 0.3s ease 0.2s';
+                            p.style.transform  = 'translate(calc(-50% + ' + (Math.cos(angle)*dist).toFixed(1) + 'px),'
+                                + 'calc(-50% + ' + (Math.sin(angle)*dist).toFixed(1) + 'px))';
+                            p.style.opacity = '0';
+                        });
+                    });
+                    setTimeout(function() { p.remove(); }, 700);
+                })(i);
+            }
+
+            // Badge: slam up then snap away
+            badge.style.transition = 'transform 0.12s ease-out';
+            badge.style.transform  = 'scale(2.2)';
+            setTimeout(function() {
+                badge.style.transition = 'transform 0.1s ease-in';
+                badge.style.transform  = 'scale(0)';
+                setTimeout(function() {
+                    onComplete(); // remove flag + refresh UI
+                    badge.style.transition = 'transform 0.4s cubic-bezier(.2,1.6,.4,1)';
+                    badge.style.transform  = '';
+                    setTimeout(function() { badge.style.transition = ''; }, 420);
+                }, 110);
+            }, 130);
+
+        }, 340);
+    }
+
     document.addEventListener('keydown', function(e) {
         // Normalise: keep arrow key names as-is, lowercase single chars (handles Caps Lock)
         const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
@@ -689,7 +768,16 @@ function screenMelt() {
             pos++;
             if (pos === seq.length) {
                 pos = 0;
-                showOverlay('cheat code activated<br><span style="font-size:0.9rem;color:var(--muted);font-weight:400">unfortunately there are no cheats in learning</span>', '&#129504;', 3000);
+                const wasCheater = localStorage.getItem('bs-cheater') === '1';
+                if (wasCheater) {
+                    const badge = document.getElementById('level-badge');
+                    hadoukenExorcise(badge || document.body, function() {
+                        localStorage.removeItem('bs-cheater');
+                        if (window.refreshLevelUI) window.refreshLevelUI();
+                    });
+                } else {
+                    showOverlay('Cheat Code Activated<br><span style="font-size:0.9rem;color:var(--muted);font-weight:400">Unfortunately there are no cheats in learning</span>', '&#129504;', 3000);
+                }
             }
         } else {
             pos = key === seq[0] ? 1 : 0;

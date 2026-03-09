@@ -172,6 +172,7 @@ function _showLevelDown(level) {
 }
 
 window.getCurrentLevel  = function() { return _getLevel(_totalXp); };
+window.refreshLevelUI   = function() { _updateLevelUI(); };
 window.getLevelProgress = function() { return _getLevelProgress(_totalXp); };
 
 window.resetXP = function() {
