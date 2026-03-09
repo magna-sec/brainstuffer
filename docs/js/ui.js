@@ -680,13 +680,19 @@ function screenMelt() {
 
 // ── Konami code ──────────────────────────────────────────────────
 (function () {
-    const seq = [38,38,40,40,37,39,37,39,66,65];
+    const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
     let pos = 0;
     document.addEventListener('keydown', function(e) {
-        pos = (e.keyCode === seq[pos]) ? pos + 1 : (e.keyCode === seq[0] ? 1 : 0);
-        if (pos === seq.length) {
-            pos = 0;
-            showOverlay('cheat code activated<br><span style="font-size:0.9rem;color:var(--muted);font-weight:400">unfortunately there are no cheats in learning</span>', '&#129504;', 3000);
+        // Normalise: keep arrow key names as-is, lowercase single chars (handles Caps Lock)
+        const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+        if (key === seq[pos]) {
+            pos++;
+            if (pos === seq.length) {
+                pos = 0;
+                showOverlay('cheat code activated<br><span style="font-size:0.9rem;color:var(--muted);font-weight:400">unfortunately there are no cheats in learning</span>', '&#129504;', 3000);
+            }
+        } else {
+            pos = key === seq[0] ? 1 : 0;
         }
     });
 })();
