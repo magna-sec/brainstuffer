@@ -299,59 +299,16 @@ footer {
     0%, 100% { filter: drop-shadow(0 0 16px var(--accent)); }
     50%       { filter: drop-shadow(0 0 34px var(--accent)); transform: scale(1.05); }
 }
+@keyframes brain-home-pulse {
+    0%, 100% { filter: drop-shadow(0 0 6px var(--accent)); transform: scale(1); }
+    50%       { filter: drop-shadow(0 0 18px var(--accent)); transform: scale(1.04); }
+}
 
 .logo-svg.breathing { animation: brain-breathe 3.5s ease-in-out infinite; }
+body.on-home .logo-svg:not(.breathing) { animation: brain-home-pulse 5s ease-in-out infinite; }
 
-/* ── Damage states ──────────────────────────────────────────── */
-[data-damage="1"] .logo-svg {
-    filter: drop-shadow(0 0 28px #fb923c) hue-rotate(30deg) saturate(3) brightness(1.1);
-}
-[data-damage="2"] .logo-svg {
-    filter: drop-shadow(0 0 36px #ef4444) hue-rotate(58deg) saturate(4.5) brightness(1.05);
-}
-[data-damage="3"] .logo-svg {
-    filter: drop-shadow(0 0 44px #dc2626) hue-rotate(82deg) saturate(6) brightness(0.85);
-}
-[data-damage="4"] .logo-svg {
-    filter: drop-shadow(0 0 56px #991b1b) hue-rotate(115deg) saturate(8) brightness(0.6);
-    animation: brain-breathe-critical 1.2s ease-in-out infinite;
-}
 
-@keyframes brain-breathe-critical {
-    0%, 100% { filter: drop-shadow(0 0 40px #991b1b) hue-rotate(115deg) saturate(8) brightness(0.55); }
-    50%       { filter: drop-shadow(0 0 70px #dc2626) hue-rotate(115deg) saturate(8) brightness(0.7); }
-}
 
-/* Health bar under logo */
-.brain-health {
-    width: 72px;
-    height: 6px;
-    background: var(--bg2);
-    border-radius: 999px;
-    margin: 0.6rem auto 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: opacity 0.6s;
-    box-shadow: 0 0 0 1px rgba(255,255,255,.06);
-}
-.brain-health.visible { opacity: 1; }
-.brain-health-fill {
-    height: 100%;
-    border-radius: 999px;
-    width: 100%;
-    transition: width 0.7s ease, background 0.7s ease;
-}
-
-/* Damage flash vignette */
-#damage-flash {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9998;
-    background: radial-gradient(ellipse at center, transparent 30%, #dc2626 100%);
-    opacity: 0;
-    transition: opacity 0.1s;
-}
 
 /* ── Skin switcher ──────────────────────────────────────────── */
 #skin-toggle {
@@ -677,6 +634,215 @@ footer {
 .page { display: none; }
 .page.active { display: block; }
 
+/* ── Level system ───────────────────────────────────────────────── */
+#level-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0.5rem 0 1.2rem;
+    transition: all 0.3s;
+}
+#level-badge {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    min-width: 2.5rem;
+    text-align: right;
+}
+#xp-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--bg2);
+    border-radius: 99px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+}
+#xp-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+}
+#xp-label {
+    font-size: 0.68rem;
+    color: var(--muted);
+    min-width: 5rem;
+}
+
+/* Danger state — within one wrong answer of level drop */
+#level-row.level-danger #xp-bar-fill { background: linear-gradient(90deg, var(--danger), #fb923c); }
+#level-row.level-danger #level-badge { color: var(--danger); animation: danger-pulse 1s ease-in-out infinite; }
+#level-row.level-danger #xp-label   { color: var(--danger); }
+@keyframes danger-pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+
+/* Level up flash */
+#level-row.level-up-flash #xp-bar-fill { background: linear-gradient(90deg, var(--success), #86efac); }
+#level-row.level-up-flash #level-badge { color: var(--success); }
+
+/* Level down overlay */
+.level-down-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(239,68,68,0.18);
+    z-index: 9996;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    animation: leveldown-fade 1.4s ease-out forwards;
+}
+.level-down-text {
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #ef4444;
+    text-align: center;
+    text-shadow: 0 0 40px #ef4444, 0 0 80px rgba(239,68,68,0.5);
+    animation: leveldown-scale 1.4s ease-out forwards;
+}
+@keyframes leveldown-fade { 0% { opacity:1; } 80% { opacity:1; } 100% { opacity:0; } }
+@keyframes leveldown-scale { 0% { transform:scale(1.3); } 100% { transform:scale(0.9); } }
+
+/* Screen shake */
+@keyframes screen-shake {
+    0%,100% { transform:translateX(0); }
+    15%      { transform:translateX(-8px); }
+    30%      { transform:translateX(8px); }
+    45%      { transform:translateX(-6px); }
+    60%      { transform:translateX(6px); }
+    75%      { transform:translateX(-3px); }
+    90%      { transform:translateX(3px); }
+}
+body.screen-shake { animation: screen-shake 0.5s ease-out; }
+
+/* XP change in feedback */
+.xp-change {
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin: 0.6rem 0 0.2rem;
+    letter-spacing: 0.02em;
+}
+.xp-gain  { color: var(--success); }
+.xp-loss  { color: var(--danger); }
+.xp-warning {
+    font-size: 0.82rem;
+    color: var(--warning);
+    margin-bottom: 0.4rem;
+}
+
+/* ── Level tier visual changes (only when XP system is active) ── */
+
+body.xp-active [data-level-tier="1"] .logo-svg {
+    filter: drop-shadow(0 0 14px var(--accent));
+}
+
+body.xp-active [data-level-tier="2"] .logo-svg {
+    filter: drop-shadow(0 0 22px var(--accent)) saturate(1.2);
+}
+body.xp-active [data-level-tier="2"] .card {
+    box-shadow: 0 2px 24px var(--glow);
+}
+
+body.xp-active [data-level-tier="3"] .logo-svg {
+    filter: drop-shadow(0 0 32px var(--accent)) drop-shadow(0 0 10px var(--accent2)) saturate(1.4);
+    animation: brain-xp-pulse 2.5s ease-in-out infinite;
+}
+body.xp-active [data-level-tier="3"] .card {
+    box-shadow: 0 2px 32px var(--glow);
+    border-color: color-mix(in srgb, var(--accent) 30%, var(--card-border));
+}
+
+body.xp-active [data-level-tier="4"] .logo-svg {
+    filter: drop-shadow(0 0 44px var(--accent)) drop-shadow(0 0 18px var(--accent2)) saturate(1.8);
+    animation: brain-xp-pulse 1.7s ease-in-out infinite;
+}
+body.xp-active [data-level-tier="4"] .card {
+    box-shadow: 0 2px 40px var(--glow);
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--card-border));
+}
+body.xp-active [data-level-tier="4"] #xp-bar { box-shadow: 0 0 8px var(--accent); }
+
+body.xp-active [data-level-tier="5"] .logo-svg {
+    filter: drop-shadow(0 0 60px var(--accent)) drop-shadow(0 0 28px var(--accent2)) saturate(2.2) brightness(1.15);
+    animation: brain-xp-pulse 1s ease-in-out infinite;
+}
+body.xp-active [data-level-tier="5"] .card {
+    box-shadow: 0 2px 60px var(--glow);
+    border-color: color-mix(in srgb, var(--accent) 70%, var(--card-border));
+}
+body.xp-active [data-level-tier="5"] #xp-bar { box-shadow: 0 0 14px var(--accent); }
+body.xp-active [data-level-tier="5"] #level-badge { font-size: 0.82rem; text-shadow: 0 0 10px var(--accent); }
+
+body.xp-active [data-level-tier="6"] .logo-svg {
+    filter: drop-shadow(0 0 70px var(--accent)) drop-shadow(0 0 35px var(--accent2)) saturate(2.6) brightness(1.2);
+    animation: brain-xp-pulse 0.85s ease-in-out infinite;
+}
+body.xp-active [data-level-tier="6"] .card {
+    box-shadow: 0 2px 70px var(--glow);
+    border-color: color-mix(in srgb, var(--accent) 80%, var(--card-border));
+}
+body.xp-active [data-level-tier="6"] #xp-bar { box-shadow: 0 0 18px var(--accent); }
+
+body.xp-active [data-level-tier="7"] .logo-svg {
+    filter: drop-shadow(0 0 80px var(--accent)) drop-shadow(0 0 40px var(--accent2)) saturate(3) brightness(1.25);
+    animation: brain-xp-pulse 0.75s ease-in-out infinite;
+}
+body.xp-active [data-level-tier="7"] .card {
+    box-shadow: 0 2px 80px var(--glow);
+    border-color: var(--accent);
+}
+body.xp-active [data-level-tier="7"] #xp-bar { box-shadow: 0 0 22px var(--accent); }
+body.xp-active [data-level-tier="7"] #level-badge { text-shadow: 0 0 12px var(--accent); }
+
+body.xp-active [data-level-tier="8"] .logo-svg {
+    filter: drop-shadow(0 0 90px var(--accent)) drop-shadow(0 0 50px var(--accent2)) saturate(3.5) brightness(1.3);
+    animation: brain-xp-pulse 0.65s ease-in-out infinite;
+}
+body.xp-active [data-level-tier="8"] .card {
+    box-shadow: 0 2px 90px var(--glow);
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--card) 92%, var(--accent));
+}
+body.xp-active [data-level-tier="8"] #xp-bar { box-shadow: 0 0 28px var(--accent); }
+body.xp-active [data-level-tier="8"] #level-badge { text-shadow: 0 0 16px var(--accent); font-size: 0.84rem; }
+
+body.xp-active [data-level-tier="9"] .logo-svg {
+    filter: drop-shadow(0 0 100px var(--accent)) drop-shadow(0 0 60px var(--accent2)) saturate(4) brightness(1.35);
+    animation: brain-xp-pulse 0.55s ease-in-out infinite;
+}
+body.xp-active [data-level-tier="9"] .card {
+    box-shadow: 0 2px 100px var(--glow);
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--card) 88%, var(--accent));
+}
+body.xp-active [data-level-tier="9"] #xp-bar { box-shadow: 0 0 34px var(--accent); }
+body.xp-active [data-level-tier="9"] #level-badge { text-shadow: 0 0 20px var(--accent); font-weight: 900; }
+
+body.xp-active [data-level-tier="10"] .logo-svg {
+    filter: drop-shadow(0 0 120px var(--accent)) drop-shadow(0 0 70px var(--accent2)) drop-shadow(0 0 30px white) saturate(4.5) brightness(1.45);
+    animation: brain-xp-pulse-max 0.45s ease-in-out infinite;
+}
+body.xp-active [data-level-tier="10"] .card {
+    box-shadow: 0 0 120px var(--glow);
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--card) 84%, var(--accent));
+}
+body.xp-active [data-level-tier="10"] #xp-bar { box-shadow: 0 0 40px var(--accent); }
+body.xp-active [data-level-tier="10"] #level-badge {
+    text-shadow: 0 0 24px var(--accent), 0 0 8px white;
+    font-size: 0.88rem; font-weight: 900;
+}
+
+@keyframes brain-xp-pulse {
+    0%, 100% { filter: drop-shadow(0 0 14px var(--accent)) saturate(1.3); }
+    50%       { filter: drop-shadow(0 0 44px var(--accent)) drop-shadow(0 0 22px var(--accent2)) saturate(2.5) brightness(1.1); }
+}
+@keyframes brain-xp-pulse-max {
+    0%, 100% { filter: drop-shadow(0 0 60px var(--accent)) drop-shadow(0 0 30px var(--accent2)) saturate(3.5) brightness(1.3); }
+    50%       { filter: drop-shadow(0 0 130px var(--accent)) drop-shadow(0 0 80px var(--accent2)) drop-shadow(0 0 40px white) saturate(5) brightness(1.6); }
+}
+
 /* ── Upload / download cards ───────────────────────────────── */
 .upload-zone {
     border: 2px dashed var(--card-border);
@@ -732,7 +898,6 @@ footer {
     header { margin-bottom: 1.5rem; }
     .logo-name { font-size: 1.5rem; }
     .logo-svg { width: 56px; height: 56px; }
-    .brain-health { width: 56px; }
     .card { padding: 1.1rem; border-radius: 12px; }
     h2 { font-size: 1.05rem; }
     .btn { padding: 0.6rem 1.1rem; font-size: 0.85rem; }
@@ -783,11 +948,6 @@ body.quiz-mode .logo-name { font-size: 1.1rem; }
 
 body.quiz-mode .logo-tagline { display: none; }
 
-body.quiz-mode .brain-health {
-    width: 38px;
-    height: 5px;
-    margin: 0;
-}
 
 /* ── Extra compact on mobile ────────────────────────────────── */
 @media (max-width: 600px) {
@@ -796,7 +956,6 @@ body.quiz-mode .brain-health {
     body.quiz-mode .logo-wrap { gap: 0.45rem; }
     body.quiz-mode .logo-svg { width: 26px; height: 26px; }
     body.quiz-mode .logo-name { font-size: 0.95rem; }
-    body.quiz-mode .brain-health { width: 26px; height: 4px; }
 }
 
 /* ── Flashcard ───────────────────────────────────────────────────────────────── */

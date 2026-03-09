@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="damage-flash"></div>
-
     <!-- Skin switcher -->
     <button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
     <div id="skin-panel" role="listbox" aria-label="Colour skins">
@@ -34,6 +32,7 @@
     <div class="container">
         <header>
             <a class="logo-wrap" id="logo-link">
+                <span id="logo-svg-wrap">
                 <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                     <defs>
                         <linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -54,13 +53,18 @@
                     <circle cx="24" cy="20" r="2" fill="var(--accent)" opacity="0.8"/>
                     <circle cx="40" cy="20" r="2" fill="var(--accent2)" opacity="0.8"/>
                 </svg>
+                </span>
                 <span class="logo-name">BrainStuffer</span>
             </a>
-            <div class="brain-health" id="brain-health">
-                <div class="brain-health-fill" id="brain-health-fill"></div>
-            </div>
             <p class="logo-tagline" id="subtitle">Quiz yourself</p>
         </header>
+
+        <!-- Level / XP bar — always visible -->
+        <div id="level-row">
+            <span id="level-badge">Lv.1</span>
+            <div id="xp-bar"><div id="xp-bar-fill"></div></div>
+            <span id="xp-label">0 / 30 XP</span>
+        </div>
 
         <!-- ════════════════════ PAGE: HOME ════════════════════ -->
         <div id="page-home" class="page active">
@@ -79,6 +83,11 @@
                 <div style="display:flex;gap:0.65rem;flex-wrap:wrap;">
                     <button class="btn btn-primary" id="btn-start" style="flex:1;min-width:140px">Start Quiz</button>
                     <button class="btn btn-outline" id="btn-start-flashcard" style="flex:1;min-width:140px">Flashcard Mode</button>
+                </div>
+                <div style="margin-top:0.75rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+                    <input type="checkbox" id="xp-mode-toggle" style="cursor:pointer;width:1rem;height:1rem">
+                    <label for="xp-mode-toggle" style="cursor:pointer;color:var(--subtle);font-size:0.88rem;margin:0">Enable XP &amp; Level system</label>
+                    <a id="btn-xp-reset" href="#" style="margin-left:auto;font-size:0.78rem;color:var(--muted);cursor:pointer;text-decoration:none" title="Reset XP and level to zero">Reset XP</a>
                 </div>
             </div>
 
@@ -239,15 +248,9 @@
             </div>
 
             <div class="card">
-                <h2>Brain Damage States</h2>
-                <p style="color:var(--muted);font-size:0.82rem;margin-bottom:0.75rem">Set the damage level (0 = healthy, 4 = critical).</p>
-                <div class="damage-row">
-                    <button class="dmg-chip" onclick="window.applyDamage && window.applyDamage(0)">0 &#8212; Healthy</button>
-                    <button class="dmg-chip" onclick="window.applyDamage && window.applyDamage(1, true)">1 &#8212; Scratched</button>
-                    <button class="dmg-chip" onclick="window.applyDamage && window.applyDamage(2, true)">2 &#8212; Hurt</button>
-                    <button class="dmg-chip" onclick="window.applyDamage && window.applyDamage(3, true)">3 &#8212; Messed Up</button>
-                    <button class="dmg-chip" onclick="window.applyDamage && window.applyDamage(4, true)">4 &#8212; CRITICAL</button>
-                </div>
+                <h2>&#9888; XP Injection</h2>
+                <p style="color:var(--muted);font-size:0.82rem;margin-bottom:0.75rem">Grants 100 XP instantly. You will be permanently tagged as a cheater. There is no undo.</p>
+                <button class="btn btn-danger" id="btn-xp-cheat">&#9762; Add 100 XP (mark me as a cheater)</button>
             </div>
 
             <div class="card" style="text-align:center">
@@ -256,13 +259,14 @@
         </div>
 
         <footer id="footer-quip">brainstuffer</footer>
-        <div style="text-align:center;color:var(--muted);font-size:0.7rem;opacity:0.4;margin-top:0.35rem">v1.2</div>
+        <div style="text-align:center;color:var(--muted);font-size:0.7rem;opacity:0.4;margin-top:0.35rem">v1.31</div>
     </div>
 
 <script src="js/state.js"></script>
 <script src="js/utils.js"></script>
 <script src="js/crypto.js"></script>
 <script src="js/loader.js"></script>
+<script src="js/levels.js"></script>
 <script src="js/quiz.js"></script>
 <script src="js/flashcard.js"></script>
 <script src="js/ui.js"></script>

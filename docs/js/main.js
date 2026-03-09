@@ -3,6 +3,7 @@
 // ══════════════════════════════════════════════════════════════════
 
 document.getElementById('btn-start').addEventListener('click', startQuiz);
+
 document.getElementById('btn-submit-answer').addEventListener('click', submitAnswer);
 document.getElementById('quiz-home-link').addEventListener('click', goHome);
 document.getElementById('dragons-home-link').addEventListener('click', goHome);
@@ -69,9 +70,29 @@ window.addEventListener('hashchange', checkHash);
     }, { passive: true });
 })();
 
+// XP reset button
+document.getElementById('btn-xp-reset').addEventListener('click', function(e) {
+    e.preventDefault();
+    if (confirm('Reset your XP and level back to zero?')) {
+        if (window.resetXP) window.resetXP();
+    }
+});
+
+// Dragons lab: XP cheat button
+document.getElementById('btn-xp-cheat').addEventListener('click', function() {
+    localStorage.setItem('bs-cheater', '1');
+    // Enable XP mode if not already on
+    var toggle = document.getElementById('xp-mode-toggle');
+    if (toggle && !toggle.checked) {
+        toggle.checked = true;
+        toggle.dispatchEvent(new Event('change'));
+    }
+    if (window.applyXP) window.applyXP(100);
+    this.textContent = '\u2620 XP added \u2014 you\u2019re tagged as a cheater';
+});
+
 // ══════════════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════════════
 loadManifest();
-if (window.applyDamage) window.applyDamage(0);
 checkHash();

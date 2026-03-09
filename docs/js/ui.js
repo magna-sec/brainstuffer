@@ -7,13 +7,13 @@ function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
 
-    // Compact header on quiz/feedback pages for mobile
     document.body.classList.toggle('quiz-mode', id === 'quiz' || id === 'feedback');
+    document.body.classList.toggle('on-home', id === 'home');
 
     const sub = document.getElementById('subtitle');
     switch (id) {
         case 'home':      sub.textContent = 'Choose a question set and test yourself'; break;
-        case 'quiz':      break; // set dynamically
+        case 'quiz':      break;
         case 'feedback':  sub.textContent = 'Answer feedback'; break;
         case 'results':   sub.textContent = 'Quiz complete'; break;
         case 'dragons':   sub.textContent = 'Secret test lab \u2014 do not touch'; break;
@@ -28,6 +28,7 @@ function goHome() {
     if (window.applyDamage) window.applyDamage(0);
     if (window.location.hash) history.pushState(null, '', window.location.pathname);
     showPage('home');
+    if (window.renderQuip) window.renderQuip();
 }
 
 // ── Shared overlay helper ────────────────────────────────────────
@@ -496,14 +497,17 @@ function screenMelt() {
         },
     ];
 
-    const footer = document.getElementById('footer-quip');
-    const quip   = quips[Math.floor(Math.random() * quips.length)];
-    const enc    = encoders[Math.floor(Math.random() * encoders.length)];
-    if (enc) {
-        footer.innerHTML = 'BrainStuffer \u2014 <span title="' + quip.replace(/"/g,'&quot;') + '" style="cursor:help;opacity:0.7;font-family:monospace;font-size:0.7rem">' + enc.fn(quip) + '</span>';
-    } else {
-        footer.textContent = 'BrainStuffer \u2014 ' + quip;
-    }
+    window.renderQuip = function() {
+        const footer = document.getElementById('footer-quip');
+        const quip   = quips[Math.floor(Math.random() * quips.length)];
+        const enc    = encoders[Math.floor(Math.random() * encoders.length)];
+        if (enc) {
+            footer.innerHTML = 'BrainStuffer \u2014 <span title="' + quip.replace(/"/g,'&quot;') + '" style="cursor:help;opacity:0.7;font-family:monospace;font-size:0.7rem">' + enc.fn(quip) + '</span>';
+        } else {
+            footer.textContent = 'BrainStuffer \u2014 ' + quip;
+        }
+    };
+    window.renderQuip();
 })();
 
 // ══════════════════════════════════════════════════════════════════
@@ -516,10 +520,41 @@ function screenMelt() {
     const opts     = panel.querySelectorAll('.skin-opt');
     const STORAGE  = 'bs-skin';
 
+    const SKIN_COLORS = {
+        midnight: ['#818cf8','#38bdf8','#0f1117'],
+        neon:     ['#4ade80','#86efac','#060d06'],
+        crimson:  ['#f87171','#fca5a5','#100608'],
+        ocean:    ['#2dd4bf','#67e8f9','#040e14'],
+        amber:    ['#fbbf24','#fde68a','#0f0b04'],
+    };
+
+    function updateFavicon(skin) {
+        var c = SKIN_COLORS[skin] || SKIN_COLORS.midnight;
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'
+            + '<defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">'
+            + '<stop offset="0%" stop-color="' + c[0] + '"/>'
+            + '<stop offset="100%" stop-color="' + c[1] + '"/>'
+            + '</linearGradient></defs>'
+            + '<rect width="64" height="64" rx="14" fill="' + c[2] + '"/>'
+            + '<path d="M32 50 C24 50 13 44 11 34 C9 24 15 15 22 14 C23 9 27 7 32 10" stroke="url(#g)" stroke-width="2.8" fill="none" stroke-linecap="round"/>'
+            + '<path d="M32 50 C40 50 51 44 53 34 C55 24 49 15 42 14 C41 9 37 7 32 10" stroke="url(#g)" stroke-width="2.8" fill="none" stroke-linecap="round"/>'
+            + '<path d="M32 10 L32 50" stroke="url(#g)" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-dasharray="3.5 3"/>'
+            + '<path d="M16 28 Q20 24 24 28" stroke="url(#g)" stroke-width="2" fill="none" stroke-linecap="round"/>'
+            + '<path d="M15 38 Q19 34 23 38" stroke="url(#g)" stroke-width="2" fill="none" stroke-linecap="round"/>'
+            + '<path d="M40 28 Q44 24 48 28" stroke="url(#g)" stroke-width="2" fill="none" stroke-linecap="round"/>'
+            + '<path d="M41 38 Q45 34 49 38" stroke="url(#g)" stroke-width="2" fill="none" stroke-linecap="round"/>'
+            + '<circle cx="24" cy="20" r="1.5" fill="' + c[0] + '" opacity="0.7"/>'
+            + '<circle cx="40" cy="20" r="1.5" fill="' + c[1] + '" opacity="0.7"/>'
+            + '</svg>';
+        var link = document.querySelector('link[rel="icon"]');
+        if (link) link.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+    }
+
     function applySkin(skin) {
         root.setAttribute('data-skin', skin);
         localStorage.setItem(STORAGE, skin);
         opts.forEach(function(o) { o.classList.toggle('active', o.dataset.skin === skin); });
+        updateFavicon(skin);
     }
 
     var saved = localStorage.getItem(STORAGE);
@@ -559,8 +594,9 @@ function screenMelt() {
         'keep going','flashcard!','revision!','trivia time','knowledge++',
     ];
 
-    const logo = document.getElementById('logo-link');
-    const svg  = logo && logo.querySelector('.logo-svg');
+    const logo    = document.getElementById('logo-link');
+    const svg     = logo && logo.querySelector('.logo-svg');
+    const svgWrap = document.getElementById('logo-svg-wrap');
     if (!logo) return;
 
     // Idle breathing
@@ -589,12 +625,13 @@ function screenMelt() {
             return;
         }
 
-        // Squish + bounce
-        svg.style.transition = 'transform 0.12s ease-out';
-        svg.style.transform  = 'scale(0.7) rotate(-10deg)';
+        // Squish + bounce only the SVG so the title text doesn't jiggle
+        const sq = svgWrap || logo;
+        sq.style.transition = 'transform 0.12s ease-out';
+        sq.style.transform  = 'scale(0.7) rotate(-10deg)';
         setTimeout(function() {
-            svg.style.transform = 'scale(1.15) rotate(5deg)';
-            setTimeout(function() { svg.style.transform = ''; }, 160);
+            sq.style.transform = 'scale(1.15) rotate(5deg)';
+            setTimeout(function() { sq.style.transform = ''; }, 160);
         }, 120);
 
         // Particle burst
@@ -625,10 +662,13 @@ function screenMelt() {
             const dy    = Math.sin(angle) * dist;
             const dur   = (0.65 + Math.random() * 0.45).toFixed(2);
 
+            // Double rAF: first frame commits initial styles, second starts transition (Firefox fix)
             requestAnimationFrame(function() {
-                p.style.transition = 'transform ' + dur + 's cubic-bezier(.2,.8,.3,1), opacity ' + dur + 's ease-in 0.25s';
-                p.style.transform  = 'translate(calc(-50% + ' + dx + 'px), calc(-50% + ' + dy + 'px))';
-                p.style.opacity    = '0';
+                requestAnimationFrame(function() {
+                    p.style.transition = 'transform ' + dur + 's cubic-bezier(.2,.8,.3,1), opacity ' + dur + 's ease-in 0.25s';
+                    p.style.transform  = 'translate(calc(-50% + ' + dx + 'px), calc(-50% + ' + dy + 'px))';
+                    p.style.opacity    = '0';
+                });
             });
             setTimeout(function() { p.remove(); }, 1300);
         }
@@ -649,50 +689,6 @@ function screenMelt() {
             showOverlay('cheat code activated<br><span style="font-size:0.9rem;color:var(--muted);font-weight:400">unfortunately there are no cheats in learning</span>', '&#129504;', 3000);
         }
     });
-})();
-
-// ══════════════════════════════════════════════════════════════════
-// DAMAGE SYSTEM
-// ══════════════════════════════════════════════════════════════════
-(function () {
-    const BAR    = document.getElementById('brain-health');
-    const FILL   = document.getElementById('brain-health-fill');
-    const COLORS = ['#22c55e', '#f97316', '#ef4444', '#dc2626', '#7f1d1d'];
-    const WIDTHS = ['100%', '72%', '44%', '18%', '4%'];
-    const FLASH  = document.getElementById('damage-flash');
-
-    window.flashDamage = function () {
-        if (!FLASH) return;
-        FLASH.style.transition = 'opacity 0.15s';
-        FLASH.style.opacity = '0.18';
-        setTimeout(function() {
-            FLASH.style.transition = 'opacity 1s';
-            FLASH.style.opacity = '0';
-        }, 150);
-    };
-
-    window.applyDamage = function (dmg, flash) {
-        dmg = Math.max(0, Math.min(4, dmg));
-        document.documentElement.setAttribute('data-damage', dmg);
-        localStorage.setItem('bs-damage', dmg);
-        if (flash) window.flashDamage();
-        if (!BAR || !FILL) return;
-        if (dmg > 0) {
-            BAR.classList.add('visible');
-            FILL.style.background = COLORS[dmg];
-            FILL.style.width      = WIDTHS[dmg];
-        } else {
-            BAR.classList.remove('visible');
-            FILL.style.width = '100%';
-            FILL.style.background = COLORS[0];
-        }
-    };
-
-    window.getDamage = function () {
-        return parseInt(localStorage.getItem('bs-damage') || '0', 10);
-    };
-
-    applyDamage(getDamage());
 })();
 
 // ══════════════════════════════════════════════════════════════════

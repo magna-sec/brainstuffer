@@ -17,7 +17,7 @@ async function startQuiz() {
 
     const quiz = sampled.map(q => {
         const answers = q.answers.slice();
-        const correct = answers[0];
+        const correct = q.correct !== undefined ? String(q.correct) : String(answers[0]);
         return {
             question_id: q.question_id || 0,
             question: q.question,
@@ -38,7 +38,6 @@ async function startQuiz() {
         question_start: null,
     };
 
-    if (window.applyDamage) window.applyDamage(0);
     showQuizQuestion();
 }
 
@@ -127,6 +126,12 @@ function submitAnswer() {
         store.correct++;
     }
 
+    // XP
+    let xpResult = null;
+    if (window.applyXP) {
+        xpResult = window.applyXP(isCorrect ? window.LEVEL_XP_CORRECT : -window.LEVEL_XP_WRONG);
+    }
+
     const flagged = !isCorrect || tooSlow;
     if (flagged) {
         const alreadyQueued = store.review_queue.some(q => q.question_id === question.question_id);
@@ -161,6 +166,7 @@ function submitAnswer() {
         isLast, flagged, tooSlow,
         elapsed: Math.floor(elapsed),
         isReview: store.is_review,
+        xpResult,
     });
 }
 
@@ -178,6 +184,26 @@ function showFeedback(data) {
         html += '<div class="answer-box answer-wrong"><strong>Your answer:</strong> ' + escHtml(data.selectedVal || '(none)') + '</div>';
     }
     html += '<div class="answer-box answer-correct"><strong>Correct answer:</strong> ' + escHtml(data.correct) + '</div>';
+
+    if (data.xpResult) {
+        const gained = data.xpResult.xpChange > 0;
+        const cls    = gained ? 'xp-gain' : 'xp-loss';
+        const sign   = gained ? '+' : '';
+        html += '<div class="xp-change ' + cls + '">' + sign + data.xpResult.xpChange + ' XP';
+        if (!gained && data.xpResult.newLevel < data.xpResult.oldLevel) {
+            html += ' &mdash; <strong>LEVEL DOWN \u2193</strong>';
+        } else if (gained && data.xpResult.newLevel > data.xpResult.oldLevel) {
+            html += ' &mdash; <strong>LEVEL UP \u2191</strong>';
+        }
+        html += '</div>';
+        // Warn if next wrong answer would drop a level
+        if (!gained && window.getLevelProgress) {
+            const prog = window.getLevelProgress();
+            if (prog.xpInLevel < window.LEVEL_XP_WRONG && prog.level > 1) {
+                html += '<div class="xp-warning">\u26a0\ufe0f One wrong answer will drop you to Level ' + (prog.level - 1) + '</div>';
+            }
+        }
+    }
 
     html += '<div class="meta"><span>&#9201; ' + data.elapsed + 's</span>';
     if (data.tooSlow) html += '<span class="badge badge-slow">Too slow (&gt;30s)</span>';
@@ -198,13 +224,6 @@ function showFeedback(data) {
         document.getElementById('btn-see-results').addEventListener('click', showResults);
     } else {
         document.getElementById('btn-next-question').addEventListener('click', showQuizQuestion);
-    }
-
-    // Damage on incorrect first-pass
-    if (!data.isCorrect && !data.isReview) {
-        if (window.applyDamage && window.getDamage) {
-            window.applyDamage(window.getDamage() + 1, true);
-        }
     }
 
     showPage('feedback');
@@ -315,7 +334,6 @@ async function restartQuiz() {
         question_start: null,
     };
 
-    if (window.applyDamage) window.applyDamage(0);
     showQuizQuestion();
 }
 
