@@ -24,7 +24,8 @@ async function loadQuizData(filename) {
     // Uploaded files are cached directly, never fetched
     if (filename.startsWith('upload:')) return null;
     const resp = await fetch('data/' + filename);
-    const data = await resp.json();
+    const text = await resp.text();
+    const data = safeJsonParse(text);
     quizDataCache[filename] = data;
     return data;
 }

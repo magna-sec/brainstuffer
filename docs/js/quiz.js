@@ -187,7 +187,7 @@ function showFeedback(data) {
     }
     html += '<div class="answer-box answer-correct"><strong>Correct answer:</strong> ' + escHtml(data.correct) + '</div>';
 
-    if (data.xpResult) {
+    if (data.xpResult && data.xpResult.xpChange !== 0) {
         const gained = data.xpResult.xpChange > 0;
         const cls    = gained ? 'xp-gain' : 'xp-loss';
         const sign   = gained ? '+' : '';
@@ -213,6 +213,8 @@ function showFeedback(data) {
     html += '</div>';
 
     document.getElementById('fb-card').innerHTML = html;
+
+    if (window.renderQuip) window.renderQuip();
 
     let nextHtml;
     if (data.isLast) {

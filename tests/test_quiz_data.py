@@ -185,6 +185,12 @@ class TestHTML:
             "use DOM methods (input.value = ans) instead."
         )
 
+    def test_title_capitalisation(self):
+        """Browser tab should read 'BrainStuffer', not 'Brainstuffer'."""
+        assert "<title>BrainStuffer</title>" in self.html, (
+            "index.html <title> must be 'BrainStuffer' (capital S)"
+        )
+
 
 # ── File structure ────────────────────────────────────────────────────────────
 
@@ -255,3 +261,161 @@ class TestFileStructure:
                 f"index.html contains inline <script> block #{i+1} with {line_count} lines "
                 f"(max allowed: 50). Move JS to an external file."
             )
+
+# ── Quiz JS behaviour (static analysis) ──────────────────────────────────────
+
+QUIZ_JS   = JS_DIR / "quiz.js"
+UI_JS     = JS_DIR / "ui.js"
+LOADER_JS = JS_DIR / "loader.js"
+
+
+class TestQuizJS:
+    def setup_method(self):
+        self.quiz_js   = QUIZ_JS.read_text(encoding="utf-8")
+        self.ui_js     = UI_JS.read_text(encoding="utf-8")
+        self.loader_js = LOADER_JS.read_text(encoding="utf-8")
+
+    # ── Quip updates ────────────────────────────────────────────────
+
+    def _function_body(self, source: str, fn_name: str) -> str:
+        """
+        Very simple extractor: finds `function fn_name(` and returns
+        the content up to (and including) its matching closing brace.
+        """
+        start = source.find(f"function {fn_name}(")
+        if start == -1:
+            return ""
+        depth = 0
+        i = source.index("{", start)
+        while i < len(source):
+            if source[i] == "{":
+                depth += 1
+            elif source[i] == "}":
+                depth -= 1
+                if depth == 0:
+                    return source[start : i + 1]
+            i += 1
+        return source[start:]
+
+    def test_quip_called_in_show_quiz_question(self):
+        """renderQuip() must be called inside showQuizQuestion so the quip
+        updates on every new question (including 'Next Question' click)."""
+        body = self._function_body(self.quiz_js, "showQuizQuestion")
+        assert "renderQuip" in body, (
+            "showQuizQuestion() in quiz.js does not call renderQuip() — "
+            "the footer quip will not update when a new question is shown."
+        )
+
+    def test_quip_called_in_show_feedback(self):
+        """renderQuip() must be called inside showFeedback so the quip
+        updates when 'Submit Answer' is clicked."""
+        body = self._function_body(self.quiz_js, "showFeedback")
+        assert "renderQuip" in body, (
+            "showFeedback() in quiz.js does not call renderQuip() — "
+            "the footer quip will not update when the feedback page is shown."
+        )
+
+    def test_quip_called_in_go_home(self):
+        """renderQuip() should also be called when returning to the home page."""
+        body = self._function_body(self.ui_js, "goHome")
+        assert "renderQuip" in body, (
+            "goHome() in ui.js does not call renderQuip()."
+        )
+
+    # ── XP display when disabled ─────────────────────────────────────
+
+    def test_xp_block_guarded_by_xp_change(self):
+        """When XP is disabled, applyXP returns {xpChange: 0}. The feedback
+        page must check xpChange !== 0 (not just that xpResult is truthy)
+        so no XP info is shown when the system is off."""
+        body = self._function_body(self.quiz_js, "showFeedback")
+        # The guard must include xpChange, not just `if (data.xpResult)`
+        assert "xpChange" in body, (
+            "showFeedback() does not check xpResult.xpChange — XP info will "
+            "appear even when the XP system is disabled."
+        )
+
+    # ── Backslash / safe JSON parsing ────────────────────────────────
+
+    def test_loader_uses_safe_json_parse(self):
+        """loadQuizData() in loader.js must use safeJsonParse (not raw resp.json())
+        so that answers containing Windows-style paths like C:\\windows\\system32
+        are not silently mangled."""
+        load_quiz_body = self._function_body(self.loader_js, "loadQuizData")
+        assert load_quiz_body, "loadQuizData function not found in loader.js"
+        assert "safeJsonParse" in load_quiz_body, (
+            "loadQuizData() in loader.js does not use safeJsonParse() — "
+            "unescaped backslashes in quiz JSON files will be silently dropped "
+            "(e.g. C:\\windows becomes C:windows)."
+        )
+        assert "resp.json()" not in load_quiz_body, (
+            "loadQuizData() in loader.js still calls resp.json() directly — "
+            "replace with safeJsonParse(await resp.text()) to handle unescaped backslashes."
+        )
+
+    def test_safe_json_parse_defined_in_utils(self):
+        utils_js = (JS_DIR / "utils.js").read_text(encoding="utf-8")
+        assert "safeJsonParse" in utils_js, (
+            "safeJsonParse is not defined in utils.js"
+        )
+        assert "backslash" in utils_js.lower() or r"\\" in utils_js, (
+            "safeJsonParse in utils.js does not appear to handle backslash repair"
+        )
+
+
+# ── Backslash integrity in quiz data files ────────────────────────────────────
+
+class TestBackslashIntegrity:
+    """
+    Checks that quiz JSON files either:
+      (a) are valid JSON with properly escaped backslashes (\\\\), OR
+      (b) can be repaired by safeJsonParse-style logic without data loss.
+
+    Python's json.load is strict and will raise on unescaped backslashes,
+    so a file that loads cleanly in Python is safe for the browser too.
+    """
+
+    def test_all_quiz_files_parse_without_error(self):
+        """All data/*.json files must be parseable by Python's strict JSON parser."""
+        errors = []
+        for path in all_quiz_files():
+            try:
+                with open(path, encoding="utf-8") as f:
+                    json.load(f)
+            except json.JSONDecodeError as e:
+                errors.append(f"{path.name}: {e}")
+        assert not errors, (
+            "The following quiz files contain invalid JSON (possibly due to "
+            "unescaped backslashes — use \\\\ for a single backslash in JSON):\n"
+            + "\n".join(errors)
+        )
+
+    def test_backslash_strings_round_trip(self):
+        """
+        Any answer or question that contains a backslash in the parsed value
+        must also contain a double-backslash in the raw file bytes — confirming
+        the backslash is properly escaped and will survive the browser's
+        JSON.parse without being silently dropped.
+        """
+        failures = []
+        for path in all_quiz_files():
+            raw = path.read_text(encoding="utf-8")
+            try:
+                questions = json.loads(raw)
+            except json.JSONDecodeError:
+                continue  # caught by the previous test
+            for i, q in enumerate(questions):
+                texts = [q.get("question", "")] + [str(a) for a in q.get("answers", [])]
+                for text in texts:
+                    if "\\" in text:
+                        # The raw JSON must contain \\\\ (escaped backslash)
+                        # to represent a single \ in the parsed value.
+                        # We verify at least one \\\\ exists nearby.
+                        if "\\\\" not in raw:
+                            failures.append(
+                                f"{path.name}[{i}]: parsed value contains \\ "
+                                f"but raw file has no \\\\ — backslash may be lost "
+                                f"in browser JSON.parse."
+                            )
+                            break
+        assert not failures, "\n".join(failures)
