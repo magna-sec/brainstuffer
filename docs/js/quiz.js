@@ -249,11 +249,18 @@ function showResults() {
     else if (percentage >= 25) resultLabel = 'Keep practising.';
     else resultLabel = 'More study needed.';
 
-    let html = '<div class="card" style="text-align:center">';
+    let html = '<div class="card" style="text-align:center;border-color:var(--accent);box-shadow:0 0 32px var(--glow)">';
     html += '<div class="score-ring-wrap">';
     html += '<svg viewBox="0 0 140 140" width="140" height="140">';
+    html += '<defs>'
+         + '<linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">'
+         + '<stop offset="0%" stop-color="var(--accent)"/>'
+         + '<stop offset="100%" stop-color="var(--accent2)"/>'
+         + '</linearGradient>'
+         + '</defs>';
     html += '<circle class="score-ring-bg" cx="70" cy="70" r="60"/>';
     html += '<circle class="score-ring-fill colour-' + colour + '" cx="70" cy="70" r="60" '
+         + 'stroke="url(#ring-grad)" '
          + 'stroke-dasharray="376.99" stroke-dashoffset="376.99" id="ring-fill"/>';
     html += '</svg>';
     html += '<div class="score-text">';
@@ -301,7 +308,7 @@ function showResults() {
     // 100% celebration
     if (percentage >= 100) {
         setTimeout(() => {
-            const picks = [flyAround, inflate, multiply, bounce, firework, matrixRain, disco, parade, confetti, spinShrink, screenMelt];
+            const picks = [flyAround, inflate, multiply, bounce, firework, matrixRain, disco, parade, confetti, spinShrink, screenMelt, goldenRing];
             picks[Math.floor(Math.random() * picks.length)]();
         }, 1300);
     }

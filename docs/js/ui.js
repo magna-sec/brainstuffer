@@ -337,6 +337,133 @@ function screenMelt() {
 }
 
 // ══════════════════════════════════════════════════════════════════
+// GOLDEN RING — perfect-score celebration
+// ══════════════════════════════════════════════════════════════════
+function goldenRing() {
+    const W = window.innerWidth, H = window.innerHeight;
+
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0);z-index:9994;pointer-events:none;'
+        + 'display:flex;align-items:center;justify-content:center;transition:background 1.2s ease 0.3s;';
+    document.body.appendChild(overlay);
+    requestAnimationFrame(function() { overlay.style.background = 'rgba(0,0,0,0.88)'; });
+
+    const ringSize = Math.min(W, H) * 0.3;
+    const r = ringSize / 2;
+    const pad = ringSize * 0.2;
+    const svgSize = ringSize + pad * 2;
+    const cx = svgSize / 2, cy = svgSize / 2;
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('width', svgSize);
+    svg.setAttribute('height', svgSize);
+    svg.setAttribute('viewBox', '0 0 ' + svgSize + ' ' + svgSize);
+
+    svg.innerHTML =
+        '<defs>'
+        + '<radialGradient id="rg-metal" cx="50%" cy="35%" r="65%">'
+        + '<stop offset="0%" stop-color="#fffbeb"/>'
+        + '<stop offset="30%" stop-color="#fbbf24"/>'
+        + '<stop offset="70%" stop-color="#b45309"/>'
+        + '<stop offset="100%" stop-color="#78350f"/>'
+        + '</radialGradient>'
+        + '<radialGradient id="rg-ember" cx="50%" cy="50%" r="50%">'
+        + '<stop offset="0%" stop-color="#fef3c7" stop-opacity="0.9"/>'
+        + '<stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>'
+        + '</radialGradient>'
+        + '<filter id="rg-glow" x="-50%" y="-50%" width="200%" height="200%">'
+        + '<feGaussianBlur stdDeviation="3" result="b"/>'
+        + '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>'
+        + '</filter>'
+        + '<filter id="rg-biglow" x="-100%" y="-100%" width="300%" height="300%">'
+        + '<feGaussianBlur stdDeviation="5" result="b"/>'
+        + '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>'
+        + '</filter>'
+        + '</defs>'
+        + '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r * 1.15) + '" fill="url(#rg-ember)"/>'
+        + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '"'
+        + ' fill="none" stroke="#f59e0b" stroke-width="' + (ringSize * 0.22) + '" opacity="0.18" filter="url(#rg-biglow)"/>'
+        + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '"'
+        + ' fill="none" stroke="url(#rg-metal)" stroke-width="' + (ringSize * 0.13) + '" filter="url(#rg-glow)"/>'
+        + '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r + ringSize * 0.068) + '"'
+        + ' fill="none" stroke="#fde68a" stroke-width="1" opacity="0.5"/>'
+        + '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r - ringSize * 0.068) + '"'
+        + ' fill="none" stroke="#fde68a" stroke-width="1" opacity="0.5"/>';
+
+    svg.style.cssText = 'position:absolute;transform:translateY(' + (H * 0.8) + 'px);'
+        + 'transition:transform 0.9s cubic-bezier(.15,.85,.25,1), opacity 0.3s;opacity:0;';
+    overlay.appendChild(svg);
+
+    const title = document.createElement('div');
+    title.textContent = 'One Perfect Score';
+    title.style.cssText = 'position:absolute;top:18%;left:0;right:0;text-align:center;'
+        + 'font-size:clamp(1.1rem,3vw,1.8rem);font-weight:900;color:#fbbf24;font-family:serif;'
+        + 'letter-spacing:0.12em;text-shadow:0 0 20px #f59e0b,0 0 40px #b45309;'
+        + 'opacity:0;transition:opacity 0.6s ease 1s;';
+    overlay.appendChild(title);
+
+    const sub = document.createElement('div');
+    sub.textContent = 'to rule them all';
+    sub.style.cssText = 'position:absolute;bottom:20%;left:0;right:0;text-align:center;'
+        + 'font-size:clamp(0.75rem,1.8vw,0.95rem);color:#fde68a;font-family:serif;'
+        + 'letter-spacing:0.18em;text-shadow:0 0 10px #f59e0b;'
+        + 'opacity:0;transition:opacity 0.6s ease 1.4s;';
+    overlay.appendChild(sub);
+
+    const quipEl = document.createElement('div');
+    var quipText = window.quips && window.quips.length
+        ? window.quips[Math.floor(Math.random() * window.quips.length)]
+        : 'perfection unlocked';
+    quipEl.textContent = quipText;
+    quipEl.style.cssText = 'position:absolute;bottom:12%;left:0;right:0;text-align:center;'
+        + 'font-size:clamp(0.65rem,1.5vw,0.85rem);color:#fde68a;font-family:sans-serif;'
+        + 'letter-spacing:0.05em;font-style:italic;'
+        + 'opacity:0;transition:opacity 0.6s ease 1.8s;';
+    overlay.appendChild(quipEl);
+
+    // Rise
+    requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+            svg.style.transform = 'translateY(0)';
+            svg.style.opacity = '1';
+            title.style.opacity = '1';
+            sub.style.opacity = '0.75';
+            quipEl.style.opacity = '0.7';
+        });
+    });
+
+    // Pulse glow
+    var glowRaf, glowPhase = 0;
+    function pulseGlow() {
+        glowPhase += 0.05;
+        var i1 = (6 + Math.sin(glowPhase) * 4).toFixed(1);
+        var i2 = (12 + Math.sin(glowPhase) * 6).toFixed(1);
+        svg.style.filter = 'drop-shadow(0 0 ' + i1 + 'px #f59e0b) drop-shadow(0 0 ' + i2 + 'px #92400e)';
+        glowRaf = requestAnimationFrame(pulseGlow);
+    }
+    setTimeout(pulseGlow, 900);
+
+    // Descend and fade
+    setTimeout(function() {
+        cancelAnimationFrame(glowRaf);
+        title.style.transition = 'opacity 0.4s';
+        title.style.opacity = '0';
+        sub.style.transition = 'opacity 0.4s';
+        sub.style.opacity = '0';
+        quipEl.style.transition = 'opacity 0.4s';
+        quipEl.style.opacity = '0';
+        svg.style.transition = 'transform 0.9s cubic-bezier(.8,0,1,1), opacity 0.6s ease 0.3s';
+        svg.style.transform = 'translateY(' + (H * 0.85) + 'px)';
+        svg.style.opacity = '0';
+        overlay.style.transition = 'background 0.6s ease 0.2s, opacity 0.4s ease 0.7s';
+        overlay.style.background = 'rgba(0,0,0,0)';
+        overlay.style.opacity = '0';
+        setTimeout(function() { overlay.remove(); }, 1200);
+    }, 3800);
+}
+window.goldenRing = goldenRing;
+
+// ══════════════════════════════════════════════════════════════════
 // FOOTER QUIPS
 // ══════════════════════════════════════════════════════════════════
 (function () {
@@ -497,6 +624,7 @@ function screenMelt() {
         },
     ];
 
+    window.quips = quips;
     window.renderQuip = function() {
         const footer = document.getElementById('footer-quip');
         const quip   = quips[Math.floor(Math.random() * quips.length)];
@@ -801,8 +929,9 @@ function screenMelt() {
         ['Confetti',        confetti],
         ['Spin & Shrink',   spinShrink],
         ['Screen Melt',     screenMelt],
+        ['Golden Ring',     goldenRing],
         ['Random',          function() {
-            var fns = [flyAround, inflate, multiply, bounce, firework, matrixRain, disco, parade, confetti, spinShrink, screenMelt];
+            var fns = [flyAround, inflate, multiply, bounce, firework, matrixRain, disco, parade, confetti, spinShrink, screenMelt, goldenRing];
             fns[Math.floor(Math.random() * fns.length)]();
         }],
     ];
