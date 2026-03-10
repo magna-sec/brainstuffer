@@ -87,6 +87,8 @@ function showQuizQuestion() {
     document.getElementById('quiz-q-number').textContent = 'Question ' + humanIdx;
     document.getElementById('quiz-q-text').textContent = question.question;
 
+    if (window.renderQuip) window.renderQuip();
+
     const answersList = document.getElementById('quiz-answers');
     answersList.innerHTML = '';
     question.answers.forEach((ans, i) => {

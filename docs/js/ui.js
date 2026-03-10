@@ -19,7 +19,7 @@ function showPage(id) {
         case 'dragons':   sub.textContent = 'Secret test lab \u2014 do not touch'; break;
         case 'flashcard': sub.textContent = 'Flashcard mode'; break;
     }
-    document.title = id === 'home' ? 'Brainstuffer' : 'Brainstuffer \u2014 ' + sub.textContent;
+    document.title = id === 'home' ? 'BrainStuffer' : 'BrainStuffer \u2014 ' + sub.textContent;
     window.scrollTo(0, 0);
 }
 
