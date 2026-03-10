@@ -401,6 +401,7 @@ function downloadPrompt() {
         '- The FIRST answer in the list MUST be the correct one',
         '- Include 3-4 answer options per question (1 correct + 2-3 plausible distractors)',
         '- Make distractors realistic and challenging, not obviously wrong',
+        '- Keep all answer options roughly the same length — correct answers must NOT be consistently longer or more detailed than distractors, as this allows test-takers to guess by length alone',
         '- Number question_id sequentially starting from 1',
         '',
         'Topic: [YOUR TOPIC HERE]',
