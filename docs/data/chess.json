@@ -1,0 +1,1002 @@
+[
+  {
+    "question": "How does a knight move in chess?",
+    "answers": [
+      "In an L-shape: two squares in one direction and one square perpendicular",
+      "Diagonally any number of squares in one direction",
+      "One square in any direction including diagonals",
+      "Straight forward any number of squares without capturing"
+    ],
+    "correct": "In an L-shape: two squares in one direction and one square perpendicular"
+  },
+  {
+    "question": "What is castling in chess?",
+    "answers": [
+      "A special move where the king moves two squares toward a rook and the rook jumps to the other side",
+      "A defensive manoeuvre where a pawn advances two squares on its first move",
+      "A sequence where the queen and a bishop coordinate to create a mating net",
+      "A tactical operation involving a knight sacrificed to open a file for the rook"
+    ],
+    "correct": "A special move where the king moves two squares toward a rook and the rook jumps to the other side"
+  },
+  {
+    "question": "What is en passant?",
+    "answers": [
+      "A rule allowing a pawn to capture an adjacent pawn that has just moved two squares forward",
+      "A move where the king steps to a safe square immediately after being checked",
+      "A draw offer made by touching a piece before deciding on the move",
+      "A rule allowing the bishop to switch diagonals by passing through the centre"
+    ],
+    "correct": "A rule allowing a pawn to capture an adjacent pawn that has just moved two squares forward"
+  },
+  {
+    "question": "Who was the first undisputed World Chess Champion?",
+    "answers": [
+      "Wilhelm Steinitz",
+      "Paul Morphy",
+      "Adolf Anderssen",
+      "Howard Staunton"
+    ],
+    "correct": "Wilhelm Steinitz"
+  },
+  {
+    "question": "What is the value commonly assigned to a pawn in chess?",
+    "answers": [
+      "1 point",
+      "2 points",
+      "3 points",
+      "5 points"
+    ],
+    "correct": "1 point"
+  },
+  {
+    "question": "What is a 'fork' in chess?",
+    "answers": [
+      "A single piece attacking two or more enemy pieces simultaneously",
+      "A pin where a piece cannot move without exposing the king to check",
+      "A sacrifice that opens a diagonal for a long-range attacking piece",
+      "A pawn advance that creates a passed pawn on an open file"
+    ],
+    "correct": "A single piece attacking two or more enemy pieces simultaneously"
+  },
+  {
+    "question": "What is a 'pin' in chess tactics?",
+    "answers": [
+      "An attack where a piece cannot legally or safely move because it shields a more valuable piece",
+      "A double attack launched by a knight jumping over intervening pieces",
+      "A rook sacrifice on a seventh-rank square to restrict the enemy king",
+      "A pawn structure where two pawns of the same colour block each other"
+    ],
+    "correct": "An attack where a piece cannot legally or safely move because it shields a more valuable piece"
+  },
+  {
+    "question": "What is the Sicilian Defence?",
+    "answers": [
+      "A chess opening beginning 1.e4 c5, where Black counters from the side",
+      "An opening beginning 1.d4 d5 where both sides aim for a solid centre",
+      "A defence based on 1.e4 e6, leading to closed French-type positions",
+      "An aggressive system where Black plays 1.e4 e5 and aims for quick counterplay"
+    ],
+    "correct": "A chess opening beginning 1.e4 c5, where Black counters from the side"
+  },
+  {
+    "question": "What does it mean to 'promote' a pawn?",
+    "answers": [
+      "When a pawn reaches the opposite back rank and is exchanged for a more powerful piece",
+      "When a pawn advances two squares from its starting position on the first move",
+      "When a pawn captures diagonally to remove a centrally placed enemy piece",
+      "When a pawn forms a chain with other pawns to control key central squares"
+    ],
+    "correct": "When a pawn reaches the opposite back rank and is exchanged for a more powerful piece"
+  },
+  {
+    "question": "Which piece can only move diagonally?",
+    "answers": [
+      "The bishop",
+      "The rook",
+      "The knight",
+      "The queen"
+    ],
+    "correct": "The bishop"
+  },
+  {
+    "question": "What is 'stalemate'?",
+    "answers": [
+      "A position where the player to move has no legal moves and is not in check, resulting in a draw",
+      "A position where the king is in check with no possible escape, ending the game",
+      "A draw agreed by both players after a long series of repetitive moves",
+      "A situation where both sides have insufficient material to force checkmate"
+    ],
+    "correct": "A position where the player to move has no legal moves and is not in check, resulting in a draw"
+  },
+  {
+    "question": "What is the standard starting number of pieces each player has?",
+    "answers": [
+      "16 pieces",
+      "12 pieces",
+      "20 pieces",
+      "18 pieces"
+    ],
+    "correct": "16 pieces"
+  },
+  {
+    "question": "Who defeated Garry Kasparov in a famous 1997 man-versus-machine match?",
+    "answers": [
+      "Deep Blue",
+      "Deep Thought",
+      "Stockfish",
+      "Fritz"
+    ],
+    "correct": "Deep Blue"
+  },
+  {
+    "question": "What is the 'Scholar's Mate'?",
+    "answers": [
+      "A four-move checkmate targeting the f7 square with queen and bishop",
+      "A two-move checkmate using the queen along the back rank",
+      "A six-move trap in the Sicilian where the knight forks king and rook",
+      "A back-rank mate involving a rook sacrificed to deflect the defending queen"
+    ],
+    "correct": "A four-move checkmate targeting the f7 square with queen and bishop"
+  },
+  {
+    "question": "What is the 'Immortal Game'?",
+    "answers": [
+      "Adolf Anderssen's 1851 brilliancy against Lionel Kieseritzky featuring bold sacrifices",
+      "Paul Morphy's 1858 Opera Game played against two nobles at the Paris Opera",
+      "Wilhelm Steinitz's final title defence game against Emanuel Lasker in 1894",
+      "Bobby Fischer's game 6 victory against Boris Spassky in the 1972 World Championship"
+    ],
+    "correct": "Adolf Anderssen's 1851 brilliancy against Lionel Kieseritzky featuring bold sacrifices"
+  },
+  {
+    "question": "What is a 'discovered check'?",
+    "answers": [
+      "A check delivered when one piece moves and unmasks an attack by another piece behind it",
+      "A check created by a pawn advancing two squares to threaten the opposing king directly",
+      "A check resulting from a knight sacrifice that opens a diagonal for the queen",
+      "A check that simultaneously attacks two pieces in different corners of the board"
+    ],
+    "correct": "A check delivered when one piece moves and unmasks an attack by another piece behind it"
+  },
+  {
+    "question": "What is the 'Fool's Mate'?",
+    "answers": [
+      "The fastest possible checkmate in chess, occurring in just two moves",
+      "A four-move trap targeting the uncastled king on the f-file",
+      "A beginner mistake where the queen is lost to a knight fork in the opening",
+      "A checkmate delivered by an underpromotion to a knight on the seventh rank"
+    ],
+    "correct": "The fastest possible checkmate in chess, occurring in just two moves"
+  },
+  {
+    "question": "What are the three main phases of a chess game?",
+    "answers": [
+      "Opening, middlegame, and endgame",
+      "Development, attack, and combination",
+      "Advance, consolidation, and promotion",
+      "Deployment, manoeuvre, and resolution"
+    ],
+    "correct": "Opening, middlegame, and endgame"
+  },
+  {
+    "question": "Which player is known as the 'Mozart of Chess'?",
+    "answers": [
+      "Paul Morphy",
+      "Jose Raul Capablanca",
+      "Magnus Carlsen",
+      "Mikhail Tal"
+    ],
+    "correct": "Paul Morphy"
+  },
+  {
+    "question": "What is the 'Ruy Lopez' opening?",
+    "answers": [
+      "An opening beginning 1.e4 e5 2.Nf3 Nc6 3.Bb5, attacking the knight that defends the pawn",
+      "An opening beginning 1.d4 Nf6 2.c4 g6, leading to a King's Indian type position",
+      "An opening beginning 1.e4 c5 2.Nf3 d6, steering toward a sharp Sicilian structure",
+      "An opening beginning 1.c4 e5, transposing into an English reversed Sicilian position"
+    ],
+    "correct": "An opening beginning 1.e4 e5 2.Nf3 Nc6 3.Bb5, attacking the knight that defends the pawn"
+  },
+  {
+    "question": "What is a 'skewer' in chess tactics?",
+    "answers": [
+      "An attack on a valuable piece that forces it to move and expose a less valuable piece behind it",
+      "A pin on a piece that cannot move without putting the king directly into check",
+      "A diagonal attack by the bishop that simultaneously threatens two enemy pawns",
+      "A queen manoeuvre that traps the opposing king between two rooks on an open file"
+    ],
+    "correct": "An attack on a valuable piece that forces it to move and expose a less valuable piece behind it"
+  },
+  {
+    "question": "How many squares are on a standard chess board?",
+    "answers": [
+      "64 squares",
+      "56 squares",
+      "72 squares",
+      "60 squares"
+    ],
+    "correct": "64 squares"
+  },
+  {
+    "question": "What is 'zugzwang'?",
+    "answers": [
+      "A situation where any move a player makes will worsen their own position",
+      "A tactical device where the queen sacrifices itself to enable a back-rank mate",
+      "A German term for a forced sequence of checks leading to an inevitable capture",
+      "A positional technique where the bishop is deliberately trapped behind its own pawns"
+    ],
+    "correct": "A situation where any move a player makes will worsen their own position"
+  },
+  {
+    "question": "What is the value commonly assigned to a queen in chess?",
+    "answers": [
+      "9 points",
+      "7 points",
+      "8 points",
+      "10 points"
+    ],
+    "correct": "9 points"
+  },
+  {
+    "question": "Who was World Chess Champion from 1985 to 2000?",
+    "answers": [
+      "Garry Kasparov",
+      "Anatoly Karpov",
+      "Bobby Fischer",
+      "Viswanathan Anand"
+    ],
+    "correct": "Garry Kasparov"
+  },
+  {
+    "question": "What is the 'King's Indian Defence'?",
+    "answers": [
+      "A defence after 1.d4 Nf6 2.c4 g6 where Black fianchettoes the king's bishop",
+      "A defence after 1.e4 e5 where Black plays Bc5 targeting the f2 pawn",
+      "A defence after 1.d4 d5 where Black holds the centre with a closed structure",
+      "A defence after 1.c4 e5 where Black plays a reversed Sicilian setup"
+    ],
+    "correct": "A defence after 1.d4 Nf6 2.c4 g6 where Black fianchettoes the king's bishop"
+  },
+  {
+    "question": "What does FIDE stand for?",
+    "answers": [
+      "Federation Internationale des Echecs",
+      "Federacion Internacional de Estrategia",
+      "Federation Internationale des Etudes",
+      "Forum International des Echiquiers"
+    ],
+    "correct": "Federation Internationale des Echecs"
+  },
+  {
+    "question": "What is a 'fianchetto'?",
+    "answers": [
+      "Developing a bishop to b2 or g2 (or b7/g7) to control a long diagonal",
+      "Castling queenside immediately to connect the rooks via the centre",
+      "Placing both knights on their optimal central squares in the opening",
+      "Advancing a central pawn two squares to establish an immediate space advantage"
+    ],
+    "correct": "Developing a bishop to b2 or g2 (or b7/g7) to control a long diagonal"
+  },
+  {
+    "question": "What is 'opposition' in a king and pawn endgame?",
+    "answers": [
+      "When two kings face each other with an odd number of squares between them, granting the other player a positional advantage",
+      "When a king uses its rook to cut off the opponent's king along a rank or file",
+      "When both kings advance toward the centre simultaneously and neither can proceed",
+      "When the king steps in front of its passed pawn to escort it to promotion"
+    ],
+    "correct": "When two kings face each other with an odd number of squares between them, granting the other player a positional advantage"
+  },
+  {
+    "question": "Who was the youngest chess grandmaster in history at the time of the title (2002)?",
+    "answers": [
+      "Sergey Karjakin",
+      "Magnus Carlsen",
+      "Teimour Radjabov",
+      "Wesley So"
+    ],
+    "correct": "Sergey Karjakin"
+  },
+  {
+    "question": "What is a 'battery' in chess?",
+    "answers": [
+      "Two or more pieces on the same line combining their attacks and power",
+      "A series of checks that forces the king across the board into a net",
+      "A pawn formation built to support a knight on a strong outpost square",
+      "A defensive arrangement of rooks and king behind a pawn chain barrier"
+    ],
+    "correct": "Two or more pieces on the same line combining their attacks and power"
+  },
+  {
+    "question": "What is the 'French Defence'?",
+    "answers": [
+      "An opening where Black responds to 1.e4 with 1...e6, aiming for a solid structure",
+      "An opening where Black responds to 1.d4 with 1...d5, directly contesting the centre",
+      "An opening where Black responds to 1.e4 with 1...c5, creating an asymmetric battle",
+      "An opening where Black responds to 1.e4 with 1...g6, developing the bishop on the long diagonal"
+    ],
+    "correct": "An opening where Black responds to 1.e4 with 1...e6, aiming for a solid structure"
+  },
+  {
+    "question": "What is 'tempo' in chess?",
+    "answers": [
+      "A unit of time representing one move, often used to describe gaining or losing time in development",
+      "The speed at which a player makes moves within the allotted clock time",
+      "The evaluation of a position based on material count and pawn structure",
+      "The advantage gained by controlling the centre with two pawns side by side"
+    ],
+    "correct": "A unit of time representing one move, often used to describe gaining or losing time in development"
+  },
+  {
+    "question": "What is an 'outpost' in chess?",
+    "answers": [
+      "A square that cannot be attacked by an enemy pawn and provides a stable base for a piece",
+      "The final square a passed pawn occupies before being promoted on the back rank",
+      "A forward pawn that has advanced past all opposing pawns on adjacent files",
+      "A square guarded by two knights that forms part of a mating pattern"
+    ],
+    "correct": "A square that cannot be attacked by an enemy pawn and provides a stable base for a piece"
+  },
+  {
+    "question": "Which country has produced the most World Chess Champions?",
+    "answers": [
+      "Russia and the Soviet Union",
+      "The United States of America",
+      "Germany and Austria combined",
+      "India and China combined"
+    ],
+    "correct": "Russia and the Soviet Union"
+  },
+  {
+    "question": "What is the 'Queenside Castling' notation?",
+    "answers": [
+      "0-0-0",
+      "0-0",
+      "Q-0",
+      "K-Q"
+    ],
+    "correct": "0-0-0"
+  },
+  {
+    "question": "What is a 'passed pawn'?",
+    "answers": [
+      "A pawn with no opposing pawn on its file or adjacent files to block or capture it",
+      "A pawn that has already captured an enemy piece during the course of the game",
+      "A pawn that has advanced past the midpoint of the board to an advanced rank",
+      "A pawn used in a sacrifice to open a file for the rooks in a king attack"
+    ],
+    "correct": "A pawn with no opposing pawn on its file or adjacent files to block or capture it"
+  },
+  {
+    "question": "What is the 'Caro-Kann Defence'?",
+    "answers": [
+      "A solid defence to 1.e4 where Black plays 1...c6 to support a later d5 push",
+      "A defence to 1.d4 where Black plays 1...Nf6 aiming for a King's Indian setup",
+      "An aggressive response to 1.e4 where Black plays 1...e5 and aims for rapid counterplay",
+      "A hypermodern defence to 1.e4 where Black plays 1...g6 and fianchettoes the bishop"
+    ],
+    "correct": "A solid defence to 1.e4 where Black plays 1...c6 to support a later d5 push"
+  },
+  {
+    "question": "What is 'algebraic notation' in chess?",
+    "answers": [
+      "The standard system for recording moves using letters for files and numbers for ranks",
+      "A method of scoring a game based on the material value of pieces exchanged",
+      "A system of evaluating positions using positive and negative numerical values",
+      "A notation system that records only the piece type and destination without file letters"
+    ],
+    "correct": "The standard system for recording moves using letters for files and numbers for ranks"
+  },
+  {
+    "question": "Who is Magnus Carlsen?",
+    "answers": [
+      "A Norwegian grandmaster who became the highest-rated player in history and World Champion in 2013",
+      "A Russian grandmaster who won the World Championship in 1985 at the age of twenty-two",
+      "An Indian grandmaster who became the first Asian World Chess Champion in 2007",
+      "An American grandmaster who controversially forfeited his World Championship title in 1975"
+    ],
+    "correct": "A Norwegian grandmaster who became the highest-rated player in history and World Champion in 2013"
+  },
+  {
+    "question": "What is the 'doubled pawns' concept?",
+    "answers": [
+      "Two pawns of the same colour on the same file, generally considered a structural weakness",
+      "Two pawns advancing side by side on adjacent files to control a wide area of the board",
+      "A formation where two pawns each protect the other in a mutually defensive chain",
+      "Two pawns positioned to promote simultaneously on adjacent files in the endgame"
+    ],
+    "correct": "Two pawns of the same colour on the same file, generally considered a structural weakness"
+  },
+  {
+    "question": "What is a 'zwischenzug'?",
+    "answers": [
+      "An in-between move that changes the course of an expected exchange sequence",
+      "A forced series of checks that leads inevitably to material gain or checkmate",
+      "A German term for the zugzwang concept applied specifically to pawn endgames",
+      "A sacrificial combination that transforms a positional advantage into a mating attack"
+    ],
+    "correct": "An in-between move that changes the course of an expected exchange sequence"
+  },
+  {
+    "question": "What is the 'Dragon Variation' of the Sicilian Defence?",
+    "answers": [
+      "A sharp Sicilian line where Black fianchettoes the bishop on g7 after ...d6 and ...g6",
+      "A variation where Black sacrifices a pawn on d5 to gain rapid piece activity",
+      "A line where Black plays an early ...e5 to challenge White's central pawn on d4",
+      "A system where Black develops the knight to e5 to attack the bishop on f3 early"
+    ],
+    "correct": "A sharp Sicilian line where Black fianchettoes the bishop on g7 after ...d6 and ...g6"
+  },
+  {
+    "question": "What piece is worth approximately 3 points?",
+    "answers": [
+      "A bishop or knight in most standard positions",
+      "A rook placed actively on an open or half-open file",
+      "The queen traded early in a simplified endgame",
+      "A passed pawn that has reached the sixth rank"
+    ],
+    "correct": "A bishop or knight in most standard positions"
+  },
+  {
+    "question": "What is 'the exchange' in chess?",
+    "answers": [
+      "Trading a rook for a bishop or knight, often described as winning or losing the exchange",
+      "Any trade of two equal-valued pieces made to simplify a complex position",
+      "A sequence where both players castle on opposite sides and attack each other",
+      "A pawn swap in the centre that opens lines for pieces to become more active"
+    ],
+    "correct": "Trading a rook for a bishop or knight, often described as winning or losing the exchange"
+  },
+  {
+    "question": "What is a 'grandmaster draw'?",
+    "answers": [
+      "A short, uninspired draw agreed early by two grandmasters making minimal effort",
+      "A draw awarded when a grandmaster defeats a lower-rated opponent in a simul display",
+      "A draw resulting from threefold repetition deliberately engineered in a theoretically even position",
+      "A draw in which both players achieve the same number of pieces following a sequence of exchanges"
+    ],
+    "correct": "A short, uninspired draw agreed early by two grandmasters making minimal effort"
+  },
+  {
+    "question": "What was the famous 1972 match between Bobby Fischer and Boris Spassky called?",
+    "answers": [
+      "The Match of the Century",
+      "The Cold War Showdown",
+      "The Battle of Reykjavik",
+      "The Fischer-Spassky Showdown"
+    ],
+    "correct": "The Match of the Century"
+  },
+  {
+    "question": "What is a 'back-rank mate'?",
+    "answers": [
+      "A checkmate delivered by a rook or queen on the opponent's first rank when the king is trapped by its own pawns",
+      "A checkmate in which the queen approaches from behind the king along the eighth rank",
+      "A mating pattern where a knight checks the king and covers all escape squares simultaneously",
+      "A forced checkmate initiated after a rook sacrifice clears the back rank of defending pieces"
+    ],
+    "correct": "A checkmate delivered by a rook or queen on the opponent's first rank when the king is trapped by its own pawns"
+  },
+  {
+    "question": "What is the 'Nimzo-Indian Defence'?",
+    "answers": [
+      "A defence beginning 1.d4 Nf6 2.c4 e6 3.Nc3 Bb4, where Black pins the knight",
+      "A defence beginning 1.d4 Nf6 2.c4 g6 where Black fianchettoes the king's bishop",
+      "A defence beginning 1.d4 d5 2.c4 e6 where Black adopts the solid Queen's Gambit Declined",
+      "A defence beginning 1.d4 Nf6 2.Nf3 e6 where Black avoids the main Queen's Gambit lines"
+    ],
+    "correct": "A defence beginning 1.d4 Nf6 2.c4 e6 3.Nc3 Bb4, where Black pins the knight"
+  },
+  {
+    "question": "What does the chess clock do in competitive play?",
+    "answers": [
+      "It records the time each player uses for their moves, ensuring both have a limited amount of time",
+      "It automatically stops when a player makes an illegal move and requires a judge to restart",
+      "It signals to spectators when a player is in time trouble by emitting an audible alarm",
+      "It determines the draw conditions if neither player has achieved checkmate after a set period"
+    ],
+    "correct": "It records the time each player uses for their moves, ensuring both have a limited amount of time"
+  },
+  {
+    "question": "What is 'initiative' in chess?",
+    "answers": [
+      "The advantage of being able to set threats that force the opponent to react defensively",
+      "The numerical score gained by occupying more central squares than the opponent",
+      "The first-move advantage that White holds at the start of every chess game",
+      "The benefit of having more pieces developed than the opponent in the opening phase"
+    ],
+    "correct": "The advantage of being able to set threats that force the opponent to react defensively"
+  },
+  {
+    "question": "What is a 'gambit' in chess?",
+    "answers": [
+      "An opening where a player sacrifices material, usually a pawn, to gain positional or tactical compensation",
+      "A defensive system where both pawns are advanced to the centre in the first two moves",
+      "A queen manoeuvre designed to force the opponent into a passive defensive posture",
+      "A long-term strategic plan to win the endgame by creating a majority of passed pawns"
+    ],
+    "correct": "An opening where a player sacrifices material, usually a pawn, to gain positional or tactical compensation"
+  },
+  {
+    "question": "What is the 'Queen's Gambit'?",
+    "answers": [
+      "An opening beginning 1.d4 d5 2.c4 where White offers a pawn to gain central control",
+      "An opening beginning 1.e4 e5 2.Qh5 where White attacks the vulnerable f7 pawn early",
+      "An opening beginning 1.d4 Nf6 where White develops quickly and aims for piece pressure",
+      "An opening beginning 1.c4 e5 where White plays an English and waits for Black to overextend"
+    ],
+    "correct": "An opening beginning 1.d4 d5 2.c4 where White offers a pawn to gain central control"
+  },
+  {
+    "question": "What is 'material' in chess?",
+    "answers": [
+      "The pieces and pawns each player has on the board, assessed by their relative point values",
+      "The squares controlled in the centre of the board by each player's pawns and pieces",
+      "The time advantage one player has gained by making more efficient developing moves",
+      "The structural features of the pawn formation that determine long-term endgame chances"
+    ],
+    "correct": "The pieces and pawns each player has on the board, assessed by their relative point values"
+  },
+  {
+    "question": "Who invented the chess engine Stockfish?",
+    "answers": [
+      "It is an open-source engine developed collaboratively by Tord Romstad and many contributors",
+      "It was created by IBM researchers as a successor to the Deep Blue supercomputer project",
+      "It was programmed by Magnus Carlsen's team to assist his preparation for World Championship matches",
+      "It was developed at Carnegie Mellon University as a research project into artificial intelligence"
+    ],
+    "correct": "It is an open-source engine developed collaboratively by Tord Romstad and many contributors"
+  },
+  {
+    "question": "What is a 'pawn storm'?",
+    "answers": [
+      "An aggressive advance of multiple pawns toward the enemy king's castled position",
+      "A sequence where pawns are exchanged rapidly in the centre to open lines for pieces",
+      "A defensive technique where pawns are pushed to restrict the opponent's knight activity",
+      "An endgame strategy using a group of connected pawns to overwhelm the opposing king"
+    ],
+    "correct": "An aggressive advance of multiple pawns toward the enemy king's castled position"
+  },
+  {
+    "question": "What is a 'blockade' in chess strategy?",
+    "answers": [
+      "Placing a piece, often a knight, directly in front of a passed pawn to stop its advance",
+      "Lining up rooks and a queen on an open file to exert overwhelming pressure on the seventh rank",
+      "Using the king aggressively in the endgame to cut off the opposing king from the centre",
+      "Advancing pawns to restrict the opponent's pieces to the back two ranks of the board"
+    ],
+    "correct": "Placing a piece, often a knight, directly in front of a passed pawn to stop its advance"
+  },
+  {
+    "question": "What is the 'Opera Game'?",
+    "answers": [
+      "Paul Morphy's famous 1858 game against two aristocrats at the Paris Opera, showcasing rapid development",
+      "Adolf Anderssen's 1851 queen sacrifice brilliancy that became known as the Immortal Game",
+      "A famous demonstration game played by Howard Staunton to promote chess during a European tour",
+      "Jose Capablanca's celebrated endgame victory that demonstrated his effortless technique"
+    ],
+    "correct": "Paul Morphy's famous 1858 game against two aristocrats at the Paris Opera, showcasing rapid development"
+  },
+  {
+    "question": "What is a 'bishop pair'?",
+    "answers": [
+      "Possessing both bishops, considered an advantage especially in open positions with long diagonals",
+      "Two bishops of the same colour that coordinate to attack the same corner of the board",
+      "A formation where both bishops are placed on the long diagonals in a fianchetto setup",
+      "A trading sequence where both of White's bishops are exchanged for Black's two knights"
+    ],
+    "correct": "Possessing both bishops, considered an advantage especially in open positions with long diagonals"
+  },
+  {
+    "question": "What is 'time trouble' in chess?",
+    "answers": [
+      "A situation where a player has very little time left on their clock and must move quickly",
+      "A penalty applied when a player makes more than three illegal moves during a game",
+      "A rule that forces an immediate adjudication if neither player has moved for ten minutes",
+      "A condition in correspondence chess where the maximum time per move has been exceeded"
+    ],
+    "correct": "A situation where a player has very little time left on their clock and must move quickly"
+  },
+  {
+    "question": "What is the 'Najdorf Variation' of the Sicilian?",
+    "answers": [
+      "A popular Sicilian line beginning 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6",
+      "A sharp Sicilian variation where Black plays an early ...b5 to gain queenside space",
+      "A solid Sicilian setup where Black plays ...e6 and ...d6 to maintain central tension",
+      "A variation named after Miguel Najdorf where Black sacrifices a pawn for rapid counterplay"
+    ],
+    "correct": "A popular Sicilian line beginning 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6"
+  },
+  {
+    "question": "What is a 'perpetual check'?",
+    "answers": [
+      "A situation where one player can check the opponent's king indefinitely, usually resulting in a draw",
+      "A tactic where the queen delivers three consecutive checks forcing the king to a mating square",
+      "A defensive resource where a player sacrifices the queen to create an unstoppable check sequence",
+      "A type of endgame where the rook checks the king along a rank while the king advances"
+    ],
+    "correct": "A situation where one player can check the opponent's king indefinitely, usually resulting in a draw"
+  },
+  {
+    "question": "What does ELO stand for in chess ratings?",
+    "answers": [
+      "It refers to Arpad Elo, the Hungarian-American physicist who designed the rating system",
+      "It stands for Elite League Organisation, the body that oversees international chess ratings",
+      "It is an acronym for Established Level of Opposition used to calibrate tournament results",
+      "It stands for European League Official, the original body that assigned international rankings"
+    ],
+    "correct": "It refers to Arpad Elo, the Hungarian-American physicist who designed the rating system"
+  },
+  {
+    "question": "What is the 'Lucena position'?",
+    "answers": [
+      "A key rook and pawn endgame position showing how the winning side builds a bridge to escort the pawn",
+      "A theoretical king and pawn ending where the defending king holds the opposition to draw",
+      "A classic queen versus rook endgame technique where the queen gradually forces a winning position",
+      "A bishop and pawn endgame position demonstrating the wrong-coloured bishop drawing technique"
+    ],
+    "correct": "A key rook and pawn endgame position showing how the winning side builds a bridge to escort the pawn"
+  },
+  {
+    "question": "What is a 'fianchettoed bishop' doing on g2?",
+    "answers": [
+      "Controlling the long a8-h1 diagonal and supporting pieces and pawns in the centre",
+      "Defending the castled king from direct attacks along the g and h files",
+      "Preparing to advance the g-pawn as part of an aggressive kingside pawn storm",
+      "Connecting with the knight on f3 to exert pressure on the e5 square"
+    ],
+    "correct": "Controlling the long a8-h1 diagonal and supporting pieces and pawns in the centre"
+  },
+  {
+    "question": "What is 'hypermodern' chess theory?",
+    "answers": [
+      "A philosophy where the centre is controlled from a distance by pieces rather than occupied by pawns",
+      "A system developed by Mikhail Botvinnik based on thorough opening preparation and endgame technique",
+      "A theory advocating the immediate occupation of the centre with two pawns in the first two moves",
+      "An approach emphasising rapid kingside castling and piece coordination over pawn structure"
+    ],
+    "correct": "A philosophy where the centre is controlled from a distance by pieces rather than occupied by pawns"
+  },
+  {
+    "question": "What is a 'pawn island'?",
+    "answers": [
+      "A group of connected pawns of the same colour that are separated from other friendly pawns",
+      "A lone advanced pawn far from the king that the opponent targets as a weakness",
+      "A pawn that has become isolated by exchanges and sits on an open file",
+      "A central pawn formation consisting of two pawns that mutually support each other"
+    ],
+    "correct": "A group of connected pawns of the same colour that are separated from other friendly pawns"
+  },
+  {
+    "question": "Who is Viswanathan Anand?",
+    "answers": [
+      "An Indian grandmaster and five-time World Chess Champion, the first Asian to hold the title",
+      "A Russian grandmaster known for his tactical brilliance and aggressive attacking style",
+      "A Norwegian grandmaster who achieved the highest classical chess rating ever recorded",
+      "An American grandmaster who became World Champion in 1972 by defeating the Soviet Boris Spassky"
+    ],
+    "correct": "An Indian grandmaster and five-time World Chess Champion, the first Asian to hold the title"
+  },
+  {
+    "question": "What is 'the rule of the square' in pawn endgames?",
+    "answers": [
+      "A visual method to determine whether a king can catch a passed pawn before it promotes",
+      "A principle stating that a king reaching the centre of the board during the endgame is winning",
+      "A rule requiring the king to occupy the key square in front of a passed pawn to win",
+      "A geometric calculation showing how many moves it takes a rook to reach a target square"
+    ],
+    "correct": "A visual method to determine whether a king can catch a passed pawn before it promotes"
+  },
+  {
+    "question": "What is a 'windmill' combination in chess?",
+    "answers": [
+      "A series of alternating discovered checks and direct checks that systematically win material",
+      "A mating attack using the queen and two rooks rotating around the enemy king",
+      "A tactical sequence where a knight uses perpetual forks to win multiple enemy pieces",
+      "A pawn break that opens three files simultaneously in the centre for a decisive attack"
+    ],
+    "correct": "A series of alternating discovered checks and direct checks that systematically win material"
+  },
+  {
+    "question": "What is the 'Pirc Defence'?",
+    "answers": [
+      "A hypermodern opening where Black plays ...d6 and ...g6 against 1.e4, developing the bishop to g7",
+      "A solid defence where Black plays ...e6 and ...d5 to maintain a stable central pawn formation",
+      "An aggressive defence where Black plays ...c5 and ...e5 to challenge White's centre immediately",
+      "A passive system where Black plays ...d6 and ...e5 to restrict White's bishops in the opening"
+    ],
+    "correct": "A hypermodern opening where Black plays ...d6 and ...g6 against 1.e4, developing the bishop to g7"
+  },
+  {
+    "question": "What is a 'clearance sacrifice'?",
+    "answers": [
+      "Sacrificing a piece to vacate a square or line for a more powerful piece to occupy",
+      "Sacrificing a pawn to open a file so that a rook can penetrate to the seventh rank",
+      "Sacrificing the queen to destroy the pawn cover around the opposing king",
+      "Sacrificing a knight on h7 to initiate a kingside attack against the castled king"
+    ],
+    "correct": "Sacrificing a piece to vacate a square or line for a more powerful piece to occupy"
+  },
+  {
+    "question": "What is the 'Sicilian Defence Najdorf' associated with regarding famous players?",
+    "answers": [
+      "It was a favourite of Bobby Fischer and is closely associated with Garry Kasparov's career",
+      "It was developed by Mikhail Tal and used extensively in his 1960 World Championship victory",
+      "It is the opening most associated with Anatoly Karpov's positional and endgame-oriented style",
+      "It became famous through Jose Capablanca who used it to dominate the 1920s tournament circuit"
+    ],
+    "correct": "It was a favourite of Bobby Fischer and is closely associated with Garry Kasparov's career"
+  },
+  {
+    "question": "What does 'resign' mean in chess?",
+    "answers": [
+      "A player concedes defeat voluntarily rather than playing on to checkmate",
+      "A player requests that the game be declared a draw due to a lack of mating material",
+      "A player claims a win on time when their opponent's flag falls on the clock",
+      "A player forfeits the game by failing to arrive within the allotted waiting period"
+    ],
+    "correct": "A player concedes defeat voluntarily rather than playing on to checkmate"
+  },
+  {
+    "question": "What is the 'Ponziani Opening'?",
+    "answers": [
+      "One of the oldest openings, beginning 1.e4 e5 2.Nf3 Nc6 3.c3, preparing an early d4",
+      "An aggressive opening beginning 1.e4 e5 2.f4 exf4, sacrificing a pawn for central control",
+      "A quiet opening beginning 1.d4 d5 2.Nf3 Nf6 3.e3, avoiding all sharp theoretical lines",
+      "A romantic opening beginning 1.e4 e5 2.Bc4 Bc5, heading toward the Giuoco Piano"
+    ],
+    "correct": "One of the oldest openings, beginning 1.e4 e5 2.Nf3 Nc6 3.c3, preparing an early d4"
+  },
+  {
+    "question": "What is the 'fifty-move rule'?",
+    "answers": [
+      "A draw can be claimed if fifty consecutive moves have been made by both players without a capture or pawn move",
+      "A rule requiring a player to checkmate within fifty moves once only the king and queen remain",
+      "A regulation setting the maximum game length at fifty moves per player before adjudication",
+      "A tiebreak rule awarding a draw if a position is repeated fifty times within the same game"
+    ],
+    "correct": "A draw can be claimed if fifty consecutive moves have been made by both players without a capture or pawn move"
+  },
+  {
+    "question": "What is 'prophylaxis' in chess?",
+    "answers": [
+      "Anticipating and preventing the opponent's plans before they can be put into action",
+      "Advancing pawns to restrict the opponent's knight from reaching an outpost square",
+      "Exchanging pieces to reach a simplified endgame where a material advantage is decisive",
+      "Placing pieces on squares where they cannot be easily attacked or exchanged"
+    ],
+    "correct": "Anticipating and preventing the opponent's plans before they can be put into action"
+  },
+  {
+    "question": "Who wrote 'My System', an influential chess strategy book?",
+    "answers": [
+      "Aaron Nimzowitsch",
+      "Siegbert Tarrasch",
+      "Richard Reti",
+      "Emanuel Lasker"
+    ],
+    "correct": "Aaron Nimzowitsch"
+  },
+  {
+    "question": "What is 'Zugzwang' most commonly encountered in?",
+    "answers": [
+      "King and pawn endgames where forcing the opponent to move causes them to lose a pawn or the game",
+      "Opening theory where the side with more space is often placed in positional Zugzwang",
+      "Tactical middlegame combinations where one side is forced to allow a decisive material gain",
+      "Rook endgames where the defending rook is tied to a passive square and cannot improve"
+    ],
+    "correct": "King and pawn endgames where forcing the opponent to move causes them to lose a pawn or the game"
+  },
+  {
+    "question": "What is the 'Boden's Mate'?",
+    "answers": [
+      "A checkmate pattern using two bishops on criss-crossing diagonals against an unmoved or castled king",
+      "A mating pattern where a queen and rook cooperate to deliver checkmate on the back rank",
+      "A checkmate achieved by a knight and bishop trapping the king in the corner of the board",
+      "A two-rook mating pattern on adjacent files that cuts off all the king's escape squares"
+    ],
+    "correct": "A checkmate pattern using two bishops on criss-crossing diagonals against an unmoved or castled king"
+  },
+  {
+    "question": "What is the 'Grünfeld Defence'?",
+    "answers": [
+      "A defence where Black allows White a strong pawn centre then attacks it with pieces after ...d5",
+      "A defence where Black fianchettoes both bishops to control the long diagonals hypermodernly",
+      "A defence based on 1.d4 Nf6 2.c4 e6 where Black develops the bishop to b4 to pin the knight",
+      "A solid defence where Black plays ...c6 and ...d5 to build a stable and unbreakable pawn centre"
+    ],
+    "correct": "A defence where Black allows White a strong pawn centre then attacks it with pieces after ...d5"
+  },
+  {
+    "question": "What is 'connected rooks'?",
+    "answers": [
+      "Two rooks of the same colour on the same rank or file with no pieces between them, protecting each other",
+      "Two rooks placed on the seventh rank simultaneously to cut off the enemy king",
+      "A formation where both rooks support a passed pawn as it advances toward promotion",
+      "Two rooks coordinated so that one covers a file and the other controls the adjacent rank"
+    ],
+    "correct": "Two rooks of the same colour on the same rank or file with no pieces between them, protecting each other"
+  },
+  {
+    "question": "Which famous player was nicknamed 'The Magician from Riga'?",
+    "answers": [
+      "Mikhail Tal",
+      "Paul Keres",
+      "Tigran Petrosian",
+      "Vasily Smyslov"
+    ],
+    "correct": "Mikhail Tal"
+  },
+  {
+    "question": "What is the 'minority attack'?",
+    "answers": [
+      "Using fewer pawns on one flank to create weaknesses in the opponent's larger pawn majority",
+      "Attacking the enemy king with fewer pieces than the defender has to guard against the assault",
+      "A queenside expansion where a player advances pawns to outnumber the opponent on that wing",
+      "A strategy of targeting an isolated pawn with multiple pieces to win it through attrition"
+    ],
+    "correct": "Using fewer pawns on one flank to create weaknesses in the opponent's larger pawn majority"
+  },
+  {
+    "question": "What does 'development' mean in opening theory?",
+    "answers": [
+      "Moving pieces from their starting squares to more active positions in the early game",
+      "Advancing pawns to occupy the four central squares in the first few moves",
+      "Castling as quickly as possible to connect the rooks and safeguard the king",
+      "Building a pawn chain to restrict the opponent's pieces before making piece moves"
+    ],
+    "correct": "Moving pieces from their starting squares to more active positions in the early game"
+  },
+  {
+    "question": "What is the 'King's Gambit'?",
+    "answers": [
+      "An aggressive 1.e4 e5 2.f4 opening where White sacrifices a pawn for rapid development and attack",
+      "A quiet 1.d4 e5 opening where White avoids sharp lines and builds a solid defensive structure",
+      "An opening beginning 1.e4 c5 2.f4 where White adopts a reversed Grand Prix Attack stance",
+      "An early queen sortie after 1.e4 e5 2.Qh5 designed to force weaknesses around the black king"
+    ],
+    "correct": "An aggressive 1.e4 e5 2.f4 opening where White sacrifices a pawn for rapid development and attack"
+  },
+  {
+    "question": "What is the significance of the 1986 Kasparov-Karpov match?",
+    "answers": [
+      "Kasparov retained his title and the matches became iconic Cold War battles of contrasting styles",
+      "It was the first match played under modern FIDE rules with a defined number of games",
+      "Karpov won back the title after losing it in 1985 in what was considered his finest performance",
+      "It was the last World Championship match decided by a single game played as a tiebreaker"
+    ],
+    "correct": "Kasparov retained his title and the matches became iconic Cold War battles of contrasting styles"
+  },
+  {
+    "question": "What is an 'isolated pawn'?",
+    "answers": [
+      "A pawn with no friendly pawns on the adjacent files, making it a potential long-term weakness",
+      "A pawn that has advanced past the midpoint of the board with no enemy pawn on its file",
+      "A pawn separated from the king that requires active piece defence in the endgame",
+      "A pawn left behind by advancing neighbours that blocks a piece from reaching an outpost"
+    ],
+    "correct": "A pawn with no friendly pawns on the adjacent files, making it a potential long-term weakness"
+  },
+  {
+    "question": "What is the 'Catalan Opening'?",
+    "answers": [
+      "A system where White plays 1.d4 and 2.c4 with a g3 fianchetto combining Queen's Gambit and Reti ideas",
+      "A solid opening where White plays 1.c4 and develops both bishops before advancing central pawns",
+      "A flexible system beginning 1.Nf3 d5 2.g3 where White avoids committing the central pawns early",
+      "An opening beginning 1.d4 d5 2.Nf3 Nf6 3.Bf4 where White develops the bishop outside the pawn chain"
+    ],
+    "correct": "A system where White plays 1.d4 and 2.c4 with a g3 fianchetto combining Queen's Gambit and Reti ideas"
+  },
+  {
+    "question": "What is a 'back-rank weakness'?",
+    "answers": [
+      "A vulnerability along the first or eighth rank caused by a castled king with no escape square",
+      "A weakness created when a pawn advances and leaves the king's defensive pawns unprotected",
+      "A positional problem where the rooks cannot connect due to uncastled pieces on the back rank",
+      "A structural defect where the pawns on the back rank cannot be defended by the king alone"
+    ],
+    "correct": "A vulnerability along the first or eighth rank caused by a castled king with no escape square"
+  },
+  {
+    "question": "Who is Judit Polgar?",
+    "answers": [
+      "A Hungarian grandmaster widely regarded as the strongest female chess player of all time",
+      "A Romanian grandmaster who became the first woman to qualify for the World Championship cycle",
+      "A Georgian grandmaster who won the Women's World Championship title on multiple occasions",
+      "A Chinese grandmaster who achieved the highest classical rating of any female player in history"
+    ],
+    "correct": "A Hungarian grandmaster widely regarded as the strongest female chess player of all time"
+  },
+  {
+    "question": "What is the 'Italian Game'?",
+    "answers": [
+      "An opening beginning 1.e4 e5 2.Nf3 Nc6 3.Bc4, aiming to control d5 and attack f7",
+      "An opening beginning 1.e4 e5 2.Nf3 Nc6 3.Bb5, placing the bishop on b5 to pin the knight",
+      "An opening beginning 1.e4 e5 2.f4 exf4 3.Nf3, sacrificing a pawn for rapid development",
+      "An opening beginning 1.e4 c5 2.Nf3 Nc6 3.d4, entering the main lines of the Sicilian Defence"
+    ],
+    "correct": "An opening beginning 1.e4 e5 2.Nf3 Nc6 3.Bc4, aiming to control d5 and attack f7"
+  },
+  {
+    "question": "What is 'overloading' as a chess tactic?",
+    "answers": [
+      "Forcing a defending piece to perform too many tasks simultaneously so it cannot fulfil all of them",
+      "Advancing so many pawns that the opponent's pieces are physically blocked from moving",
+      "Placing multiple pieces on a single file to overwhelm the defence and force a breakthrough",
+      "Sacrificing material to overload the opponent's king with multiple simultaneous threats"
+    ],
+    "correct": "Forcing a defending piece to perform too many tasks simultaneously so it cannot fulfil all of them"
+  },
+  {
+    "question": "What does 'N' represent in chess notation?",
+    "answers": [
+      "A knight piece",
+      "An empty square",
+      "A neutral square",
+      "A notable move"
+    ],
+    "correct": "A knight piece"
+  },
+  {
+    "question": "What is the 'Staunton chess set'?",
+    "answers": [
+      "The standardised chess piece design adopted internationally since 1849 and required in official play",
+      "A historically significant set owned by Howard Staunton used in 19th-century match play",
+      "A wooden decorative set commissioned for the first official World Chess Championship match",
+      "A set design created by the Jaques of London company purely for ornamental display purposes"
+    ],
+    "correct": "The standardised chess piece design adopted internationally since 1849 and required in official play"
+  },
+  {
+    "question": "What is a 'mating net'?",
+    "answers": [
+      "A web of threats and controlled squares that gradually restricts the king until checkmate is forced",
+      "A combination of checks that drives the king to a predetermined square for the final blow",
+      "A back-rank construction using two rooks that guarantees checkmate within three moves",
+      "A queen and knight coordination pattern that covers all the king's available escape squares"
+    ],
+    "correct": "A web of threats and controlled squares that gradually restricts the king until checkmate is forced"
+  },
+  {
+    "question": "What is the 'Morphy Trap' or Légal's Mate?",
+    "answers": [
+      "A smothered-style combination involving a queen sacrifice followed by knight checkmate",
+      "A trap in the Ruy Lopez where Black loses the e5 pawn after a careless knight retreat",
+      "An opening trap in the Sicilian where an early queen sortie leads to rapid piece loss",
+      "A back-rank trick in the Italian Game exploiting the uncastled king on the e1 square"
+    ],
+    "correct": "A smothered-style combination involving a queen sacrifice followed by knight checkmate"
+  },
+  {
+    "question": "What is an 'Elo rating' of 2700 considered?",
+    "answers": [
+      "Super-grandmaster level, among the world's top players",
+      "The minimum required to qualify for a grandmaster title norm",
+      "The average rating of a typical international master title holder",
+      "The threshold separating national masters from international masters"
+    ],
+    "correct": "Super-grandmaster level, among the world's top players"
+  },
+  {
+    "question": "What is 'King safety' in chess?",
+    "answers": [
+      "Ensuring the king is well protected from attack, typically by castling and maintaining pawn cover",
+      "The endgame principle requiring the king to march toward the centre to become an active piece",
+      "The number of squares the king can safely move to without stepping onto an attacked square",
+      "A positional concept demanding the king remain on its starting square throughout the middlegame"
+    ],
+    "correct": "Ensuring the king is well protected from attack, typically by castling and maintaining pawn cover"
+  },
+  {
+    "question": "What is a 'smothered mate'?",
+    "answers": [
+      "A checkmate where the knight delivers the final blow and the king is trapped by its own pieces",
+      "A checkmate achieved when the rook slides to the back rank and the pawns cover all exits",
+      "A checkmate pattern involving a bishop pinning the king against a rook on an adjacent file",
+      "A checkmate executed by two knights cooperating to cover all squares around the cornered king"
+    ],
+    "correct": "A checkmate where the knight delivers the final blow and the king is trapped by its own pieces"
+  }
+]

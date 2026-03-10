@@ -48,5 +48,10 @@
     "file": "antiques_collecting.json",
     "label": "Antiques & Collecting",
     "count": 70
+  },
+  {
+    "file": "chess.json",
+    "label": "Chess",
+    "count": 100
   }
 ]
