@@ -145,13 +145,80 @@
             </div>
 
             <div class="card">
-                <h2>Question Template</h2>
-                <p style="color:var(--subtle);font-size:0.88rem;margin-bottom:1rem">Download a YAML template you can fill in yourself or feed to an AI/LLM to generate quiz questions.</p>
+                <h2>Question Template &amp; Creator</h2>
+                <p style="color:var(--subtle);font-size:0.88rem;margin-bottom:1rem">Download a YAML template you can fill in yourself or feed to an AI/LLM to generate quiz questions. Or build one visually with the Quiz Creator.</p>
                 <div class="home-btn-row">
                     <button class="btn btn-muted" id="btn-download-template">Download YAML Template</button>
                     <button class="btn btn-muted" id="btn-download-prompt">Download AI Prompt</button>
                 </div>
+                <button class="btn btn-outline" id="btn-open-creator" style="width:100%;margin-top:0.65rem">&#9998; Open Quiz Creator</button>
             </div>
+        </div>
+
+        <!-- ════════════════════ PAGE: CREATOR ════════════════════ -->
+        <div id="page-creator" class="page">
+
+            <div class="card">
+                <h2>&#9998; Add a Question</h2>
+
+                <label for="creator-q-text">Question</label>
+                <textarea id="creator-q-text" rows="3" placeholder="Type your question here&hellip;"></textarea>
+
+                <label style="margin-top:0.25rem">Image <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;font-size:0.78rem">&mdash; optional</span></label>
+                <div id="creator-img-preview" class="creator-img-preview" style="display:none">
+                    <img id="creator-img-preview-img" src="" alt="Question image preview">
+                    <button id="creator-remove-img" class="creator-img-remove" title="Remove image">&#10005;</button>
+                </div>
+                <div class="upload-zone creator-img-zone" id="creator-img-zone" style="padding:0.85rem">
+                    <input type="file" id="creator-img-input" accept="image/*">
+                    <div class="upload-zone-icon" style="font-size:1.5rem">&#128247;</div>
+                    <div class="upload-zone-text">Drop image or <strong>click to browse</strong></div>
+                    <div class="upload-zone-hint">JPEG, PNG, WebP &mdash; auto-resized to 800&times;600</div>
+                </div>
+
+                <label style="margin-top:0.25rem">Answers <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;font-size:0.78rem">&mdash; tick the correct one</span></label>
+                <div class="creator-answer-row">
+                    <span class="creator-answer-label">A</span>
+                    <input type="text" id="creator-a0" placeholder="Answer A" style="margin-bottom:0">
+                    <input type="radio" name="creator-correct" id="creator-correct-0" value="0" checked title="Correct answer">
+                </div>
+                <div class="creator-answer-row">
+                    <span class="creator-answer-label">B</span>
+                    <input type="text" id="creator-a1" placeholder="Answer B" style="margin-bottom:0">
+                    <input type="radio" name="creator-correct" id="creator-correct-1" value="1" title="Correct answer">
+                </div>
+                <div class="creator-answer-row">
+                    <span class="creator-answer-label">C</span>
+                    <input type="text" id="creator-a2" placeholder="Answer C (optional)" style="margin-bottom:0">
+                    <input type="radio" name="creator-correct" id="creator-correct-2" value="2" title="Correct answer">
+                </div>
+                <div class="creator-answer-row">
+                    <span class="creator-answer-label">D</span>
+                    <input type="text" id="creator-a3" placeholder="Answer D (optional)" style="margin-bottom:0">
+                    <input type="radio" name="creator-correct" id="creator-correct-3" value="3" title="Correct answer">
+                </div>
+
+                <div style="display:flex;gap:0.5rem;margin-top:1rem">
+                    <button class="btn btn-primary" id="creator-add-btn" style="flex:1">Add Question</button>
+                    <button class="btn btn-outline" id="creator-cancel-edit" style="display:none">Cancel</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+                    <h2 style="margin:0">Your Questions</h2>
+                    <span id="creator-q-count" style="color:var(--muted);font-size:0.83rem">0 questions</span>
+                </div>
+                <div id="creator-question-list"></div>
+
+                <div style="margin-top:1.25rem;border-top:1px solid var(--card-border);padding-top:1.25rem">
+                    <label for="creator-quiz-name">File name</label>
+                    <input type="text" id="creator-quiz-name" placeholder="my_quiz" style="margin-bottom:0.75rem">
+                    <button class="btn btn-primary" id="creator-export-btn" style="width:100%" disabled>&#128229; Download as JSON</button>
+                </div>
+            </div>
+
+            <nav><a id="creator-home-link">&#8592; Back to home</a></nav>
         </div>
 
         <!-- ════════════════════ PAGE: QUIZ ════════════════════ -->
@@ -168,6 +235,7 @@
             <div id="quiz-review-badge" style="display:none" class="review-badge">&#9733; Review Round</div>
             <div class="card">
                 <div class="q-number" id="quiz-q-number"></div>
+                <img id="quiz-q-image" class="question-image" style="display:none" alt="Question image">
                 <p class="q-text" id="quiz-q-text"></p>
                 <ul class="answer-list" id="quiz-answers"></ul>
                 <br>
@@ -273,6 +341,7 @@
 <script src="js/upload.js"></script>
 <script src="js/github.js"></script>
 <script src="js/encrypt.js"></script>
+<script src="js/creator.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

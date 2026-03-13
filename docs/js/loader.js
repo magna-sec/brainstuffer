@@ -8,6 +8,14 @@ async function loadManifest() {
         manifest = await resp.json();
         const sel = document.getElementById('filename');
         sel.innerHTML = '<option value="" disabled selected>-- select a file --</option>';
+        const newOpt = document.createElement('option');
+        newOpt.value = 'creator:new';
+        newOpt.textContent = '\u270E New / blank quiz \u2014 open Creator';
+        sel.appendChild(newOpt);
+        const sep = document.createElement('option');
+        sep.disabled = true;
+        sep.textContent = '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500';
+        sel.appendChild(sep);
         manifest.forEach(m => {
             const opt = document.createElement('option');
             opt.value = m.file;

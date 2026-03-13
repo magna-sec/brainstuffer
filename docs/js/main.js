@@ -18,7 +18,7 @@ document.getElementById('fc-home-link').addEventListener('click', goHome);
 
 document.getElementById('btn-start-flashcard').addEventListener('click', function() {
     const sel = document.getElementById('filename');
-    if (!sel || !sel.value) return;
+    if (!sel || !sel.value || sel.value === 'creator:new') return;
     store = { filename: sel.value };
     startFlashcards();
 });
@@ -91,8 +91,23 @@ document.getElementById('btn-xp-cheat').addEventListener('click', function() {
     this.textContent = '\u2620 XP added \u2014 you\u2019re tagged as a cheater';
 });
 
+// Quiz Creator
+document.getElementById('btn-open-creator').addEventListener('click', async function () {
+    var sel = document.getElementById('filename');
+    var val = sel.value;
+    if (val && val !== 'creator:new') {
+        var data = await loadQuizData(val);
+        if (data && window.loadIntoCreator) window.loadIntoCreator(data);
+    } else if (window.loadIntoCreator) {
+        window.loadIntoCreator([]);
+    }
+    showPage('creator');
+});
+document.getElementById('creator-home-link').addEventListener('click', goHome);
+
 // ══════════════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════════════
 loadManifest();
 checkHash();
+if (window.initCreator) window.initCreator();

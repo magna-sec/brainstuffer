@@ -6,7 +6,7 @@
 async function startQuiz() {
     const sel = document.getElementById('filename');
     const filename = sel.value;
-    if (!filename) return;
+    if (!filename || filename === 'creator:new') return;
 
     const amount = parseInt(document.getElementById('amount').value) || 0;
     const questions = await loadQuizData(filename);
@@ -21,6 +21,7 @@ async function startQuiz() {
         return {
             question_id: q.question_id || 0,
             question: q.question,
+            image: q.image || null,
             answers: shuffle(answers),
             correct: correct,
         };
@@ -55,6 +56,7 @@ function showQuizQuestion() {
                 return {
                     question_id: q.question_id,
                     question: q.question,
+                    image: q.image || null,
                     answers: shuffle(answers),
                     correct: q.correct,
                 };
@@ -85,6 +87,11 @@ function showQuizQuestion() {
 
     document.getElementById('quiz-review-badge').style.display = store.is_review ? '' : 'none';
     document.getElementById('quiz-q-number').textContent = 'Question ' + humanIdx;
+    const qImg = document.getElementById('quiz-q-image');
+    if (qImg) {
+        if (question.image) { qImg.src = question.image; qImg.style.display = ''; }
+        else { qImg.src = ''; qImg.style.display = 'none'; }
+    }
     document.getElementById('quiz-q-text').textContent = question.question;
 
     if (window.renderQuip) window.renderQuip();

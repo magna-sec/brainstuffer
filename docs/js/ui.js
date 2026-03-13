@@ -18,6 +18,7 @@ function showPage(id) {
         case 'results':   sub.textContent = 'Quiz complete'; break;
         case 'dragons':   sub.textContent = 'Secret test lab \u2014 do not touch'; break;
         case 'flashcard': sub.textContent = 'Flashcard mode'; break;
+        case 'creator':   sub.textContent = 'Quiz Creator'; break;
     }
     document.title = id === 'home' ? 'BrainStuffer' : 'BrainStuffer \u2014 ' + sub.textContent;
     window.scrollTo(0, 0);
