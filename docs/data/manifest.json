@@ -53,5 +53,10 @@
     "file": "chess.json",
     "label": "Chess",
     "count": 100
+  },
+  {
+    "file": "book_collecting.json",
+    "label": "Book Collecting (ABC)",
+    "count": 65
   }
 ]
