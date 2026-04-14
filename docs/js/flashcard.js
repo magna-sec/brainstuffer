@@ -60,6 +60,7 @@ function fcGotIt() {
     if (!fcFlipped) { fcFlip(); return; }
     fcDeck.shift();
     fcDone++;
+    if (window.applyXP) window.applyXP(window.LEVEL_XP_CORRECT || 20);
     fcShowCard();
 }
 

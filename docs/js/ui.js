@@ -655,7 +655,113 @@ window.goldenRing = goldenRing;
         crimson:  ['#f87171','#fca5a5','#100608'],
         ocean:    ['#2dd4bf','#67e8f9','#040e14'],
         amber:    ['#fbbf24','#fde68a','#0f0b04'],
+        caveman:  ['#e8732a','#f0b040','#1c1008'],
     };
+
+    // ── Caveman theme: text translations ─────────────────────────
+    var CAVEMAN_MAP = [
+        ['#btn-start',                              'UGH START QUIZ'],
+        ['#btn-start-flashcard',                    'FLIP ROCK THING'],
+        ['#btn-xp-reset',                           'FORGET NUMBER'],
+        ['.skin-panel-title',                       'CAVE PAINTING'],
+        ['label[for="xp-mode-toggle"]',             'ME WANT SHINY NUMBER'],
+    ];
+
+    function applyCavemanText() {
+        CAVEMAN_MAP.forEach(function(pair) {
+            var el = document.querySelector(pair[0]);
+            if (!el || el.children.length) return;
+            if (!el.dataset.caveOrig) el.dataset.caveOrig = el.textContent;
+            el.textContent = pair[1];
+        });
+    }
+
+    function restoreCavemanText() {
+        document.querySelectorAll('[data-cave-orig]').forEach(function(el) {
+            el.textContent = el.dataset.caveOrig;
+            delete el.dataset.caveOrig;
+        });
+    }
+
+    var CAVE_SVG_STROKE = 'stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+
+    function injectCaveDrawings() {
+        if (document.getElementById('cave-drawings')) return;
+        var d = document.createElement('div');
+        d.id = 'cave-drawings';
+        d.style.cssText = 'color:#f0b040';
+        d.innerHTML = [
+            // Mammoth — top left
+            '<svg viewBox="0 0 160 110" width="200" height="140" style="position:absolute;left:10px;top:90px;opacity:0.15" ' + CAVE_SVG_STROKE + ' stroke-width="4">',
+              '<path d="M18 82 Q15 58 28 42 Q46 24 72 26 Q98 28 110 46 Q120 58 114 72 L104 78"/>',
+              '<path d="M110 46 Q122 34 128 42 Q132 52 124 60 Q118 66 112 62"/>',
+              '<path d="M124 58 Q132 68 128 78 Q120 86 110 80"/>',
+              '<path d="M122 44 Q136 38 142 50"/>',
+              '<line x1="32" y1="80" x2="29" y2="96"/><line x1="50" y1="76" x2="48" y2="96"/>',
+              '<line x1="82" y1="74" x2="80" y2="96"/><line x1="100" y1="74" x2="98" y2="96"/>',
+              '<path d="M70 26 Q64 12 74 14 Q84 16 82 26"/>',
+              '<circle cx="122" cy="40" r="3.5" fill="currentColor"/>',
+              '<path d="M36 48 L32 60 M50 36 L46 50 M64 30 L60 44"/>',
+            '</svg>',
+
+            // Handprint — top right
+            '<svg viewBox="0 0 90 115" width="115" height="145" style="position:absolute;right:20px;top:80px;opacity:0.13" ' + CAVE_SVG_STROKE + ' stroke-width="3.5">',
+              '<path d="M22 92 Q16 108 28 114 Q44 122 60 110 Q70 100 64 84 L60 56 L57 48 L52 56 L50 40 L44 48 L42 30 L36 40 L34 22 L26 36 L22 54 Z"/>',
+            '</svg>',
+
+            // Running stick figure with spear — left side, lower
+            '<svg viewBox="0 0 100 130" width="100" height="130" style="position:absolute;left:25px;bottom:220px;opacity:0.14" ' + CAVE_SVG_STROKE + ' stroke-width="3.5">',
+              '<circle cx="70" cy="18" r="12"/>',
+              '<line x1="70" y1="30" x2="64" y2="72"/>',
+              '<line x1="64" y1="72" x2="46" y2="94"/><line x1="64" y1="72" x2="72" y2="98"/>',
+              '<line x1="64" y1="50" x2="40" y2="58"/><line x1="64" y1="50" x2="88" y2="44"/>',
+              '<line x1="88" y1="44" x2="8" y2="36"/><path d="M8 36 L14 30 L12 40 Z" fill="currentColor"/>',
+            '</svg>',
+
+            // Fish — right side mid
+            '<svg viewBox="0 0 110 55" width="130" height="65" style="position:absolute;right:15px;bottom:280px;opacity:0.13" ' + CAVE_SVG_STROKE + ' stroke-width="3.5">',
+              '<path d="M80 27 Q60 8 18 27 Q60 46 80 27 Z"/>',
+              '<path d="M80 27 L102 15 L96 27 L102 39 Z"/>',
+              '<circle cx="30" cy="24" r="3.5" fill="currentColor"/>',
+              '<path d="M50 18 L48 36 M62 14 L60 40 M72 18 L70 36"/>',
+            '</svg>',
+
+            // Sun — bottom right corner
+            '<svg viewBox="0 0 90 90" width="90" height="90" style="position:absolute;right:50px;bottom:140px;opacity:0.12" ' + CAVE_SVG_STROKE + ' stroke-width="3.5">',
+              '<circle cx="45" cy="45" r="16"/>',
+              '<line x1="45" y1="4" x2="45" y2="20"/><line x1="45" y1="70" x2="45" y2="86"/>',
+              '<line x1="4" y1="45" x2="20" y2="45"/><line x1="70" y1="45" x2="86" y2="45"/>',
+              '<line x1="16" y1="16" x2="27" y2="27"/><line x1="63" y1="63" x2="74" y2="74"/>',
+              '<line x1="74" y1="16" x2="63" y2="27"/><line x1="16" y1="74" x2="27" y2="63"/>',
+            '</svg>',
+
+            // Dot cluster / stars — upper right
+            '<svg viewBox="0 0 220 80" width="220" height="80" style="position:absolute;right:5px;top:200px;opacity:0.14">',
+              '<circle cx="20" cy="22" r="5" fill="currentColor"/><circle cx="52" cy="10" r="4" fill="currentColor"/>',
+              '<circle cx="84" cy="28" r="6" fill="currentColor"/><circle cx="116" cy="8" r="4" fill="currentColor"/>',
+              '<circle cx="148" cy="20" r="5" fill="currentColor"/><circle cx="178" cy="6" r="3.5" fill="currentColor"/>',
+              '<circle cx="36" cy="52" r="4" fill="currentColor"/><circle cx="68" cy="62" r="5" fill="currentColor"/>',
+              '<circle cx="100" cy="46" r="3.5" fill="currentColor"/><circle cx="130" cy="58" r="4" fill="currentColor"/>',
+            '</svg>',
+
+            // Second mammoth silhouette — bottom left
+            '<svg viewBox="0 0 100 70" width="120" height="84" style="position:absolute;left:5px;bottom:100px;opacity:0.10" ' + CAVE_SVG_STROKE + ' stroke-width="3.5">',
+              '<path d="M12 55 Q10 38 20 28 Q32 16 50 18 Q68 20 76 32 Q82 40 78 50 L72 54"/>',
+              '<path d="M76 32 Q84 24 88 30 Q91 36 86 42 Q82 46 78 44"/>',
+              '<path d="M86 42 Q91 50 88 57 Q82 62 76 58"/>',
+              '<path d="M85 30 Q93 26 97 34"/>',
+              '<line x1="22" y1="54" x2="20" y2="64"/><line x1="34" y1="52" x2="32" y2="64"/>',
+              '<line x1="56" y1="50" x2="55" y2="64"/><line x1="68" y1="50" x2="67" y2="64"/>',
+              '<circle cx="84" cy="28" r="2.5" fill="currentColor"/>',
+            '</svg>',
+        ].join('');
+        document.body.insertBefore(d, document.body.firstChild);
+    }
+
+    function removeCaveDrawings() {
+        var el = document.getElementById('cave-drawings');
+        if (el) el.remove();
+    }
 
     function updateFavicon(skin) {
         var c = SKIN_COLORS[skin] || SKIN_COLORS.midnight;
@@ -680,10 +786,20 @@ window.goldenRing = goldenRing;
     }
 
     function applySkin(skin) {
+        var prev = root.getAttribute('data-skin');
         root.setAttribute('data-skin', skin);
         localStorage.setItem(STORAGE, skin);
         opts.forEach(function(o) { o.classList.toggle('active', o.dataset.skin === skin); });
         updateFavicon(skin);
+
+        if (skin === 'caveman') {
+            injectCaveDrawings();
+            // Delay text swap so DOM is ready on first load
+            setTimeout(applyCavemanText, 0);
+        } else {
+            removeCaveDrawings();
+            if (prev === 'caveman') restoreCavemanText();
+        }
     }
 
     var saved = localStorage.getItem(STORAGE);

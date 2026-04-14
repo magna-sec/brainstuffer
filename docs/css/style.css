@@ -60,6 +60,84 @@
     --glow:        rgba(251,191,36,.15);
 }
 
+[data-skin="caveman"] {
+    --bg:          #1c1008;
+    --bg2:         #100a03;
+    --card:        #2a1a0a;
+    --card-border: #5a3518;
+    --text:        #f2d898;
+    --muted:       #9c7040;
+    --subtle:      #c49060;
+    --accent:      #e8732a;
+    --accent2:     #f0b040;
+    --accent-btn:  #c05515;
+    --success:     #6a9e3a;
+    --danger:      #cc2200;
+    --warning:     #e09020;
+    --glow:        rgba(232,115,42,.35);
+}
+
+[data-skin="caveman"] body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background-image:
+        radial-gradient(ellipse 90% 60% at 15% 10%, rgba(120,60,10,.5), transparent),
+        radial-gradient(ellipse 70% 50% at 85% 90%, rgba(80,35,5,.6), transparent),
+        radial-gradient(ellipse 50% 70% at 60% 40%, rgba(50,25,3,.3), transparent),
+        radial-gradient(ellipse 60% 40% at 50% -10%, var(--glow), transparent),
+        radial-gradient(ellipse 40% 30% at 80% 110%, var(--glow), transparent);
+}
+
+[data-skin="caveman"] .card {
+    border-radius: 3px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,.6), inset 0 0 40px rgba(0,0,0,.35);
+}
+
+[data-skin="caveman"] h1,
+[data-skin="caveman"] h2,
+[data-skin="caveman"] h3 {
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+[data-skin="caveman"] .btn {
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+}
+
+[data-skin="caveman"] .logo-name {
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+[data-skin="caveman"] input,
+[data-skin="caveman"] select,
+[data-skin="caveman"] textarea {
+    border-radius: 2px;
+    font-family: 'Georgia', serif;
+}
+
+/* Cave drawings layer */
+#cave-drawings {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+[data-skin="caveman"] .container {
+    position: relative;
+    z-index: 1;
+}
+
+[data-skin="caveman"] #skin-toggle,
+[data-skin="caveman"] #skin-panel {
+    z-index: 101;
+}
+
 /* ── Reset & base ───────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
