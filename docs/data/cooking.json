@@ -1,0 +1,1092 @@
+[
+  {
+    "question": "What is the safe minimum internal temperature for chicken and poultry?",
+    "answers": [
+      "74°C (165°F)",
+      "63°C (145°F)",
+      "68°C (155°F)",
+      "82°C (180°F)"
+    ],
+    "correct": "74°C (165°F)"
+  },
+  {
+    "question": "What is the safe minimum internal temperature for whole cuts of pork?",
+    "answers": [
+      "63°C (145°F)",
+      "74°C (165°F)",
+      "57°C (135°F)",
+      "71°C (160°F)"
+    ],
+    "correct": "63°C (145°F)"
+  },
+  {
+    "question": "What is the safe minimum internal temperature for ground beef and minced meat?",
+    "answers": [
+      "71°C (160°F)",
+      "63°C (145°F)",
+      "74°C (165°F)",
+      "66°C (150°F)"
+    ],
+    "correct": "71°C (160°F)"
+  },
+  {
+    "question": "What is the safe minimum internal temperature for whole beef steaks and roasts?",
+    "answers": [
+      "63°C (145°F) with a 3-minute rest",
+      "74°C (165°F) with a 5-minute rest",
+      "57°C (135°F) with a 1-minute rest",
+      "71°C (160°F) with no rest required"
+    ],
+    "correct": "63°C (145°F) with a 3-minute rest"
+  },
+  {
+    "question": "At what internal temperature is a beef steak considered medium-rare?",
+    "answers": [
+      "57–60°C (135–140°F)",
+      "71–74°C (160–165°F)",
+      "49–52°C (120–125°F)",
+      "63–66°C (145–150°F)"
+    ],
+    "correct": "57–60°C (135–140°F)"
+  },
+  {
+    "question": "What internal temperature indicates a beef steak cooked to medium?",
+    "answers": [
+      "63–68°C (145–155°F)",
+      "52–57°C (125–135°F)",
+      "74–77°C (165–170°F)",
+      "82–85°C (180–185°F)"
+    ],
+    "correct": "63–68°C (145–155°F)"
+  },
+  {
+    "question": "What is the safe minimum internal temperature for fish and seafood?",
+    "answers": [
+      "63°C (145°F)",
+      "74°C (165°F)",
+      "57°C (135°F)",
+      "71°C (160°F)"
+    ],
+    "correct": "63°C (145°F)"
+  },
+  {
+    "question": "What internal temperature should a whole roast turkey reach?",
+    "answers": [
+      "74°C (165°F) in the thickest part of the thigh",
+      "63°C (145°F) measured at the breast centre",
+      "82°C (180°F) measured at the tip of the drumstick",
+      "68°C (155°F) in the stuffing cavity if present"
+    ],
+    "correct": "74°C (165°F) in the thickest part of the thigh"
+  },
+  {
+    "question": "What is the safe minimum internal temperature for lamb chops and whole cuts?",
+    "answers": [
+      "63°C (145°F) with a 3-minute rest",
+      "74°C (165°F) with a 5-minute rest",
+      "57°C (135°F) with a 1-minute rest",
+      "71°C (160°F) with no rest required"
+    ],
+    "correct": "63°C (145°F) with a 3-minute rest"
+  },
+  {
+    "question": "At what temperature is pork considered well done?",
+    "answers": [
+      "77°C (170°F) or above throughout",
+      "63°C (145°F) with a short rest period",
+      "71°C (160°F) with no rest needed",
+      "85°C (185°F) throughout the whole cut"
+    ],
+    "correct": "77°C (170°F) or above throughout"
+  },
+  {
+    "question": "What internal temperature should a pre-cooked ham reach when reheated?",
+    "answers": [
+      "60°C (140°F)",
+      "74°C (165°F)",
+      "52°C (125°F)",
+      "71°C (160°F)"
+    ],
+    "correct": "60°C (140°F)"
+  },
+  {
+    "question": "What temperature indicates duck breast cooked to a safe medium doneness?",
+    "answers": [
+      "74°C (165°F) at the thickest point",
+      "63°C (145°F) with a 3-minute rest",
+      "57°C (135°F) measured at the centre",
+      "82°C (180°F) throughout the whole breast"
+    ],
+    "correct": "74°C (165°F) at the thickest point"
+  },
+  {
+    "question": "At what internal temperature are egg-based dishes considered safe to eat?",
+    "answers": [
+      "71°C (160°F)",
+      "63°C (145°F)",
+      "57°C (135°F)",
+      "82°C (180°F)"
+    ],
+    "correct": "71°C (160°F)"
+  },
+  {
+    "question": "What is the danger zone temperature range in which bacteria multiply rapidly in food?",
+    "answers": [
+      "5°C to 60°C (40°F to 140°F)",
+      "0°C to 40°C (32°F to 104°F)",
+      "10°C to 70°C (50°F to 158°F)",
+      "20°C to 80°C (68°F to 176°F)"
+    ],
+    "correct": "5°C to 60°C (40°F to 140°F)"
+  },
+  {
+    "question": "What internal temperature should raw sausages reach to be safe to eat?",
+    "answers": [
+      "71°C (160°F) throughout",
+      "63°C (145°F) throughout",
+      "74°C (165°F) throughout",
+      "68°C (155°F) throughout"
+    ],
+    "correct": "71°C (160°F) throughout"
+  },
+  {
+    "question": "What is the correct internal temperature for a medium-well beef steak?",
+    "answers": [
+      "68–74°C (155–165°F)",
+      "57–60°C (135–140°F)",
+      "77–82°C (170–180°F)",
+      "49–54°C (120–130°F)"
+    ],
+    "correct": "68–74°C (155–165°F)"
+  },
+  {
+    "question": "At what temperature should cooked food be held hot to stay safe for service?",
+    "answers": [
+      "Above 60°C (140°F)",
+      "Above 40°C (104°F)",
+      "Above 50°C (122°F)",
+      "Above 74°C (165°F)"
+    ],
+    "correct": "Above 60°C (140°F)"
+  },
+  {
+    "question": "What is the recommended internal temperature for veal cutlets and roasts?",
+    "answers": [
+      "63°C (145°F) with a 3-minute rest",
+      "74°C (165°F) with a 5-minute rest",
+      "71°C (160°F) with no rest required",
+      "57°C (135°F) with a 1-minute rest"
+    ],
+    "correct": "63°C (145°F) with a 3-minute rest"
+  },
+  {
+    "question": "At what internal temperature is beef considered well done?",
+    "answers": [
+      "77°C (170°F) and above",
+      "63°C (145°F) and above",
+      "74°C (165°F) and above",
+      "68°C (155°F) and above"
+    ],
+    "correct": "77°C (170°F) and above"
+  },
+  {
+    "question": "What is the correct internal temperature for a rare beef steak?",
+    "answers": [
+      "49–52°C (120–125°F)",
+      "63–66°C (145–150°F)",
+      "57–60°C (135–140°F)",
+      "71–74°C (160–165°F)"
+    ],
+    "correct": "49–52°C (120–125°F)"
+  },
+  {
+    "question": "What are the two ingredients in a classic roux?",
+    "answers": [
+      "Equal parts plain flour and butter by weight, cooked together",
+      "Equal parts plain flour and cream by weight, whisked cold",
+      "Equal parts cornflour and butter by weight, simmered briefly",
+      "Equal parts plain flour and oil by volume, cooked in a pan"
+    ],
+    "correct": "Equal parts plain flour and butter by weight, cooked together"
+  },
+  {
+    "question": "What are the three types of roux distinguished by colour?",
+    "answers": [
+      "White, blond (pale), and brown — determined by how long the roux is cooked",
+      "Light, medium, and dark — determined by the ratio of flour to butter used",
+      "Thin, standard, and thick — determined by the amount of liquid added",
+      "Cold, warm, and hot — determined by the temperature of the butter used"
+    ],
+    "correct": "White, blond (pale), and brown — determined by how long the roux is cooked"
+  },
+  {
+    "question": "What are the ingredients in a classic béchamel sauce?",
+    "answers": [
+      "White roux, warm whole milk, salt, pepper, and a pinch of nutmeg",
+      "Brown roux, beef stock, tomato paste, and a bouquet garni",
+      "Blond roux, white wine, double cream, and fresh tarragon",
+      "White roux, warm chicken stock, shallots, and dry white wine"
+    ],
+    "correct": "White roux, warm whole milk, salt, pepper, and a pinch of nutmeg"
+  },
+  {
+    "question": "What is a velouté sauce made from?",
+    "answers": [
+      "A blond roux whisked into a light white stock (chicken, veal, or fish)",
+      "A white roux whisked into warm whole milk with nutmeg and seasoning",
+      "A brown roux simmered with brown stock and a classic mirepoix base",
+      "Egg yolks emulsified with clarified butter and seasoned with lemon"
+    ],
+    "correct": "A blond roux whisked into a light white stock (chicken, veal, or fish)"
+  },
+  {
+    "question": "What are the five French mother sauces?",
+    "answers": [
+      "Béchamel, velouté, espagnole, sauce tomat, and hollandaise",
+      "Béchamel, hollandaise, mayonnaise, velouté, and vinaigrette",
+      "Espagnole, béchamel, chasseur, bordelaise, and béarnaise",
+      "Hollandaise, béchamel, demi-glace, roux, and velouté"
+    ],
+    "correct": "Béchamel, velouté, espagnole, sauce tomat, and hollandaise"
+  },
+  {
+    "question": "What are the main ingredients in a classic hollandaise sauce?",
+    "answers": [
+      "Egg yolks, clarified butter, lemon juice, and seasoning",
+      "Whole eggs, double cream, white wine, and tarragon",
+      "Egg yolks, olive oil, white wine vinegar, and mustard",
+      "Egg whites, unsalted butter, lime juice, and cayenne"
+    ],
+    "correct": "Egg yolks, clarified butter, lemon juice, and seasoning"
+  },
+  {
+    "question": "What is the difference between hollandaise and béarnaise sauce?",
+    "answers": [
+      "Béarnaise replaces lemon juice with a tarragon and vinegar reduction",
+      "Béarnaise uses whole eggs instead of yolks and adds fresh chervil",
+      "Béarnaise is made with olive oil rather than clarified butter",
+      "Béarnaise adds tomato concassé and uses red wine instead of lemon"
+    ],
+    "correct": "Béarnaise replaces lemon juice with a tarragon and vinegar reduction"
+  },
+  {
+    "question": "What are the ingredients in a classic mayonnaise?",
+    "answers": [
+      "Egg yolks, neutral oil, mustard, lemon juice or vinegar, and seasoning",
+      "Whole eggs, olive oil, tarragon vinegar, capers, and white pepper",
+      "Egg yolks, double cream, white wine, Dijon mustard, and herbs",
+      "Egg whites, vegetable oil, apple cider vinegar, and garlic paste"
+    ],
+    "correct": "Egg yolks, neutral oil, mustard, lemon juice or vinegar, and seasoning"
+  },
+  {
+    "question": "What is espagnole (Spanish sauce) made from?",
+    "answers": [
+      "Brown roux, brown veal stock, mirepoix, tomato paste, and a bouquet garni",
+      "Blond roux, chicken stock, white wine, shallots, and fresh parsley",
+      "White roux, warm milk, onion studded with cloves, and bay leaf",
+      "Egg yolks emulsified with brown butter, sherry, and smoked paprika"
+    ],
+    "correct": "Brown roux, brown veal stock, mirepoix, tomato paste, and a bouquet garni"
+  },
+  {
+    "question": "What are the main ingredients in a classic vinaigrette?",
+    "answers": [
+      "Three parts oil to one part acid (vinegar or citrus), mustard, and seasoning",
+      "Equal parts oil and vinegar with honey, garlic, and fresh thyme",
+      "Two parts olive oil to one part lemon, with capers and anchovies",
+      "Four parts oil to one part acid with cream, shallots, and chives"
+    ],
+    "correct": "Three parts oil to one part acid (vinegar or citrus), mustard, and seasoning"
+  },
+  {
+    "question": "What is a mirepoix?",
+    "answers": [
+      "A rough-cut mixture of onion, carrot, and celery used to build flavour in stocks and sauces",
+      "A finely diced mixture of shallots, garlic, and leeks used as a sauce base",
+      "A julienned mixture of vegetables used specifically as a garnish for consommé",
+      "A roasted mixture of root vegetables blended into a thick vegetable purée"
+    ],
+    "correct": "A rough-cut mixture of onion, carrot, and celery used to build flavour in stocks and sauces"
+  },
+  {
+    "question": "What is a bouquet garni?",
+    "answers": [
+      "A bundle of fresh herbs (typically bay, thyme, and parsley stalks) tied together or wrapped in muslin",
+      "A blend of dried ground spices tied in muslin and simmered in stocks and braises",
+      "A garnish of fresh herbs placed on a dish immediately before it is served at table",
+      "A mixture of aromatic vegetables wrapped in leek leaves and tied with kitchen string"
+    ],
+    "correct": "A bundle of fresh herbs (typically bay, thyme, and parsley stalks) tied together or wrapped in muslin"
+  },
+  {
+    "question": "What are the ingredients in a classic beef stock (brown stock)?",
+    "answers": [
+      "Roasted beef bones, mirepoix, tomato paste, bouquet garni, and cold water",
+      "Raw chicken carcasses, white mirepoix, leeks, celery, and cold water",
+      "Veal bones, roasted onions, red wine, thyme, and hot water",
+      "Beef mince, aromatics, tomatoes, red wine vinegar, and cold water"
+    ],
+    "correct": "Roasted beef bones, mirepoix, tomato paste, bouquet garni, and cold water"
+  },
+  {
+    "question": "What ingredients make up a classic chicken stock?",
+    "answers": [
+      "Raw chicken carcasses, onion, carrot, celery, leek, peppercorns, and cold water",
+      "Roasted chicken bones, mirepoix, red wine, tomato paste, and hot water",
+      "Whole chicken, root vegetables, bay leaf, thyme, and boiling water",
+      "Chicken wings, brown butter, shallots, garlic, and white wine stock"
+    ],
+    "correct": "Raw chicken carcasses, onion, carrot, celery, leek, peppercorns, and cold water"
+  },
+  {
+    "question": "What is the ratio of fat to flour in a standard roux?",
+    "answers": [
+      "Equal parts by weight (1:1)",
+      "Two parts fat to one part flour by weight",
+      "One part fat to two parts flour by weight",
+      "Three parts fat to one part flour by weight"
+    ],
+    "correct": "Equal parts by weight (1:1)"
+  },
+  {
+    "question": "What are the three main ingredients in a classic Caesar dressing?",
+    "answers": [
+      "Egg yolks (or mayo), anchovies, Parmesan, lemon, garlic, and Worcestershire",
+      "Double cream, Parmesan, lemon juice, capers, and black pepper",
+      "Olive oil, red wine vinegar, Parmesan, garlic, and Dijon mustard",
+      "Egg yolks, blue cheese, buttermilk, chives, and white wine vinegar"
+    ],
+    "correct": "Egg yolks (or mayo), anchovies, Parmesan, lemon, garlic, and Worcestershire"
+  },
+  {
+    "question": "What is a liaison in cooking?",
+    "answers": [
+      "A mixture of egg yolks and cream used to enrich and thicken sauces and soups",
+      "A sauce made from equal parts butter and flour kneaded together cold",
+      "A starch-based thickener made from cornflour dissolved in cold liquid",
+      "A reduction of wine and shallots used as a base for butter sauces"
+    ],
+    "correct": "A mixture of egg yolks and cream used to enrich and thicken sauces and soups"
+  },
+  {
+    "question": "What is beurre blanc?",
+    "answers": [
+      "A French butter sauce made by emulsifying cold butter into a white wine and shallot reduction",
+      "Clarified butter infused with lemon juice and fresh herbs for finishing fish dishes",
+      "Browned butter (beurre noisette) whisked with cream and seasoned with lemon",
+      "Softened butter blended with herbs, garlic, and lemon to form a compound butter"
+    ],
+    "correct": "A French butter sauce made by emulsifying cold butter into a white wine and shallot reduction"
+  },
+  {
+    "question": "What is a demi-glace?",
+    "answers": [
+      "A rich sauce made by reducing espagnole and brown stock together by half until glossy",
+      "A thick sauce made from a dark roux cooked until it reaches a chocolate colour",
+      "A concentrated glaze made by reducing chicken stock until it coats the back of a spoon",
+      "A reduction of red wine, shallots, and bone marrow used only with grilled beef"
+    ],
+    "correct": "A rich sauce made by reducing espagnole and brown stock together by half until glossy"
+  },
+  {
+    "question": "What is the difference between sautéing and frying?",
+    "answers": [
+      "Sautéing uses a small amount of fat over high heat with frequent movement; frying uses a larger quantity of fat with the food left relatively still",
+      "Sautéing is always done in butter while frying uses only oil; the temperatures used are essentially the same for both methods",
+      "Sautéing is a slow, low-heat method for tenderising tough cuts; frying is always done at very high heat for quick caramelisation",
+      "Sautéing requires a lid to trap steam; frying is always uncovered to allow moisture to escape from the food"
+    ],
+    "correct": "Sautéing uses a small amount of fat over high heat with frequent movement; frying uses a larger quantity of fat with the food left relatively still"
+  },
+  {
+    "question": "What is the Maillard reaction?",
+    "answers": [
+      "A chemical reaction between amino acids and reducing sugars that creates brown colour and complex flavour when food is heated",
+      "The process by which proteins in meat denature and contract when exposed to high cooking temperatures",
+      "A reaction between fat and oxygen that produces the characteristic smell of rancid or over-cooked food",
+      "The caramelisation of natural sugars in vegetables when they are roasted at temperatures above 180°C"
+    ],
+    "correct": "A chemical reaction between amino acids and reducing sugars that creates brown colour and complex flavour when food is heated"
+  },
+  {
+    "question": "What does it mean to 'blanch' a vegetable?",
+    "answers": [
+      "To briefly cook it in boiling salted water then immediately plunge it into ice water to stop cooking and preserve colour",
+      "To cook it slowly in butter over low heat until tender but without any colour developing on the surface",
+      "To roast it dry in a hot oven until the outer skin is charred and the interior is soft",
+      "To steam it in a covered pan with a small amount of water and butter until just tender"
+    ],
+    "correct": "To briefly cook it in boiling salted water then immediately plunge it into ice water to stop cooking and preserve colour"
+  },
+  {
+    "question": "What is braising?",
+    "answers": [
+      "A method of cooking tough cuts in a small amount of liquid in a covered vessel at low heat for a long time",
+      "A high-heat method of cooking in a very small amount of fat, turning the food frequently in the pan",
+      "A technique of cooking food submerged in hot fat at a controlled temperature in a deep vessel",
+      "A method of cooking food slowly in a water bath held at a precise temperature below boiling"
+    ],
+    "correct": "A method of cooking tough cuts in a small amount of liquid in a covered vessel at low heat for a long time"
+  },
+  {
+    "question": "What is the difference between poaching, simmering, and boiling?",
+    "answers": [
+      "Poaching 65–80°C (gentle movement); simmering 85–95°C (small bubbles); boiling 100°C (vigorous rolling)",
+      "Poaching 50–60°C (no movement); simmering 70–80°C (rare bubbles); boiling 90°C (steady bubbles)",
+      "Poaching 75–85°C (medium bubbles); simmering 95–98°C (rolling); boiling 100°C (rapid rolling)",
+      "Poaching 55–65°C (no movement); simmering 80–90°C (fast rolling); boiling 100°C (vigorous steam)"
+    ],
+    "correct": "Poaching 65–80°C (gentle movement); simmering 85–95°C (small bubbles); boiling 100°C (vigorous rolling)"
+  },
+  {
+    "question": "What is clarified butter (ghee)?",
+    "answers": [
+      "Butter that has been melted and had the milk solids and water removed, leaving pure butterfat",
+      "Butter that has been whipped with air until light and spreadable at room temperature",
+      "Butter cooked until the milk solids brown, giving a nutty aroma and golden colour",
+      "Butter blended with neutral oil to raise its smoke point for use in high-heat cooking"
+    ],
+    "correct": "Butter that has been melted and had the milk solids and water removed, leaving pure butterfat"
+  },
+  {
+    "question": "What is the difference between beurre noisette and beurre noir?",
+    "answers": [
+      "Beurre noisette is butter cooked to a light golden-brown; beurre noir is cooked until dark brown, both finished with acid",
+      "Beurre noisette uses unsalted butter clarified slowly; beurre noir uses salted butter cooked over very high heat",
+      "Beurre noisette is a cold butter sauce; beurre noir is a warm brown butter emulsified with cream",
+      "Beurre noisette is browned butter with herbs; beurre noir is browned butter thickened with a roux"
+    ],
+    "correct": "Beurre noisette is butter cooked to a light golden-brown; beurre noir is cooked until dark brown, both finished with acid"
+  },
+  {
+    "question": "What is julienne as a knife cut?",
+    "answers": [
+      "Long thin matchstick strips approximately 3mm × 3mm × 6cm",
+      "Small uniform cubes approximately 6mm × 6mm × 6mm",
+      "Very fine dice approximately 1.5mm × 1.5mm × 1.5mm",
+      "Thin diagonal slices approximately 3mm thick cut on the bias"
+    ],
+    "correct": "Long thin matchstick strips approximately 3mm × 3mm × 6cm"
+  },
+  {
+    "question": "What is a brunoise knife cut?",
+    "answers": [
+      "Very fine dice approximately 1.5mm × 1.5mm × 1.5mm, created from julienne strips",
+      "Small standard dice approximately 6mm × 6mm × 6mm for general use",
+      "Long thin matchstick strips approximately 3mm × 3mm × 6cm in length",
+      "Medium dice approximately 12mm × 12mm × 12mm for soups and stews"
+    ],
+    "correct": "Very fine dice approximately 1.5mm × 1.5mm × 1.5mm, created from julienne strips"
+  },
+  {
+    "question": "What are the main ingredients in a classic beef Wellington?",
+    "answers": [
+      "Beef fillet, mushroom duxelles, Parma ham or prosciutto, and puff pastry",
+      "Beef sirloin, caramelised onions, Gruyère cheese, and shortcrust pastry",
+      "Beef topside, spinach, blue cheese, mushrooms, and filo pastry",
+      "Beef fillet, red wine reduction, liver pâté, and rough puff pastry"
+    ],
+    "correct": "Beef fillet, mushroom duxelles, Parma ham or prosciutto, and puff pastry"
+  },
+  {
+    "question": "What is duxelles?",
+    "answers": [
+      "Finely chopped mushrooms cooked with shallots and butter until all moisture has evaporated",
+      "A mixture of finely diced carrots, onions, and celery cooked in butter as an aromatic base",
+      "Sliced mushrooms sautéed briefly in butter and seasoned with garlic and fresh thyme",
+      "A mushroom purée blended with cream and truffle oil used to fill pastry shells"
+    ],
+    "correct": "Finely chopped mushrooms cooked with shallots and butter until all moisture has evaporated"
+  },
+  {
+    "question": "What are the main ingredients in a classic eggs Benedict?",
+    "answers": [
+      "Toasted English muffin, Canadian bacon or ham, poached egg, and hollandaise sauce",
+      "Toasted sourdough, smoked salmon, poached egg, and crème fraîche dressing",
+      "Toasted brioche, crispy streaky bacon, fried egg, and béarnaise sauce",
+      "Toasted muffin, prosciutto, soft-boiled egg, and beurre blanc sauce"
+    ],
+    "correct": "Toasted English muffin, Canadian bacon or ham, poached egg, and hollandaise sauce"
+  },
+  {
+    "question": "What are the key ingredients in a classic French onion soup?",
+    "answers": [
+      "Caramelised onions, beef stock, dry white wine or sherry, Gruyère, and croutons",
+      "Sliced white onions, chicken stock, cream, thyme, and melted Cheddar topping",
+      "Caramelised shallots, vegetable stock, brandy, Emmental, and sourdough toast",
+      "Caramelised onions, lamb stock, red wine, Comté, and toasted baguette slices"
+    ],
+    "correct": "Caramelised onions, beef stock, dry white wine or sherry, Gruyère, and croutons"
+  },
+  {
+    "question": "What are the core ingredients in a classic beef bourguignon?",
+    "answers": [
+      "Beef, red Burgundy wine, lardons, pearl onions, mushrooms, and bouquet garni",
+      "Beef, dark ale, carrots, parsnips, Worcestershire sauce, and fresh thyme",
+      "Beef, white wine, cream, tarragon, shallots, and button mushrooms",
+      "Beef, red wine, tomatoes, olives, anchovy paste, and herbes de Provence"
+    ],
+    "correct": "Beef, red Burgundy wine, lardons, pearl onions, mushrooms, and bouquet garni"
+  },
+  {
+    "question": "What ingredients make up a classic carbonara?",
+    "answers": [
+      "Pasta, guanciale or pancetta, eggs, Pecorino Romano, and black pepper — no cream",
+      "Pasta, streaky bacon, double cream, Parmesan, eggs, and black pepper",
+      "Pasta, smoked ham, mascarpone, Parmesan, white wine, and fresh parsley",
+      "Pasta, pancetta, cream, egg yolks, Gruyère, nutmeg, and white pepper"
+    ],
+    "correct": "Pasta, guanciale or pancetta, eggs, Pecorino Romano, and black pepper — no cream"
+  },
+  {
+    "question": "What are the ingredients in a classic Bolognese (ragù alla Bolognese)?",
+    "answers": [
+      "Beef mince, pork mince, soffritto, milk, white wine, tomato paste, and a little stock",
+      "Beef mince, chopped tomatoes, garlic, basil, red wine, and olive oil",
+      "Mixed mince, passata, mushrooms, red wine, herbs, and double cream",
+      "Lamb mince, fresh tomatoes, rosemary, red wine, olives, and anchovies"
+    ],
+    "correct": "Beef mince, pork mince, soffritto, milk, white wine, tomato paste, and a little stock"
+  },
+  {
+    "question": "What are the core ingredients in a classic beef lasagne?",
+    "answers": [
+      "Bolognese ragù, béchamel sauce, lasagne sheets, Parmesan, and mozzarella",
+      "Minced beef, tomato sauce, cream sauce, pasta sheets, and Cheddar",
+      "Beef ragù, velouté, egg pasta sheets, Gruyère, and breadcrumbs",
+      "Minced meat, passata, ricotta, lasagne sheets, and Pecorino Romano"
+    ],
+    "correct": "Bolognese ragù, béchamel sauce, lasagne sheets, Parmesan, and mozzarella"
+  },
+  {
+    "question": "What is the primary raising agent in a Victoria sponge?",
+    "answers": [
+      "Baking powder and the air beaten into the creamed butter and sugar",
+      "Bicarbonate of soda activated by acidic buttermilk in the batter",
+      "Beaten egg whites folded into the batter to provide lift",
+      "Self-raising flour only, with no additional leavening agent needed"
+    ],
+    "correct": "Baking powder and the air beaten into the creamed butter and sugar"
+  },
+  {
+    "question": "What is the correct ratio of ingredients in a classic Victoria sponge?",
+    "answers": [
+      "Equal weights of butter, caster sugar, eggs, and self-raising flour",
+      "Two parts flour to one part each of butter, sugar, and eggs by weight",
+      "Three parts flour to one part butter, with milk to adjust consistency",
+      "Equal weights of butter and sugar, with flour at double the weight of eggs"
+    ],
+    "correct": "Equal weights of butter, caster sugar, eggs, and self-raising flour"
+  },
+  {
+    "question": "What is the difference between baking powder and bicarbonate of soda?",
+    "answers": [
+      "Bicarbonate of soda needs an acid to activate it; baking powder contains its own acid and activates with moisture and heat",
+      "Baking powder is used for cakes only; bicarbonate of soda is used only in bread and savoury baking",
+      "Bicarbonate of soda produces more lift than baking powder and should be used in smaller quantities",
+      "They are chemically identical; the difference is only in the brand name and regional terminology used"
+    ],
+    "correct": "Bicarbonate of soda needs an acid to activate it; baking powder contains its own acid and activates with moisture and heat"
+  },
+  {
+    "question": "What are the main ingredients in a classic shortcrust pastry?",
+    "answers": [
+      "Plain flour, cold fat (butter or lard), a pinch of salt, and cold water to bind",
+      "Self-raising flour, room-temperature butter, egg yolk, and a little milk",
+      "Plain flour, warm butter, egg, baking powder, salt, and cold water",
+      "Strong bread flour, cold butter, a pinch of sugar, and full-fat milk"
+    ],
+    "correct": "Plain flour, cold fat (butter or lard), a pinch of salt, and cold water to bind"
+  },
+  {
+    "question": "What is the fat-to-flour ratio in classic shortcrust pastry?",
+    "answers": [
+      "Half fat to flour by weight (1 part fat : 2 parts flour)",
+      "Equal fat to flour by weight (1 part fat : 1 part flour)",
+      "Quarter fat to flour by weight (1 part fat : 4 parts flour)",
+      "Three-quarters fat to flour by weight (3 parts fat : 4 parts flour)"
+    ],
+    "correct": "Half fat to flour by weight (1 part fat : 2 parts flour)"
+  },
+  {
+    "question": "What is choux pastry made from?",
+    "answers": [
+      "Water, butter, plain flour, and eggs — the dough is cooked on the hob before baking",
+      "Milk, butter, self-raising flour, and eggs — mixed cold and piped directly onto trays",
+      "Water, lard, strong flour, and eggs — enriched with cream and chilled before shaping",
+      "Butter, plain flour, eggs, and baking powder — beaten until smooth then baked at high heat"
+    ],
+    "correct": "Water, butter, plain flour, and eggs — the dough is cooked on the hob before baking"
+  },
+  {
+    "question": "What is the key technique that makes puff pastry flaky?",
+    "answers": [
+      "Laminating — repeatedly folding butter into the dough to create hundreds of thin layers",
+      "Aerating — vigorously beating air into the fat before incorporating the flour",
+      "Chilling — resting the dough in ice water between each roll to firm the gluten",
+      "Hydrating — using a high proportion of water to steam the layers apart during baking"
+    ],
+    "correct": "Laminating — repeatedly folding butter into the dough to create hundreds of thin layers"
+  },
+  {
+    "question": "What are the ingredients in a classic crème brûlée?",
+    "answers": [
+      "Double cream, egg yolks, caster sugar, vanilla, and a caramelised sugar crust",
+      "Whole milk, whole eggs, icing sugar, vanilla, and a caramelised brown sugar top",
+      "Single cream, egg yolks, condensed milk, vanilla, and demerara sugar crust",
+      "Double cream, whole eggs, caster sugar, lemon zest, and a caramelised top"
+    ],
+    "correct": "Double cream, egg yolks, caster sugar, vanilla, and a caramelised sugar crust"
+  },
+  {
+    "question": "What is the difference between a soufflé and a mousse?",
+    "answers": [
+      "A soufflé is baked and relies on beaten egg whites for lift; a mousse is set cold and uses whipped cream or gelatin",
+      "A soufflé is always sweet; a mousse is always savoury and never contains eggs or cream",
+      "A soufflé is chilled until set; a mousse is baked and relies on steam for its light texture",
+      "Both are identical in technique but a soufflé uses a collar to rise above the ramekin"
+    ],
+    "correct": "A soufflé is baked and relies on beaten egg whites for lift; a mousse is set cold and uses whipped cream or gelatin"
+  },
+  {
+    "question": "What does 'al dente' mean when cooking pasta?",
+    "answers": [
+      "Cooked until tender but with a slight firmness remaining when bitten through",
+      "Cooked until completely soft all the way through with no resistance at all",
+      "Cooked until only just softened but still raw and starchy at the very centre",
+      "Cooked in heavily salted water until the pasta floats freely to the surface"
+    ],
+    "correct": "Cooked until tender but with a slight firmness remaining when bitten through"
+  },
+  {
+    "question": "What is the purpose of resting meat after cooking?",
+    "answers": [
+      "To allow juices to redistribute throughout the meat, resulting in a juicier and more evenly cooked result",
+      "To continue cooking the meat using residual heat to safely raise the core temperature",
+      "To allow the outer crust to firm up and the internal fat to resolidify before carving",
+      "To cool the meat surface quickly so the Maillard crust does not over-darken"
+    ],
+    "correct": "To allow juices to redistribute throughout the meat, resulting in a juicier and more evenly cooked result"
+  },
+  {
+    "question": "What is the difference between stock and broth?",
+    "answers": [
+      "Stock is made from bones and is rich in gelatin; broth is made from meat and has more flavour but less body",
+      "Stock is always seasoned; broth is always unseasoned and used as a base for sauces",
+      "Stock uses fresh vegetables; broth uses roasted vegetables and is therefore darker in colour",
+      "They are identical — the terms are interchangeable with no meaningful culinary distinction"
+    ],
+    "correct": "Stock is made from bones and is rich in gelatin; broth is made from meat and has more flavour but less body"
+  },
+  {
+    "question": "What are the main ingredients in a classic pesto alla Genovese?",
+    "answers": [
+      "Fresh basil, pine nuts, Parmesan, Pecorino, garlic, and extra virgin olive oil",
+      "Fresh parsley, walnuts, Gruyère, garlic, lemon juice, and vegetable oil",
+      "Fresh basil, almonds, Parmesan, garlic, lemon zest, and mild olive oil",
+      "Fresh rocket, pine nuts, Parmesan, garlic, capers, and extra virgin olive oil"
+    ],
+    "correct": "Fresh basil, pine nuts, Parmesan, Pecorino, garlic, and extra virgin olive oil"
+  },
+  {
+    "question": "What are the ingredients in a classic guacamole?",
+    "answers": [
+      "Ripe avocado, lime juice, salt, coriander, onion, and jalapeño or chilli",
+      "Ripe avocado, lemon juice, garlic, cumin, tomato, and Greek yoghurt",
+      "Mashed avocado, lime juice, sour cream, garlic powder, and pickled jalapeños",
+      "Ripe avocado, white wine vinegar, spring onion, parsley, and black pepper"
+    ],
+    "correct": "Ripe avocado, lime juice, salt, coriander, onion, and jalapeño or chilli"
+  },
+  {
+    "question": "What are the key ingredients in a traditional Margherita pizza?",
+    "answers": [
+      "Pizza dough, San Marzano tomato sauce, fresh mozzarella, and fresh basil",
+      "Pizza base, passata, shredded mozzarella, dried oregano, and olive oil",
+      "Flatbread, tomato purée, buffalo mozzarella, rocket, and Parmesan shavings",
+      "Pizza dough, fresh tomatoes, bocconcini, garlic oil, and dried basil"
+    ],
+    "correct": "Pizza dough, San Marzano tomato sauce, fresh mozzarella, and fresh basil"
+  },
+  {
+    "question": "What are the main ingredients in a classic risotto?",
+    "answers": [
+      "Arborio or Carnaroli rice, onion, white wine, hot stock, Parmesan, and butter (mantecatura)",
+      "Long-grain rice, shallots, dry white wine, chicken stock, cream, and Gruyère",
+      "Short-grain rice, leeks, vermouth, vegetable stock, mascarpone, and Pecorino",
+      "Arborio rice, garlic, rosé wine, hot fish stock, cream, and aged Cheddar"
+    ],
+    "correct": "Arborio or Carnaroli rice, onion, white wine, hot stock, Parmesan, and butter (mantecatura)"
+  },
+  {
+    "question": "What is tempering chocolate?",
+    "answers": [
+      "Melting and cooling chocolate to precise temperatures to stabilise the cocoa butter crystals, giving a glossy snap",
+      "Mixing chocolate with cream and butter at equal ratios to produce a smooth ganache for coating",
+      "Heating chocolate slowly in a double boiler until fully melted, then pouring into moulds to set",
+      "Adding a small amount of water to melted chocolate to prevent it seizing in a warm environment"
+    ],
+    "correct": "Melting and cooling chocolate to precise temperatures to stabilise the cocoa butter crystals, giving a glossy snap"
+  },
+  {
+    "question": "What is ganache made from?",
+    "answers": [
+      "Hot double cream poured over chopped chocolate and stirred until smooth",
+      "Melted chocolate whipped with cold butter until light and aerated",
+      "Chocolate melted in a double boiler with milk and a little glucose syrup",
+      "Equal parts cocoa powder and hot cream whisked together until thickened"
+    ],
+    "correct": "Hot double cream poured over chopped chocolate and stirred until smooth"
+  },
+  {
+    "question": "What is the difference between single, double, and whipping cream?",
+    "answers": [
+      "Single has ~18% fat and will not whip; whipping has ~36% fat; double has ~48% fat and whips thickly",
+      "Single has 10% fat, whipping has 25% fat, and double has 35% fat — all can be whipped with enough effort",
+      "Single cannot be heated; whipping is for cold uses only; double is suitable for both hot and cold uses",
+      "All three are interchangeable in savoury dishes; the distinction only matters in dessert preparations"
+    ],
+    "correct": "Single has ~18% fat and will not whip; whipping has ~36% fat; double has ~48% fat and whips thickly"
+  },
+  {
+    "question": "What is caramelisation?",
+    "answers": [
+      "The browning of sugars through heat, producing complex flavours and golden to dark brown colours",
+      "A reaction between proteins and sugars that creates the brown crust on seared meat",
+      "The process of dissolving sugar in water and cooking it to form a crystalline solid",
+      "The breakdown of starches into simple sugars through enzymatic activity at low temperatures"
+    ],
+    "correct": "The browning of sugars through heat, producing complex flavours and golden to dark brown colours"
+  },
+  {
+    "question": "What is the difference between sea salt and table salt in cooking?",
+    "answers": [
+      "Sea salt has larger, flakier crystals with a subtler flavour and is used for finishing; table salt is fine with additives and dissolves quickly for general cooking",
+      "Sea salt has more sodium per gram and is better for baking; table salt is coarser and better for seasoning at the table",
+      "They are chemically identical — the distinction is purely marketing with no practical effect on food",
+      "Table salt is always iodised which makes it unsuitable for fermenting; sea salt must be used for all preserved foods"
+    ],
+    "correct": "Sea salt has larger, flakier crystals with a subtler flavour and is used for finishing; table salt is fine with additives and dissolves quickly for general cooking"
+  },
+  {
+    "question": "What are the key ingredients in a classic tartar sauce?",
+    "answers": [
+      "Mayonnaise, gherkins (or capers), shallots, lemon juice, and parsley",
+      "Mayonnaise, horseradish, lemon juice, Dijon mustard, and dill",
+      "Mayonnaise, pickled jalapeños, lime juice, garlic, and fresh coriander",
+      "Crème fraîche, capers, anchovies, lemon zest, and fresh tarragon"
+    ],
+    "correct": "Mayonnaise, gherkins (or capers), shallots, lemon juice, and parsley"
+  },
+  {
+    "question": "What is a gastrique in French cuisine?",
+    "answers": [
+      "A sweet and sour reduction of caramelised sugar and vinegar used in savoury sauces, especially with game and duck",
+      "A cold sauce made by emulsifying butter into a reduction of white wine and cream",
+      "A concentrated reduction of fruit juice and red wine used to dress dessert plates",
+      "A slow-cooked mixture of onions, butter, and vinegar used as a condiment with charcuterie"
+    ],
+    "correct": "A sweet and sour reduction of caramelised sugar and vinegar used in savoury sauces, especially with game and duck"
+  },
+  {
+    "question": "What is the difference between a stock and a glace (glace de viande)?",
+    "answers": [
+      "A glace is a stock reduced by up to 90% until it becomes a thick, intensely flavoured syrupy gel",
+      "A glace is a lightly clarified stock used as a base; a stock is always reduced before use in sauces",
+      "A glace is made from fish and shellfish only; a stock can be made from any meat or vegetables",
+      "They are the same thing — the term glace simply indicates the stock has been skimmed and strained"
+    ],
+    "correct": "A glace is a stock reduced by up to 90% until it becomes a thick, intensely flavoured syrupy gel"
+  },
+  {
+    "question": "What are the main ingredients in a classic potato dauphinoise?",
+    "answers": [
+      "Thinly sliced potatoes, garlic, double cream, milk, salt, pepper, and nutmeg",
+      "Thinly sliced potatoes, chicken stock, butter, thyme, and gruyère cheese",
+      "Thinly sliced potatoes, crème fraîche, shallots, Dijon mustard, and Emmental",
+      "Sliced waxy potatoes, double cream, egg yolks, Parmesan, and bay leaf"
+    ],
+    "correct": "Thinly sliced potatoes, garlic, double cream, milk, salt, pepper, and nutmeg"
+  },
+  {
+    "question": "What are the key ingredients in a traditional coq au vin?",
+    "answers": [
+      "Chicken, red wine, lardons, pearl onions, mushrooms, garlic, and bouquet garni",
+      "Chicken, white wine, cream, shallots, tarragon, mushrooms, and butter",
+      "Chicken, dark beer, root vegetables, thyme, tomato paste, and bay leaf",
+      "Chicken, rosé wine, olives, artichokes, garlic, and herbes de Provence"
+    ],
+    "correct": "Chicken, red wine, lardons, pearl onions, mushrooms, garlic, and bouquet garni"
+  },
+  {
+    "question": "What is the difference between chopping and mincing as knife techniques?",
+    "answers": [
+      "Chopping produces rough irregular pieces; mincing produces very fine, almost paste-like pieces through repeated fine cuts",
+      "Chopping uses the tip of the blade; mincing uses the heel of the blade in a rocking motion",
+      "Chopping is always applied to meat; mincing is exclusively a vegetable preparation technique",
+      "Chopping produces larger pieces than dicing; mincing and dicing are interchangeable terms"
+    ],
+    "correct": "Chopping produces rough irregular pieces; mincing produces very fine, almost paste-like pieces through repeated fine cuts"
+  },
+  {
+    "question": "What does 'folding' mean as a baking technique?",
+    "answers": [
+      "Gently combining a lighter mixture (e.g. beaten egg whites) into a heavier base using a figure-of-eight motion to retain air",
+      "Vigorously stirring two mixtures together with a spoon or spatula until fully incorporated",
+      "Rolling a dough repeatedly over itself to develop gluten structure and even layering",
+      "Turning the edges of a pastry over a filling to seal the edges before baking"
+    ],
+    "correct": "Gently combining a lighter mixture (e.g. beaten egg whites) into a heavier base using a figure-of-eight motion to retain air"
+  },
+  {
+    "question": "What are the ingredients in a classic brine for meat?",
+    "answers": [
+      "Water, salt (typically 5–8% by weight), sugar, and aromatics such as peppercorns, bay, and herbs",
+      "Water, vinegar, salt, garlic, and spices cooked together and poured hot over the meat",
+      "Buttermilk, salt, garlic, and hot sauce used to tenderise poultry overnight before frying",
+      "Wine, olive oil, salt, lemon juice, and fresh herbs combined cold before soaking meat"
+    ],
+    "correct": "Water, salt (typically 5–8% by weight), sugar, and aromatics such as peppercorns, bay, and herbs"
+  },
+  {
+    "question": "What is the difference between dry heat and moist heat cooking methods?",
+    "answers": [
+      "Dry heat uses air or fat (roasting, grilling, frying, baking) and browns food; moist heat uses liquid or steam (poaching, braising, steaming) and does not brown food",
+      "Dry heat always requires a fat medium; moist heat always requires a water medium — neither method can be used without the correct medium",
+      "Dry heat is used exclusively for vegetables and grains; moist heat is used exclusively for proteins and pastry",
+      "Dry heat cooks food from the outside in; moist heat cooks food evenly from all sides simultaneously at the same rate"
+    ],
+    "correct": "Dry heat uses air or fat (roasting, grilling, frying, baking) and browns food; moist heat uses liquid or steam (poaching, braising, steaming) and does not brown food"
+  },
+  {
+    "question": "What are the main spices in a classic garam masala blend?",
+    "answers": [
+      "Cumin, coriander, cardamom, black pepper, cinnamon, cloves, and nutmeg",
+      "Turmeric, chilli, coriander, cumin, mustard seeds, and fenugreek",
+      "Paprika, cumin, oregano, garlic powder, cayenne, and cinnamon",
+      "Coriander, fennel, fenugreek, black pepper, mustard seeds, and curry leaf"
+    ],
+    "correct": "Cumin, coriander, cardamom, black pepper, cinnamon, cloves, and nutmeg"
+  },
+  {
+    "question": "What are the main ingredients in a classic hummus?",
+    "answers": [
+      "Cooked chickpeas, tahini (sesame paste), lemon juice, garlic, and olive oil",
+      "Cooked chickpeas, Greek yoghurt, cumin, garlic, lemon zest, and olive oil",
+      "Cooked white beans, tahini, lemon juice, garlic, and vegetable oil",
+      "Cooked chickpeas, cream cheese, roasted garlic, lemon juice, and parsley"
+    ],
+    "correct": "Cooked chickpeas, tahini (sesame paste), lemon juice, garlic, and olive oil"
+  },
+  {
+    "question": "What does 'deglaze' mean when cooking?",
+    "answers": [
+      "Adding liquid to a hot pan to dissolve the browned bits stuck to the bottom, creating a flavourful sauce base",
+      "Adding cold fat to a sauce off the heat to make it smooth and prevent it from splitting",
+      "Rapidly reducing a sauce over very high heat to concentrate the flavour and thicken the consistency",
+      "Removing the cooking liquid from a braise and skimming off the fat before reducing to a sauce"
+    ],
+    "correct": "Adding liquid to a hot pan to dissolve the browned bits stuck to the bottom, creating a flavourful sauce base"
+  },
+  {
+    "question": "What is a gastronorm (GN) container used for in professional kitchens?",
+    "answers": [
+      "A standardised stainless steel food pan used in steam ovens, bains-marie, and display fridges in defined fraction sizes",
+      "A temperature-controlled transport container for moving plated meals from the kitchen to service areas",
+      "A large non-stick cooking vessel used exclusively for making stocks and sauces in bulk quantities",
+      "A calibrated measuring jug used to ensure consistent portion sizes for liquids and sauces in service"
+    ],
+    "correct": "A standardised stainless steel food pan used in steam ovens, bains-marie, and display fridges in defined fraction sizes"
+  },
+  {
+    "question": "What are the main ingredients in a classic lemon tart (tarte au citron)?",
+    "answers": [
+      "Blind-baked shortcrust or sweet pastry shell, lemon juice, lemon zest, eggs, sugar, and butter",
+      "Sweet pastry, cream cheese, icing sugar, lemon curd, gelatin, and whipped cream",
+      "Pâte sucrée, lemon juice, condensed milk, egg yolks, and a meringue topping",
+      "Shortcrust pastry, lemon zest, double cream, whole eggs, caster sugar, and cornflour"
+    ],
+    "correct": "Blind-baked shortcrust or sweet pastry shell, lemon juice, lemon zest, eggs, sugar, and butter"
+  },
+  {
+    "question": "What is the difference between steaming and boiling as cooking methods?",
+    "answers": [
+      "Steaming cooks food above the water without contact, preserving more nutrients; boiling submerges food in water at 100°C",
+      "Steaming is only suitable for vegetables; boiling is required for proteins to ensure safe core temperatures are reached",
+      "Steaming uses a lower temperature than boiling and is therefore a slower method for all types of food",
+      "Boiling preserves more vitamins; steaming leaches nutrients into the water and is best avoided for vegetables"
+    ],
+    "correct": "Steaming cooks food above the water without contact, preserving more nutrients; boiling submerges food in water at 100°C"
+  },
+  {
+    "question": "What is the purpose of blind baking a pastry case?",
+    "answers": [
+      "To pre-cook the pastry base before adding a filling so it does not go soggy during the final bake",
+      "To test the pastry for any cracks before filling to prevent the filling leaking during cooking",
+      "To caramelise the inner surface of the pastry case so the filling does not stick to it",
+      "To allow the pastry to shrink fully before filling so it fits the tin precisely after cooling"
+    ],
+    "correct": "To pre-cook the pastry base before adding a filling so it does not go soggy during the final bake"
+  },
+  {
+    "question": "What are the main ingredients in a classic risotto Milanese?",
+    "answers": [
+      "Carnaroli rice, saffron, dry white wine, warm chicken or veal stock, Parmesan, and butter",
+      "Arborio rice, white wine, mushrooms, Parmesan, butter, and a pinch of nutmeg",
+      "Short-grain rice, saffron, cream, dry vermouth, onion, and aged Gruyère",
+      "Carnaroli rice, turmeric, white wine, warm vegetable stock, mascarpone, and Pecorino"
+    ],
+    "correct": "Carnaroli rice, saffron, dry white wine, warm chicken or veal stock, Parmesan, and butter"
+  },
+  {
+    "question": "What is the smoke point and why does it matter when cooking with oil?",
+    "answers": [
+      "The temperature at which an oil begins to burn and break down, producing harmful compounds and bitter flavours",
+      "The temperature at which oil becomes viscous enough to coat food evenly during a shallow fry",
+      "The point at which oil reaches the correct temperature for deep frying as indicated by a thin wisp of steam",
+      "The maximum temperature at which an oil remains liquid without solidifying in a cool kitchen environment"
+    ],
+    "correct": "The temperature at which an oil begins to burn and break down, producing harmful compounds and bitter flavours"
+  },
+  {
+    "question": "What is a court bouillon?",
+    "answers": [
+      "A quick-cook aromatic poaching liquid of water, white wine or vinegar, vegetables, and herbs used for fish and shellfish",
+      "A quickly made light chicken stock used as a base for velouté and cream soups in classic cuisine",
+      "A short reduction of red wine and shallots used as the base for a classic red wine butter sauce",
+      "A concentrated aromatic broth made from fish bones, white wine, and cream used in seafood bisques"
+    ],
+    "correct": "A quick-cook aromatic poaching liquid of water, white wine or vinegar, vegetables, and herbs used for fish and shellfish"
+  },
+  {
+    "question": "What are the main ingredients in a classic crème pâtissière (pastry cream)?",
+    "answers": [
+      "Milk, egg yolks, caster sugar, cornflour or plain flour, and vanilla",
+      "Double cream, whole eggs, icing sugar, gelatin, and vanilla extract",
+      "Milk, whole eggs, caster sugar, arrowroot, butter, and lemon zest",
+      "Single cream, egg yolks, cornflour, caster sugar, and orange blossom water"
+    ],
+    "correct": "Milk, egg yolks, caster sugar, cornflour or plain flour, and vanilla"
+  },
+  {
+    "question": "What is the difference between a compote and a coulis?",
+    "answers": [
+      "A compote is cooked fruit pieces in syrup; a coulis is a smooth sieved fruit purée",
+      "A compote is always cold; a coulis is always served warm alongside a hot dessert",
+      "A compote uses only stone fruits; a coulis is exclusively made from berries and citrus",
+      "They are interchangeable terms for the same fruit-based sauce in modern pastry"
+    ],
+    "correct": "A compote is cooked fruit pieces in syrup; a coulis is a smooth sieved fruit purée"
+  },
+  {
+    "question": "What are the ingredients in a classic chimichurri sauce?",
+    "answers": [
+      "Fresh parsley, garlic, oregano, red wine vinegar, olive oil, chilli flakes, and salt",
+      "Fresh coriander, lime juice, garlic, jalapeño, olive oil, and toasted cumin",
+      "Fresh herbs, anchovy paste, capers, red wine vinegar, Dijon mustard, and oil",
+      "Flat-leaf parsley, red pepper, onion, sherry vinegar, olive oil, and smoked paprika"
+    ],
+    "correct": "Fresh parsley, garlic, oregano, red wine vinegar, olive oil, chilli flakes, and salt"
+  },
+  {
+    "question": "What is the purpose of adding salt to pasta water?",
+    "answers": [
+      "To season the pasta from within as it cooks, since pasta absorbs water and flavour during cooking",
+      "To raise the boiling point of the water significantly, reducing the cooking time needed",
+      "To prevent the pasta from sticking together by changing the surface tension of the water",
+      "To activate the gluten in the pasta dough so it holds its shape throughout cooking"
+    ],
+    "correct": "To season the pasta from within as it cooks, since pasta absorbs water and flavour during cooking"
+  },
+  {
+    "question": "What are the main ingredients in a classic French vinaigrette (sauce vinaigrette)?",
+    "answers": [
+      "Dijon mustard, red wine vinegar, olive oil, salt, pepper, and optionally a little honey or shallot",
+      "Whole grain mustard, balsamic vinegar, walnut oil, garlic, and fresh tarragon",
+      "English mustard, white wine vinegar, sunflower oil, caster sugar, and chives",
+      "Dijon mustard, apple cider vinegar, extra virgin olive oil, garlic, and dried herbs"
+    ],
+    "correct": "Dijon mustard, red wine vinegar, olive oil, salt, pepper, and optionally a little honey or shallot"
+  },
+  {
+    "question": "What are the main ingredients in a classic bread sauce?",
+    "answers": [
+      "Whole milk, white breadcrumbs, onion studded with cloves and bay, butter, and seasoning",
+      "Double cream, fresh white breadcrumbs, garlic, thyme, and grated nutmeg",
+      "Whole milk, brioche crumbs, shallots, white pepper, cream, and a bay leaf",
+      "Single cream, stale white bread, onion, mustard powder, and ground mace"
+    ],
+    "correct": "Whole milk, white breadcrumbs, onion studded with cloves and bay, butter, and seasoning"
+  },
+  {
+    "question": "What is the correct temperature for deep frying most foods?",
+    "answers": [
+      "175–190°C (350–375°F)",
+      "140–155°C (285–310°F)",
+      "200–215°C (390–420°F)",
+      "160–170°C (320–340°F)"
+    ],
+    "correct": "175–190°C (350–375°F)"
+  },
+  {
+    "question": "What are the classic flavouring ingredients in a beurre blanc sauce?",
+    "answers": [
+      "White wine, white wine vinegar, shallots, cold unsalted butter, and seasoning",
+      "White wine, lemon juice, shallots, clarified butter, cream, and fresh dill",
+      "Dry vermouth, shallots, cold salted butter, cream, and fresh chervil",
+      "White wine, shallots, fish stock, whole butter, and a pinch of cayenne"
+    ],
+    "correct": "White wine, white wine vinegar, shallots, cold unsalted butter, and seasoning"
+  },
+  {
+    "question": "What is the ideal internal temperature for a medium-rare lamb rack?",
+    "answers": [
+      "57–60°C (135–140°F) after a brief rest",
+      "71–74°C (160–165°F) after a brief rest",
+      "49–52°C (120–125°F) after a brief rest",
+      "63–66°C (145–150°F) after a brief rest"
+    ],
+    "correct": "57–60°C (135–140°F) after a brief rest"
+  },
+  {
+    "question": "What are the main ingredients in a classic tapenade?",
+    "answers": [
+      "Black olives, capers, anchovies, garlic, olive oil, and lemon juice",
+      "Green olives, sun-dried tomatoes, garlic, basil, and extra virgin olive oil",
+      "Black olives, roasted red peppers, capers, olive oil, and smoked paprika",
+      "Kalamata olives, walnuts, garlic, fresh thyme, red wine vinegar, and oil"
+    ],
+    "correct": "Black olives, capers, anchovies, garlic, olive oil, and lemon juice"
+  },
+  {
+    "question": "What is the purpose of a water bath (bain-marie) in baking?",
+    "answers": [
+      "To provide gentle, even heat that prevents egg-based mixtures from curdling or overcooking",
+      "To add steam to the oven to create a crisp crust on bread and enriched doughs",
+      "To maintain fat at a liquid state for continuous basting of roasting meats",
+      "To keep a sauce warm at a consistent temperature during a long service period"
+    ],
+    "correct": "To provide gentle, even heat that prevents egg-based mixtures from curdling or overcooking"
+  },
+  {
+    "question": "What are the main ingredients in a classic sauce vierge?",
+    "answers": [
+      "Ripe tomatoes, lemon juice, olive oil, coriander seeds, basil, and shallots",
+      "Cherry tomatoes, red wine vinegar, garlic, capers, tarragon, and olive oil",
+      "Concassé tomatoes, balsamic vinegar, basil, pine nuts, and extra virgin olive oil",
+      "Fresh tomatoes, lemon zest, olive oil, anchovy, oregano, and spring onion"
+    ],
+    "correct": "Ripe tomatoes, lemon juice, olive oil, coriander seeds, basil, and shallots"
+  },
+  {
+    "question": "What does 'reducing' a sauce mean?",
+    "answers": [
+      "Simmering or boiling it to evaporate water, concentrating flavour and thickening the consistency",
+      "Adding a starch-based thickener (cornflour or roux) to increase the sauce's viscosity",
+      "Straining it through a fine sieve to remove solid particles and produce a smooth texture",
+      "Cooling it rapidly over ice to stop the cooking process and prevent over-reduction"
+    ],
+    "correct": "Simmering or boiling it to evaporate water, concentrating flavour and thickening the consistency"
+  }
+]

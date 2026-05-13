@@ -58,5 +58,10 @@
     "file": "book_collecting.json",
     "label": "Book Collecting (ABC)",
     "count": 65
+  },
+  {
+    "file": "cooking.json",
+    "label": "Cooking & Food Science",
+    "count": 100
   }
 ]
