@@ -656,6 +656,8 @@ window.goldenRing = goldenRing;
         ocean:    ['#2dd4bf','#67e8f9','#040e14'],
         amber:    ['#fbbf24','#fde68a','#0f0b04'],
         caveman:  ['#e8732a','#f0b040','#1c1008'],
+        win95:    ['#000080','#d4d0c8','#008080'],
+        aero:     ['#4fa3e0','#a8d4f5','#0d1b3e'],
     };
 
     // ── Caveman theme: text translations ─────────────────────────
