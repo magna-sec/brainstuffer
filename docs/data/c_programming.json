@@ -1,0 +1,225 @@
+[
+  {"question": "What does malloc return on allocation failure?", "answers": ["NULL", "0", "-1", "ENOMEM"], "correct": "NULL"},
+  {"question": "What is a dangling pointer?", "answers": ["A pointer to memory that has already been freed", "A pointer that was never initialised", "A pointer to a local variable after it goes out of scope", "Both B and C are dangling pointers"], "correct": "Both B and C are dangling pointers"},
+  {"question": "What is the key difference between malloc and calloc?", "answers": ["calloc initialises allocated memory to zero; malloc does not", "calloc takes one argument; malloc takes two", "malloc is faster; calloc is safer for sensitive data", "They are identical — calloc is just an alias"], "correct": "calloc initialises allocated memory to zero; malloc does not"},
+  {"question": "What does the 'static' keyword do to a local variable?", "answers": ["Makes the variable persist across function calls (stored in BSS/data, not the stack)", "Makes the variable visible across all translation units", "Makes the variable read-only", "Allocates the variable on the heap"], "correct": "Makes the variable persist across function calls (stored in BSS/data, not the stack)"},
+  {"question": "What does sizeof(char) always evaluate to?", "answers": ["1", "2", "Platform-dependent", "4"], "correct": "1"},
+  {"question": "What typically causes a segmentation fault?", "answers": ["Accessing memory the process is not permitted to access (null/dangling/out-of-bounds pointer)", "An integer overflow", "Calling free() twice", "Forgetting to return from main"], "correct": "Accessing memory the process is not permitted to access (null/dangling/out-of-bounds pointer)"},
+  {"question": "What does 'volatile' tell the compiler about a variable?", "answers": ["Do not optimise away reads/writes — the value may change outside the compiler's knowledge", "The variable is stored in a CPU register", "The variable is constant after initialisation", "The variable is thread-safe"], "correct": "Do not optimise away reads/writes — the value may change outside the compiler's knowledge"},
+  {"question": "What is undefined behaviour in C?", "answers": ["Code where the standard places no requirements on the result — anything can happen", "Code that crashes the program", "Code that produces a compiler error", "Code that is implementation-defined but documented"], "correct": "Code where the standard places no requirements on the result — anything can happen"},
+  {"question": "What does 'extern' do in a variable declaration?", "answers": ["Declares a variable defined in another translation unit without allocating storage here", "Declares the variable as external (heap-allocated)", "Makes the variable visible to external programs", "Forces the variable into a specific memory segment"], "correct": "Declares a variable defined in another translation unit without allocating storage here"},
+  {"question": "What does NULL evaluate to in C?", "answers": ["0 (a null pointer constant)", "An empty string", "-1", "The address 0xFFFFFFFF"], "correct": "0 (a null pointer constant)"},
+  {"question": "What is the maximum value of an unsigned char?", "answers": ["255", "127", "256", "65535"], "correct": "255"},
+  {"question": "What does the '%p' format specifier print in printf?", "answers": ["A pointer value (address) in hexadecimal", "A percentage sign followed by a value", "A platform-specific pointer string", "The pointed-to value in decimal"], "correct": "A pointer value (address) in hexadecimal"},
+  {"question": "What is a union in C?", "answers": ["A type where all members share the same memory location — only one can hold a value at a time", "A struct with all members set to the same type", "A collection that can hold multiple values simultaneously", "An anonymous struct inside another struct"], "correct": "A type where all members share the same memory location — only one can hold a value at a time"},
+  {"question": "What does fclose do?", "answers": ["Closes an open file stream and flushes any buffered data to disk", "Frees the FILE pointer from heap memory", "Closes the file and removes it", "Marks the file as read-only"], "correct": "Closes an open file stream and flushes any buffered data to disk"},
+  {"question": "What operator yields the address of a variable?", "answers": ["& (address-of operator)", "* (dereference operator)", "-> (arrow operator)", "@ (AT operator)"], "correct": "& (address-of operator)"},
+  {"question": "What is the purpose of typedef in C?", "answers": ["Creates an alias for an existing type to improve readability", "Defines a new primitive type", "Restricts a type to a specific range", "Makes a type available across translation units"], "correct": "Creates an alias for an existing type to improve readability"},
+  {"question": "What does free() do?", "answers": ["Returns heap memory to the allocator so it can be reused", "Zeroes the memory and returns it", "Terminates the allocation and the pointer", "Removes the pointer from the variable table"], "correct": "Returns heap memory to the allocator so it can be reused"},
+  {"question": "What is a void pointer (void*)?", "answers": ["A generic pointer that can point to any type but cannot be dereferenced directly", "A pointer to a void function", "A pointer guaranteed to be NULL", "A pointer with no storage associated"], "correct": "A generic pointer that can point to any type but cannot be dereferenced directly"},
+  {"question": "What is a function pointer in C?", "answers": ["A variable that stores the address of a function and can be used to call it indirectly", "A pointer passed as an argument to a function", "A return type indicating a function returns a pointer", "A macro that wraps a function call"], "correct": "A variable that stores the address of a function and can be used to call it indirectly"},
+  {"question": "What does the ternary operator ?: do?", "answers": ["Evaluates a condition; returns the second expression if true, the third if false", "Performs a three-way comparison", "Declares three variables at once", "Combines two boolean conditions"], "correct": "Evaluates a condition; returns the second expression if true, the third if false"},
+  {
+    "question": "What does this code print?",
+    "code": "int x = 5;\nprintf(\"%d\", x++);",
+    "code_lang": "c",
+    "answers": ["5", "6", "4", "Undefined behaviour"],
+    "correct": "5"
+  },
+  {
+    "question": "What is the output?",
+    "code": "int a = 10;\nint b = 3;\nprintf(\"%d\", a / b);",
+    "code_lang": "c",
+    "answers": ["3", "3.33", "4", "0"],
+    "correct": "3"
+  },
+  {
+    "question": "What does this print?",
+    "code": "int arr[3] = {10, 20, 30};\nint *p = arr;\nprintf(\"%d\", *(p + 2));",
+    "code_lang": "c",
+    "answers": ["30", "20", "10", "Undefined behaviour"],
+    "correct": "30"
+  },
+  {
+    "question": "What is the problem with this code?",
+    "code": "char buf[4];\nstrcpy(buf, \"Hello\");",
+    "code_lang": "c",
+    "answers": ["Buffer overflow: 'Hello' needs 6 bytes but buf is only 4", "buf is uninitialised before use", "strcpy requires a non-const destination", "Hello cannot be assigned to a char array directly"],
+    "correct": "Buffer overflow: 'Hello' needs 6 bytes but buf is only 4"
+  },
+  {
+    "question": "What is printed?",
+    "code": "int i = 0;\nwhile (i < 3) {\n    printf(\"%d \", i);\n    i++;\n}",
+    "code_lang": "c",
+    "answers": ["0 1 2 ", "1 2 3 ", "0 1 2 3 ", "0 1"],
+    "correct": "0 1 2 "
+  },
+  {
+    "question": "What does this print?",
+    "code": "int x = 5;\nint *p = &x;\n*p = 10;\nprintf(\"%d\", x);",
+    "code_lang": "c",
+    "answers": ["10", "5", "0", "Address of x"],
+    "correct": "10"
+  },
+  {
+    "question": "What is the output?",
+    "code": "int x = 3;\nint y = x++;\nprintf(\"%d %d\", x, y);",
+    "code_lang": "c",
+    "answers": ["4 3", "3 3", "4 4", "3 4"],
+    "correct": "4 3"
+  },
+  {
+    "question": "What does this code print? (Spot the bug)",
+    "code": "int x = 5;\nif (x = 3) {\n    printf(\"true\");\n} else {\n    printf(\"false\");\n}",
+    "code_lang": "c",
+    "answers": ["true (assignment returns 3, which is truthy — common bug)", "false (x is 5, not 3)", "Compiler error", "Undefined behaviour"],
+    "correct": "true (assignment returns 3, which is truthy — common bug)"
+  },
+  {
+    "question": "What does this typically print on a 32-bit or 64-bit x86 platform?",
+    "code": "printf(\"%zu\", sizeof(int));",
+    "code_lang": "c",
+    "answers": ["4", "2", "8", "Platform-dependent — no guaranteed output"],
+    "correct": "4"
+  },
+  {
+    "question": "What is printed?",
+    "code": "int a = 0xFF;\nprintf(\"%d\", a >> 4);",
+    "code_lang": "c",
+    "answers": ["15", "255", "16", "0"],
+    "correct": "15"
+  },
+  {
+    "question": "What is printed?",
+    "code": "char *s = \"hello\";\nprintf(\"%d\", (int)strlen(s));",
+    "code_lang": "c",
+    "answers": ["5", "6", "4", "Null terminator is counted, so 6"],
+    "correct": "5"
+  },
+  {
+    "question": "What is printed?",
+    "code": "int x = 0;\nx |= (1 << 3);\nprintf(\"%d\", x);",
+    "code_lang": "c",
+    "answers": ["8", "3", "1", "0"],
+    "correct": "8"
+  },
+  {
+    "question": "What does this print?",
+    "code": "int arr[] = {1, 2, 3};\nprintf(\"%zu\", sizeof(arr) / sizeof(arr[0]));",
+    "code_lang": "c",
+    "answers": ["3", "12", "1", "sizeof is not defined for arrays"],
+    "correct": "3"
+  },
+  {
+    "question": "What is the problem with this code?",
+    "code": "int *p = malloc(sizeof(int));\n*p = 42;\nfree(p);\nprintf(\"%d\", *p);",
+    "code_lang": "c",
+    "answers": ["Use-after-free: p is a dangling pointer after free()", "Nothing — free() only marks the memory, *p is still readable", "malloc returns NULL here, causing a crash on line 2", "printf does not accept an int pointer"],
+    "correct": "Use-after-free: p is a dangling pointer after free()"
+  },
+  {
+    "question": "What is printed?",
+    "code": "int x = -1;\nunsigned int y = x;\nprintf(\"%u\", y);",
+    "code_lang": "c",
+    "answers": ["4294967295", "-1", "0", "Undefined behaviour"],
+    "correct": "4294967295"
+  },
+  {
+    "question": "What does this print? (x = 7 = 0b0111)",
+    "code": "int x = 7;\nx &= ~(1 << 1);\nprintf(\"%d\", x);",
+    "code_lang": "c",
+    "answers": ["5", "6", "3", "7"],
+    "correct": "5"
+  },
+  {
+    "question": "What is printed?",
+    "code": "printf(\"%d\", 5 ^ 2);",
+    "code_lang": "c",
+    "answers": ["7", "3", "10", "0"],
+    "correct": "7"
+  },
+  {
+    "question": "What does this function return when called with n = 5?",
+    "code": "int fib(int n) {\n    if (n <= 1) return n;\n    return fib(n-1) + fib(n-2);\n}",
+    "code_lang": "c",
+    "answers": ["5", "8", "3", "Infinite recursion"],
+    "correct": "5"
+  },
+  {
+    "question": "What is printed?",
+    "code": "printf(\"%c\", \"hello\"[1]);",
+    "code_lang": "c",
+    "answers": ["e", "h", "l", "Address of 'e'"],
+    "correct": "e"
+  },
+  {
+    "question": "What is the output?",
+    "code": "int a = 3, b = 4;\nint c = a++ + ++b;\nprintf(\"%d %d %d\", a, b, c);",
+    "code_lang": "c",
+    "answers": ["4 5 8", "4 5 7", "3 5 8", "4 4 8"],
+    "correct": "4 5 8"
+  },
+  {
+    "question": "What does this function effectively compute?",
+    "code": "int func(char *s) {\n    int n = 0;\n    while (*s++) n++;\n    return n;\n}",
+    "code_lang": "c",
+    "answers": ["The length of string s (same as strlen)", "The number of non-null bytes in a fixed buffer", "The address of the null terminator", "The number of unique characters"],
+    "correct": "The length of string s (same as strlen)"
+  },
+  {
+    "question": "What does this print?",
+    "code": "int x = 0xFF;\nprintf(\"%d\", x & 0x0F);",
+    "code_lang": "c",
+    "answers": ["15", "255", "0", "0xF0"],
+    "correct": "15"
+  },
+  {
+    "question": "What is the output?",
+    "code": "#include <stdio.h>\nint main(void) {\n    int i;\n    for (i = 0; i < 5; i += 2)\n        printf(\"%d \", i);\n    return 0;\n}",
+    "code_lang": "c",
+    "answers": ["0 2 4 ", "0 1 2 3 4 ", "1 3 5 ", "0 2 4 6 "],
+    "correct": "0 2 4 "
+  },
+  {
+    "question": "What does this print?",
+    "code": "int x = 1;\nswitch (x) {\n    case 1: printf(\"one\");\n    case 2: printf(\"two\");\n    default: printf(\"def\");\n}",
+    "code_lang": "c",
+    "answers": ["onetwodef", "one", "onetwo", "Compiler error — missing break"],
+    "correct": "onetwodef"
+  },
+  {
+    "question": "What does this print?",
+    "code": "int arr[3] = {0};\narr[1] = 99;\nprintf(\"%d %d %d\", arr[0], arr[1], arr[2]);",
+    "code_lang": "c",
+    "answers": ["0 99 0", "99 0 0", "0 0 99", "Undefined — arr is partially uninitialised"],
+    "correct": "0 99 0"
+  },
+  {
+    "question": "What does this output?",
+    "code": "int x = 10;\ndo {\n    printf(\"%d \", x);\n    x -= 3;\n} while (x > 0);",
+    "code_lang": "c",
+    "answers": ["10 7 4 1 ", "10 7 4 ", "10 7 ", "7 4 1 "],
+    "correct": "10 7 4 1 "
+  },
+  {
+    "question": "What does this print?",
+    "code": "int x = 5, y = 10;\nint *p = &x, *q = &y;\n*p = *q;\nprintf(\"%d %d\", x, y);",
+    "code_lang": "c",
+    "answers": ["10 10", "5 10", "10 5", "5 5"],
+    "correct": "10 10"
+  },
+  {
+    "question": "What is the output?",
+    "code": "int x = 16;\nwhile (x > 1) x >>= 1;\nprintf(\"%d\", x);",
+    "code_lang": "c",
+    "answers": ["1", "0", "2", "16"],
+    "correct": "1"
+  },
+  {
+    "question": "What does this macro expand to for SQUARE(3+1)?",
+    "code": "#define SQUARE(x) x*x\n// SQUARE(3+1) expands to:",
+    "code_lang": "c",
+    "answers": ["3+1*3+1 = 7 (not 16 — classic macro bug)", "16 (correctly computes (3+1)*(3+1))", "Compiler error", "10"],
+    "correct": "3+1*3+1 = 7 (not 16 — classic macro bug)"
+  }
+]

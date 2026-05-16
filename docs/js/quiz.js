@@ -22,6 +22,8 @@ async function startQuiz() {
             question_id: q.question_id || 0,
             question: q.question,
             image: q.image || null,
+            code: q.code || null,
+            code_lang: q.code_lang || null,
             answers: shuffle(answers),
             correct: correct,
         };
@@ -57,6 +59,8 @@ function showQuizQuestion() {
                     question_id: q.question_id,
                     question: q.question,
                     image: q.image || null,
+                    code: q.code || null,
+                    code_lang: q.code_lang || null,
                     answers: shuffle(answers),
                     correct: q.correct,
                 };
@@ -93,6 +97,16 @@ function showQuizQuestion() {
         else { qImg.src = ''; qImg.style.display = 'none'; }
     }
     document.getElementById('quiz-q-text').textContent = question.question;
+
+    var codeEl = document.getElementById('quiz-q-code');
+    if (codeEl) {
+        if (question.code) {
+            codeEl.innerHTML = highlightCode(question.code, question.code_lang || 'c');
+            codeEl.style.display = '';
+        } else {
+            codeEl.style.display = 'none';
+        }
+    }
 
     if (window.renderQuip) window.renderQuip();
 
@@ -150,6 +164,8 @@ function submitAnswer() {
                 question: question.question,
                 answers: question.answers,
                 correct: correct,
+                code: question.code || null,
+                code_lang: question.code_lang || null,
             });
         }
     }
@@ -335,6 +351,8 @@ async function restartQuiz() {
         return {
             question_id: q.question_id || 0,
             question: q.question,
+            code: q.code || null,
+            code_lang: q.code_lang || null,
             answers: shuffle(answers),
             correct: correct,
         };

@@ -1494,3 +1494,25 @@ body.quiz-mode .logo-tagline { display: none; }
     justify-content: center;
 }
 #fc-progress-wrap { margin-bottom: 1rem; }
+
+/* ── Code blocks ────────────────────────────────────────────── */
+.code-block {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: #c9d1d9;
+    overflow-x: auto;
+    margin: 0.5rem 0 1rem;
+    white-space: pre;
+    text-align: left;
+}
+.hl-kw  { color: #ff7b72; }
+.hl-reg { color: #79c0ff; }
+.hl-num { color: #a5d6ff; }
+.hl-str { color: #a8d8a8; }
+.hl-cmt { color: #8b949e; font-style: italic; }
+.hl-pre { color: #d2a679; }

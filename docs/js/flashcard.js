@@ -41,6 +41,16 @@ function fcShowCard() {
     card.classList.remove('flipped');
     document.getElementById('fc-question-text').textContent = q.question;
 
+    var fcCodeEl = document.getElementById('fc-q-code');
+    if (fcCodeEl) {
+        if (q.code) {
+            fcCodeEl.innerHTML = highlightCode(q.code, q.code_lang || 'c');
+            fcCodeEl.style.display = '';
+        } else {
+            fcCodeEl.style.display = 'none';
+        }
+    }
+
     // Delay back-face update so it's safely hidden before content changes
     setTimeout(function() {
         document.getElementById('fc-answer-text').textContent = correctAns;

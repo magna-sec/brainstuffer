@@ -63,5 +63,30 @@
     "file": "cooking.json",
     "label": "Cooking & Food Science",
     "count": 100
+  },
+  {
+    "file": "music_theory.json",
+    "label": "Music Theory",
+    "count": 63
+  },
+  {
+    "file": "windows_api.json",
+    "label": "Win32 API",
+    "count": 59
+  },
+  {
+    "file": "windows_internals_re.json",
+    "label": "Windows Internals RE",
+    "count": 61
+  },
+  {
+    "file": "c_programming.json",
+    "label": "C Programming",
+    "count": 49
+  },
+  {
+    "file": "intel_x86_asm.json",
+    "label": "Intel x86 Assembly",
+    "count": 54
   }
 ]
