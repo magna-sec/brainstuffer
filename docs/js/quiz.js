@@ -24,6 +24,7 @@ async function startQuiz() {
             image: q.image || null,
             code: q.code || null,
             code_lang: q.code_lang || null,
+            explanation: q.explanation || null,
             answers: shuffle(answers),
             correct: correct,
         };
@@ -61,6 +62,7 @@ function showQuizQuestion() {
                     image: q.image || null,
                     code: q.code || null,
                     code_lang: q.code_lang || null,
+                    explanation: q.explanation || null,
                     answers: shuffle(answers),
                     correct: q.correct,
                 };
@@ -166,6 +168,7 @@ function submitAnswer() {
                 correct: correct,
                 code: question.code || null,
                 code_lang: question.code_lang || null,
+                explanation: question.explanation || null,
             });
         }
     }
@@ -192,6 +195,7 @@ function submitAnswer() {
         elapsed: Math.floor(elapsed),
         isReview: store.is_review,
         xpResult,
+        explanation: question.explanation || null,
     });
 }
 
@@ -209,6 +213,15 @@ function showFeedback(data) {
         html += '<div class="answer-box answer-wrong"><strong>Your answer:</strong> ' + escHtml(data.selectedVal || '(none)') + '</div>';
     }
     html += '<div class="answer-box answer-correct"><strong>Correct answer:</strong> ' + escHtml(data.correct) + '</div>';
+
+    if (data.explanation) {
+        if (!data.isCorrect) {
+            html += '<div class="explanation-box"><span class="explanation-label">Explanation</span>' + escHtml(data.explanation) + '</div>';
+        } else {
+            html += '<button class="btn btn-muted btn-explain" id="btn-explain">Explain &#9660;</button>'
+                  + '<div class="explanation-box" id="explain-box" style="display:none"><span class="explanation-label">Explanation</span>' + escHtml(data.explanation) + '</div>';
+        }
+    }
 
     if (data.xpResult && data.xpResult.xpChange !== 0) {
         const gained = data.xpResult.xpChange > 0;
@@ -236,6 +249,14 @@ function showFeedback(data) {
     html += '</div>';
 
     document.getElementById('fb-card').innerHTML = html;
+
+    const explainBtn = document.getElementById('btn-explain');
+    if (explainBtn) {
+        explainBtn.addEventListener('click', function() {
+            const box = document.getElementById('explain-box');
+            if (box) { box.style.display = ''; explainBtn.style.display = 'none'; }
+        });
+    }
 
     if (window.renderQuip) window.renderQuip();
 
@@ -353,6 +374,7 @@ async function restartQuiz() {
             question: q.question,
             code: q.code || null,
             code_lang: q.code_lang || null,
+            explanation: q.explanation || null,
             answers: shuffle(answers),
             correct: correct,
         };

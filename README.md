@@ -20,7 +20,9 @@ A client-side flashcard quiz app hosted on GitHub Pages. Load multiple-choice qu
 - Download a YAML template or AI prompt to generate new quiz sets
 - Load quiz files directly from a public GitHub repository
 - Encrypt quiz files with a password and share them as `.bsq` files
-- 5 colour skins (Phantom, Matrix, Hellfire, Abyss, Reactor)
+- **Syntax-highlighted code blocks** for C and x86 ASM quiz questions
+- **Explanation system** — wrong answers auto-show an explanation; correct answers reveal one on demand via an "Explain" button
+- 8 colour skins (Phantom, Matrix, Hellfire, Abyss, Reactor, Win 95, Aero, Caveman)
 - XP & level system, celebration animations, and easter eggs
 - Fully mobile responsive
 
@@ -57,18 +59,23 @@ brainstuffer/
 │   │   ├── crypto.js
 │   │   └── utils.js
 │   └── data/
-│       ├── manifest.json          # Quiz file index
-│       ├── generic_cyber.json     # General cybersecurity (428 questions)
-│       ├── classic_literature.json# Classic Literature & Authors (75 questions)
-│       ├── science_discovery.json # Science & Discovery (74 questions)
-│       ├── world_history.json     # World History (99 questions)
-│       ├── geography.json         # Geography (78 questions)
-│       ├── mathematics_logic.json # Mathematics & Logic (50 questions)
-│       ├── philosophy.json        # Philosophy (59 questions)
-│       ├── astronomy_space.json   # Astronomy & Space (76 questions)
-│       ├── music_history.json     # Music Theory & History (75 questions)
-│       ├── antiques_collecting.json# Antiques & Collecting (70 questions)
-│       └── example_quiz.bsq      # Example encrypted quiz file
+│       ├── manifest.json              # Quiz file index
+│       ├── generic_cyber.json         # General cybersecurity (428 questions)
+│       ├── classic_literature.json    # Classic Literature & Authors (75 questions)
+│       ├── science_discovery.json     # Science & Discovery (74 questions)
+│       ├── world_history.json         # World History (99 questions)
+│       ├── geography.json             # Geography (78 questions)
+│       ├── mathematics_logic.json     # Mathematics & Logic (50 questions)
+│       ├── philosophy.json            # Philosophy (59 questions)
+│       ├── astronomy_space.json       # Astronomy & Space (76 questions)
+│       ├── music_history.json         # Music Theory & History (75 questions)
+│       ├── antiques_collecting.json   # Antiques & Collecting (70 questions)
+│       ├── music_theory.json          # Music Theory (63 questions)
+│       ├── windows_api.json           # Win32 API (59 questions)
+│       ├── windows_internals_re.json  # Windows Internals RE (61 questions, explanations)
+│       ├── c_programming.json         # C Programming with code blocks (49 questions, explanations)
+│       ├── intel_x86_asm.json         # Intel x86 Assembly with code blocks (54 questions, explanations)
+│       └── example_quiz.bsq           # Example encrypted quiz file
 ├── convert_to_json.py             # YAML to JSON converter for adding new quizzes
 ├── .gitignore
 └── README.md
@@ -100,17 +107,43 @@ The first answer in the list is always the correct one. Answers are shuffled bef
     - "Access Registration Protocol"
 ```
 
+## JSON Format (extended)
+
+Quiz files stored in `docs/data/` are JSON arrays. Each question supports optional code block and explanation fields:
+
+```json
+[
+  {
+    "question": "What does this function return?",
+    "answers": ["Correct answer", "Wrong 1", "Wrong 2", "Wrong 3"],
+    "correct": 0,
+    "code": "int add(int a, int b) {\n    return a + b;\n}",
+    "code_lang": "c",
+    "explanation": "The function adds two integers and returns their sum."
+  }
+]
+```
+
+- `code` — source code snippet displayed above the answers (optional)
+- `code_lang` — `"c"` or `"asm"` — controls syntax highlighting (required when `code` is set)
+- `explanation` — shown automatically on a wrong answer, or on demand via "Explain" button on a correct answer (optional)
+
 ## Included Quiz Sets
 
-| File | Description | Questions |
-|------|-------------|-----------|
-| `generic_cyber.json` | General cybersecurity knowledge | 428 |
-| `world_history.json` | World History | 99 |
-| `geography.json` | Geography | 78 |
-| `astronomy_space.json` | Astronomy & Space | 76 |
-| `classic_literature.json` | Classic Literature & Authors | 75 |
-| `music_history.json` | Music Theory & History | 75 |
-| `science_discovery.json` | Science & Discovery | 74 |
-| `antiques_collecting.json` | Antiques & Collecting | 70 |
-| `philosophy.json` | Philosophy | 59 |
-| `mathematics_logic.json` | Mathematics & Logic | 50 |
+| File | Description | Questions | Code blocks | Explanations |
+|------|-------------|-----------|-------------|--------------|
+| `generic_cyber.json` | General cybersecurity knowledge | 428 | | |
+| `world_history.json` | World History | 99 | | |
+| `geography.json` | Geography | 78 | | |
+| `astronomy_space.json` | Astronomy & Space | 76 | | |
+| `classic_literature.json` | Classic Literature & Authors | 75 | | |
+| `music_history.json` | Music Theory & History | 75 | | |
+| `science_discovery.json` | Science & Discovery | 74 | | |
+| `antiques_collecting.json` | Antiques & Collecting | 70 | | |
+| `philosophy.json` | Philosophy | 59 | | |
+| `windows_api.json` | Win32 API | 59 | | |
+| `mathematics_logic.json` | Mathematics & Logic | 50 | | |
+| `music_theory.json` | Music Theory | 63 | | |
+| `windows_internals_re.json` | Windows Internals & Reverse Engineering | 61 | | ✓ |
+| `intel_x86_asm.json` | Intel x86 Assembly | 54 | ✓ (ASM) | ✓ |
+| `c_programming.json` | C Programming | 49 | ✓ (C) | ✓ |

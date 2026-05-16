@@ -1,63 +1,368 @@
 [
-  {"question": "In WinDbg, which single-character command continues execution of the debuggee?", "answers": ["g", "t", "p", "r"], "correct": "g"},
-  {"question": "What does the WinDbg command 'bp 0x00401000' do?", "answers": ["Sets a software breakpoint at address 0x00401000", "Lists all breakpoints at that address", "Breaks immediately and jumps to that address", "Clears the breakpoint at that address"], "correct": "Sets a software breakpoint at address 0x00401000"},
-  {"question": "Which WinDbg command lists all currently set breakpoints?", "answers": ["bl", "bp", "bd", "be"], "correct": "bl"},
-  {"question": "Which WinDbg command clears (deletes) breakpoint number 0?", "answers": ["bc 0", "bd 0", "bp -0", "bk 0"], "correct": "bc 0"},
-  {"question": "What does the WinDbg 't' command do?", "answers": ["Steps one instruction, stepping INTO calls", "Steps one instruction, stepping OVER calls", "Traces until a return instruction", "Runs until the next breakpoint"], "correct": "Steps one instruction, stepping INTO calls"},
-  {"question": "What does the WinDbg 'p' command do?", "answers": ["Steps one instruction, stepping OVER calls", "Steps one instruction, stepping INTO calls", "Pauses the debuggee", "Prints a register value"], "correct": "Steps one instruction, stepping OVER calls"},
-  {"question": "Which WinDbg command displays the current register values?", "answers": ["r", "d", "u", "k"], "correct": "r"},
-  {"question": "What does 'dd esp' display in WinDbg?", "answers": ["Memory at ESP shown as 32-bit DWORDs", "Memory at ESP shown as bytes", "The value of ESP and EBP registers", "Disassembly starting at ESP"], "correct": "Memory at ESP shown as 32-bit DWORDs"},
-  {"question": "Which WinDbg command disassembles instructions at a given address?", "answers": ["u", "d", "a", "k"], "correct": "u"},
-  {"question": "What does the WinDbg 'k' command display?", "answers": ["The call stack / stack backtrace", "All kernel module addresses", "Kernel objects", "The current thread's key registers"], "correct": "The call stack / stack backtrace"},
-  {"question": "Which WinDbg command lists all loaded module base addresses?", "answers": ["lm", "ml", "modules", "ld"], "correct": "lm"},
-  {"question": "What does 'eb 0x00401000 90' do in WinDbg?", "answers": ["Writes byte 0x90 (NOP) to address 0x00401000", "Enables breakpoint at address 0x00401000", "Edits EBP to the value 0x00401000", "Breaks on execute at 0x00401000"], "correct": "Writes byte 0x90 (NOP) to address 0x00401000"},
-  {"question": "What does the WinDbg command '!analyze -v' do?", "answers": ["Runs verbose automated exception/crash analysis", "Analyses all virtual memory regions", "Lists all loaded modules verbosely", "Verifies symbol loading"], "correct": "Runs verbose automated exception/crash analysis"},
-  {"question": "Which WinDbg command runs the debuggee until it returns from the current function?", "answers": ["gu (go up / step out)", "p", "t", "g ret"], "correct": "gu (go up / step out)"},
-  {"question": "What does 'a 0x00401000' do in WinDbg?", "answers": ["Enters inline assembly mode at that address so you can type instructions", "Analyses memory at that address", "Adds a breakpoint at that address", "Aligns memory at that address"], "correct": "Enters inline assembly mode at that address so you can type instructions"},
-  {"question": "On x86, in which direction does the stack grow?", "answers": ["Towards lower addresses (downward)", "Towards higher addresses (upward)", "In both directions simultaneously", "Horizontally across segments"], "correct": "Towards lower addresses (downward)"},
-  {"question": "In a standard x86 function prologue, what do 'PUSH EBP; MOV EBP, ESP' accomplish?", "answers": ["Save the caller's frame pointer and establish a new stack frame", "Save EBP and allocate local variable space", "Push arguments and set up the return address", "Save all registers before executing function code"], "correct": "Save the caller's frame pointer and establish a new stack frame"},
-  {"question": "In __cdecl calling convention, who cleans the stack after a function call?", "answers": ["The caller", "The callee", "The OS", "Neither; ESP is preserved automatically"], "correct": "The caller"},
-  {"question": "In a typical x86 __cdecl / __stdcall stack frame, what is stored at [EBP+4]?", "answers": ["The saved return address", "The first argument", "The saved EBP", "A local variable"], "correct": "The saved return address"},
-  {"question": "In a typical x86 stack frame, what is stored at [EBP+8]?", "answers": ["The first function argument", "The return address", "The saved EBP", "The second local variable"], "correct": "The first function argument"},
-  {"question": "What is stored at [EBP+0] in a standard stack frame?", "answers": ["The saved EBP from the calling function", "The return address", "The first argument", "A local variable"], "correct": "The saved EBP from the calling function"},
-  {"question": "In __fastcall convention, where are the first two integer arguments passed?", "answers": ["ECX and EDX", "EAX and EBX", "EBX and ECX", "The stack only"], "correct": "ECX and EDX"},
-  {"question": "What does the LEAVE instruction do?", "answers": ["Equivalent to MOV ESP, EBP then POP EBP — tears down the stack frame", "Pops the return address and jumps to it", "Clears all general-purpose registers", "Restores the saved flags register"], "correct": "Equivalent to MOV ESP, EBP then POP EBP — tears down the stack frame"},
-  {"question": "What does RETN 0x10 do differently from RETN?", "answers": ["Pops the return address AND adds 0x10 to ESP, cleaning 16 bytes of arguments", "Returns from 10 functions up the call stack", "Jumps to the address 0x10 bytes past the return address", "Returns with exit code 0x10"], "correct": "Pops the return address AND adds 0x10 to ESP, cleaning 16 bytes of arguments"},
-  {"question": "After a PUSH EBP in a function prologue, ESP changes by how much?", "answers": ["Decreases by 4 bytes", "Increases by 4 bytes", "Decreases by 8 bytes", "Does not change"], "correct": "Decreases by 4 bytes"},
-  {"question": "What does SEH stand for?", "answers": ["Structured Exception Handling", "Software Exception Handler", "Stack Exception Hierarchy", "System Error Handling"], "correct": "Structured Exception Handling"},
-  {"question": "Where is the head of the SEH chain stored on x86 Windows?", "answers": ["FS:[0] (Thread Environment Block)", "The stack pointer (ESP)", "The Process Environment Block (PEB)", "A global kernel structure"], "correct": "FS:[0] (Thread Environment Block)"},
-  {"question": "What are the two fields in an _EXCEPTION_REGISTRATION_RECORD?", "answers": ["Next (pointer to next record) and Handler (pointer to exception handler function)", "Handler (the exception code) and Context (CPU state)", "Address (location of the exception) and Code (error code)", "Frame (stack frame) and Filter (filter expression)"], "correct": "Next (pointer to next record) and Handler (pointer to exception handler function)"},
-  {"question": "What value in the 'Next' field indicates the end of the SEH chain?", "answers": ["0xFFFFFFFF", "NULL (0x00000000)", "0xDEADBEEF", "The address of the OS default handler"], "correct": "0xFFFFFFFF"},
-  {"question": "What does the return value EXCEPTION_CONTINUE_SEARCH (0) from a SEH handler indicate?", "answers": ["The handler did not handle the exception; continue to the next handler in the chain", "Continue execution from the point of the exception", "The exception has been fully handled", "Terminate the process immediately"], "correct": "The handler did not handle the exception; continue to the next handler in the chain"},
-  {"question": "What does the return value EXCEPTION_EXECUTE_HANDLER (1) indicate from a SEH filter?", "answers": ["Execute the __except block and handle the exception", "Ignore the exception and resume execution", "Pass the exception to the next handler", "Terminate with an error message"], "correct": "Execute the __except block and handle the exception"},
-  {"question": "What does EXCEPTION_CONTINUE_EXECUTION (-1) cause?", "answers": ["Execution resumes at the instruction that caused the exception", "The exception handler continues to the next handler", "The process terminates gracefully", "The exception is re-raised"], "correct": "Execution resumes at the instruction that caused the exception"},
-  {"question": "In a classic stack buffer overflow, overflowing a local buffer can overwrite which critical values?", "answers": ["Saved EBP and the saved return address", "Only the saved return address", "The heap metadata headers", "The SEH record stored in the TEB"], "correct": "Saved EBP and the saved return address"},
-  {"question": "What is EIP in x86 context?", "answers": ["The instruction pointer — holds the address of the next instruction to execute", "The extended instruction parameter register", "A register used for integer operations only", "The base pointer for the current stack frame"], "correct": "The instruction pointer — holds the address of the next instruction to execute"},
-  {"question": "What is a NOP sled in exploit development?", "answers": ["A sequence of NOP instructions before shellcode that increases the landing target area", "A chain of RET instructions used to bypass DEP", "A technique for locating the exact offset to the return address", "A method to encode shellcode without null bytes"], "correct": "A sequence of NOP instructions before shellcode that increases the landing target area"},
-  {"question": "Why is the null byte (0x00) commonly avoided in shellcode targeting string-based overflows?", "answers": ["String functions like strcpy stop copying at the null terminator, truncating the payload", "The CPU ignores null bytes in shellcode", "It causes a hardware exception on x86", "It is filtered by all Windows anti-exploit mechanisms"], "correct": "String functions like strcpy stop copying at the null terminator, truncating the payload"},
-  {"question": "What technique uses a 'JMP ESP' gadget to redirect execution after a return address overwrite?", "answers": ["Finding a JMP ESP in a loaded module and overwriting the return address with its address so execution jumps to the stack", "Placing shellcode inside the JMP instruction itself", "Using JMP ESP to bypass ASLR by predicting the stack address", "Calling JMP ESP from the heap to bypass DEP"], "correct": "Finding a JMP ESP in a loaded module and overwriting the return address with its address so execution jumps to the stack"},
-  {"question": "What is DEP (Data Execution Prevention)?", "answers": ["A hardware/software mechanism that marks memory pages as non-executable, preventing code injection in data regions", "A kernel feature that randomises base addresses on each load", "A stack canary implementation in the Windows compiler", "A sandboxing mechanism that prevents cross-process memory access"], "correct": "A hardware/software mechanism that marks memory pages as non-executable, preventing code injection in data regions"},
-  {"question": "What is ASLR?", "answers": ["Address Space Layout Randomisation — randomises base addresses of modules and stack each load", "Address Signature and Link Resolver — a linker security feature", "Advanced Stack Layout Register — a hardware register", "Automatic Stack Limit Resolution — bounds checking at runtime"], "correct": "Address Space Layout Randomisation — randomises base addresses of modules and stack each load"},
-  {"question": "What does PE stand for in the context of Windows executables?", "answers": ["Portable Executable", "Program Entry", "Process Executable", "Protected Environment"], "correct": "Portable Executable"},
-  {"question": "What is the MZ header in a PE file?", "answers": ["The DOS stub header beginning with bytes 'MZ' (0x4D5A), containing the offset to the PE header", "The main executable header describing sections and imports", "A checksum header appended to the end of the file", "The resource section header"], "correct": "The DOS stub header beginning with bytes 'MZ' (0x4D5A), containing the offset to the PE header"},
-  {"question": "Which PE section typically contains executable code?", "answers": [".text", ".data", ".rdata", ".bss"], "correct": ".text"},
-  {"question": "Which PE section contains initialised global and static variables?", "answers": [".data", ".text", ".bss", ".rdata"], "correct": ".data"},
-  {"question": "What information does the Import Address Table (IAT) hold?", "answers": ["Resolved addresses of imported functions from external DLLs", "Addresses of functions exported by this module", "A list of all loaded modules and their base addresses", "The virtual addresses of all relocation entries"], "correct": "Resolved addresses of imported functions from external DLLs"},
-  {"question": "What is the Export Directory in a PE file?", "answers": ["A table listing functions the DLL exports so other modules can import them", "A directory of all PE files on disk", "A table of addresses used internally by the module", "A list of imported symbols resolved at load time"], "correct": "A table listing functions the DLL exports so other modules can import them"},
-  {"question": "What IDA Pro keyboard shortcut decompiles a function using the HexRays decompiler?", "answers": ["F5", "F2", "F9", "Ctrl+D"], "correct": "F5"},
-  {"question": "What does pressing 'N' do in IDA Pro's disassembly view?", "answers": ["Renames the selected label, function, or variable", "Navigates to the next cross-reference", "Opens the names window", "Creates a new comment"], "correct": "Renames the selected label, function, or variable"},
-  {"question": "What does pressing 'X' do in IDA Pro?", "answers": ["Shows all cross-references to the selected item", "Exports the current function to C", "Marks a region as data", "Opens the hex view"], "correct": "Shows all cross-references to the selected item"},
-  {"question": "What does the Spacebar do in IDA Pro's disassembly view?", "answers": ["Toggles between graph view and linear (text) view", "Starts single-step execution in the debugger", "Adds a comment", "Marks the selection as code"], "correct": "Toggles between graph view and linear (text) view"},
-  {"question": "What is IDA Pro's '.idb' file?", "answers": ["IDA's database storing all analysis, comments, names, and patches for the binary", "The original binary imported by IDA", "An intermediate disassembly format for export", "A log of all debugger sessions"], "correct": "IDA's database storing all analysis, comments, names, and patches for the binary"},
-  {"question": "What is the difference between static and dynamic analysis in reverse engineering?", "answers": ["Static: examine code without executing it; Dynamic: run the program and observe behaviour", "Static: use IDA Pro; Dynamic: use WinDbg", "Static: decompile to C; Dynamic: disassemble to ASM", "Static: examine memory dumps; Dynamic: analyse source code"], "correct": "Static: examine code without executing it; Dynamic: run the program and observe behaviour"},
-  {"question": "What does the INT 3 instruction do?", "answers": ["Triggers a software breakpoint exception (opcode 0xCC), causing the debugger to halt", "Calls interrupt vector 3 for a system call", "Inverts bit 3 of the EFLAGS register", "Causes an arithmetic overflow exception"], "correct": "Triggers a software breakpoint exception (opcode 0xCC), causing the debugger to halt"},
-  {"question": "What is the opcode byte for INT 3 (software breakpoint)?", "answers": ["0xCC", "0x90", "0xEB", "0xCD"], "correct": "0xCC"},
-  {"question": "What does the Win32 function IsDebuggerPresent() do?", "answers": ["Returns non-zero if the calling process is being debugged", "Checks if WinDbg is installed on the system", "Detects if a kernel debugger is attached to the OS", "Verifies that a process has debugging privileges"], "correct": "Returns non-zero if the calling process is being debugged"},
-  {"question": "What is anti-debugging?", "answers": ["Techniques programs use to detect if they are being debugged and alter their behaviour", "Compiler flags that produce debug-resistant binaries", "Kernel security features blocking debugger attachment", "A category of malware analysis technique"], "correct": "Techniques programs use to detect if they are being debugged and alter their behaviour"},
-  {"question": "What is return-oriented programming (ROP)?", "answers": ["Chaining small existing code gadgets ending in RET to build exploit payloads without injecting new code", "Overwriting the return address with shellcode on the stack", "Exploiting use-after-free vulnerabilities in heap memory", "A programming technique using tail calls for stack efficiency"], "correct": "Chaining small existing code gadgets ending in RET to build exploit payloads without injecting new code"},
-  {"question": "What is a 'junk code' anti-disassembly trick?", "answers": ["Inserting dead bytes that confuse linear disassemblers into misaligning instruction parsing", "Encrypting the code section at load time to hide instructions", "Using self-modifying code to change instructions at runtime", "Inserting large NOP sleds to slow analysis"], "correct": "Inserting dead bytes that confuse linear disassemblers into misaligning instruction parsing"},
-  {"question": "What is the purpose of a stack canary (stack cookie)?", "answers": ["A value placed between local variables and the return address to detect buffer overflows before the function returns", "A pointer to the top of the stack for bounds checking", "A hardware register monitoring stack integrity", "An entropy source used in ASLR calculations"], "correct": "A value placed between local variables and the return address to detect buffer overflows before the function returns"},
-  {"question": "What does the Process Environment Block (PEB) contain?", "answers": ["Process-wide information including loaded module list, heap handles, and environment strings", "The list of running threads and their priorities", "The kernel memory map for the process", "Hardware performance counters for the process"], "correct": "Process-wide information including loaded module list, heap handles, and environment strings"},
-  {"question": "Which WinDbg command searches memory for a specific byte pattern?", "answers": ["s (e.g. s -b 0 L?0x7fffffff 90 90 90)", "f (fill)", "m (move)", "q (query)"], "correct": "s (e.g. s -b 0 L?0x7fffffff 90 90 90)"},
-  {"question": "What does 'db esp L20' display in WinDbg?", "answers": ["32 bytes of memory at ESP shown as individual bytes in hex and ASCII", "The top 32 DWORD values on the stack", "The disassembly of 32 bytes starting at ESP", "A 32-byte hexdump written to a log file"], "correct": "32 bytes of memory at ESP shown as individual bytes in hex and ASCII"}
+  {
+    "question": "In WinDbg, which single-character command continues execution of the debuggee?",
+    "answers": ["g", "t", "p", "r"],
+    "correct": "g",
+    "explanation": "'g' (Go) resumes execution until the next breakpoint, exception, or until the process exits. You can also use 'g address' to run until a specific address without setting a permanent breakpoint (a one-shot pass)."
+  },
+  {
+    "question": "What does the WinDbg command 'bp 0x00401000' do?",
+    "answers": ["Sets a software breakpoint at address 0x00401000", "Lists all breakpoints at that address", "Breaks immediately into the debugger and jumps to that address", "Clears the breakpoint at that address"],
+    "correct": "Sets a software breakpoint at address 0x00401000",
+    "explanation": "bp writes a 0xCC (INT 3) byte at the target address, replacing the original byte. When execution hits it, the CPU triggers an exception, WinDbg catches it, restores the original byte, and breaks. Use 'bu' for unresolved symbol breakpoints (resolved when the module loads)."
+  },
+  {
+    "question": "Which WinDbg command lists all currently set breakpoints?",
+    "answers": ["bl", "bp", "bd", "be"],
+    "correct": "bl",
+    "explanation": "'bl' (Breakpoint List) shows each breakpoint's index, status (e/d = enabled/disabled), address, and hit count. 'bp' sets, 'bc' clears, 'bd' disables, 'be' enables. Remembering the b* family: bl=list, bp=place, bc=clear, bd=disable, be=enable."
+  },
+  {
+    "question": "Which WinDbg command clears (deletes) breakpoint number 0?",
+    "answers": ["bc 0", "bd 0", "bp -0", "bk 0"],
+    "correct": "bc 0",
+    "explanation": "'bc 0' permanently removes breakpoint 0. 'bd 0' only disables it (still listed by bl, can be re-enabled with be 0). 'bc *' clears all breakpoints. Clearing removes the breakpoint's record entirely; disabling keeps it but marks it inactive."
+  },
+  {
+    "question": "What does the WinDbg 't' command do?",
+    "answers": ["Steps one instruction, stepping INTO calls", "Steps one instruction, stepping OVER calls", "Traces until a return instruction", "Runs until the next breakpoint"],
+    "correct": "Steps one instruction, stepping INTO calls",
+    "explanation": "'t' (trace) single-steps one instruction. If the current instruction is CALL, execution enters the called function. Use 't N' to step N instructions. Contrast with 'p' (step over): 'p' on a CALL executes the whole call and breaks at the instruction after it."
+  },
+  {
+    "question": "What does the WinDbg 'p' command do?",
+    "answers": ["Steps one instruction, stepping OVER calls", "Steps one instruction, stepping INTO calls", "Pauses the debuggee", "Prints a register value"],
+    "correct": "Steps one instruction, stepping OVER calls",
+    "explanation": "'p' (step over) executes one instruction. If it's a CALL, the entire called function runs to completion and WinDbg breaks at the instruction after the CALL. This is efficient when you trust the called function and don't want to trace through it."
+  },
+  {
+    "question": "Which WinDbg command displays the current register values?",
+    "answers": ["r", "d", "u", "k"],
+    "correct": "r",
+    "explanation": "'r' shows all general-purpose, segment, and flags registers. 'r eax' shows just EAX. 'r eax=5' sets EAX to 5. This lets you inspect or modify CPU state mid-execution — useful for patching conditional jumps on the fly."
+  },
+  {
+    "question": "What does 'dd esp' display in WinDbg?",
+    "answers": ["Memory at ESP shown as 32-bit DWORDs (4-byte groups)", "Memory at ESP shown as individual bytes", "The value of ESP and EBP registers", "Disassembly starting at the address in ESP"],
+    "correct": "Memory at ESP shown as 32-bit DWORDs (4-byte groups)",
+    "explanation": "'dd' = Display DWORDs. 'dd esp' shows 32 DWORDs (128 bytes) starting at the current stack pointer — the top of the stack. The first DWORD is the return address of the current function. Other display variants: 'db' (bytes), 'dw' (words), 'dq' (QWORDs), 'da' (ASCII string)."
+  },
+  {
+    "question": "Which WinDbg command disassembles instructions at a given address?",
+    "answers": ["u", "d", "a", "k"],
+    "correct": "u",
+    "explanation": "'u eip' disassembles starting at EIP. 'u address' disassembles from a specific address. 'ub address' disassembles backwards. 'u address L20' disassembles 32 instructions. WinDbg resolves symbols when available, showing function names and offsets."
+  },
+  {
+    "question": "What does the WinDbg 'k' command display?",
+    "answers": ["The call stack / stack backtrace showing return addresses and function names", "All kernel module base addresses", "Kernel object handles", "The current thread's key registers"],
+    "correct": "The call stack / stack backtrace showing return addresses and function names",
+    "explanation": "'k' shows the call stack — the chain of functions that led to the current execution point. 'kb' includes the first 3 parameters. 'kv' shows frame pointer and calling convention. 'kn' shows frame numbers. This is essential for understanding how execution reached a particular point."
+  },
+  {
+    "question": "Which WinDbg command lists all loaded module base addresses?",
+    "answers": ["lm", "ml", "modules", "ld"],
+    "correct": "lm",
+    "explanation": "'lm' (List Modules) shows each loaded DLL and EXE with its base address and size. 'lm m ntdll' filters by name. The base addresses are critical for calculating absolute addresses when ASLR is enabled — you add the module's offset to its base."
+  },
+  {
+    "question": "What does 'eb 0x00401000 90' do in WinDbg?",
+    "answers": ["Writes byte 0x90 (NOP) to address 0x00401000", "Enables breakpoint at address 0x00401000", "Edits EBP to the value 0x00401000", "Breaks on execute at 0x00401000"],
+    "correct": "Writes byte 0x90 (NOP) to address 0x00401000",
+    "explanation": "'eb' (Edit Bytes) writes raw bytes to memory. 0x90 is the NOP opcode — writing it over an instruction effectively removes that instruction. This is used to patch out anti-debugging checks, JZ/JNZ decisions, or any code you want to skip without recompiling."
+  },
+  {
+    "question": "What does the WinDbg command '!analyze -v' do?",
+    "answers": ["Runs verbose automated exception/crash analysis and suggests the root cause", "Analyses all virtual memory regions verbosely", "Lists all loaded modules with verbose symbol info", "Verifies symbol file (.pdb) loading"],
+    "correct": "Runs verbose automated exception/crash analysis and suggests the root cause",
+    "explanation": "!analyze -v invokes the automated analysis engine. It identifies the faulting thread, exception type, stack trace, and often names the buggy module/function. Particularly useful in crash dump analysis (minidumps, full dumps) where you need a starting point quickly."
+  },
+  {
+    "question": "Which WinDbg command runs the debuggee until it returns from the current function?",
+    "answers": ["gu (go up / step out)", "p", "t", "g ret"],
+    "correct": "gu (go up / step out)",
+    "explanation": "'gu' (Go Up) runs until the current function executes its RET instruction and control returns to the caller. It's equivalent to 'step out' in Visual Studio or 'finish' in GDB. Useful when you've accidentally stepped into a function you don't want to trace through."
+  },
+  {
+    "question": "What does 'a 0x00401000' do in WinDbg?",
+    "answers": ["Enters inline assembly mode at that address — type instructions to patch memory directly", "Analyses memory at that address for patterns", "Adds a breakpoint at that address", "Aligns stack memory at that address"],
+    "correct": "Enters inline assembly mode at that address — type instructions to patch memory directly",
+    "explanation": "'a' (Assemble) puts WinDbg into assembly input mode. You type x86 mnemonics and they are assembled and written to the specified address. Press Enter on an empty line to exit. This lets you patch instructions on the fly without a hex editor."
+  },
+  {
+    "question": "On x86, in which direction does the stack grow?",
+    "answers": ["Towards lower addresses (downward)", "Towards higher addresses (upward)", "In both directions simultaneously", "Horizontally across memory segments"],
+    "correct": "Towards lower addresses (downward)",
+    "explanation": "When you PUSH, ESP decrements first, then the value is written. The 'top' of the stack is the lowest address currently in use. This is why stack buffer overflows write toward higher addresses — toward the saved EBP and return address that sit above (at higher addresses than) the local buffer."
+  },
+  {
+    "question": "In a standard x86 function prologue, what do 'PUSH EBP; MOV EBP, ESP' accomplish?",
+    "answers": ["Save the caller's frame pointer and establish a new stable frame base", "Save EBP and allocate local variable space", "Push arguments and set up the return address", "Save all registers before executing function code"],
+    "correct": "Save the caller's frame pointer and establish a new stable frame base",
+    "explanation": "PUSH EBP saves the previous frame pointer so it can be restored on exit. MOV EBP, ESP anchors EBP to the current stack top — now a fixed reference point. Without this, all [EBP±n] addresses shift whenever ESP changes. SUB ESP, N follows to carve out space for locals."
+  },
+  {
+    "question": "In __cdecl calling convention, who cleans the stack after a function call?",
+    "answers": ["The caller — it adjusts ESP after the CALL returns", "The callee — via RETN N", "The OS — via the SYSRET mechanism", "Neither — ESP is preserved automatically by CALL/RET"],
+    "correct": "The caller — it adjusts ESP after the CALL returns",
+    "explanation": "In __cdecl, the caller pushes arguments right-to-left and after the CALL returns, executes ADD ESP, N to remove them. This allows variadic functions (like printf) because only the caller knows how many args were pushed. In __stdcall, the callee uses RETN N instead."
+  },
+  {
+    "question": "In a typical x86 __cdecl / __stdcall stack frame, what is stored at [EBP+4]?",
+    "answers": ["The saved return address (where to resume after RET)", "The first argument", "The saved EBP", "A local variable"],
+    "correct": "The saved return address (where to resume after RET)",
+    "explanation": "Stack layout from bottom: [EBP+0]=saved caller EBP, [EBP+4]=return address (pushed by CALL), [EBP+8]=first arg, [EBP+12]=second arg. If you overwrite [EBP+4] with an attacker-controlled address, RET will jump there instead of back to the caller."
+  },
+  {
+    "question": "In a typical x86 stack frame, what is stored at [EBP+8]?",
+    "answers": ["The first function argument pushed by the caller", "The return address", "The saved EBP", "The second local variable"],
+    "correct": "The first function argument pushed by the caller",
+    "explanation": "For a function call f(a, b, c) in __stdcall/__cdecl: arguments are pushed right-to-left (c, b, then a). After CALL pushes the return address and the prologue pushes EBP, the first argument (a) sits at [EBP+8]. Second argument at [EBP+12], third at [EBP+16]."
+  },
+  {
+    "question": "What is stored at [EBP+0] in a standard stack frame?",
+    "answers": ["The saved EBP from the calling function", "The return address", "The first argument", "A local variable"],
+    "correct": "The saved EBP from the calling function",
+    "explanation": "The prologue does PUSH EBP (saves caller's EBP), then MOV EBP, ESP (EBP now points here). So [EBP+0] = the value that was in EBP before the call — the caller's frame pointer. By following [EBP+0] chains, a debugger can walk the entire call stack."
+  },
+  {
+    "question": "In __fastcall convention, where are the first two integer arguments passed?",
+    "answers": ["ECX and EDX — avoids the overhead of stack pushes for small functions", "EAX and EBX", "EBX and ECX", "The stack only — __fastcall only affects the calling side naming"],
+    "correct": "ECX and EDX — avoids the overhead of stack pushes for small functions",
+    "explanation": "Microsoft's __fastcall passes the first two 32-bit arguments in ECX (left) and EDX (right). Remaining arguments go on the stack. This is faster for small functions because it avoids memory writes. Note: ECX is also 'this' in __thiscall (member function calls)."
+  },
+  {
+    "question": "What does the LEAVE instruction do?",
+    "answers": ["Equivalent to MOV ESP, EBP then POP EBP — restores ESP and EBP for the caller", "Leaves the function without touching the stack", "Pops the return address and jumps there", "Decrements ECX and jumps if not zero"],
+    "correct": "Equivalent to MOV ESP, EBP then POP EBP — restores ESP and EBP for the caller",
+    "explanation": "LEAVE reverses the prologue: MOV ESP, EBP drops all locals instantly (just moves the stack pointer up). POP EBP restores the caller's frame pointer. LEAVE is 1 byte; the equivalent two instructions are 4 bytes. It's always followed by RET in a standard epilogue."
+  },
+  {
+    "question": "What does RETN 0x10 do differently from plain RETN?",
+    "answers": ["Pops the return address AND then adds 0x10 to ESP, cleaning 16 bytes of caller-pushed arguments", "Returns from 10 function frames up the call stack", "Jumps to 0x10 bytes past the return address", "Returns with error code 0x10 in EAX"],
+    "correct": "Pops the return address AND then adds 0x10 to ESP, cleaning 16 bytes of caller-pushed arguments",
+    "explanation": "RETN N is the callee-clean form used in __stdcall. It pops [ESP] into EIP, then adds N to ESP. For 4 arguments (each 4 bytes = 16 bytes), RETN 0x10 cleans exactly those 16 bytes. The caller does NOT need to add to ESP. This is why most Win32 API functions use RETN."
+  },
+  {
+    "question": "After PUSH EBP in a function prologue, how does ESP change?",
+    "answers": ["Decreases by 4 bytes", "Increases by 4 bytes", "Decreases by 8 bytes", "Does not change"],
+    "correct": "Decreases by 4 bytes",
+    "explanation": "Every PUSH on 32-bit x86 does: ESP -= 4; [ESP] = value. Stack grows downward — ESP is decremented before the write. So after PUSH EBP, ESP is 4 bytes lower than before the instruction, and [ESP] contains the old EBP value."
+  },
+  {
+    "question": "What does SEH stand for?",
+    "answers": ["Structured Exception Handling", "Software Exception Handler", "Stack Exception Hierarchy", "System Error Handling"],
+    "correct": "Structured Exception Handling",
+    "explanation": "SEH is Windows' built-in exception-dispatching mechanism, exposed in C via __try/__except/__finally. Each thread maintains a chain of handler records on its stack. When an exception occurs, Windows walks this chain looking for a handler. It predates C++ exceptions and is the foundation for them on Windows."
+  },
+  {
+    "question": "Where is the head of the SEH chain stored on x86 Windows?",
+    "answers": ["FS:[0] — the Thread Environment Block (TEB) field at offset 0", "The current stack pointer (ESP)", "The Process Environment Block (PEB)", "A global kernel structure shared by all threads"],
+    "correct": "FS:[0] — the Thread Environment Block (TEB) field at offset 0",
+    "explanation": "The FS segment register points to the TEB. FS:[0] is the TEB's ExceptionList field — a pointer to the first _EXCEPTION_REGISTRATION_RECORD on the stack. This is why SEH overwrite exploits patch the exception handler on the stack: when the overflow triggers, the OS walks FS:[0] and finds the attacker's record."
+  },
+  {
+    "question": "What are the two fields in an _EXCEPTION_REGISTRATION_RECORD?",
+    "answers": ["Next (pointer to next record in the chain) and Handler (pointer to the exception handler function)", "Handler (the exception code) and Context (saved CPU state)", "Address (location of the exception) and Code (the error code)", "Frame (stack frame pointer) and Filter (filter expression value)"],
+    "correct": "Next (pointer to next record in the chain) and Handler (pointer to the exception handler function)",
+    "explanation": "The record is just two DWORDs: Next (linked list pointer to the previous record deeper in the chain) and Handler (function pointer called when an exception occurs). New records are pushed onto the stack at function entry and linked in at the head (FS:[0]). On function exit, the record is unlinked."
+  },
+  {
+    "question": "What value in the 'Next' field of an _EXCEPTION_REGISTRATION_RECORD indicates the end of the SEH chain?",
+    "answers": ["0xFFFFFFFF", "NULL (0x00000000)", "0xDEADBEEF", "The address of the OS default handler"],
+    "correct": "0xFFFFFFFF",
+    "explanation": "0xFFFFFFFF (-1 as a pointer) is the sentinel value meaning 'no more handlers'. If no registered handler processes the exception and the chain is exhausted, the OS invokes its own unhandled-exception filter (e.g., the application's SetUnhandledExceptionFilter callback), and ultimately terminates the process."
+  },
+  {
+    "question": "What does EXCEPTION_CONTINUE_SEARCH (0) from a SEH handler indicate?",
+    "answers": ["This handler didn't handle it — continue walking the chain to the next handler", "Resume execution at the instruction that faulted", "Execute the __except block", "Terminate the process immediately"],
+    "correct": "This handler didn't handle it — continue walking the chain to the next handler",
+    "explanation": "The dispatcher calls each handler in order. EXCEPTION_CONTINUE_SEARCH (0) means 'not my problem, try the next one'. EXCEPTION_EXECUTE_HANDLER (1) means 'I'll handle it — run the __except block'. EXCEPTION_CONTINUE_EXECUTION (-1) means 'I fixed the problem — resume at the faulting instruction'."
+  },
+  {
+    "question": "What does EXCEPTION_EXECUTE_HANDLER (1) indicate?",
+    "answers": ["The exception is handled — execute the corresponding __except block", "Ignore the exception and resume", "Pass the exception to the next handler", "Terminate with an error message"],
+    "correct": "The exception is handled — execute the corresponding __except block",
+    "explanation": "When a filter returns EXCEPTION_EXECUTE_HANDLER, Windows performs a second pass (unwinding) through the handlers, calling any __finally blocks, then transfers control to the __except block. This is the normal 'catch and recover' path."
+  },
+  {
+    "question": "What does EXCEPTION_CONTINUE_EXECUTION (-1) cause?",
+    "answers": ["Execution resumes at the exact instruction that caused the exception", "The exception handler continues to the next handler in the chain", "The process terminates gracefully after cleanup", "The exception is re-raised with a new code"],
+    "correct": "Execution resumes at the exact instruction that caused the exception",
+    "explanation": "EXCEPTION_CONTINUE_EXECUTION tells Windows 'I've fixed whatever caused the fault — try the instruction again'. Used in vectored exception handlers to, for example, intercept a guard page fault, make the page accessible, and transparently resume. If nothing was actually fixed, the exception will fire again infinitely."
+  },
+  {
+    "question": "In a classic stack buffer overflow, overflowing a local buffer can overwrite which critical values?",
+    "answers": ["Saved EBP and the saved return address above the buffer", "Only the return address", "The heap metadata headers", "The SEH record stored in the TEB at FS:[0]"],
+    "correct": "Saved EBP and the saved return address above the buffer",
+    "explanation": "Stack layout (top = low address): [local buffers][saved EBP][return address][arguments]. A buffer overflow writes toward higher addresses, first corrupting other locals, then saved EBP (corrupts the caller's frame reconstruction), then the return address (hijacks EIP on RET). Controlling the return address is the classic goal."
+  },
+  {
+    "question": "What is EIP in x86 context?",
+    "answers": ["The instruction pointer — holds the address of the next instruction to execute", "The extended instruction parameter register", "A register used exclusively for integer arithmetic", "The base pointer for the current stack frame"],
+    "correct": "The instruction pointer — holds the address of the next instruction to execute",
+    "explanation": "EIP is the most important register in exploit development: control EIP = control execution flow. EIP cannot be read or written directly with MOV — it only changes via CALL, RET, JMP, and conditional jumps. Overwriting the return address on the stack redirects EIP when RET executes."
+  },
+  {
+    "question": "What is a NOP sled in exploit development?",
+    "answers": ["A sequence of 0x90 (NOP) instructions before shellcode that tolerates imprecise jump targeting", "A chain of RET instructions used to bypass DEP", "A technique for locating the exact offset to the return address", "A method to encode shellcode without null bytes"],
+    "correct": "A sequence of 0x90 (NOP) instructions before shellcode that tolerates imprecise jump targeting",
+    "explanation": "If you can't predict the exact stack address where your shellcode lands (due to slight ESP variation), a NOP sled provides a large landing zone. Any address within the sled slides execution to the shellcode at the end. Wider sleds increase reliability at the cost of payload size."
+  },
+  {
+    "question": "Why is the null byte (0x00) commonly avoided in shellcode targeting string-based overflows?",
+    "answers": ["String functions like strcpy/sprintf stop at '\\0', truncating the payload before it's fully written", "The CPU raises a hardware exception on 0x00 bytes in code", "0x00 is filtered by all Windows security mitigations", "Writing 0x00 to the stack corrupts segment registers"],
+    "correct": "String functions like strcpy/sprintf stop at '\\0', truncating the payload before it's fully written",
+    "explanation": "strcpy, gets, scanf %s, and similar functions treat 0x00 as the string terminator and stop copying there. If your shellcode or return address contains a null byte, the overflow payload is cut short. Workarounds: encode null bytes differently (e.g., XOR then decode), use null-free instruction equivalents, or choose a different overflow vector."
+  },
+  {
+    "question": "What technique uses a 'JMP ESP' gadget after a return address overwrite?",
+    "answers": ["Overwrite return address with a JMP ESP gadget's address; on RET, ESP points to shellcode on the stack", "Placing shellcode inside the JMP instruction opcode", "Using JMP ESP to bypass ASLR by predicting the stack address", "Calling JMP ESP from the heap to bypass DEP"],
+    "correct": "Overwrite return address with a JMP ESP gadget's address; on RET, ESP points to shellcode on the stack",
+    "explanation": "When RET executes, ESP has already advanced past the return address slot — ESP now points to whatever is next on the stack (your shellcode). JMP ESP from a known non-ASLR module redirects execution there. This sidesteps the need to know the exact stack address of the shellcode — ESP does the work."
+  },
+  {
+    "question": "What is DEP (Data Execution Prevention)?",
+    "answers": ["A hardware/OS mechanism marking memory pages as non-executable, preventing code injection in data regions", "A kernel feature that randomises base addresses on each load", "A stack canary implementation in MSVC", "A sandbox preventing cross-process memory access"],
+    "correct": "A hardware/OS mechanism marking memory pages as non-executable, preventing code injection in data regions",
+    "explanation": "DEP uses the NX/XD bit in page table entries. Pages marked non-executable (stack, heap, data sections) cause a fault if the CPU tries to execute code there. This defeats classic shellcode injection. Bypasses include ROP (using existing executable code) and disabling DEP via NtSetInformationProcess."
+  },
+  {
+    "question": "What is ASLR?",
+    "answers": ["Address Space Layout Randomisation — randomises the load base of modules, stack, and heap on each run", "Address Signature and Link Resolver — a linker security feature", "Advanced Stack Layout Register — a hardware register for stack bounds", "Automatic Stack Limit Resolution — runtime bounds checking"],
+    "correct": "Address Space Layout Randomisation — randomises the load base of modules, stack, and heap on each run",
+    "explanation": "ASLR means you can't hardcode addresses — the base of kernel32.dll, ntdll.dll, the stack, and the heap change each run. 32-bit ASLR is weak (only ~256 positions for some regions) and can be defeated by brute force or info leaks. 64-bit ASLR is much stronger. Bypasses: info leaks, non-ASLR modules, heap spraying."
+  },
+  {
+    "question": "What does PE stand for in the context of Windows executables?",
+    "answers": ["Portable Executable", "Program Entry", "Process Executable", "Protected Environment"],
+    "correct": "Portable Executable",
+    "explanation": "The PE format is the standard binary format for Windows EXEs and DLLs. It is derived from COFF (Common Object File Format) and is described in the Microsoft PE/COFF specification. The structure includes DOS stub, PE signature, COFF file header, optional header, and section headers."
+  },
+  {
+    "question": "What is the MZ header in a PE file?",
+    "answers": ["The DOS stub header beginning with bytes 0x4D5A ('MZ'), containing the offset to the PE header at offset 0x3C", "The main executable header describing sections and imports", "A checksum header appended to the file end", "The resource section header"],
+    "correct": "The DOS stub header beginning with bytes 0x4D5A ('MZ'), containing the offset to the PE header at offset 0x3C",
+    "explanation": "'MZ' are the initials of Mark Zbikowski, one of the original MS-DOS architects. Every valid PE starts with these two bytes. At offset 0x3C (e_lfanew field) is the offset to the PE signature ('PE\\0\\0'). The DOS stub in between just prints 'This program cannot be run in DOS mode.'"
+  },
+  {
+    "question": "Which PE section typically contains the executable code?",
+    "answers": [".text", ".data", ".rdata", ".bss"],
+    "correct": ".text",
+    "explanation": ".text has execute and read permissions (IMAGE_SCN_CNT_CODE | IMAGE_SCN_MEM_EXECUTE | IMAGE_SCN_MEM_READ). This is where compiled function bodies live. IDA Pro and WinDbg primarily analyse this section. DEP marks all other sections as non-executable by default."
+  },
+  {
+    "question": "Which PE section contains initialised global and static variables?",
+    "answers": [".data", ".text", ".bss", ".rdata"],
+    "correct": ".data",
+    "explanation": ".data holds variables that have non-zero initial values set by the programmer. .bss holds zero-initialised variables (they don't take space in the file — only a size declaration). .rdata holds read-only data like string literals and the Import/Export tables. .text holds code."
+  },
+  {
+    "question": "What information does the Import Address Table (IAT) hold?",
+    "answers": ["Resolved absolute addresses of imported functions, filled in by the Windows loader at load time", "Names of functions exported by this module", "A list of all loaded modules and their base addresses", "The virtual addresses of all relocation entries"],
+    "correct": "Resolved absolute addresses of imported functions, filled in by the Windows loader at load time",
+    "explanation": "Before loading, IAT entries contain RVAs (relative virtual addresses) or hint/name table pointers. The loader resolves each import, finds the actual function address in the target DLL, and writes it into the IAT. CALL [IAT_entry] then dereferences the IAT to reach the API. Hooking the IAT is a common technique for API interception."
+  },
+  {
+    "question": "What is the Export Directory in a PE file?",
+    "answers": ["A table listing functions the DLL makes available for other modules to import", "A directory listing all PE files referenced by this module", "A table of internal function addresses used only within the module", "A list of imported symbols resolved at load time"],
+    "correct": "A table listing functions the DLL makes available for other modules to import",
+    "explanation": "The Export Directory contains: the module name, an array of function addresses (EAT — Export Address Table), an array of function name strings, and an ordinal table mapping names to indices. GetProcAddress walks this structure to find an exported function by name or ordinal."
+  },
+  {
+    "question": "What IDA Pro keyboard shortcut decompiles a function using the HexRays decompiler?",
+    "answers": ["F5", "F2", "F9", "Ctrl+D"],
+    "correct": "F5",
+    "explanation": "F5 invokes the HexRays decompiler (requires the HexRays plugin) and produces pseudo-C code for the function at the cursor. This dramatically speeds up RE by showing high-level intent rather than raw assembly. The result is approximate — always verify against the disassembly for security-critical analysis."
+  },
+  {
+    "question": "What does pressing 'N' do in IDA Pro's disassembly view?",
+    "answers": ["Renames the selected label, function, or variable", "Navigates to the next cross-reference", "Opens the names window", "Creates a new analysis comment"],
+    "correct": "Renames the selected label, function, or variable",
+    "explanation": "Renaming is one of the most important RE activities — replacing 'sub_401234' with 'parse_config' makes the codebase comprehensible. Names persist in the IDB database. 'Y' sets a function prototype. ';' adds a comment. 'Ctrl+Alt+K' adds a struct offset."
+  },
+  {
+    "question": "What does pressing 'X' do in IDA Pro?",
+    "answers": ["Shows all cross-references (xrefs) to the selected item", "Exports the current function to C", "Marks a region as data", "Opens the hex view"],
+    "correct": "Shows all cross-references (xrefs) to the selected item",
+    "explanation": "Cross-references are essential for understanding function call graphs and data usage. 'X' on a function name shows everywhere it's called from. 'X' on a string literal shows which functions reference it. Double-clicking an xref navigates to that location."
+  },
+  {
+    "question": "What does the Spacebar do in IDA Pro's disassembly view?",
+    "answers": ["Toggles between graph view (control flow blocks) and linear (text) view", "Steps one instruction in the built-in debugger", "Adds an inline comment", "Marks the current address as a function start"],
+    "correct": "Toggles between graph view (control flow blocks) and linear (text) view",
+    "explanation": "Graph view (the default) shows basic blocks connected by arrows, making control flow (branches, loops) visually obvious. Linear view shows disassembly sequentially — better for large functions or when you need to see exact byte offsets. Both views are equally valid; experienced analysts switch between them."
+  },
+  {
+    "question": "What is IDA Pro's '.idb' file?",
+    "answers": ["IDA's database storing all analysis, names, comments, and patches — the 'project file' for the binary", "The original binary imported by IDA", "An intermediate disassembly format for export", "A log of all debugger sessions"],
+    "correct": "IDA's database storing all analysis, names, comments, and patches — the 'project file' for the binary",
+    "explanation": "The .idb (or .i64 for 64-bit) file stores everything IDA knows: auto-analysis results, your manual renames, comments, structure definitions, function prototypes, and applied patches. Share the IDB to hand off analysis to a colleague without re-doing all the work. Never modify the original binary — patch in IDA and export if needed."
+  },
+  {
+    "question": "What is the difference between static and dynamic analysis in reverse engineering?",
+    "answers": ["Static: examine code without executing; Dynamic: run the program and observe live behaviour", "Static: use IDA Pro; Dynamic: use WinDbg", "Static: decompile to C; Dynamic: disassemble to ASM", "Static: examine memory dumps; Dynamic: analyse source code"],
+    "correct": "Static: examine code without executing; Dynamic: run the program and observe live behaviour",
+    "explanation": "Static analysis (IDA, Ghidra, strings, PE headers) reveals code structure and logic without risk of malware execution. Dynamic analysis (WinDbg, x64dbg, Process Monitor, Wireshark) reveals runtime behaviour: actual function arguments, network traffic, file writes, registry accesses. Effective RE combines both."
+  },
+  {
+    "question": "What does the INT 3 instruction do?",
+    "answers": ["Triggers a software breakpoint exception (opcode 0xCC), causing a debugger to halt execution", "Calls interrupt vector 3 for a system call", "Inverts bit 3 of EFLAGS", "Causes an arithmetic overflow exception"],
+    "correct": "Triggers a software breakpoint exception (opcode 0xCC), causing a debugger to halt execution",
+    "explanation": "INT 3 is a single-byte instruction (0xCC) that generates a EXCEPTION_BREAKPOINT (0x80000003). Debuggers set software breakpoints by writing 0xCC over the first byte of the target instruction, saving the original. When hit, the debugger restores the original byte and shows the break. 0xCC also happens to be 'int 3' if misinterpreted, making it ideal for alignment padding."
+  },
+  {
+    "question": "What is the opcode byte for INT 3 (software breakpoint)?",
+    "answers": ["0xCC", "0x90", "0xEB", "0xCD 0x03"],
+    "correct": "0xCC",
+    "explanation": "0xCC is INT 3's 1-byte opcode (there's also a 2-byte form: 0xCD 0x03, but 0xCC is always used for breakpoints because it's one byte). Replacing a function's first byte with 0xCC is how software breakpoints work. If you see unexpected 0xCC bytes in disassembly, a debugger has set a breakpoint there."
+  },
+  {
+    "question": "What does the Win32 function IsDebuggerPresent() do?",
+    "answers": ["Returns non-zero (TRUE) if the calling process is currently being debugged", "Checks if WinDbg is installed on the system", "Detects if a kernel debugger is attached to the OS", "Verifies that the process has SeDebugPrivilege"],
+    "correct": "Returns non-zero (TRUE) if the calling process is currently being debugged",
+    "explanation": "IsDebuggerPresent reads the BeingDebugged flag from the PEB (Process Environment Block, at PEB+2). Debuggers set this byte to 1. Common bypass: in WinDbg, '? poi(fs:[0x30]+2)' finds it, then 'eb address 0' patches it to 0. The NtGlobalFlag (PEB+0x68) and heap magic bytes are alternative detection methods."
+  },
+  {
+    "question": "What is anti-debugging?",
+    "answers": ["Techniques a program uses to detect or hinder debuggers, altering its behaviour or crashing when debugged", "Compiler flags that produce optimised binaries with no debug symbols", "Kernel features blocking unauthorised debugger attachment", "A category of defensive security tooling"],
+    "correct": "Techniques a program uses to detect or hinder debuggers, altering its behaviour or crashing when debugged",
+    "explanation": "Common anti-debug techniques: IsDebuggerPresent, CheckRemoteDebuggerPresent, NtQueryInformationProcess, timing attacks (RDTSC), heap flag checks, OutputDebugString, SEH-based detection (exceptions behave differently under a debugger). Countermeasures: ScyllaHide plugin, manual patching of detection checks."
+  },
+  {
+    "question": "What is return-oriented programming (ROP)?",
+    "answers": ["Chaining small existing code gadgets (ending in RET) to execute arbitrary logic without injecting new code", "Overwriting the return address with shellcode on the stack", "Exploiting use-after-free in heap allocations", "A programming pattern using tail calls to avoid stack growth"],
+    "correct": "Chaining small existing code gadgets (ending in RET) to execute arbitrary logic without injecting new code",
+    "explanation": "Each 'gadget' is a few instructions followed by RET. By controlling the stack, you chain gadgets: RET pops the next gadget address, executes its instructions, then RET pops the next, and so on. Since all code is in existing executable memory, ROP bypasses DEP/NX. Tools: ROPgadget, ropper. Mitigation: CFI, CET (shadow stack)."
+  },
+  {
+    "question": "What is a 'junk code' anti-disassembly trick?",
+    "answers": ["Inserting dead bytes after a JMP that confuse linear disassemblers into misaligning instruction parsing", "Encrypting the .text section at load time", "Using self-modifying code to change instructions at runtime", "Inserting NOP sleds to slow automated analysis"],
+    "correct": "Inserting dead bytes after a JMP that confuse linear disassemblers into misaligning instruction parsing",
+    "explanation": "Example: JMP next; db 0xE8; next: ... — the 0xE8 is never executed but a linear disassembler thinks it's the start of a CALL instruction, misaligning all subsequent disassembly. IDA's recursive descent disassembler is immune (it follows control flow), but linear tools like ndisasm are fooled."
+  },
+  {
+    "question": "What is the purpose of a stack canary (stack cookie)?",
+    "answers": ["A random value placed between locals and the return address, checked on exit to detect stack corruption", "A pointer to the top of the stack for bounds checking", "A hardware register monitoring stack integrity", "An entropy source used in ASLR address calculations"],
+    "correct": "A random value placed between locals and the return address, checked on exit to detect stack corruption",
+    "explanation": "MSVC's /GS flag inserts a stack cookie: a random value written between the local variables and the saved return address. On function exit, the cookie is verified against a stored copy. If they differ (indicating a buffer overflow has corrupted the stack), the program calls __report_gsfailure and terminates. Bypass: leak the cookie value (info leak) or overwrite the exception handler instead."
+  },
+  {
+    "question": "What does the Process Environment Block (PEB) contain?",
+    "answers": ["Process-wide info: loaded module list, heap handles, image base, environment strings, and flags like BeingDebugged", "The list of all running threads and their priorities", "The kernel memory map for the process", "Hardware performance counters for the process"],
+    "correct": "Process-wide info: loaded module list, heap handles, image base, environment strings, and flags like BeingDebugged",
+    "explanation": "The PEB (accessible via FS:[0x30] on x86) is a rich data structure. Key fields: ImageBaseAddress, Ldr (module list), ProcessHeap, BeingDebugged. Shellcode often walks the PEB module list to find kernel32.dll without calling APIs — a technique that bypasses import-based detection."
+  },
+  {
+    "question": "Which WinDbg command searches memory for a specific byte pattern?",
+    "answers": ["s -b startaddr endaddr bytes (e.g. s -b 0 L?0x7fffffff ff d8 ff e0)", "f (fill pattern)", "m (move memory)", "q (query pattern)"],
+    "correct": "s -b startaddr endaddr bytes (e.g. s -b 0 L?0x7fffffff ff d8 ff e0)",
+    "explanation": "The 's' command searches memory for byte sequences: 's -b 0 L?0x7fffffff ff d8 ff e0' finds all 'FFD8 FFE0' JPEG magic bytes in the process. '-a' searches for ASCII strings, '-u' for Unicode. This is useful for finding 'JMP ESP' gadgets (0xFF 0xE4) or locating specific patterns."
+  },
+  {
+    "question": "What does 'db esp L20' display in WinDbg?",
+    "answers": ["32 bytes of memory at ESP shown as individual hex bytes plus ASCII representation", "The top 32 DWORD values on the stack", "Disassembly of 32 bytes starting at ESP", "A 32-byte hex dump written to a log file"],
+    "correct": "32 bytes of memory at ESP shown as individual hex bytes plus ASCII representation",
+    "explanation": "'db' = Display Bytes. 'L20' means length 0x20 = 32 units (bytes in this case). The output shows offset, 16 hex bytes per line, then ASCII equivalents. The first bytes at ESP are the top of the stack — typically the return address and local variables of the current function."
+  }
 ]

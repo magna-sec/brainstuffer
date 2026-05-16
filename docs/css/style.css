@@ -1495,6 +1495,36 @@ body.quiz-mode .logo-tagline { display: none; }
 }
 #fc-progress-wrap { margin-bottom: 1rem; }
 
+/* ── Explanation box ────────────────────────────────────────── */
+.explanation-box {
+    background: color-mix(in srgb, var(--card) 60%, var(--bg2));
+    border: 1px solid var(--card-border);
+    border-left: 3px solid var(--accent2);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    font-size: 0.88rem;
+    color: var(--subtle);
+    line-height: 1.65;
+    margin-top: 0.75rem;
+    text-align: left;
+}
+.explanation-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent2);
+    display: block;
+    margin-bottom: 0.35rem;
+}
+.btn-explain {
+    margin-top: 0.65rem;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.9rem;
+    opacity: 0.8;
+}
+.btn-explain:hover { opacity: 1; }
+
 /* ── Code blocks ────────────────────────────────────────────── */
 .code-block {
     background: #0d1117;
