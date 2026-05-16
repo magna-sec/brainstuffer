@@ -199,6 +199,7 @@ function submitAnswer() {
         isReview: store.is_review,
         xpResult,
         explanation: question.explanation || null,
+        diagram: question.diagram || null,
     });
 }
 
