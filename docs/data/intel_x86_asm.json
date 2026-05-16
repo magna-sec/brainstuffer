@@ -1,181 +1,342 @@
 [
   {
     "question": "What is the purpose of the EIP register on x86?",
-    "answers": ["Instruction pointer — holds the address of the next instruction to execute", "An extended index pointer for string operations", "An integer parameter register", "The base pointer for the current stack frame"],
+    "answers": [
+      "Instruction pointer — holds the address of the next instruction to execute",
+      "An extended index pointer for string operations",
+      "An integer parameter register",
+      "The base pointer for the current stack frame"
+    ],
     "correct": "Instruction pointer — holds the address of the next instruction to execute",
     "explanation": "EIP (Extended Instruction Pointer) is read-only in user mode — you can't MOV directly into it. The only way to change EIP is through control-flow instructions: JMP, CALL, RET, and conditional jumps. In 64-bit mode this becomes RIP."
   },
   {
     "question": "Which register is the stack pointer on 32-bit x86?",
-    "answers": ["ESP", "EBP", "ESI", "EAX"],
+    "answers": [
+      "ESP",
+      "EBP",
+      "ESI",
+      "EAX"
+    ],
     "correct": "ESP",
     "explanation": "ESP (Extended Stack Pointer) always points to the top of the current stack. PUSH decrements ESP then writes; POP reads then increments. The stack grows downward (toward lower addresses). Never use ESP as a general-purpose register — the OS and runtime expect it to always be a valid stack pointer."
   },
   {
     "question": "What is EBP typically used for in a function?",
-    "answers": ["As the frame pointer — provides a stable reference to local variables and arguments throughout the function", "As the second function argument", "As a stack pointer backup", "As the address of the current instruction"],
+    "answers": [
+      "As the frame pointer — provides a stable reference to local variables and arguments throughout the function",
+      "As the second function argument",
+      "As a stack pointer backup",
+      "As the address of the current instruction"
+    ],
     "correct": "As the frame pointer — provides a stable reference to local variables and arguments throughout the function",
     "explanation": "Because ESP moves as you PUSH/POP, [ESP+n] changes constantly. EBP is set once at the function entry (MOV EBP, ESP) and stays fixed. Locals are at negative offsets [EBP-n]; arguments are at positive offsets [EBP+8], [EBP+12], etc. Compiler optimisations can eliminate EBP and use ESP-relative addressing instead."
   },
   {
     "question": "What does the Zero Flag (ZF) indicate?",
-    "answers": ["The result of the last arithmetic/logical operation was zero", "The result was negative", "An unsigned overflow occurred", "A signed overflow occurred"],
+    "answers": [
+      "The result of the last arithmetic/logical operation was zero",
+      "The result was negative",
+      "An unsigned overflow occurred",
+      "A signed overflow occurred"
+    ],
     "correct": "The result of the last arithmetic/logical operation was zero",
     "explanation": "ZF = 1 when the result is zero, ZF = 0 otherwise. It is set by most arithmetic (ADD, SUB, AND, OR, XOR, INC, DEC) and comparison instructions (CMP, TEST). JE and JZ both jump when ZF = 1 — they are the same instruction."
   },
   {
     "question": "What does the Carry Flag (CF) indicate?",
-    "answers": ["An unsigned overflow or borrow occurred in the last arithmetic operation", "The result was zero", "The result was negative", "A signed arithmetic overflow occurred"],
+    "answers": [
+      "An unsigned overflow or borrow occurred in the last arithmetic operation",
+      "The result was zero",
+      "The result was negative",
+      "A signed arithmetic overflow occurred"
+    ],
     "correct": "An unsigned overflow or borrow occurred in the last arithmetic operation",
     "explanation": "CF = 1 when an ADD result exceeds the unsigned maximum (carry out of MSB) or a SUB result goes below zero (borrow). Unsigned comparisons (JA, JB, JAE, JBE) use CF. Also used by ADC/SBB for multi-precision arithmetic."
   },
   {
     "question": "What does the Sign Flag (SF) indicate?",
-    "answers": ["The result of the last operation was negative (most significant bit was 1)", "The result was zero", "An unsigned carry occurred", "A signed overflow occurred"],
+    "answers": [
+      "The result of the last operation was negative (most significant bit was 1)",
+      "The result was zero",
+      "An unsigned carry occurred",
+      "A signed overflow occurred"
+    ],
     "correct": "The result of the last operation was negative (most significant bit was 1)",
     "explanation": "SF simply mirrors the MSB of the result. For signed integers, MSB = 1 means the value is negative. Signed comparisons like JL (jump less) check SF XOR OF, because a signed overflow flips the apparent sign."
   },
   {
     "question": "What does the Overflow Flag (OF) indicate?",
-    "answers": ["A signed arithmetic overflow occurred (result too large/small for the signed type)", "An unsigned carry occurred", "The result was zero", "Division by zero occurred"],
+    "answers": [
+      "A signed arithmetic overflow occurred (result too large/small for the signed type)",
+      "An unsigned carry occurred",
+      "The result was zero",
+      "Division by zero occurred"
+    ],
     "correct": "A signed arithmetic overflow occurred (result too large/small for the signed type)",
     "explanation": "OF = 1 when adding two positives gives a negative result (or two negatives give positive). For 8-bit signed: 127 + 1 overflows to -128 — OF is set. CF handles unsigned overflow; OF handles signed. The JO instruction jumps when OF = 1."
   },
   {
     "question": "What is the relationship between JZ and JE?",
-    "answers": ["They are identical — same opcode (0x74 / 0x0F84), both check ZF = 1", "JZ jumps if the result is zero; JE jumps if operands were equal — different opcodes", "JZ is for unsigned comparison; JE is for signed comparison", "JE is deprecated; JZ is the modern equivalent"],
+    "answers": [
+      "They are identical — same opcode (0x74 / 0x0F84), both check ZF = 1",
+      "JZ jumps if the result is zero; JE jumps if operands were equal — different opcodes",
+      "JZ is for unsigned comparison; JE is for signed comparison",
+      "JE is deprecated; JZ is the modern equivalent"
+    ],
     "correct": "They are identical — same opcode (0x74 / 0x0F84), both check ZF = 1",
     "explanation": "CMP sets ZF = 1 when both operands are equal (because EAX - EBX = 0 when equal). JZ and JE both encode to the same byte(s) and check ZF. IDA Pro and other disassemblers use JZ after TEST and JE after CMP by convention — for readability only."
   },
   {
     "question": "How large is a DWORD?",
-    "answers": ["32 bits (4 bytes)", "16 bits (2 bytes)", "64 bits (8 bytes)", "8 bits (1 byte)"],
+    "answers": [
+      "32 bits (4 bytes)",
+      "16 bits (2 bytes)",
+      "64 bits (8 bytes)",
+      "8 bits (1 byte)"
+    ],
     "correct": "32 bits (4 bytes)",
     "explanation": "x86 naming: BYTE = 8 bits, WORD = 16 bits, DWORD (double word) = 32 bits, QWORD (quad word) = 64 bits. This is why 32-bit registers have the 'E' prefix (Extended) — EAX is the 32-bit extension of the original 16-bit AX register."
   },
   {
     "question": "What are the sizes of EAX, AX, AL, and AH respectively?",
-    "answers": ["32-bit, 16-bit, 8-bit (bits 0-7), 8-bit (bits 8-15)", "64-bit, 32-bit, 16-bit, 8-bit", "32-bit, 16-bit, 16-bit, 16-bit", "All are 32-bit aliases of the same storage"],
+    "answers": [
+      "32-bit, 16-bit, 8-bit (bits 0-7), 8-bit (bits 8-15)",
+      "64-bit, 32-bit, 16-bit, 8-bit",
+      "32-bit, 16-bit, 16-bit, 16-bit",
+      "All are 32-bit aliases of the same storage"
+    ],
     "correct": "32-bit, 16-bit, 8-bit (bits 0-7), 8-bit (bits 8-15)",
-    "explanation": "EAX is the full 32-bit register. AX accesses the lower 16 bits. AL accesses the lowest byte (bits 0-7). AH accesses bits 8-15. Writing to AL or AH does NOT zero the upper bits of EAX — it merges. In 64-bit mode, RAX is the 64-bit version; writing to EAX zero-extends to RAX."
+    "explanation": "EAX is the full 32-bit register. AX accesses the lower 16 bits. AL accesses the lowest byte (bits 0-7). AH accesses bits 8-15. Writing to AL or AH does NOT zero the upper bits of EAX — it merges. In 64-bit mode, RAX is the 64-bit version; writing to EAX zero-extends to RAX.",
+    "diagram": "Register layout (32-bit):\n\n  Bit:  31              16 15        8 7          0\n        +----------------+------------+-----------+\n        |                |     AH     |     AL    |\n        |                +------------+-----------+\n        |                |          AX            |\n        +----------------+------------------------+\n        |                    EAX                  |\n        +-----------------------------------------+\n\n  Writing AL/AH does NOT zero the upper bits of EAX.\n  In 64-bit mode, RAX holds all 64 bits; writing EAX\n  zero-extends into the upper 32 bits of RAX."
   },
   {
     "question": "What does PUSH EAX do to the stack?",
-    "answers": ["Decreases ESP by 4, then writes EAX to the new [ESP] address", "Writes EAX to [ESP] then decreases ESP by 4", "Increases ESP by 4 and writes EAX", "Copies EAX to EBP"],
+    "answers": [
+      "Decreases ESP by 4, then writes EAX to the new [ESP] address",
+      "Writes EAX to [ESP] then decreases ESP by 4",
+      "Increases ESP by 4 and writes EAX",
+      "Copies EAX to EBP"
+    ],
     "correct": "Decreases ESP by 4, then writes EAX to the new [ESP] address",
-    "explanation": "PUSH: ESP -= 4; [ESP] = EAX. The stack grows downward, so pre-decrementing ESP allocates the slot before writing. On 32-bit x86, PUSH always moves ESP by 4 (unless you use a WORD PTR override). This is why the stack top is the lowest occupied address."
+    "explanation": "PUSH: ESP -= 4; [ESP] = EAX. The stack grows downward, so pre-decrementing ESP allocates the slot before writing. On 32-bit x86, PUSH always moves ESP by 4 (unless you use a WORD PTR override). This is why the stack top is the lowest occupied address.",
+    "diagram": "PUSH EAX  (stack grows toward lower addresses)\n\n  Before:                   After:\n  Higher addr               Higher addr\n  +---------------+         +---------------+\n  |  ...          |         |  ...          |\n  +---------------+         +---------------+\n  |  prev value   | <- ESP  |  prev value   |\n  +---------------+         +---------------+\n                            |  EAX value    | <- ESP (4 bytes lower)\n                            +---------------+\n  Lower addr                Lower addr\n\n  Operation: ESP -= 4,  then  [ESP] = EAX"
   },
   {
     "question": "What does POP EAX do?",
-    "answers": ["Reads 4 bytes from [ESP] into EAX, then increases ESP by 4", "Writes EAX to [ESP] then increases ESP by 4", "Decreases ESP by 4 and reads into EAX", "Copies [EBP] to EAX"],
+    "answers": [
+      "Reads 4 bytes from [ESP] into EAX, then increases ESP by 4",
+      "Writes EAX to [ESP] then increases ESP by 4",
+      "Decreases ESP by 4 and reads into EAX",
+      "Copies [EBP] to EAX"
+    ],
     "correct": "Reads 4 bytes from [ESP] into EAX, then increases ESP by 4",
-    "explanation": "POP: EAX = [ESP]; ESP += 4. The memory is NOT zeroed — it is simply abandoned below the new stack top. This is why reading below ESP can give you 'ghost' values from previous stack frames, which is a source of data leaks."
+    "explanation": "POP: EAX = [ESP]; ESP += 4. The memory is NOT zeroed — it is simply abandoned below the new stack top. This is why reading below ESP can give you 'ghost' values from previous stack frames, which is a source of data leaks.",
+    "diagram": "POP EAX  (stack shrinks toward higher addresses)\n\n  Before:                   After:\n  Higher addr               Higher addr\n  +---------------+         +---------------+\n  |  prev value   |         |  prev value   | <- ESP (new)\n  +---------------+         +---------------+\n  |  top value    | <- ESP  |  (abandoned)  |  NOT zeroed!\n  +---------------+         +---------------+\n  Lower addr                Lower addr\n\n  Operation: EAX = [ESP],  then  ESP += 4\n  Memory below ESP is NOT cleared -- old data lingers.\n  Reading it is a source of information leaks."
   },
   {
     "question": "What does the CALL instruction do?",
-    "answers": ["Pushes the return address (next instruction's address) onto the stack, then jumps to the target", "Pushes all registers and jumps to the target", "Jumps to the target and immediately returns", "Pushes the target address and jumps to the return address"],
+    "answers": [
+      "Pushes the return address (next instruction's address) onto the stack, then jumps to the target",
+      "Pushes all registers and jumps to the target",
+      "Jumps to the target and immediately returns",
+      "Pushes the target address and jumps to the return address"
+    ],
     "correct": "Pushes the return address (next instruction's address) onto the stack, then jumps to the target",
-    "explanation": "CALL 0x401000 is equivalent to: PUSH (address of next instruction); JMP 0x401000. The pushed value is the return address — where execution should resume after RET. This is why overwriting the saved return address on the stack redirects execution when the function returns."
+    "explanation": "CALL 0x401000 is equivalent to: PUSH (address of next instruction); JMP 0x401000. The pushed value is the return address — where execution should resume after RET. This is why overwriting the saved return address on the stack redirects execution when the function returns.",
+    "diagram": "CALL 0x00401000\n\n  Before:                       After:\n  +------------------+          +------------------+\n  |  ...             |          |  ...             |\n  +------------------+ <- ESP   +------------------+\n                                |  return address  | <- ESP (new)\n                                +------------------+\n  EIP = CALL instruction        EIP = 0x00401000\n\n  'return address' = address of the instruction\n  immediately AFTER the CALL.\n\n  Overwrite this value via a buffer overflow and\n  RET will jump to your address instead."
   },
   {
     "question": "What does RET do?",
-    "answers": ["Pops the return address from [ESP] into EIP and jumps there", "Returns the value in EAX to the caller", "Restores all caller-saved registers and jumps to EIP", "Pops EBP and then jumps to the saved return address"],
+    "answers": [
+      "Pops the return address from [ESP] into EIP and jumps there",
+      "Returns the value in EAX to the caller",
+      "Restores all caller-saved registers and jumps to EIP",
+      "Pops EBP and then jumps to the saved return address"
+    ],
     "correct": "Pops the return address from [ESP] into EIP and jumps there",
-    "explanation": "RET is equivalent to POP EIP (though EIP is not directly addressable). It reads [ESP] into EIP then increments ESP by 4. RETN n additionally adds n to ESP after the jump, cleaning caller-pushed arguments (used in __stdcall). If the stack is corrupted, RET jumps to an attacker-controlled address."
+    "explanation": "RET is equivalent to POP EIP (though EIP is not directly addressable). It reads [ESP] into EIP then increments ESP by 4. RETN n additionally adds n to ESP after the jump, cleaning caller-pushed arguments (used in __stdcall). If the stack is corrupted, RET jumps to an attacker-controlled address.",
+    "diagram": "RET  (equivalent to POP EIP)\n\n  Before:                       After:\n  +------------------+          +------------------+\n  |  ...             |          |  ...             |\n  +------------------+          +------------------+ <- ESP (new)\n  |  return address  | <- ESP   |  (freed)         |\n  +------------------+          +------------------+\n\n  EIP = [old ESP]  (the return address)\n\n  If the return address on the stack has been\n  overwritten (stack overflow), RET jumps there.\n  This is the classic EIP hijack primitive."
   },
   {
     "question": "What does NOP do?",
-    "answers": ["No operation — opcode 0x90, advances EIP by 1 and does nothing else", "Nulls out the operand register", "Clears the carry flag", "Negates the current accumulator"],
+    "answers": [
+      "No operation — opcode 0x90, advances EIP by 1 and does nothing else",
+      "Nulls out the operand register",
+      "Clears the carry flag",
+      "Negates the current accumulator"
+    ],
     "correct": "No operation — opcode 0x90, advances EIP by 1 and does nothing else",
     "explanation": "NOP (0x90) is XCHG EAX, EAX — swapping a register with itself. It consumes one clock cycle, advances EIP by 1, and changes no flags or state. Uses: alignment padding, NOP sleds in shellcode, patching out instructions without changing binary size."
   },
   {
     "question": "What is the key difference between MOV and LEA?",
-    "answers": ["MOV moves/reads a value; LEA computes the effective address without dereferencing memory", "LEA is faster than MOV for all operations", "MOV works on registers only; LEA works on memory operands", "They are identical — LEA is an alias for MOV"],
+    "answers": [
+      "MOV moves/reads a value; LEA computes the effective address without dereferencing memory",
+      "LEA is faster than MOV for all operations",
+      "MOV works on registers only; LEA works on memory operands",
+      "They are identical — LEA is an alias for MOV"
+    ],
     "correct": "MOV moves/reads a value; LEA computes the effective address without dereferencing memory",
     "explanation": "MOV EAX, [EBX+4] reads the DWORD at address EBX+4. LEA EAX, [EBX+4] loads the ADDRESS (EBX+4) itself into EAX without accessing memory. LEA is commonly used for fast address arithmetic: LEA EAX, [EBX+ECX*4+8] computes EBX+ECX*4+8 in one instruction."
   },
   {
     "question": "What does XCHG EAX, EBX do?",
-    "answers": ["Atomically swaps the values of EAX and EBX", "Exchanges EAX with the value at address EBX", "Extends EAX by copying EBX into the high bits", "Exchanges CPU mode registers"],
+    "answers": [
+      "Atomically swaps the values of EAX and EBX",
+      "Exchanges EAX with the value at address EBX",
+      "Extends EAX by copying EBX into the high bits",
+      "Exchanges CPU mode registers"
+    ],
     "correct": "Atomically swaps the values of EAX and EBX",
     "explanation": "XCHG with a memory operand has an implicit LOCK prefix — it is atomic. XCHG with only registers is not implicitly locked but is still an exchange. XCHG EAX, EAX is NOP (opcode 0x90). XCHG is used in spinlocks and test-and-set primitives."
   },
   {
     "question": "What does the LEAVE instruction do?",
-    "answers": ["Equivalent to MOV ESP, EBP then POP EBP — restores ESP and EBP to caller's values", "Leaves the current function without touching the stack", "Pops the return address and jumps there", "Decrements ECX and jumps if not zero"],
+    "answers": [
+      "Equivalent to MOV ESP, EBP then POP EBP — restores ESP and EBP to caller's values",
+      "Leaves the current function without touching the stack",
+      "Pops the return address and jumps there",
+      "Decrements ECX and jumps if not zero"
+    ],
     "correct": "Equivalent to MOV ESP, EBP then POP EBP — restores ESP and EBP to caller's values",
-    "explanation": "LEAVE reverses the function prologue: MOV ESP, EBP discards all local variables by resetting ESP to the saved frame base. POP EBP restores the caller's frame pointer. LEAVE + RET is the standard function epilogue for frame-pointer-using functions."
+    "explanation": "LEAVE reverses the function prologue: MOV ESP, EBP discards all local variables by resetting ESP to the saved frame base. POP EBP restores the caller's frame pointer. LEAVE + RET is the standard function epilogue for frame-pointer-using functions.",
+    "diagram": "LEAVE = MOV ESP, EBP  +  POP EBP\n\n  Before LEAVE:                 After LEAVE:\n  +---------------+             +---------------+\n  |  arg 1        | [EBP+8]     |  arg 1        |\n  +---------------+             +---------------+\n  |  return addr  | [EBP+4]     |  return addr  | <- ESP\n  +---------------+             +---------------+\n  |  saved EBP    | [EBP] <-EBP |  (freed)      |  EBP restored\n  +---------------+             +---------------+\n  |  locals ...   | <- ESP      |  (freed)      |\n  +---------------+             +---------------+\n\n  After LEAVE, the next RET pops the return\n  address into EIP and returns to the caller."
   },
   {
     "question": "What does MOVSX do that a plain MOV cannot?",
-    "answers": ["Sign-extends a smaller source (byte or word) to fill the larger destination register", "Moves data between segment registers", "Performs a conditional move when the sign flag is set", "Moves with exclusive-or to clear the destination first"],
+    "answers": [
+      "Sign-extends a smaller source (byte or word) to fill the larger destination register",
+      "Moves data between segment registers",
+      "Performs a conditional move when the sign flag is set",
+      "Moves with exclusive-or to clear the destination first"
+    ],
     "correct": "Sign-extends a smaller source (byte or word) to fill the larger destination register",
-    "explanation": "MOVSX EAX, byte ptr [EBX] reads 1 byte, sign-extends it to 32 bits, and stores in EAX. Example: byte value 0xFF (-1 signed) becomes 0xFFFFFFFF in EAX. Without sign extension, 0xFF zero-extended (MOVZX) becomes 0x000000FF (255 unsigned)."
+    "explanation": "MOVSX EAX, byte ptr [EBX] reads 1 byte, sign-extends it to 32 bits, and stores in EAX. Example: byte value 0xFF (-1 signed) becomes 0xFFFFFFFF in EAX. Without sign extension, 0xFF zero-extended (MOVZX) becomes 0x000000FF (255 unsigned).",
+    "diagram": "Sign extension vs zero extension  (source byte = 0xFF)\n\n  Source byte:  0xFF  =  1111 1111  (bit 7 = 1, negative)\n\n  MOVSX EAX, byte  (sign-extend: fill upper bits with sign bit = 1)\n  +------------------------+----------+\n  |  1111 1111  1111 1111  | 1111 1111|\n  +------------------------+----------+\n  = 0xFFFFFFFF  =  -1  (signed 32-bit)\n\n  MOVZX EAX, byte  (zero-extend: fill upper bits with 0)\n  +------------------------+----------+\n  |  0000 0000  0000 0000  | 1111 1111|\n  +------------------------+----------+\n  = 0x000000FF  =  255  (unsigned 32-bit)\n\n  Rule:  signed char   -> MOVSX\n         unsigned char -> MOVZX"
   },
   {
     "question": "What does MOVZX do?",
-    "answers": ["Zero-extends a smaller source (byte or word) to fill the larger destination register", "Moves zero into the destination register", "Performs a conditional move if the zero flag is set", "Moves data and sets ZF based on the result"],
+    "answers": [
+      "Zero-extends a smaller source (byte or word) to fill the larger destination register",
+      "Moves zero into the destination register",
+      "Performs a conditional move if the zero flag is set",
+      "Moves data and sets ZF based on the result"
+    ],
     "correct": "Zero-extends a smaller source (byte or word) to fill the larger destination register",
     "explanation": "MOVZX EAX, byte ptr [EBX] reads 1 byte and fills the upper 24 bits of EAX with 0. Example: byte 0xFF becomes 0x000000FF (255 unsigned). Contrast with MOVSX where 0xFF becomes 0xFFFFFFFF (-1 signed). Use MOVZX for unsigned bytes/words; MOVSX for signed."
   },
   {
     "question": "What does TEST EAX, EAX accomplish?",
-    "answers": ["Performs bitwise AND of EAX with itself, sets ZF = 1 if EAX is zero (without storing the result)", "Stores 0 in EAX if EAX is zero", "Compares EAX to itself, always setting ZF = 1", "Moves EAX to the test register"],
+    "answers": [
+      "Performs bitwise AND of EAX with itself, sets ZF = 1 if EAX is zero (without storing the result)",
+      "Stores 0 in EAX if EAX is zero",
+      "Compares EAX to itself, always setting ZF = 1",
+      "Moves EAX to the test register"
+    ],
     "correct": "Performs bitwise AND of EAX with itself, sets ZF = 1 if EAX is zero (without storing the result)",
     "explanation": "TEST is like AND but discards the result, only setting flags. TEST EAX, EAX is the standard idiom to check if a register is zero without destroying it. Preferred over CMP EAX, 0 — it generates a smaller instruction encoding and is equally expressive."
   },
   {
     "question": "What does CMP EAX, EBX do?",
-    "answers": ["Subtracts EBX from EAX and sets flags without storing the result", "Compares and stores the smaller value in EAX", "Sets EAX to 1 if equal, 0 otherwise", "Subtracts and stores the result in EBX"],
+    "answers": [
+      "Subtracts EBX from EAX and sets flags without storing the result",
+      "Compares and stores the smaller value in EAX",
+      "Sets EAX to 1 if equal, 0 otherwise",
+      "Subtracts and stores the result in EBX"
+    ],
     "correct": "Subtracts EBX from EAX and sets flags without storing the result",
     "explanation": "CMP is like SUB but discards the result. The flags reflect EAX - EBX: ZF set if equal, CF set if EAX < EBX unsigned, SF/OF set for signed comparison. The subsequent conditional jump (JE, JL, JG, etc.) reads the appropriate flag combination."
   },
   {
     "question": "What addressing mode is [EBP - 8]?",
-    "answers": ["Base + displacement — accesses memory at address (EBP - 8)", "Indirect register addressing", "Scaled index addressing", "Immediate addressing"],
+    "answers": [
+      "Base + displacement — accesses memory at address (EBP - 8)",
+      "Indirect register addressing",
+      "Scaled index addressing",
+      "Immediate addressing"
+    ],
     "correct": "Base + displacement — accesses memory at address (EBP - 8)",
-    "explanation": "[EBP - 8] is base (EBP) plus a negative displacement (-8). It accesses the local variable 8 bytes below the frame pointer. Local variables are at [EBP-4], [EBP-8], etc. Arguments are at [EBP+8], [EBP+12], etc. (EBP+0 is saved EBP, EBP+4 is return address)."
+    "explanation": "[EBP - 8] is base (EBP) plus a negative displacement (-8). It accesses the local variable 8 bytes below the frame pointer. Local variables are at [EBP-4], [EBP-8], etc. Arguments are at [EBP+8], [EBP+12], etc. (EBP+0 is saved EBP, EBP+4 is return address).",
+    "diagram": "EBP-relative addressing in a stack frame:\n\n  High addr\n  +---------------+\n  |  arg 1        |  [EBP+8]   <- positive = arguments\n  +---------------+\n  |  return addr  |  [EBP+4]\n  +---------------+\n  |  saved EBP    |  [EBP+0]   <- EBP (fixed)\n  +---------------+\n  |  local 1      |  [EBP-4]\n  +---------------+\n  |  local 2      |  [EBP-8]   <- THIS reads here\n  +---------------+\n  |  local 3      |  [EBP-12]\n  +---------------+  <- ESP (moves)\n  Low addr\n\n  EBP stays fixed; ESP moves with PUSHes/POPs.\n  Negative offsets = locals, positive = arguments."
   },
   {
     "question": "What does SHL EAX, 1 effectively compute?",
-    "answers": ["EAX * 2 (left shift by 1 is identical to unsigned multiply by 2)", "EAX / 2", "EAX + 1", "EAX XOR 1"],
+    "answers": [
+      "EAX * 2 (left shift by 1 is identical to unsigned multiply by 2)",
+      "EAX / 2",
+      "EAX + 1",
+      "EAX XOR 1"
+    ],
     "correct": "EAX * 2 (left shift by 1 is identical to unsigned multiply by 2)",
     "explanation": "Each left shift by 1 doubles the value — every bit moves one position higher (= one higher power of 2). SHL by n multiplies by 2^n. Compilers use shifts instead of IMUL when the multiplier is a power of 2 because SHL is one cycle; IMUL is typically 3 cycles."
   },
   {
     "question": "What is the difference between SHR and SAR for right shifts?",
-    "answers": ["SHR fills vacated bits with 0 (unsigned divide); SAR fills with the sign bit (signed divide)", "SAR is faster than SHR for large shifts", "SHR operates on bytes only; SAR on DWORDs", "They are identical — SAR is the 64-bit variant"],
+    "answers": [
+      "SHR fills vacated bits with 0 (unsigned divide); SAR fills with the sign bit (signed divide)",
+      "SAR is faster than SHR for large shifts",
+      "SHR operates on bytes only; SAR on DWORDs",
+      "They are identical — SAR is the 64-bit variant"
+    ],
     "correct": "SHR fills vacated bits with 0 (unsigned divide); SAR fills with the sign bit (signed divide)",
-    "explanation": "SHR EAX, 1 on 0x80000000 (-2147483648 signed) gives 0x40000000 (divides the bit pattern by 2, treating it as unsigned). SAR EAX, 1 on 0x80000000 gives 0xC0000000 (preserves the sign bit, correctly dividing -2147483648 by 2 to get -1073741824)."
+    "explanation": "SHR EAX, 1 on 0x80000000 (-2147483648 signed) gives 0x40000000 (divides the bit pattern by 2, treating it as unsigned). SAR EAX, 1 on 0x80000000 gives 0xC0000000 (preserves the sign bit, correctly dividing -2147483648 by 2 to get -1073741824).",
+    "diagram": "Right shift on 0x80000000  (MSB = 1, negative signed)\n  Binary: 1000 0000  0000 0000  0000 0000  0000 0000\n\n  SHR (logical -- vacated bits filled with 0):\n  0 --> [1000 0000 ... 0000] --> (dropped)\n        [0100 0000 ... 0000]\n  = 0x40000000  (+1073741824)  WRONG for signed divide\n\n  SAR (arithmetic -- vacated bits filled with sign bit = 1):\n  1 --> [1000 0000 ... 0000] --> (dropped)\n        [1100 0000 ... 0000]\n  = 0xC0000000  (-1073741824)  CORRECT: -2147483648 / 2\n\n  Use SHR for unsigned values, SAR for signed values."
   },
   {
     "question": "What registers does PUSHAD save onto the stack?",
-    "answers": ["EAX, ECX, EDX, EBX, ESP (original), EBP, ESI, EDI — in that order", "EAX, EBX, ECX, EDX only", "All general-purpose and segment registers", "EBP, ESP, ESI, EDI only"],
+    "answers": [
+      "EAX, ECX, EDX, EBX, ESP (original), EBP, ESI, EDI — in that order",
+      "EAX, EBX, ECX, EDX only",
+      "All general-purpose and segment registers",
+      "EBP, ESP, ESI, EDI only"
+    ],
     "correct": "EAX, ECX, EDX, EBX, ESP (original), EBP, ESI, EDI — in that order",
     "explanation": "PUSHAD pushes all 8 general-purpose registers. The ESP value pushed is the value BEFORE PUSHAD executes. POPAD restores them in reverse order. PUSHAD/POPAD are commonly used in shellcode to save state before running payload code and restore it cleanly afterwards."
   },
   {
     "question": "What does CDQ do?",
-    "answers": ["Sign-extends EAX into EDX:EAX (used before 32-bit signed division with IDIV)", "Converts a double float to a quad integer", "Clears EDX to zero", "Copies EAX to EDX"],
+    "answers": [
+      "Sign-extends EAX into EDX:EAX (used before 32-bit signed division with IDIV)",
+      "Converts a double float to a quad integer",
+      "Clears EDX to zero",
+      "Copies EAX to EDX"
+    ],
     "correct": "Sign-extends EAX into EDX:EAX (used before 32-bit signed division with IDIV)",
-    "explanation": "IDIV operates on the 64-bit dividend in EDX:EAX. CDQ fills EDX with copies of EAX's sign bit (all 1s if EAX is negative, all 0s if positive). Without CDQ, EDX might contain garbage, making IDIV produce wrong results. For unsigned division, XOR EDX, EDX clears EDX instead."
+    "explanation": "IDIV operates on the 64-bit dividend in EDX:EAX. CDQ fills EDX with copies of EAX's sign bit (all 1s if EAX is negative, all 0s if positive). Without CDQ, EDX might contain garbage, making IDIV produce wrong results. For unsigned division, XOR EDX, EDX clears EDX instead.",
+    "diagram": "CDQ: sign-extend EAX into the 64-bit pair EDX:EAX\n\n  EAX = 17  (positive, sign bit = 0)\n  +------------------+  +------------------+\n  |  EDX = 0x00000000|  |  EAX = 0x00000011|\n  +------------------+  +------------------+\n  EDX:EAX = 0x00000000_00000011  (17 as 64-bit)\n\n  EAX = -5  (0xFFFFFFFB, sign bit = 1)\n  +------------------+  +------------------+\n  |  EDX = 0xFFFFFFFF|  |  EAX = 0xFFFFFFFB|\n  +------------------+  +------------------+\n  EDX:EAX = 0xFFFFFFFF_FFFFFFFB  (-5 as 64-bit)\n\n  IDIV EBX divides EDX:EAX by EBX:\n    quotient  -> EAX\n    remainder -> EDX"
   },
   {
     "question": "What is the size of a pointer on 32-bit x86?",
-    "answers": ["4 bytes (32 bits)", "8 bytes (64 bits)", "2 bytes (16 bits)", "Variable depending on the segment register"],
+    "answers": [
+      "4 bytes (32 bits)",
+      "8 bytes (64 bits)",
+      "2 bytes (16 bits)",
+      "Variable depending on the segment register"
+    ],
     "correct": "4 bytes (32 bits)",
     "explanation": "In 32-bit protected mode, all near pointers are 32 bits (4 bytes) — they are offsets within a flat 4 GB virtual address space. Far pointers (segment:offset) are 6 bytes but are rarely used. In 64-bit mode, pointers grow to 8 bytes."
   },
   {
     "question": "What does ROL EAX, 8 do to the value 0x12345678?",
-    "answers": ["Produces 0x34567812 — shifts bits left, wrapping the top byte to the bottom", "Produces 0x00123456 — shifts left filling low bits with zero", "Produces 0x78123456 — moves the top byte down", "Produces 0x12345678 — no effect at a byte boundary"],
+    "answers": [
+      "Produces 0x34567812 — shifts bits left, wrapping the top byte to the bottom",
+      "Produces 0x00123456 — shifts left filling low bits with zero",
+      "Produces 0x78123456 — moves the top byte down",
+      "Produces 0x12345678 — no effect at a byte boundary"
+    ],
     "correct": "Produces 0x34567812 — shifts bits left, wrapping the top byte to the bottom",
-    "explanation": "ROL (rotate left) shifts all bits left by 8, and the 8 bits shifted out the top reappear at the bottom. 0x12345678 → top byte 0x12 rotates to the bottom: 0x34567812. Unlike SHL there is no data loss — every bit is preserved. ROL/ROR are used in hash functions, encryption algorithms, and byte-swapping."
+    "explanation": "ROL (rotate left) shifts all bits left by 8, and the 8 bits shifted out the top reappear at the bottom. 0x12345678 → top byte 0x12 rotates to the bottom: 0x34567812. Unlike SHL there is no data loss — every bit is preserved. ROL/ROR are used in hash functions, encryption algorithms, and byte-swapping.",
+    "diagram": "ROL EAX, 8  (rotate left by 8 bits = 1 byte)\n\n  Value:  0x12345678\n  Bytes (high -> low):  [ 12 ][ 34 ][ 56 ][ 78 ]\n\n  Top byte wraps around to the bottom:\n\n  Before: [ 12 ][ 34 ][ 56 ][ 78 ]\n           ^--- rotates to end ---v\n  After:  [ 34 ][ 56 ][ 78 ][ 12 ]\n          = 0x34567812\n\n  Unlike SHL, ROL loses NO bits -- every bit that\n  exits the top reappears at the bottom.\n  Used in hashing, encryption, and byte-swapping."
   },
   {
     "question": "What is the Parity Flag (PF) used for?",
-    "answers": ["Set when the low byte of the result has an even number of set bits", "Set when the result has an odd number of total bits", "Set when the result is a power of two", "Set when both operands had equal parity"],
+    "answers": [
+      "Set when the low byte of the result has an even number of set bits",
+      "Set when the result has an odd number of total bits",
+      "Set when the result is a power of two",
+      "Set when both operands had equal parity"
+    ],
     "correct": "Set when the low byte of the result has an even number of set bits",
     "explanation": "PF = 1 if the number of 1-bits in the low 8 bits of the result is even (even parity). Historically used in serial communications for parity checking. In practice, x86 programmers rarely use PF; it's checked by JP (jump if parity even) and JNP (jump if parity odd)."
   },
@@ -183,7 +344,12 @@
     "question": "What is the value of EAX after these instructions?",
     "code": "MOV EAX, 0x0A\nADD EAX, 0x05",
     "code_lang": "asm",
-    "answers": ["0x0F (15 decimal)", "0x0A (10 decimal)", "0x05 (5 decimal)", "0x50 (80 decimal)"],
+    "answers": [
+      "0x0F (15 decimal)",
+      "0x0A (10 decimal)",
+      "0x05 (5 decimal)",
+      "0x50 (80 decimal)"
+    ],
     "correct": "0x0F (15 decimal)",
     "explanation": "MOV EAX, 0x0A loads the immediate value 10 (0x0A) into EAX. ADD EAX, 0x05 adds 5 to EAX: 10 + 5 = 15 = 0x0F. ADD updates flags: ZF=0, SF=0, CF=0, OF=0."
   },
@@ -191,7 +357,12 @@
     "question": "What is the value of EAX after this instruction?",
     "code": "XOR EAX, EAX",
     "code_lang": "asm",
-    "answers": ["0 — zeroes EAX regardless of its previous value", "0xFFFFFFFF (all bits set)", "Unchanged — XOR with self is identity", "Undefined — depends on previous EAX"],
+    "answers": [
+      "0 — zeroes EAX regardless of its previous value",
+      "0xFFFFFFFF (all bits set)",
+      "Unchanged — XOR with self is identity",
+      "Undefined — depends on previous EAX"
+    ],
     "correct": "0 — zeroes EAX regardless of its previous value",
     "explanation": "Any value XORed with itself is 0 (every bit: 1^1=0, 0^0=0). XOR EAX, EAX is the preferred way to zero a register: it encodes in 2 bytes (0x31 0xC0) vs MOV EAX, 0 which takes 5 bytes. It also breaks false dependencies on the previous EAX value on some CPUs. Sets ZF=1."
   },
@@ -199,15 +370,26 @@
     "question": "What does this standard function prologue accomplish?",
     "code": "PUSH EBP\nMOV EBP, ESP\nSUB ESP, 0x10",
     "code_lang": "asm",
-    "answers": ["Saves caller's frame pointer, establishes new frame base, allocates 16 bytes for locals", "Saves EBP, copies EBP to ESP, subtracts 16 from EBP", "Pushes 3 values and sets up a loop counter", "Sets up a __stdcall function with 4 arguments"],
+    "answers": [
+      "Saves caller's frame pointer, establishes new frame base, allocates 16 bytes for locals",
+      "Saves EBP, copies EBP to ESP, subtracts 16 from EBP",
+      "Pushes 3 values and sets up a loop counter",
+      "Sets up a __stdcall function with 4 arguments"
+    ],
     "correct": "Saves caller's frame pointer, establishes new frame base, allocates 16 bytes for locals",
-    "explanation": "PUSH EBP: saves the previous frame pointer (so it can be restored on return). MOV EBP, ESP: anchors EBP to the current stack top — this is the new frame base. SUB ESP, 0x10: moves ESP down 16 bytes, creating space for 4 local int variables (each 4 bytes). Locals are at [EBP-4], [EBP-8], [EBP-12], [EBP-16]."
+    "explanation": "PUSH EBP: saves the previous frame pointer (so it can be restored on return). MOV EBP, ESP: anchors EBP to the current stack top — this is the new frame base. SUB ESP, 0x10: moves ESP down 16 bytes, creating space for 4 local int variables (each 4 bytes). Locals are at [EBP-4], [EBP-8], [EBP-12], [EBP-16].",
+    "diagram": "Stack frame after: PUSH EBP / MOV EBP, ESP / SUB ESP, 0x10\n(SUB ESP, 0x10 allocates 16 bytes = 4 x 4-byte locals)\n\n  High addr\n  +---------------+\n  |  arg 2        |  [EBP+12]\n  +---------------+\n  |  arg 1        |  [EBP+8]   <- first argument\n  +---------------+\n  |  return addr  |  [EBP+4]   <- pushed by CALL\n  +---------------+\n  |  saved EBP    |  [EBP+0]   <- EBP anchored here\n  +---------------+\n  |  local 1      |  [EBP-4]\n  +---------------+\n  |  local 2      |  [EBP-8]\n  +---------------+\n  |  local 3      |  [EBP-12]\n  +---------------+\n  |  local 4      |  [EBP-16]  <- ESP (stack top)\n  +---------------+\n  Low addr"
   },
   {
     "question": "By how much does ESP change after these two instructions?",
     "code": "PUSH EAX\nPUSH EBX",
     "code_lang": "asm",
-    "answers": ["ESP decreases by 8 bytes", "ESP increases by 8 bytes", "ESP decreases by 4 bytes", "ESP is unchanged"],
+    "answers": [
+      "ESP decreases by 8 bytes",
+      "ESP increases by 8 bytes",
+      "ESP decreases by 4 bytes",
+      "ESP is unchanged"
+    ],
     "correct": "ESP decreases by 8 bytes",
     "explanation": "Each PUSH on 32-bit x86 decrements ESP by 4 (one DWORD). Two PUSHes = 8 bytes decrease. The stack grows downward, so decreasing ESP extends the stack. After PUSH EAX, ESP points 4 bytes lower; after PUSH EBX, another 4 bytes lower."
   },
@@ -215,7 +397,12 @@
     "question": "What is EAX after these instructions?",
     "code": "MOV EAX, 10\nMOV EBX, 3\nSUB EAX, EBX",
     "code_lang": "asm",
-    "answers": ["7", "13", "3", "10"],
+    "answers": [
+      "7",
+      "13",
+      "3",
+      "10"
+    ],
     "correct": "7",
     "explanation": "SUB EAX, EBX computes EAX = EAX - EBX = 10 - 3 = 7. EBX remains 3. Flags: ZF=0 (result non-zero), SF=0 (result positive), CF=0 (no borrow). Note: SUB sets CF when the result would be negative unsigned — here 10 ≥ 3 so no borrow."
   },
@@ -223,15 +410,26 @@
     "question": "What does this two-instruction function return?",
     "code": "MOV EAX, [EBP+8]\nRET",
     "code_lang": "asm",
-    "answers": ["The first argument passed by the caller", "The return address", "The saved EBP value", "A local variable at EBP-4"],
+    "answers": [
+      "The first argument passed by the caller",
+      "The return address",
+      "The saved EBP value",
+      "A local variable at EBP-4"
+    ],
     "correct": "The first argument passed by the caller",
-    "explanation": "In the standard x86 frame: [EBP+0]=saved EBP, [EBP+4]=return address, [EBP+8]=first argument, [EBP+12]=second argument, etc. Loading [EBP+8] into EAX then returning is the pattern for a function that simply returns its first argument. EAX is the return value register in __cdecl/__stdcall."
+    "explanation": "In the standard x86 frame: [EBP+0]=saved EBP, [EBP+4]=return address, [EBP+8]=first argument, [EBP+12]=second argument, etc. Loading [EBP+8] into EAX then returning is the pattern for a function that simply returns its first argument. EAX is the return value register in __cdecl/__stdcall.",
+    "diagram": "Stack frame during a __cdecl function call:\n\n  High addr\n  +---------------+\n  |  arg 2        |  [EBP+12]\n  +---------------+\n  |  arg 1        |  [EBP+8]  <- MOV EAX, [EBP+8] reads here\n  +---------------+\n  |  return addr  |  [EBP+4]  (pushed by CALL)\n  +---------------+\n  |  saved EBP    |  [EBP+0]  <- EBP points here\n  +---------------+\n  |  local vars   |  [EBP-n]\n  +---------------+  <- ESP\n  Low addr\n\n  [EBP+8] is always the FIRST argument (cdecl/stdcall).\n  Loading it into EAX then RETurning = 'return arg1;'."
   },
   {
     "question": "What is EAX after these instructions?",
     "code": "MOV EAX, 5\nSHL EAX, 2",
     "code_lang": "asm",
-    "answers": ["20 (5 * 4 — left shift by 2 multiplies by 2^2 = 4)", "10 (5 * 2)", "7 (5 + 2)", "25 (5 squared)"],
+    "answers": [
+      "20 (5 * 4 — left shift by 2 multiplies by 2^2 = 4)",
+      "10 (5 * 2)",
+      "7 (5 + 2)",
+      "25 (5 squared)"
+    ],
     "correct": "20 (5 * 4 — left shift by 2 multiplies by 2^2 = 4)",
     "explanation": "SHL EAX, 2 shifts all bits left by 2 positions, multiplying by 4. 5 = 0b00000101 → 0b00010100 = 20. Compilers prefer SHL over IMUL when multiplying by powers of 2: SHL is 1 cycle while IMUL is typically 3. SHL by 1 = *2, by 2 = *4, by 3 = *8, etc."
   },
@@ -239,7 +437,12 @@
     "question": "What is EAX after these instructions?",
     "code": "MOV EAX, 20\nSHR EAX, 2",
     "code_lang": "asm",
-    "answers": ["5 (20 / 4 — right shift by 2 divides by 2^2 = 4)", "10 (20 / 2)", "18 (20 - 2)", "80 (20 * 4)"],
+    "answers": [
+      "5 (20 / 4 — right shift by 2 divides by 2^2 = 4)",
+      "10 (20 / 2)",
+      "18 (20 - 2)",
+      "80 (20 * 4)"
+    ],
     "correct": "5 (20 / 4 — right shift by 2 divides by 2^2 = 4)",
     "explanation": "SHR (shift logical right) by n divides the value by 2^n, filling vacated high bits with 0. 20 = 0b00010100 → shift right 2 → 0b00000101 = 5. For positive signed integers, SHR and SAR give the same result. For negative values, use SAR to preserve the sign."
   },
@@ -247,7 +450,12 @@
     "question": "What is EAX after these instructions?",
     "code": "MOV EAX, 7\nAND EAX, 0x0F",
     "code_lang": "asm",
-    "answers": ["7 (0x07 AND 0x0F = 0x07)", "0 (AND with mask clears all)", "15 (fills low nibble)", "0xF7 (OR result instead of AND)"],
+    "answers": [
+      "7 (0x07 AND 0x0F = 0x07)",
+      "0 (AND with mask clears all)",
+      "15 (fills low nibble)",
+      "0xF7 (OR result instead of AND)"
+    ],
     "correct": "7 (0x07 AND 0x0F = 0x07)",
     "explanation": "AND keeps only bits that are 1 in BOTH operands. 0x07 = 0b0111, 0x0F = 0b1111. The low 4 bits of 7 are 0111, all within the mask, so the result is 0b0111 = 7. Masking with 0x0F extracts the low nibble. If EAX had been 0xAB, the result would be 0x0B."
   },
@@ -255,7 +463,12 @@
     "question": "What flags are set after this sequence?",
     "code": "MOV EAX, 5\nCMP EAX, 5",
     "code_lang": "asm",
-    "answers": ["ZF = 1 (result of 5 - 5 is zero)", "CF = 1 (borrow from subtraction)", "SF = 1 (negative result)", "OF = 1 (signed overflow)"],
+    "answers": [
+      "ZF = 1 (result of 5 - 5 is zero)",
+      "CF = 1 (borrow from subtraction)",
+      "SF = 1 (negative result)",
+      "OF = 1 (signed overflow)"
+    ],
     "correct": "ZF = 1 (result of 5 - 5 is zero)",
     "explanation": "CMP EAX, 5 computes 5 - 5 = 0 and sets ZF = 1. CF = 0 (no unsigned borrow: 5 ≥ 5). SF = 0 (result is not negative). OF = 0 (no signed overflow). The next instruction is likely JE or JZ, which will jump because ZF = 1."
   },
@@ -263,7 +476,12 @@
     "question": "What does this sequence check?",
     "code": "TEST EAX, EAX\nJZ zero_branch",
     "code_lang": "asm",
-    "answers": ["Jumps to zero_branch if EAX == 0", "Jumps to zero_branch if EAX != 0", "Jumps to zero_branch if EAX is negative", "Jumps to zero_branch unconditionally"],
+    "answers": [
+      "Jumps to zero_branch if EAX == 0",
+      "Jumps to zero_branch if EAX != 0",
+      "Jumps to zero_branch if EAX is negative",
+      "Jumps to zero_branch unconditionally"
+    ],
     "correct": "Jumps to zero_branch if EAX == 0",
     "explanation": "TEST EAX, EAX performs EAX AND EAX. If EAX = 0, the result is 0 and ZF = 1. JZ (jump if ZF = 1) then jumps to zero_branch. This is the standard compiler pattern for if (ptr == NULL) or if (result == 0). It's preferred over CMP EAX, 0 because TEST has a 2-byte encoding vs CMP's 3-byte."
   },
@@ -271,7 +489,12 @@
     "question": "What is EAX after this?",
     "code": "MOV EAX, 1\nNEG EAX",
     "code_lang": "asm",
-    "answers": ["0xFFFFFFFF (-1 in two's complement)", "0", "2", "1"],
+    "answers": [
+      "0xFFFFFFFF (-1 in two's complement)",
+      "0",
+      "2",
+      "1"
+    ],
     "correct": "0xFFFFFFFF (-1 in two's complement)",
     "explanation": "NEG performs two's complement negation: result = 0 - EAX. NEG(1) = 0 - 1 = -1 = 0xFFFFFFFF. Two's complement negation is equivalent to inverting all bits and adding 1: NOT(1) = 0xFFFFFFFE, +1 = 0xFFFFFFFF. CF is set if the source is non-zero."
   },
@@ -279,7 +502,12 @@
     "question": "What is EAX after these instructions?",
     "code": "MOV EAX, 4\nIMUL EAX, 3",
     "code_lang": "asm",
-    "answers": ["12", "7", "1", "43"],
+    "answers": [
+      "12",
+      "7",
+      "1",
+      "43"
+    ],
     "correct": "12",
     "explanation": "IMUL EAX, 3 multiplies EAX by the immediate 3 and stores the result in EAX. 4 * 3 = 12. This is the 2-operand IMUL form (destination, source/immediate). The 1-operand IMUL form (IMUL EBX) multiplies EAX by EBX and stores the 64-bit result in EDX:EAX."
   },
@@ -287,7 +515,12 @@
     "question": "What effective address does LEA compute for EAX?",
     "code": "MOV EBX, 0x1000\nMOV ECX, 4\nLEA EAX, [EBX + ECX*4]",
     "code_lang": "asm",
-    "answers": ["0x1010 — the address EBX + ECX*4, not the value at that address", "The DWORD value at memory address 0x1010", "0x1004 (EBX + ECX without scale)", "0x4000 (EBX * ECX)"],
+    "answers": [
+      "0x1010 — the address EBX + ECX*4, not the value at that address",
+      "The DWORD value at memory address 0x1010",
+      "0x1004 (EBX + ECX without scale)",
+      "0x4000 (EBX * ECX)"
+    ],
     "correct": "0x1010 — the address EBX + ECX*4, not the value at that address",
     "explanation": "LEA computes 0x1000 + 4*4 = 0x1000 + 16 = 0x1010, and loads that INTEGER into EAX — no memory access occurs. This is the SIB (Scale-Index-Base) addressing mode. LEA is often abused for fast multiply/add: LEA EAX, [EAX + EAX*4] computes EAX * 5 in one instruction."
   },
@@ -295,7 +528,12 @@
     "question": "How many times does this loop execute?",
     "code": "MOV ECX, 3\nloop_top:\n  DEC ECX\n  CMP ECX, 0\n  JNZ loop_top",
     "code_lang": "asm",
-    "answers": ["3 times (ECX counts 3→2→1→0, exits when CMP shows ZF=1)", "2 times", "4 times (off-by-one)", "Infinite — the condition is never false"],
+    "answers": [
+      "3 times (ECX counts 3→2→1→0, exits when CMP shows ZF=1)",
+      "2 times",
+      "4 times (off-by-one)",
+      "Infinite — the condition is never false"
+    ],
     "correct": "3 times (ECX counts 3→2→1→0, exits when CMP shows ZF=1)",
     "explanation": "Iteration 1: ECX=3→2, CMP 2,0 → ZF=0 → JNZ jumps. Iteration 2: ECX=2→1, CMP 1,0 → ZF=0 → JNZ jumps. Iteration 3: ECX=1→0, CMP 0,0 → ZF=1 → JNZ falls through. Note: LOOP ECX would do this automatically (DEC + JNZ in one instruction)."
   },
@@ -303,7 +541,12 @@
     "question": "What is EAX after these instructions?",
     "code": "MOV EAX, 0xFF\nSHR EAX, 4",
     "code_lang": "asm",
-    "answers": ["0x0F (15 decimal)", "0xF0 (240 decimal)", "0x00 (0)", "0xFF0 (4080)"],
+    "answers": [
+      "0x0F (15 decimal)",
+      "0xF0 (240 decimal)",
+      "0x00 (0)",
+      "0xFF0 (4080)"
+    ],
     "correct": "0x0F (15 decimal)",
     "explanation": "0xFF = 255 = 0b11111111. SHR by 4 shifts right 4 positions, dropping the low 4 bits and filling the top 4 with zeros: 0b00001111 = 0x0F = 15. This is equivalent to integer division by 16. Extracting nibbles (4-bit groups) is a common use of SHR with a mask."
   },
@@ -311,7 +554,12 @@
     "question": "What happens to the stack when this CALL executes?",
     "code": "CALL 0x00401000",
     "code_lang": "asm",
-    "answers": ["The address of the next instruction is pushed onto the stack; EIP = 0x00401000", "EIP is saved to EAX and execution jumps to 0x00401000", "0x00401000 is pushed and execution continues from the next instruction", "ESP is saved and execution jumps to 0x00401000"],
+    "answers": [
+      "The address of the next instruction is pushed onto the stack; EIP = 0x00401000",
+      "EIP is saved to EAX and execution jumps to 0x00401000",
+      "0x00401000 is pushed and execution continues from the next instruction",
+      "ESP is saved and execution jumps to 0x00401000"
+    ],
     "correct": "The address of the next instruction is pushed onto the stack; EIP = 0x00401000",
     "explanation": "CALL does: ESP -= 4; [ESP] = EIP_of_next_instruction; EIP = 0x00401000. The pushed value is the return address — where the function should RET to. Since ESP decrements first, the return address sits just above the function's local variables. Overwriting this return address via a stack buffer overflow hijacks EIP on RET."
   },
@@ -319,15 +567,26 @@
     "question": "What addressing mode does this instruction use?",
     "code": "MOV EAX, [EBX + EDI*4 + 0x10]",
     "code_lang": "asm",
-    "answers": ["Base + scaled index + displacement (SIB addressing mode)", "Base + displacement only", "Scaled index without base", "Register indirect with immediate offset"],
+    "answers": [
+      "Base + scaled index + displacement (SIB addressing mode)",
+      "Base + displacement only",
+      "Scaled index without base",
+      "Register indirect with immediate offset"
+    ],
     "correct": "Base + scaled index + displacement (SIB addressing mode)",
-    "explanation": "This uses the SIB (Scale-Index-Base) byte: base=EBX, index=EDI, scale=4, displacement=0x10. Effective address = EBX + EDI*4 + 0x10. This is perfect for array element access: if EBX is the array base, EDI is the index, and each element is 4 bytes, this accesses element EDI plus an offset of 16 bytes."
+    "explanation": "This uses the SIB (Scale-Index-Base) byte: base=EBX, index=EDI, scale=4, displacement=0x10. Effective address = EBX + EDI*4 + 0x10. This is perfect for array element access: if EBX is the array base, EDI is the index, and each element is 4 bytes, this accesses element EDI plus an offset of 16 bytes.",
+    "diagram": "MOV EAX, [EBX + EDI*4 + 0x10]\n\n  SIB (Scale-Index-Base) addressing:\n    Base         EBX  = start of array\n    Index        EDI  = element number\n    Scale          4  = bytes per element (sizeof int)\n    Displacement 0x10 = field offset within element\n\n  Effective address = EBX + (EDI * 4) + 0x10\n\n  Example: EBX = 0x1000, EDI = 4\n    = 0x1000 + (4 * 4) + 0x10\n    = 0x1000 + 0x10   + 0x10\n    = 0x1020\n\n  Maps to C:  array[index].field\n  where .field is 16 bytes into each struct element."
   },
   {
     "question": "What is EAX after these two instructions?",
     "code": "MOV EAX, 0x41414141\nXOR EAX, EAX",
     "code_lang": "asm",
-    "answers": ["0 (XOR with itself always zeroes the register)", "0x41414141 (XOR is identity)", "0x82828282 (doubled)", "0xBEBEBEBE (NOT of original)"],
+    "answers": [
+      "0 (XOR with itself always zeroes the register)",
+      "0x41414141 (XOR is identity)",
+      "0x82828282 (doubled)",
+      "0xBEBEBEBE (NOT of original)"
+    ],
     "correct": "0 (XOR with itself always zeroes the register)",
     "explanation": "XOR EAX, EAX performs EAX = EAX XOR EAX. Since any value XOR itself = 0 (every bit: 1^1=0, 0^0=0), EAX becomes 0 regardless of its previous value (0x41414141 here). The 0x41414141 value is irrelevant — the XOR-self trick always zeroes. This also sets ZF=1."
   },
@@ -335,7 +594,12 @@
     "question": "What does this sequence preserve about EAX?",
     "code": "PUSH EAX\n; ... arbitrary code ...\nPOP EAX",
     "code_lang": "asm",
-    "answers": ["The original value of EAX is restored after the arbitrary code runs", "EAX is zeroed by the PUSH/POP pair", "Only the low 16 bits of EAX are preserved", "Nothing — POP writes a potentially different stack value to EAX"],
+    "answers": [
+      "The original value of EAX is restored after the arbitrary code runs",
+      "EAX is zeroed by the PUSH/POP pair",
+      "Only the low 16 bits of EAX are preserved",
+      "Nothing — POP writes a potentially different stack value to EAX"
+    ],
     "correct": "The original value of EAX is restored after the arbitrary code runs",
     "explanation": "PUSH saves EAX on the stack; POP restores it from the stack. As long as the arbitrary code does not modify ESP (i.e., balances its own PUSHes and POPs), the saved value remains at the original stack slot and is correctly restored. This is the standard caller-save pattern."
   },
@@ -343,7 +607,12 @@
     "question": "What is EAX after?",
     "code": "MOV EAX, 0\nOR EAX, 0xFF",
     "code_lang": "asm",
-    "answers": ["255 (0x000000FF)", "0 (OR with zero is identity)", "0xFFFFFFFF (all bits set)", "0xFF000000 (shifts to high byte)"],
+    "answers": [
+      "255 (0x000000FF)",
+      "0 (OR with zero is identity)",
+      "0xFFFFFFFF (all bits set)",
+      "0xFF000000 (shifts to high byte)"
+    ],
     "correct": "255 (0x000000FF)",
     "explanation": "OR sets a bit if either operand has that bit set. 0 OR 0xFF = 0xFF = 255. Only the low 8 bits become 1; the upper 24 bits remain 0 because 0xFF has no bits set there. OR is commonly used to SET specific bits (set the bit in both operand and mask → always 1)."
   },
@@ -351,15 +620,26 @@
     "question": "What does this function epilogue do?",
     "code": "MOV ESP, EBP\nPOP EBP\nRET",
     "code_lang": "asm",
-    "answers": ["Tears down the stack frame (equivalent to LEAVE + RET) and returns to the caller", "Saves EBP and returns", "Jumps to EBP and restores ESP", "Clears local variables then exits the process"],
+    "answers": [
+      "Tears down the stack frame (equivalent to LEAVE + RET) and returns to the caller",
+      "Saves EBP and returns",
+      "Jumps to EBP and restores ESP",
+      "Clears local variables then exits the process"
+    ],
     "correct": "Tears down the stack frame (equivalent to LEAVE + RET) and returns to the caller",
-    "explanation": "MOV ESP, EBP discards all local variables by resetting ESP to the frame base. POP EBP restores the caller's frame pointer. RET pops the return address into EIP. This sequence is identical to LEAVE + RET. The LEAVE instruction was introduced precisely as a shorthand for MOV ESP,EBP + POP EBP."
+    "explanation": "MOV ESP, EBP discards all local variables by resetting ESP to the frame base. POP EBP restores the caller's frame pointer. RET pops the return address into EIP. This sequence is identical to LEAVE + RET. The LEAVE instruction was introduced precisely as a shorthand for MOV ESP,EBP + POP EBP.",
+    "diagram": "Epilogue: MOV ESP, EBP  /  POP EBP  /  RET\n\n  Before:                       After MOV+POP:\n  +---------------+             +---------------+\n  |  arg 1        | [EBP+8]     |  arg 1        |\n  +---------------+             +---------------+\n  |  return addr  | [EBP+4]     |  return addr  | <- ESP\n  +---------------+             +---------------+\n  |  saved EBP    | [EBP] <-EBP |  (freed)      |  EBP = caller frame\n  +---------------+             +---------------+\n  |  locals       | <- ESP      |  (freed)      |\n  +---------------+             +---------------+\n\n  MOV ESP, EBP  -- collapses local variable space\n  POP EBP       -- restores caller frame pointer\n  RET           -- pops return address into EIP"
   },
   {
     "question": "What is EAX and EDX after this sequence?",
     "code": "MOV EAX, 17\nMOV EBX, 4\nCDQ\nIDIV EBX",
     "code_lang": "asm",
-    "answers": ["EAX = 4 (quotient), EDX = 1 (remainder)", "EAX = 68 (17 * 4)", "EAX = 17, EDX = 4 (IDIV stores divisor in EDX)", "EAX = 1 (remainder only)"],
+    "answers": [
+      "EAX = 4 (quotient), EDX = 1 (remainder)",
+      "EAX = 68 (17 * 4)",
+      "EAX = 17, EDX = 4 (IDIV stores divisor in EDX)",
+      "EAX = 1 (remainder only)"
+    ],
     "correct": "EAX = 4 (quotient), EDX = 1 (remainder)",
     "explanation": "CDQ sign-extends EAX into EDX:EAX (EDX=0 since 17 is positive). IDIV EBX divides the 64-bit EDX:EAX by EBX (4): quotient = 17/4 = 4 → EAX; remainder = 17%4 = 1 → EDX. IDIV places quotient in EAX and remainder in EDX. Division by zero raises a #DE fault."
   },
@@ -367,7 +647,12 @@
     "question": "What does INC ECX do to the value 0x0000000F?",
     "code": "MOV ECX, 0x0F\nINC ECX",
     "code_lang": "asm",
-    "answers": ["0x00000010 (increments by 1)", "0x0000000F (no change)", "0x0000000E (decrements by 1)", "0x1F (adds 0x10)"],
+    "answers": [
+      "0x00000010 (increments by 1)",
+      "0x0000000F (no change)",
+      "0x0000000E (decrements by 1)",
+      "0x1F (adds 0x10)"
+    ],
     "correct": "0x00000010 (increments by 1)",
     "explanation": "INC adds 1 to the operand. 0x0F + 1 = 0x10. Notice the carry from the low nibble to the high nibble. INC sets ZF, SF, OF, PF, AF — but importantly does NOT set CF. This makes it useful in loops where you don't want INC to affect multi-precision arithmetic using CF."
   }

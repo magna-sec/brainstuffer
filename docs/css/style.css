@@ -1546,3 +1546,64 @@ body.quiz-mode .logo-tagline { display: none; }
 .hl-str { color: #a8d8a8; }
 .hl-cmt { color: #8b949e; font-style: italic; }
 .hl-pre { color: #d2a679; }
+
+/* ── Diagram modal ──────────────────────────────────────────── */
+.btn-diagram { margin-top: 0.65rem; font-size: 0.8rem; padding: 0.35rem 0.9rem; }
+
+.diagram-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+.diagram-modal {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 2.25rem 1.25rem 1.25rem;
+    width: min(92vw, 680px);
+    max-height: 82vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 8px 48px rgba(0, 0, 0, 0.65);
+}
+.diagram-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.6rem;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    min-width: 2.2rem;
+    min-height: 2.2rem;
+}
+.diagram-close:hover { color: var(--fg); background: var(--bg2); }
+.diagram-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent2);
+    margin-bottom: 0.6rem;
+}
+.diagram-content {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    overflow-x: auto;
+    white-space: pre;
+}
+@media (max-width: 480px) {
+    .diagram-modal { padding: 2.5rem 0.85rem 1rem; }
+    .diagram-content { font-size: 0.7rem; }
+}

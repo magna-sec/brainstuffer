@@ -40,11 +40,6 @@
     "count": 76
   },
   {
-    "file": "music_history.json",
-    "label": "Music Theory & History",
-    "count": 75
-  },
-  {
     "file": "antiques_collecting.json",
     "label": "Antiques & Collecting",
     "count": 70
@@ -67,7 +62,7 @@
   {
     "file": "music_theory.json",
     "label": "Music Theory",
-    "count": 63
+    "count": 88
   },
   {
     "file": "windows_api.json",

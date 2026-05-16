@@ -25,6 +25,7 @@ async function startQuiz() {
             code: q.code || null,
             code_lang: q.code_lang || null,
             explanation: q.explanation || null,
+            diagram: q.diagram || null,
             answers: shuffle(answers),
             correct: correct,
         };
@@ -63,6 +64,7 @@ function showQuizQuestion() {
                     code: q.code || null,
                     code_lang: q.code_lang || null,
                     explanation: q.explanation || null,
+                    diagram: q.diagram || null,
                     answers: shuffle(answers),
                     correct: q.correct,
                 };
@@ -169,6 +171,7 @@ function submitAnswer() {
                 code: question.code || null,
                 code_lang: question.code_lang || null,
                 explanation: question.explanation || null,
+                diagram: question.diagram || null,
             });
         }
     }
@@ -222,6 +225,9 @@ function showFeedback(data) {
                   + '<div class="explanation-box" id="explain-box" style="display:none"><span class="explanation-label">Explanation</span>' + escHtml(data.explanation) + '</div>';
         }
     }
+    if (data.diagram) {
+        html += '<button class="btn btn-muted btn-diagram" id="btn-diagram">&#9707; View Diagram</button>';
+    }
 
     if (data.xpResult && data.xpResult.xpChange !== 0) {
         const gained = data.xpResult.xpChange > 0;
@@ -255,6 +261,12 @@ function showFeedback(data) {
         explainBtn.addEventListener('click', function() {
             const box = document.getElementById('explain-box');
             if (box) { box.style.display = ''; explainBtn.style.display = 'none'; }
+        });
+    }
+    const diagramBtn = document.getElementById('btn-diagram');
+    if (diagramBtn) {
+        diagramBtn.addEventListener('click', function() {
+            showDiagramModal(data.diagram);
         });
     }
 
@@ -375,6 +387,7 @@ async function restartQuiz() {
             code: q.code || null,
             code_lang: q.code_lang || null,
             explanation: q.explanation || null,
+            diagram: q.diagram || null,
             answers: shuffle(answers),
             correct: correct,
         };
@@ -443,6 +456,34 @@ function downloadTemplate() {
     a.download = 'brainstuffer_template.yml';
     a.click();
     URL.revokeObjectURL(url);
+}
+
+// ── Diagram modal ────────────────────────────────────────────────
+function showDiagramModal(diagram) {
+    var overlay = document.createElement('div');
+    overlay.className = 'diagram-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+
+    var modal = document.createElement('div');
+    modal.className = 'diagram-modal';
+    modal.innerHTML =
+        '<button class="diagram-close" id="diagram-close" aria-label="Close">×</button>'
+        + '<div class="diagram-label">Diagram</div>'
+        + '<pre class="code-block diagram-content">' + escHtml(diagram) + '</pre>';
+
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+
+    function close() {
+        overlay.remove();
+        document.removeEventListener('keydown', onKey);
+    }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
+    document.getElementById('diagram-close').addEventListener('click', close);
+    document.addEventListener('keydown', onKey);
 }
 
 function downloadPrompt() {
