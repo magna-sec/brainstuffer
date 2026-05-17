@@ -499,6 +499,82 @@ body { padding-top: 1.25rem; }
 }
 .back-link { display: inline-block; margin-top: 0.5rem; color: var(--accent); font-size: 0.85rem; text-decoration: none; }
 .back-link:hover { text-decoration: underline; }
+
+/* ── SVG scroll wrapper ───────────────────────────────────── */
+.flow-svg-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.flow-svg-scroll .flow-svg {
+  min-width: 560px;
+}
+
+/* ── Mobile scroll hint ───────────────────────────────────── */
+.flow-scroll-hint {
+  display: none;
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-align: center;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--card-border);
+}
+
+/* ── Mobile: ≤ 600px ──────────────────────────────────────── */
+@media (max-width: 600px) {
+  .krb-card { padding: 1rem; }
+
+  /* Actor row: shrink boxes, hide subtitle */
+  .flow-actors { padding: 0.75rem 0.5rem 0; }
+  .flow-actor { flex: 1; min-width: 0; padding: 0.5rem 0.2rem; }
+  .fact-icon { font-size: 1.3rem; }
+  .fact-name { font-size: 0.7rem; }
+  .fact-sub { display: none; }
+
+  /* Show scroll hint on mobile */
+  .flow-scroll-hint { display: block; }
+
+  /* Packet detail: 2-col grid, hide description */
+  .pkt-field {
+    grid-template-columns: 120px 1fr;
+  }
+  .pkt-desc { display: none; }
+  .pkt-key { font-size: 0.72rem; }
+  .pkt-val { font-size: 0.72rem; }
+  .pkt-enc-header { font-size: 0.68rem; }
+  .flow-detail { padding: 0.85rem 0.85rem; }
+  .flow-detail-body { max-height: 220px; }
+
+  /* Legend: smaller, tighter wrap */
+  .enc-legend { gap: 0.4rem; font-size: 0.65rem; }
+
+  /* Ticket anatomy: stack fields vertically */
+  .tkt-field { flex-wrap: wrap; gap: 0.1rem; }
+  .tkt-field-key { min-width: unset; width: 100%; font-size: 0.75rem; }
+  .tkt-field-val { font-size: 0.72rem; }
+  .tkt-field-note { display: none; }
+  .tkt-box { padding: 0.6rem 0.75rem; }
+
+  /* Flow nav: wrap nicely */
+  .flow-nav { padding: 0.65rem 0.85rem; gap: 0.4rem; }
+  .flow-nav-label { order: -1; width: 100%; text-align: center; flex: none; }
+
+  /* Delegation steps: allow wrapping */
+  .deleg-step { font-size: 0.74rem; }
+  .deleg-actor { padding: 0.25rem 0.5rem; font-size: 0.72rem; }
+
+  /* Attack badges: smaller */
+  .attack-step-badge { font-size: 0.7rem; padding: 0.2rem 0.5rem; }
+  .attack-intro { font-size: 0.8rem; }
+  .attack-steps-list { font-size: 0.78rem; }
+  .defend-list { font-size: 0.78rem; }
+
+  /* Section nav: smaller pills */
+  .sec-btn { font-size: 0.72rem; padding: 0.3rem 0.65rem; }
+
+  /* Quiz */
+  .quiz-question { font-size: 0.92rem; }
+  .quiz-opt-btn { font-size: 0.82rem; padding: 0.55rem 0.85rem; }
+}
 </style>
 </head>
 <body>
@@ -647,6 +723,8 @@ body { padding-top: 1.25rem; }
         </div>
 
         <!-- SVG for lanes and arrows -->
+        <div class="flow-scroll-hint">&#8592; scroll to see full diagram &#8594;</div>
+        <div class="flow-svg-scroll">
         <svg class="flow-svg" viewBox="0 0 820 380" preserveAspectRatio="xMidYMid meet">
           <defs>
             <filter id="kglow" x="-20%" y="-20%" width="140%" height="140%">
@@ -725,6 +803,7 @@ body { padding-top: 1.25rem; }
             <text class="step-detail" x="413" y="373">mutual auth &#8212; timestamp [svc session key]</text>
           </g>
         </svg>
+        </div><!-- /flow-svg-scroll -->
 
         <!-- Packet detail panel -->
         <div class="flow-detail" id="flow-detail">
