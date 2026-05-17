@@ -170,8 +170,8 @@ body { padding-top: 1.25rem; }
   from { background: rgba(129,140,248,0.18); }
   to   { background: transparent; }
 }
-.mem-addr  { color: var(--muted); width: 106px; flex-shrink: 0; }
-.mem-val   { color: var(--text); flex: 1; word-break: break-all; }
+.mem-addr  { color: var(--muted); min-width: 158px; flex-shrink: 0; overflow: hidden; }
+.mem-val   { color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mem-label {
   font-size: 0.68rem;
   padding: 0.1rem 0.4rem;
