@@ -1,4 +1,4 @@
-// ══════════════════════════════════════════════════════════════════
+﻿// ══════════════════════════════════════════════════════════════════
 // UI: PAGE NAVIGATION, OVERLAYS, ANIMATIONS
 // ══════════════════════════════════════════════════════════════════
 
@@ -8,11 +8,17 @@ function showPage(id) {
     document.getElementById('page-' + id).classList.add('active');
 
     document.body.classList.toggle('quiz-mode', id === 'quiz' || id === 'feedback');
-    document.body.classList.toggle('on-home', id === 'home');
+    document.body.classList.toggle('on-home', id === 'picker' || id === 'home');
+
+    if      (id === 'picker') history.pushState(null, '', window.location.pathname);
+    else if (id === 'home')   history.pushState(null, '', window.location.pathname + '#quizzes');
+    else if (id === 'learn')  history.pushState(null, '', window.location.pathname + '#learn');
 
     const sub = document.getElementById('subtitle');
     switch (id) {
+        case 'picker':    sub.textContent = 'Quiz yourself'; break;
         case 'home':      sub.textContent = 'Choose a question set and test yourself'; break;
+        case 'learn':     sub.textContent = 'Interactive Learning'; break;
         case 'quiz':      break;
         case 'feedback':  sub.textContent = 'Answer feedback'; break;
         case 'results':   sub.textContent = 'Quiz complete'; break;

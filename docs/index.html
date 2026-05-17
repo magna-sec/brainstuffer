@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>BrainStuffer</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" href="css/style.css?v=1.7">
+    <link rel="stylesheet" href="css/style.css?v=1.9">
 </head>
 <body>
     <!-- Skin switcher -->
@@ -75,8 +75,26 @@
             <span id="xp-label">0 / 30 XP</span>
         </div>
 
+        <!-- ════════════════════ PAGE: PICKER ════════════════════ -->
+        <div id="page-picker" class="page active">
+            <div class="picker-tiles">
+                <div class="picker-tile" id="tile-quizzes">
+                    <div class="picker-tile-icon">&#128203;</div>
+                    <h2>Quizzes</h2>
+                    <p>Multiple choice &amp; flashcards across 17 topic sets. Test your knowledge and track your score.</p>
+                    <span class="btn btn-primary">Enter &rarr;</span>
+                </div>
+                <div class="picker-tile" id="tile-learn">
+                    <div class="picker-tile-icon">&#129504;</div>
+                    <h2>Interactive Learning</h2>
+                    <p>Hands-on tools that let you explore concepts by doing, not just answering.</p>
+                    <span class="btn btn-primary">Enter &rarr;</span>
+                </div>
+            </div>
+        </div>
+
         <!-- ════════════════════ PAGE: HOME ════════════════════ -->
-        <div id="page-home" class="page active">
+        <div id="page-home" class="page">
             <div id="upload-alert-wrap"></div>
 
             <div class="card">
@@ -162,6 +180,34 @@
                 </div>
                 <button class="btn btn-outline" id="btn-open-creator" style="width:100%;margin-top:0.65rem">&#9998; Open Quiz Creator</button>
             </div>
+        </div>
+
+        <!-- ════════════════════ PAGE: LEARN HUB ════════════════════ -->
+        <div id="page-learn" class="page">
+            <div class="card">
+                <h2>&#127891; Interactive Learning</h2>
+                <div class="learn-hub">
+                    <a class="learn-card" href="fakestack.html">
+                        <div class="learn-card-icon">&#128421;</div>
+                        <h3>FakeStack</h3>
+                        <p>Step through a live x86-64 stack. Registers, frames, recursion, and overflow &mdash; chapter by chapter.</p>
+                        <span class="learn-card-tag">9 chapters</span>
+                    </a>
+<a class="learn-card" href="circle-of-fifths.html">
+                        <div class="learn-card-icon">&#127925;</div>
+                        <h3>Circle of Fifths</h3>
+                        <p>Explore key relationships, chord progressions, and scales on an interactive wheel. Includes quiz mode.</p>
+                        <span class="learn-card-tag">Theory &amp; Quiz</span>
+                    </a>
+                    <a class="learn-card" href="binary-workbench.html">
+                        <div class="learn-card-icon">&#128290;</div>
+                        <h3>Binary Workbench</h3>
+                        <p>Live converter for binary, hex, decimal, and two&rsquo;s complement with bit-level visualisation.</p>
+                        <span class="learn-card-tag">Number Systems</span>
+                    </a>
+                </div>
+            </div>
+            <nav><a id="learn-home-link">&#8592; Back</a></nav>
         </div>
 
         <!-- ════════════════════ PAGE: CREATOR ════════════════════ -->
@@ -338,21 +384,21 @@
         </div>
 
         <footer id="footer-quip">brainstuffer</footer>
-        <div style="text-align:center;color:var(--muted);font-size:0.7rem;opacity:0.4;margin-top:0.35rem">v1.8.2</div>
+        <div style="text-align:center;color:var(--muted);font-size:0.7rem;opacity:0.4;margin-top:0.35rem">v2.0.0</div>
     </div>
 
-<script src="js/state.js?v=1.7"></script>
-<script src="js/utils.js?v=1.7"></script>
-<script src="js/crypto.js?v=1.7"></script>
-<script src="js/loader.js?v=1.7"></script>
-<script src="js/levels.js?v=1.7"></script>
-<script src="js/quiz.js?v=1.7"></script>
-<script src="js/flashcard.js?v=1.7"></script>
-<script src="js/ui.js?v=1.7"></script>
-<script src="js/upload.js?v=1.7"></script>
-<script src="js/github.js?v=1.7"></script>
-<script src="js/encrypt.js?v=1.7"></script>
-<script src="js/creator.js?v=1.7"></script>
-<script src="js/main.js?v=1.7"></script>
+<script src="js/state.js?v=1.9"></script>
+<script src="js/utils.js?v=1.9"></script>
+<script src="js/crypto.js?v=1.9"></script>
+<script src="js/loader.js?v=1.9"></script>
+<script src="js/levels.js?v=1.9"></script>
+<script src="js/quiz.js?v=1.9"></script>
+<script src="js/flashcard.js?v=1.9"></script>
+<script src="js/ui.js?v=1.9"></script>
+<script src="js/upload.js?v=1.9"></script>
+<script src="js/github.js?v=1.9"></script>
+<script src="js/encrypt.js?v=1.9"></script>
+<script src="js/creator.js?v=1.9"></script>
+<script src="js/main.js?v=1.9"></script>
 </body>
 </html>

@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="midnight">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>FakeStack — x86-64 Stack Visualiser | BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css?v=1.9">
+<style>
+/* ── FakeStack-specific layout ───────────────────────────────── */
+body { padding-top: 1.25rem; }
+
+.fs-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+}
+
+/* Chapter progress bar */
+.chapter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.chapter-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--subtle);
+  white-space: nowrap;
+  min-width: 220px;
+}
+.chapter-pip-track {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+.chapter-pip {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--card-border);
+  transition: background 0.4s;
+  cursor: pointer;
+}
+.chapter-pip.done   { background: var(--success); }
+.chapter-pip.active { background: var(--accent); box-shadow: 0 0 8px var(--glow); }
+
+/* Chapter nav buttons row */
+.chapter-nav {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.chapter-nav button {
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
+  border: 1.5px solid var(--card-border);
+  background: var(--card);
+  color: var(--subtle);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  font-family: inherit;
+}
+.chapter-nav button.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--bg2);
+}
+.chapter-nav button.done {
+  border-color: var(--success);
+  color: var(--success);
+}
+.chapter-nav button:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Three-panel grid */
+.fs-panels {
+  display: grid;
+  grid-template-columns: 220px 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 860px) {
+  .fs-panels { grid-template-columns: 1fr; }
+}
+
+.fs-panel {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
+  max-height: 500px;
+}
+.fs-panel-header {
+  padding: 0.6rem 1rem;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--card-border);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.fs-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+  scroll-behavior: smooth;
+}
+.fs-panel-body::-webkit-scrollbar { width: 4px; }
+.fs-panel-body::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+
+/* ── REGISTER panel ──────────────────────────────────────────── */
+.reg-row {
+  display: flex;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s;
+}
+.reg-name {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  width: 36px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.reg-value {
+  font-family: 'Courier New', monospace;
+  color: var(--text);
+  font-size: 0.78rem;
+  word-break: break-all;
+  flex: 1;
+}
+.reg-row.changed .reg-value {
+  color: var(--accent);
+  animation: reg-flash 1.2s ease-out forwards;
+}
+@keyframes reg-flash {
+  0%   { color: var(--accent); text-shadow: 0 0 8px var(--accent); }
+  100% { color: var(--text);   text-shadow: none; }
+}
+
+/* ── MEMORY panel ────────────────────────────────────────────── */
+.mem-row {
+  display: flex;
+  align-items: center;
+  padding: 0.28rem 0.6rem;
+  gap: 0.4rem;
+  font-size: 0.76rem;
+  font-family: 'Courier New', monospace;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  position: relative;
+  transition: background 0.3s;
+}
+.mem-row.new-row {
+  animation: mem-appear 0.5s ease-out;
+}
+@keyframes mem-appear {
+  from { background: rgba(129,140,248,0.18); }
+  to   { background: transparent; }
+}
+.mem-addr  { color: var(--muted); width: 106px; flex-shrink: 0; }
+.mem-val   { color: var(--text); flex: 1; word-break: break-all; }
+.mem-label {
+  font-size: 0.68rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+}
+.mem-arrow {
+  font-size: 0.8rem;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 700;
+  white-space: nowrap;
+  width: 42px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.arrow-rsp { color: var(--accent); }
+.arrow-rbp { color: var(--accent2); }
+.arrow-both { color: var(--warning); }
+
+/* Frame colours */
+.frame-0 { background: rgba(129,140,248,0.12); color: #a5b4fc; }
+.frame-1 { background: rgba(56,189,248,0.12);  color: #7dd3fc; }
+.frame-2 { background: rgba(34,197,94,0.12);   color: #86efac; }
+.frame-3 { background: rgba(251,191,36,0.12);  color: #fde68a; }
+.frame-4 { background: rgba(249,115,22,0.12);  color: #fdba74; }
+.frame-5 { background: rgba(236,72,153,0.12);  color: #f9a8d4; }
+.frame-h { background: rgba(239,68,68,0.15);   color: #fca5a5; } /* heap */
+
+/* ── CODE panel ──────────────────────────────────────────────── */
+.code-line {
+  display: flex;
+  align-items: center;
+  padding: 0.22rem 0.6rem;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-family: 'Courier New', monospace;
+  white-space: pre;
+  transition: background 0.2s;
+  border-bottom: 1px solid rgba(255,255,255,0.025);
+}
+.code-line.active {
+  background: rgba(129,140,248,0.18);
+  border-left: 3px solid var(--accent);
+}
+.code-line-num {
+  width: 22px;
+  color: var(--muted);
+  text-align: right;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+}
+.code-line-arrow {
+  width: 14px;
+  flex-shrink: 0;
+  color: var(--accent);
+  font-size: 0.8rem;
+}
+.code-text { flex: 1; }
+
+/* Syntax highlight */
+.kw  { color: var(--accent); font-weight: 700; }
+.kw2 { color: var(--accent2); }
+.cm  { color: var(--muted); font-style: italic; }
+.str { color: var(--warning); }
+.num { color: var(--success); }
+
+/* ── Narrative box ───────────────────────────────────────────── */
+.fs-narrative {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 60px;
+  transition: border-color 0.3s;
+}
+.fs-narrative strong { color: var(--accent); }
+
+/* ── Quiz box ────────────────────────────────────────────────── */
+.fs-quiz {
+  background: var(--card);
+  border: 1.5px solid var(--accent);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  display: none;
+  box-shadow: 0 0 24px var(--glow);
+}
+.fs-quiz.visible { display: block; }
+.fs-quiz-q {
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+.fs-quiz-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.fs-quiz-opt {
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--card-border);
+  background: var(--bg2);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: inherit;
+  text-align: left;
+}
+.fs-quiz-opt:hover:not(:disabled) { border-color: var(--accent); background: var(--card); }
+.fs-quiz-opt.correct { border-color: var(--success); background: rgba(34,197,94,0.1); color: var(--success); }
+.fs-quiz-opt.wrong   { border-color: var(--danger);  background: rgba(239,68,68,0.1);  color: var(--danger); }
+.fs-quiz-feedback {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  display: none;
+}
+.fs-quiz-feedback.show { display: block; }
+.fs-quiz-feedback.ok  { background: rgba(34,197,94,0.1);  color: var(--success); border-left: 3px solid var(--success); }
+.fs-quiz-feedback.bad { background: rgba(239,68,68,0.1);  color: var(--danger);  border-left: 3px solid var(--danger); }
+
+/* ── Control row ─────────────────────────────────────────────── */
+.fs-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.fs-controls .btn { padding: 0.55rem 1.1rem; font-size: 0.88rem; }
+.fs-step-counter {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* ── Crash overlay ───────────────────────────────────────────── */
+.crash-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(220,0,0,0.18);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.crash-overlay.visible { display: flex; }
+.crash-box {
+  background: #1a0505;
+  border: 2px solid var(--danger);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  max-width: 480px;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(239,68,68,0.5);
+}
+.crash-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--danger);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.06em;
+}
+.crash-sig { font-size: 1.1rem; color: #fca5a5; margin-bottom: 0.75rem; font-family: 'Courier New', monospace; }
+.crash-explain { color: var(--subtle); font-size: 0.88rem; line-height: 1.6; margin-bottom: 1.25rem; }
+
+/* ── Use-after-free warning overlay ─────────────────────────── */
+.uaf-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(245,158,11,0.14);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+}
+.uaf-overlay.visible { display: flex; }
+.uaf-box {
+  background: #1a1200;
+  border: 2px solid var(--warning);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  max-width: 480px;
+  text-align: center;
+  box-shadow: 0 0 50px rgba(245,158,11,0.4);
+}
+.uaf-title { font-size: 1.6rem; font-weight: 900; color: var(--warning); margin-bottom: 0.5rem; }
+.uaf-explain { color: var(--subtle); font-size: 0.88rem; line-height: 1.6; margin-bottom: 1.25rem; }
+
+/* ── Heap section ────────────────────────────────────────────── */
+.heap-panel {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  display: none;
+}
+.heap-panel.visible { display: block; }
+.heap-rows {
+  padding: 0.5rem 0;
+}
+.heap-row {
+  display: flex;
+  align-items: center;
+  padding: 0.28rem 0.6rem;
+  gap: 0.4rem;
+  font-size: 0.76rem;
+  font-family: 'Courier New', monospace;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.heap-addr { color: var(--muted); width: 106px; flex-shrink: 0; }
+.heap-val  { flex: 1; }
+.heap-tag  {
+  font-size: 0.68rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+}
+.heap-tag.alloc { background: rgba(34,197,94,0.15); color: var(--success); }
+.heap-tag.freed { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+/* Back link */
+.fs-back-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--accent);
+  font-size: 0.85rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+.fs-back-link:hover { text-decoration: underline; }
+
+/* header row */
+.fs-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.fs-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.fs-subtitle { color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<!-- Skin switcher -->
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="midnight" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom
+  </div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix
+  </div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire
+  </div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss
+  </div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor
+  </div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman
+  </div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95
+  </div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero
+  </div>
+</div>
+
+<div class="fs-container">
+  <div class="fs-header">
+    <div>
+      <div class="fs-title">FakeStack</div>
+      <div class="fs-subtitle">Interactive x86-64 stack visualiser</div>
+    </div>
+  </div>
+
+  <!-- Chapter progress -->
+  <div class="chapter-bar">
+    <div class="chapter-label" id="chapter-label">Chapter 1 of 9 — First Function Call</div>
+    <div class="chapter-pip-track" id="chapter-pips"></div>
+  </div>
+
+  <!-- Chapter nav -->
+  <div class="chapter-nav" id="chapter-nav"></div>
+
+  <!-- Three-panel grid -->
+  <div class="fs-panels">
+    <!-- LEFT: Registers -->
+    <div class="fs-panel">
+      <div class="fs-panel-header">Registers</div>
+      <div class="fs-panel-body" id="reg-panel"></div>
+    </div>
+    <!-- MIDDLE: Memory / Stack -->
+    <div class="fs-panel">
+      <div class="fs-panel-header">Stack Memory</div>
+      <div class="fs-panel-body" id="mem-panel"></div>
+    </div>
+    <!-- RIGHT: Code -->
+    <div class="fs-panel">
+      <div class="fs-panel-header">Source Code</div>
+      <div class="fs-panel-body" id="code-panel"></div>
+    </div>
+  </div>
+
+  <!-- Heap panel (chapters 8–9) -->
+  <div class="heap-panel" id="heap-panel">
+    <div class="fs-panel-header">Heap Memory</div>
+    <div class="heap-rows" id="heap-rows"></div>
+  </div>
+
+  <!-- Narrative -->
+  <div class="fs-narrative" id="narrative">Loading…</div>
+
+  <!-- Quiz -->
+  <div class="fs-quiz" id="quiz-box">
+    <div class="fs-quiz-q" id="quiz-q"></div>
+    <div class="fs-quiz-opts" id="quiz-opts"></div>
+    <div class="fs-quiz-feedback" id="quiz-feedback"></div>
+  </div>
+
+  <!-- Controls -->
+  <div class="fs-controls">
+    <button class="btn btn-muted" id="btn-back">&#9664; BACK</button>
+    <button class="btn btn-primary" id="btn-step">&#9654; STEP</button>
+    <button class="btn btn-outline" id="btn-auto">&#9654;&#9654; AUTO</button>
+    <span class="fs-step-counter" id="step-counter">Step 1 / 1</span>
+  </div>
+
+  <a class="fs-back-link" href="index.html#learn">&#8592; Back to Interactive Learning</a>
+</div>
+
+<!-- Crash overlay (Chapter 4) -->
+<div class="crash-overlay" id="crash-overlay">
+  <div class="crash-box">
+    <div class="crash-title">SIGSEGV</div>
+    <div class="crash-sig">Segmentation fault (core dumped)</div>
+    <div class="crash-explain">
+      The stack grew too large and hit the guard page at <strong style="color:var(--danger)">0x7fffff000000</strong>.
+      Every recursive call pushed a new frame. With no base case to stop it, the stack ran out of space —
+      a classic <strong style="color:var(--danger)">stack overflow</strong>.
+    </div>
+    <button class="btn btn-danger" id="crash-retry">Try Again</button>
+  </div>
+</div>
+
+<!-- Use-after-free overlay (Chapter 8) -->
+<div class="uaf-overlay" id="uaf-overlay">
+  <div class="uaf-box">
+    <div class="uaf-title">Undefined Behaviour!</div>
+    <div class="uaf-explain">
+      Writing to <strong style="color:var(--warning)">*ptr</strong> after <strong style="color:var(--warning)">free(ptr)</strong>
+      is a <strong style="color:var(--warning)">use-after-free</strong> bug. The memory has been returned to the allocator —
+      it might belong to something else now. The result is undefined: crash, silent corruption, or a security hole.
+    </div>
+    <button class="btn btn-outline" id="uaf-ok">OK, understood</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ───────────────────────────────────────────────────────────────
+   SKIN SWITCHER
+─────────────────────────────────────────────────────────────── */
+(function(){
+  const toggle = document.getElementById('skin-toggle');
+  const panel  = document.getElementById('skin-panel');
+  const saved  = localStorage.getItem('bs-skin') || 'midnight';
+  document.documentElement.setAttribute('data-skin', saved);
+
+  toggle.addEventListener('click', () => panel.classList.toggle('open'));
+  document.addEventListener('click', e => {
+    if (!toggle.contains(e.target) && !panel.contains(e.target))
+      panel.classList.remove('open');
+  });
+  panel.querySelectorAll('.skin-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const s = opt.dataset.skin;
+      document.documentElement.setAttribute('data-skin', s);
+      localStorage.setItem('bs-skin', s);
+      panel.classList.remove('open');
+    });
+  });
+})();
+
+/* ───────────────────────────────────────────────────────────────
+   HELPERS
+─────────────────────────────────────────────────────────────── */
+function hex(n, pad=16) {
+  if (typeof n === 'string') return n;
+  const h = (BigInt(n) & 0xFFFFFFFFFFFFFFFFn).toString(16).toUpperCase();
+  return '0x' + h.padStart(pad, '0');
+}
+
+const KEYWORDS = ['int','return','if','while','for','void','struct','typedef','malloc','free','sizeof'];
+function syntaxHL(line) {
+  let out = '';
+  let i = 0;
+  while (i < line.length) {
+    // comment
+    if (line[i]==='/' && line[i+1]==='/') {
+      out += `<span class="cm">${esc(line.slice(i))}</span>`; break;
+    }
+    // string
+    if (line[i]==='"') {
+      let j = i+1;
+      while (j < line.length && line[j]!=='"') j++;
+      out += `<span class="str">${esc(line.slice(i,j+1))}</span>`; i=j+1; continue;
+    }
+    // number
+    if (/[0-9]/.test(line[i]) && (i===0 || !/[a-zA-Z_]/.test(line[i-1]))) {
+      let j = i;
+      while (j < line.length && /[0-9xa-fA-FxX]/.test(line[j])) j++;
+      out += `<span class="num">${esc(line.slice(i,j))}</span>`; i=j; continue;
+    }
+    // keyword
+    let matched = false;
+    for (const kw of KEYWORDS) {
+      if (line.startsWith(kw, i)) {
+        const after = line[i+kw.length];
+        if (!after || /[^a-zA-Z0-9_]/.test(after)) {
+          out += `<span class="kw">${kw}</span>`; i+=kw.length; matched=true; break;
+        }
+      }
+    }
+    if (!matched) { out += esc(line[i]); i++; }
+  }
+  return out;
+}
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ───────────────────────────────────────────────────────────────
+   CHAPTERS DATA
+─────────────────────────────────────────────────────────────── */
+
+const REG_NAMES = ['RIP','RSP','RBP','RAX','RDI','RSI','RDX','RCX','R8','R9'];
+
+function regs(overrides, base) {
+  const defaults = base || {
+    RIP:'0x0000000000000000', RSP:'0x00007fffffffe000',
+    RBP:'0x0000000000000000', RAX:'0x0000000000000000',
+    RDI:'0x0000000000000000', RSI:'0x0000000000000000',
+    RDX:'0x0000000000000000', RCX:'0x0000000000000000',
+    R8 :'0x0000000000000000', R9 :'0x0000000000000000'
+  };
+  return Object.assign({}, defaults, overrides);
+}
+
+// ── Chapter 1 ────────────────────────────────────────────────
+const CH1_CODE = [
+  'int square(int n) {',       // 1
+  '    int result = n * n;',   // 2
+  '    return result;',         // 3
+  '}',                          // 4
+  'int main() {',              // 5
+  '    int x = 5;',            // 6
+  '    int y = square(x);',    // 7
+  '    return y;',             // 8
+  '}',                         // 9
+];
+
+const CH1 = [
+  {
+    registers: regs({RIP:'0x00000000004005b0', RSP:'0x00007fffffffe000', RBP:'0x0000000000000000'}),
+    memory: [],
+    codeLine: 5,
+    narrative: '<strong>main()</strong> is about to start. RIP points to the entry of <strong>main</strong>. The stack is empty — RSP is at the top.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x00000000004005b4', RSP:'0x00007fffffffdff8', RBP:'0x00007fffffffe000'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP = 0x0)', label:'main frame', frame:0, isNew:true},
+    ],
+    codeLine: 5,
+    narrative: '<strong>main\'s stack frame is created.</strong> The old RBP is pushed onto the stack, and RBP is updated to point to the new frame base. RSP moves down by 8 bytes.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x00000000004005b8', RSP:'0x00007fffffffdff0', RBP:'0x00007fffffffdff8'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'5', label:'x = 5', frame:0, isNew:true},
+    ],
+    codeLine: 6,
+    narrative: '<strong>int x = 5;</strong> — The value 5 is stored on the stack at the address assigned to local variable <strong>x</strong>. RSP moves down another 8 bytes.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x00000000004005c0', RSP:'0x00007fffffffdfe8', RBP:'0x00007fffffffdff8', RDI:'0x0000000000000005'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'5', label:'x = 5', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'0x00000000004005d0', label:'return addr', frame:0, isNew:true},
+    ],
+    codeLine: 7,
+    narrative: '<strong>Calling square(x).</strong> The argument <strong>x = 5</strong> goes into register <strong>RDI</strong> (first integer argument by System V AMD64 ABI). The return address is pushed onto the stack.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400560', RSP:'0x00007fffffffdfe0', RBP:'0x00007fffffffdfe8', RDI:'0x0000000000000005'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'5', label:'x = 5', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'0x00000000004005d0', label:'return addr', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'(saved RBP of main)', label:'square frame', frame:1, isNew:true},
+    ],
+    codeLine: 1,
+    narrative: '<strong>square\'s frame is set up.</strong> RBP now points into <strong>square\'s</strong> frame. RDI holds n = 5. RSP moved down again.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400564', RSP:'0x00007fffffffdfd8', RBP:'0x00007fffffffdfe0', RDI:'0x0000000000000005'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'5', label:'x = 5', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'0x00000000004005d0', label:'return addr', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'(saved RBP of main)', label:'square frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:'25', label:'result = 25', frame:1, isNew:true},
+    ],
+    codeLine: 2,
+    narrative: '<strong>int result = n * n;</strong> — 5 × 5 = <strong>25</strong>. The value is stored as a local variable in square\'s frame.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400568', RSP:'0x00007fffffffdfd8', RBP:'0x00007fffffffdfe0', RAX:'0x0000000000000019', RDI:'0x0000000000000005'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'5', label:'x = 5', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'0x00000000004005d0', label:'return addr', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'(saved RBP of main)', label:'square frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:'25', label:'result = 25', frame:1, isNew:false},
+    ],
+    codeLine: 3,
+    narrative: '<strong>return result;</strong> — The value 25 (0x19) is placed in <strong>RAX</strong>. By convention, integer return values live in RAX.',
+    quiz: {
+      question: 'square is about to return. What register holds the return value?',
+      options: ['RSP', 'RAX', 'RDI', 'RBP'],
+      correctIdx: 1,
+      explanation: 'Correct! By the System V AMD64 ABI, integer and pointer return values are passed back to the caller in RAX.'
+    }
+  },
+  {
+    registers: regs({RIP:'0x00000000004005d0', RSP:'0x00007fffffffdff0', RBP:'0x00007fffffffdff8', RAX:'0x0000000000000019'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'5', label:'x = 5', frame:0, isNew:false},
+    ],
+    codeLine: 7,
+    narrative: '<strong>square\'s frame is destroyed.</strong> RSP is restored past square\'s locals and the return address. RBP is restored to main\'s frame. RAX = 25 is passed back.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x00000000004005d4', RSP:'0x00007fffffffdfe8', RBP:'0x00007fffffffdff8', RAX:'0x0000000000000019'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'5', label:'x = 5', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'25', label:'y = 25', frame:0, isNew:true},
+    ],
+    codeLine: 8,
+    narrative: '<strong>int y = 25;</strong> — The return value from RAX is stored into y. main\'s frame now has both x and y. The call to square is complete.',
+    quiz: null
+  },
+];
+
+// ── Chapter 2 ────────────────────────────────────────────────
+const CH2_CODE = [
+  'int add(int a, int b) {',          // 1
+  '    int sum = a + b;',             // 2
+  '    return sum;',                  // 3
+  '}',                                // 4
+  'int double_add(int x, int y) {',  // 5
+  '    int first = add(x, y);',      // 6
+  '    int second = add(first, y);', // 7
+  '    return second;',              // 8
+  '}',                               // 9
+  'int main() {',                    // 10
+  '    int result = double_add(3,4);',// 11
+  '    return result;',              // 12
+  '}',                               // 13
+];
+
+const CH2 = [
+  {
+    registers: regs({RIP:'0x00000000004006a0', RSP:'0x00007fffffffe000'}),
+    memory: [],
+    codeLine: 10,
+    narrative: '<strong>main()</strong> starts. We\'ll call double_add(3, 4) which itself calls add() twice. Watch the stack grow three frames deep.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x00000000004006a8', RSP:'0x00007fffffffdff0', RBP:'0x00007fffffffdff8', RDI:'0x0000000000000003', RSI:'0x0000000000000004'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:true},
+      {addr:'0x00007fffffffdff0', value:'0x00000000004006c0', label:'return addr→double_add', frame:0, isNew:true},
+    ],
+    codeLine: 11,
+    narrative: '<strong>Calling double_add(3, 4).</strong> Arguments go in RDI=3, RSI=4. The return address and a new frame for double_add are pushed.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400660', RSP:'0x00007fffffffdfe0', RBP:'0x00007fffffffdff0', RDI:'0x0000000000000003', RSI:'0x0000000000000004'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'(saved RBP of main)', label:'double_add frame', frame:1, isNew:true},
+    ],
+    codeLine: 5,
+    narrative: '<strong>double_add\'s frame created.</strong> Now we\'re inside double_add with x=3, y=4 in RDI/RSI. double_add will call add() next.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400610', RSP:'0x00007fffffffdfc8', RBP:'0x00007fffffffdfd8', RDI:'0x0000000000000003', RSI:'0x0000000000000004'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'(saved RBP of main)', label:'double_add frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'0x000000000040067c', label:'return addr→double_add', frame:1, isNew:true},
+      {addr:'0x00007fffffffdfd8', value:'(saved RBP of double_add)', label:'add frame', frame:2, isNew:true},
+    ],
+    codeLine: 1,
+    narrative: '<strong>add(3, 4) called!</strong> Three frames on the stack simultaneously: main → double_add → add. Each frame stores its saved RBP, creating a linked chain.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400618', RSP:'0x00007fffffffdfc8', RBP:'0x00007fffffffdfd8', RAX:'0x0000000000000007', RDI:'0x0000000000000003', RSI:'0x0000000000000004'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'(saved RBP of main)', label:'double_add frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'0x000000000040067c', label:'return addr→double_add', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:'(saved RBP of double_add)', label:'add frame', frame:2, isNew:false},
+      {addr:'0x00007fffffffdfc8', value:'7', label:'sum = 7', frame:2, isNew:true},
+    ],
+    codeLine: 2,
+    narrative: '<strong>sum = a + b = 3 + 4 = 7.</strong> Local variable sum lives in add\'s frame. RAX will carry the return value.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x000000000040067c', RSP:'0x00007fffffffdff0', RBP:'0x00007fffffffdff0', RAX:'0x0000000000000007'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'(saved RBP of main)', label:'double_add frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'7', label:'first = 7', frame:1, isNew:true},
+    ],
+    codeLine: 6,
+    narrative: '<strong>add returned 7.</strong> add\'s frame is gone — sum no longer exists. first=7 is stored in double_add\'s frame.',
+    quiz: {
+      question: 'After add returns, what happens to add\'s local variable `sum`?',
+      options: [
+        'It is saved in a register for later use',
+        'It\'s gone — RSP moved past it',
+        'It is copied to main\'s frame',
+        'It stays on the stack until the program ends'
+      ],
+      correctIdx: 1,
+      explanation: 'Correct! When a function returns, RSP is moved back up past all the locals. They\'re not zeroed out — they just become unreachable "dead" memory.'
+    }
+  },
+  {
+    registers: regs({RIP:'0x0000000000400620', RSP:'0x00007fffffffdfc8', RBP:'0x00007fffffffdfd8', RAX:'0x0000000000000007', RDI:'0x0000000000000007', RSI:'0x0000000000000004'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'(saved RBP of main)', label:'double_add frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'7', label:'first = 7', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'0x000000000040068c', label:'return addr→double_add', frame:1, isNew:true},
+      {addr:'0x00007fffffffdfd8', value:'(saved RBP of double_add)', label:'add frame #2', frame:2, isNew:true},
+      {addr:'0x00007fffffffdfc8', value:'11', label:'sum = 11', frame:2, isNew:true},
+    ],
+    codeLine: 7,
+    narrative: '<strong>add(first, y) = add(7, 4) = 11.</strong> add is called again. A brand new frame appears. Reusing the same function just creates a fresh frame each time.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x000000000040068c', RSP:'0x00007fffffffdff0', RBP:'0x00007fffffffdff0', RAX:'0x000000000000000b'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'(saved RBP of main)', label:'double_add frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'7', label:'first = 7', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'11', label:'second = 11', frame:1, isNew:true},
+    ],
+    codeLine: 8,
+    narrative: '<strong>second = 11. double_add returns 11.</strong> RAX = 0xB (11). double_add\'s frame collapses and we return to main.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x00000000004006c4', RSP:'0x00007fffffffdff8', RBP:'0x00007fffffffdff8', RAX:'0x000000000000000b'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'11', label:'result = 11', frame:0, isNew:true},
+    ],
+    codeLine: 12,
+    narrative: '<strong>Back in main.</strong> result = 11 is stored. All intermediate frames are gone. Only main\'s tiny frame remains before the program exits.',
+    quiz: null
+  },
+];
+
+// ── Chapter 3 ────────────────────────────────────────────────
+const CH3_CODE = [
+  'int factorial(int n) {',       // 1
+  '    if (n <= 1) return 1;',    // 2
+  '    return n * factorial(n-1);',// 3
+  '}',                             // 4
+  'int main() {',                  // 5
+  '    int result = factorial(5);',// 6
+  '    return result;',            // 7
+  '}',                             // 8
+];
+
+function makeFacStep(n, frames, codeLine, narrative, quiz) {
+  const base = regs({
+    RIP:'0x0000000000400580',
+    RSP: hex(0x00007fffffffe000n - BigInt(frames.length) * 16n),
+    RBP: hex(0x00007fffffffe000n - BigInt(frames.length) * 16n + 8n),
+    RDI: hex(n)
+  });
+  const memory = frames.map((f, i) => ({
+    addr: hex(0x00007fffffffdff8n - BigInt(i) * 16n),
+    value: `n = ${f}`,
+    label: `factorial(${f})`,
+    frame: i % 6,
+    isNew: i === frames.length - 1
+  }));
+  return { registers: base, memory, codeLine, narrative, quiz };
+}
+
+const CH3 = [
+  {
+    registers: regs({RIP:'0x00000000004005c0', RSP:'0x00007fffffffe000'}),
+    memory: [],
+    codeLine: 5,
+    narrative: '<strong>main()</strong> starts. We\'re about to call factorial(5). Watch the stack grow with each recursive call.',
+    quiz: null
+  },
+  makeFacStep(5, [5], 1, '<strong>factorial(5)</strong> called. n=5, 5 > 1 so we recurse.', null),
+  makeFacStep(4, [5,4], 1, '<strong>factorial(4)</strong> called. n=4. The stack grows! factorial(5)\'s frame is still there, waiting.', null),
+  makeFacStep(3, [5,4,3], 1, '<strong>factorial(3)</strong> called. n=3. Three frames now. Each frame waits for its recursive call to come back.', null),
+  makeFacStep(2, [5,4,3,2], 1, '<strong>factorial(2)</strong> called. n=2. Four frames deep. Recursion feels expensive because it IS — every call uses stack space.', null),
+  makeFacStep(1, [5,4,3,2,1], 2, '<strong>factorial(1)</strong> called. n=1, and 1 ≤ 1 — the BASE CASE! We return 1 immediately without recursing.', {
+    question: 'Why does factorial(1) not call factorial again?',
+    options: [
+      'Because 1 is stored in a special register',
+      'Because n <= 1, the base case returns immediately',
+      'Because the compiler optimises it',
+      'Because the stack is full'
+    ],
+    correctIdx: 1,
+    explanation: 'Correct! The `if (n <= 1) return 1` check is the base case. Without it, recursion would never stop — causing a stack overflow (Chapter 4!).'
+  }),
+  {
+    registers: regs({RIP:'0x0000000000400590', RSP:'0x00007fffffffdfe8', RBP:'0x00007fffffffdff0', RAX:'0x0000000000000002', RDI:'0x0000000000000002'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'n = 5', label:'factorial(5)', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'n = 4', label:'factorial(4)', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'n = 3', label:'factorial(3)', frame:2, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'n = 2', label:'factorial(2)', frame:3, isNew:false},
+    ],
+    codeLine: 3,
+    narrative: '<strong>Unwinding begins!</strong> factorial(1) returned 1. factorial(2) computes 2 × 1 = 2. RAX = 2. Its frame is popped.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400590', RSP:'0x00007fffffffdff0', RBP:'0x00007fffffffdff8', RAX:'0x0000000000000006', RDI:'0x0000000000000003'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'n = 5', label:'factorial(5)', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'n = 4', label:'factorial(4)', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'n = 3', label:'factorial(3)', frame:2, isNew:false},
+    ],
+    codeLine: 3,
+    narrative: '<strong>factorial(3)</strong> computes 3 × 2 = 6. RAX = 6. Frames are disappearing as we unwind.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400590', RSP:'0x00007fffffffdff8', RBP:'0x00007fffffffe000', RAX:'0x000000000000000018', RDI:'0x0000000000000004'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'n = 5', label:'factorial(5)', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'n = 4', label:'factorial(4)', frame:1, isNew:false},
+    ],
+    codeLine: 3,
+    narrative: '<strong>factorial(4)</strong> computes 4 × 6 = 24. RAX = 24. One more level to go.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x00000000004005c8', RSP:'0x00007fffffffe000', RBP:'0x00007fffffffe000', RAX:'0x0000000000000078', RDI:'0x0000000000000005'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'120', label:'result = 120', frame:0, isNew:true},
+    ],
+    codeLine: 7,
+    narrative: '<strong>factorial(5)</strong> = 5 × 24 = <strong>120</strong>. RAX = 0x78. All five frames have collapsed. result = 120 stored in main.',
+    quiz: null
+  },
+];
+
+// ── Chapter 4 ────────────────────────────────────────────────
+const CH4_CODE = [
+  'int infinite(int n) {',      // 1
+  '    return infinite(n + 1);',// 2
+  '}',                          // 3
+  'int main() {',               // 4
+  '    return infinite(0);',    // 5
+  '}',                          // 6
+];
+
+function makeInfStep(depth) {
+  const base = 0x00007fffffffe000n;
+  const unit = 16n;
+  const rsp = base - BigInt(depth + 1) * unit;
+  const frames = [];
+  const shown = Math.min(depth + 1, 8);
+  for (let i = 0; i < shown; i++) {
+    frames.push({
+      addr: '0x' + (base - BigInt(i + 1) * unit).toString(16).toUpperCase().padStart(16,'0'),
+      value: `n = ${depth - i}`,
+      label: `infinite(${depth - i})`,
+      frame: i % 6,
+      isNew: i === 0
+    });
+  }
+  if (depth > 7) {
+    frames.push({addr:'   ...', value:`+${depth - 7} more frames below`, label:'', frame:5, isNew:false});
+  }
+  return {
+    registers: regs({
+      RIP:'0x0000000000400540',
+      RSP: '0x' + rsp.toString(16).toUpperCase().padStart(16,'0'),
+      RBP: '0x' + (rsp + 8n).toString(16).toUpperCase().padStart(16,'0'),
+      RDI: hex(depth)
+    }),
+    memory: frames,
+    codeLine: depth === 0 ? 4 : 1,
+    narrative: depth === 0
+      ? '<strong>main()</strong> calls infinite(0). No base case — this will recurse forever!'
+      : `<strong>infinite(${depth})</strong> called. The stack keeps growing. RSP moves further down with every call. There\'s no stopping condition.`,
+    quiz: null,
+    isCrash: depth >= 10
+  };
+}
+
+const CH4 = [
+  makeInfStep(0),
+  makeInfStep(1),
+  makeInfStep(2),
+  makeInfStep(3),
+  makeInfStep(5),
+  makeInfStep(8),
+  makeInfStep(10),
+];
+CH4[CH4.length - 1].narrative = '<strong>CRASH!</strong> RSP has gone past the guard page at <strong>0x7fffff000000</strong>. The OS sends SIGSEGV — Segmentation Fault. The stack has overflowed.';
+CH4[CH4.length - 1].isCrash = true;
+
+// ── Chapter 5 ────────────────────────────────────────────────
+const CH5_CODE = [
+  'int sum_array(int* arr, int len) {',  // 1
+  '    int total = 0;',                  // 2
+  '    int i = 0;',                      // 3
+  '    while (i < len) {',              // 4
+  '        total = total + arr[i];',    // 5
+  '        i = i + 1;',                 // 6
+  '    }',                              // 7
+  '    return total;',                   // 8
+  '}',                                   // 9
+  'int main() {',                        // 10
+  '    int arr[4] = {10,20,30,40};',    // 11
+  '    int result = sum_array(arr, 4);', // 12
+  '    return result;',                  // 13
+  '}',                                   // 14
+];
+
+const CH5 = [
+  {
+    registers: regs({RIP:'0x0000000000400640', RSP:'0x00007fffffffe000'}),
+    memory: [],
+    codeLine: 10,
+    narrative: '<strong>main()</strong> starts. We\'ll allocate a 4-element int array on the stack, then pass a pointer to sum_array.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400648', RSP:'0x00007fffffffdfc0', RBP:'0x00007fffffffdff8'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:true},
+      {addr:'0x00007fffffffdff0', value:'10', label:'arr[0]', frame:0, isNew:true},
+      {addr:'0x00007fffffffdfe8', value:'20', label:'arr[1]', frame:0, isNew:true},
+      {addr:'0x00007fffffffdfe0', value:'30', label:'arr[2]', frame:0, isNew:true},
+      {addr:'0x00007fffffffdfd8', value:'40', label:'arr[3]', frame:0, isNew:true},
+    ],
+    codeLine: 11,
+    narrative: '<strong>int arr[4] = {10,20,30,40};</strong> — Four contiguous 8-byte slots on the stack. &arr[0] = 0x7fffffffdff0. Elements are laid out sequentially in memory.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400660', RSP:'0x00007fffffffdfc0', RBP:'0x00007fffffffdfc8', RDI:'0x00007fffffffdff0', RSI:'0x0000000000000004'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'10', label:'arr[0]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'20', label:'arr[1]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'30', label:'arr[2]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:'40', label:'arr[3]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfc8', value:'(saved RBP of main)', label:'sum_array frame', frame:1, isNew:true},
+    ],
+    codeLine: 1,
+    narrative: '<strong>sum_array called.</strong> RDI = &arr[0] = 0x7fffffffdff0 (the pointer). RSI = 4 (length). No copy of the array — just the address!',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400668', RSP:'0x00007fffffffdfa8', RBP:'0x00007fffffffdfc8', RDI:'0x00007fffffffdff0', RSI:'0x0000000000000004'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'10', label:'arr[0] ← arr+0', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'20', label:'arr[1] ← arr+8', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'30', label:'arr[2] ← arr+16', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:'40', label:'arr[3] ← arr+24', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfc8', value:'(saved RBP of main)', label:'sum_array frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfc0', value:'0', label:'total = 0', frame:1, isNew:true},
+      {addr:'0x00007fffffffdfa8', value:'0', label:'i = 0', frame:1, isNew:true},
+    ],
+    codeLine: 2,
+    narrative: '<strong>Locals initialised:</strong> total=0, i=0. Note how arr[i] is accessed: ptr + i*sizeof(int) in bytes. The labels show the byte offsets.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400670', RSP:'0x00007fffffffdfa8', RBP:'0x00007fffffffdfc8', RDI:'0x00007fffffffdff0', RSI:'0x0000000000000004', RAX:'0x000000000000000a'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'10 ←arr[0]', label:'arr[0]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'20', label:'arr[1]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'30', label:'arr[2]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:'40', label:'arr[3]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfc8', value:'(saved RBP of main)', label:'sum_array frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfc0', value:'10', label:'total = 10', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfa8', value:'1', label:'i = 1', frame:1, isNew:false},
+    ],
+    codeLine: 5,
+    narrative: '<strong>i=0:</strong> total += arr[0] = 10. Pointer arithmetic: *(arr + 0*8) = 10. total = 10, i becomes 1.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400670', RSP:'0x00007fffffffdfa8', RBP:'0x00007fffffffdfc8', RDI:'0x00007fffffffdff0', RSI:'0x0000000000000004', RAX:'0x000000000000001e'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'10', label:'arr[0]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'20 ←arr[1]', label:'arr[1]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'30', label:'arr[2]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:'40', label:'arr[3]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfc8', value:'(saved RBP of main)', label:'sum_array frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfc0', value:'30', label:'total = 30', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfa8', value:'2', label:'i = 2', frame:1, isNew:false},
+    ],
+    codeLine: 5,
+    narrative: '<strong>i=1:</strong> total += arr[1] = 20. total = 30, i = 2.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400670', RSP:'0x00007fffffffdfa8', RBP:'0x00007fffffffdfc8', RDI:'0x00007fffffffdff0', RSI:'0x0000000000000004', RAX:'0x0000000000000064'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'10', label:'arr[0]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'20', label:'arr[1]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'30 ←arr[2]', label:'arr[2]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:'40 ←arr[3]', label:'arr[3]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfc8', value:'(saved RBP of main)', label:'sum_array frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfc0', value:'100', label:'total = 100', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfa8', value:'4', label:'i = 4 (done)', frame:1, isNew:false},
+    ],
+    codeLine: 7,
+    narrative: '<strong>i=2, i=3 done.</strong> total = 10+20+30+40 = <strong>100</strong>. i=4 is no longer < 4, so the loop exits.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400698', RSP:'0x00007fffffffdfc0', RBP:'0x00007fffffffdff8', RAX:'0x0000000000000064'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'10', label:'arr[0]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'20', label:'arr[1]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'30', label:'arr[2]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:'40', label:'arr[3]', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfc0', value:'100', label:'result = 100', frame:0, isNew:true},
+    ],
+    codeLine: 13,
+    narrative: '<strong>sum_array returns 100.</strong> RAX = 0x64 = 100. Back in main, result = 100 stored. The array data is still there (until main returns).',
+    quiz: null
+  },
+];
+
+// ── Chapter 6 ────────────────────────────────────────────────
+const CH6_CODE = [
+  'void swap(int* a, int* b) {', // 1
+  '    int temp = *a;',          // 2
+  '    *a = *b;',                // 3
+  '    *b = temp;',              // 4
+  '}',                           // 5
+  'int main() {',                // 6
+  '    int x = 10;',             // 7
+  '    int y = 20;',             // 8
+  '    swap(&x, &y);',           // 9
+  '    return x;',               // 10
+  '}',                           // 11
+];
+
+const CH6 = [
+  {
+    registers: regs({RIP:'0x0000000000400600', RSP:'0x00007fffffffe000'}),
+    memory: [],
+    codeLine: 6,
+    narrative: '<strong>main()</strong> starts. We\'ll swap two integers using pointers. The key insight: pass the <em>address</em> of x and y, not the values.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400608', RSP:'0x00007fffffffdfd8', RBP:'0x00007fffffffdff8'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:true},
+      {addr:'0x00007fffffffdff0', value:'10', label:'x = 10', frame:0, isNew:true},
+      {addr:'0x00007fffffffdfe8', value:'20', label:'y = 20', frame:0, isNew:true},
+    ],
+    codeLine: 7,
+    narrative: '<strong>x=10, y=20</strong> stored in main\'s frame. x is at address <strong>0x7fffffffdff0</strong>, y at <strong>0x7fffffffdfe8</strong>.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x00000000004005c0', RSP:'0x00007fffffffdfc0', RBP:'0x00007fffffffdfd0', RDI:'0x00007fffffffdff0', RSI:'0x00007fffffffdfe8'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'10', label:'x = 10', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'20', label:'y = 20', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfd0', value:'(saved RBP of main)', label:'swap frame', frame:1, isNew:true},
+    ],
+    codeLine: 1,
+    narrative: '<strong>swap(&x, &y) called.</strong> RDI = 0x7fffffffdff0 (address of x). RSI = 0x7fffffffdfe8 (address of y). We passed <em>pointers</em> — swap can modify main\'s variables!',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x00000000004005c8', RSP:'0x00007fffffffdfc0', RBP:'0x00007fffffffdfd0', RDI:'0x00007fffffffdff0', RSI:'0x00007fffffffdfe8', RAX:'0x000000000000000a'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'10', label:'x = 10', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'20', label:'y = 20', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfd0', value:'(saved RBP of main)', label:'swap frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfc0', value:'10', label:'temp = *a = 10', frame:1, isNew:true},
+    ],
+    codeLine: 2,
+    narrative: '<strong>int temp = *a;</strong> — Dereference the pointer: *a means "the value at address a". *a = *0x7fffffffdff0 = 10. temp is a local copy.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x00000000004005d0', RSP:'0x00007fffffffdfc0', RBP:'0x00007fffffffdfd0', RDI:'0x00007fffffffdff0', RSI:'0x00007fffffffdfe8', RAX:'0x0000000000000014'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'20', label:'x = 20 (was 10!)', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'20', label:'y = 20', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfd0', value:'(saved RBP of main)', label:'swap frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfc0', value:'10', label:'temp = 10', frame:1, isNew:false},
+    ],
+    codeLine: 3,
+    narrative: '<strong>*a = *b;</strong> — Write the value of y (20) into the address a points to. Main\'s x is now 20! This is the power of pointers — direct memory write.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x00000000004005d8', RSP:'0x00007fffffffdfc0', RBP:'0x00007fffffffdfd0', RDI:'0x00007fffffffdff0', RSI:'0x00007fffffffdfe8', RAX:'0x000000000000000a'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'20', label:'x = 20', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'10', label:'y = 10 (was 20!)', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfd0', value:'(saved RBP of main)', label:'swap frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfc0', value:'10', label:'temp = 10', frame:1, isNew:false},
+    ],
+    codeLine: 4,
+    narrative: '<strong>*b = temp;</strong> — Write temp (10) into y\'s address. y is now 10. Both values are swapped entirely through pointer manipulation.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400620', RSP:'0x00007fffffffdff0', RBP:'0x00007fffffffdff8', RAX:'0x0000000000000014'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'20', label:'x = 20', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'10', label:'y = 10', frame:0, isNew:false},
+    ],
+    codeLine: 10,
+    narrative: '<strong>swap() returned.</strong> main\'s x is 20, y is 10 — swapped! RAX = 20 for the return. swap modified main\'s stack directly via pointers.',
+    quiz: null
+  },
+];
+
+// ── Chapter 7 ────────────────────────────────────────────────
+const CH7_CODE = [
+  'struct Point { int x; int y; };', // 1
+  'int magnitude_sq(struct Point p){',// 2
+  '    return p.x*p.x + p.y*p.y;',  // 3
+  '}',                               // 4
+  'int main() {',                    // 5
+  '    struct Point pt;',            // 6
+  '    pt.x = 3;',                  // 7
+  '    pt.y = 4;',                  // 8
+  '    int m = magnitude_sq(pt);',  // 9
+  '    return m;',                   // 10
+  '}',                               // 11
+];
+
+const CH7 = [
+  {
+    registers: regs({RIP:'0x0000000000400630', RSP:'0x00007fffffffe000'}),
+    memory: [],
+    codeLine: 5,
+    narrative: '<strong>main()</strong> starts. We\'ll create a Point struct (x, y) on the stack and pass it <em>by value</em> to magnitude_sq.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400638', RSP:'0x00007fffffffdfe8', RBP:'0x00007fffffffdff8'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:true},
+      {addr:'0x00007fffffffdff0', value:'3', label:'pt.x = 3', frame:0, isNew:true},
+      {addr:'0x00007fffffffdfe8', value:'4', label:'pt.y = 4', frame:0, isNew:true},
+    ],
+    codeLine: 7,
+    narrative: '<strong>pt.x = 3; pt.y = 4;</strong> The struct members are laid out contiguously: pt.x at 0x7fffffffdff0, pt.y at 0x7fffffffdfe8. Two 8-byte slots.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400600', RSP:'0x00007fffffffdfd0', RBP:'0x00007fffffffdfe0', RDI:'0x0000000000000003', RSI:'0x0000000000000004'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'3', label:'pt.x = 3', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'4', label:'pt.y = 4', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'(saved RBP of main)', label:'magnitude_sq frame', frame:1, isNew:true},
+      {addr:'0x00007fffffffdfd8', value:'3', label:'p.x (copy)', frame:1, isNew:true},
+      {addr:'0x00007fffffffdfd0', value:'4', label:'p.y (copy)', frame:1, isNew:true},
+    ],
+    codeLine: 2,
+    narrative: '<strong>magnitude_sq(pt) called — by value!</strong> The struct is copied onto the stack. magnitude_sq gets its own copy: p.x=3, p.y=4. Changing p would not affect main\'s pt.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400608', RSP:'0x00007fffffffdfd0', RBP:'0x00007fffffffdfe0', RDI:'0x0000000000000003', RSI:'0x0000000000000004', RAX:'0x0000000000000019'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'3', label:'pt.x = 3', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'4', label:'pt.y = 4', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'(saved RBP of main)', label:'magnitude_sq frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:'3', label:'p.x', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfd0', value:'4', label:'p.y', frame:1, isNew:false},
+    ],
+    codeLine: 3,
+    narrative: '<strong>p.x*p.x + p.y*p.y = 9 + 16 = 25.</strong> RAX = 25 = 0x19. The struct copy is about to be discarded when the frame is popped.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000400658', RSP:'0x00007fffffffdfe8', RBP:'0x00007fffffffdff8', RAX:'0x0000000000000019'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'3', label:'pt.x = 3', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'25', label:'m = 25', frame:0, isNew:true},
+    ],
+    codeLine: 10,
+    narrative: '<strong>magnitude_sq returns 25.</strong> m = 25 stored in main. The struct copy in magnitude_sq\'s frame is gone — only the result survives in RAX.',
+    quiz: null
+  },
+];
+
+// ── Chapter 8 ────────────────────────────────────────────────
+const CH8_CODE = [
+  'int main() {',                    // 1
+  '    int* ptr = malloc(sizeof(int));', // 2
+  '    *ptr = 42;',                  // 3
+  '    int val = *ptr;',             // 4
+  '    free(ptr);',                  // 5
+  '    *ptr = 99;  // use-after-free!', // 6
+  '    return val;',                 // 7
+  '}',                               // 8
+];
+
+const HEAP_ADDR = '0x000055555576f2a0';
+const CH8 = [
+  {
+    registers: regs({RIP:'0x0000000000400560', RSP:'0x00007fffffffe000'}),
+    memory: [],
+    heap: [],
+    codeLine: 1,
+    narrative: '<strong>main()</strong> starts. We\'re about to use <strong>malloc</strong> to allocate memory on the <em>heap</em> — a separate memory region from the stack.',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400568', RSP:'0x00007fffffffdff0', RBP:'0x00007fffffffdff8', RAX:'0x000055555576f2a0'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:true},
+      {addr:'0x00007fffffffdff0', value:HEAP_ADDR, label:'ptr = heap addr', frame:0, isNew:true},
+    ],
+    heap: [{addr:HEAP_ADDR, value:'(uninitialized)', tag:'alloc', isNew:true}],
+    codeLine: 2,
+    narrative: '<strong>malloc(sizeof(int))</strong> allocates 8 bytes on the heap at <strong>' + HEAP_ADDR + '</strong>. The stack stores the <em>pointer</em> (an address) not the data itself.',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400570', RSP:'0x00007fffffffdff0', RBP:'0x00007fffffffdff8', RAX:'0x000055555576f2a0'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:HEAP_ADDR, label:'ptr → heap', frame:0, isNew:false},
+    ],
+    heap: [{addr:HEAP_ADDR, value:'42', tag:'alloc', isNew:false}],
+    codeLine: 3,
+    narrative: '<strong>*ptr = 42;</strong> — Dereference ptr (follow the address) and write 42 to the heap location. The heap cell now contains 42.',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400578', RSP:'0x00007fffffffdfe8', RBP:'0x00007fffffffdff8', RAX:'0x000000000000002a'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:HEAP_ADDR, label:'ptr → heap', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'42', label:'val = 42', frame:0, isNew:true},
+    ],
+    heap: [{addr:HEAP_ADDR, value:'42', tag:'alloc', isNew:false}],
+    codeLine: 4,
+    narrative: '<strong>int val = *ptr;</strong> — Read 42 from the heap into the stack variable val. RAX = 42 = 0x2A.',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400580', RSP:'0x00007fffffffdfe8', RBP:'0x00007fffffffdff8', RAX:'0x0000000000000000'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:HEAP_ADDR, label:'ptr (FREED!)', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'42', label:'val = 42', frame:0, isNew:false},
+    ],
+    heap: [{addr:HEAP_ADDR, value:'(freed)', tag:'freed', isNew:false}],
+    codeLine: 5,
+    narrative: '<strong>free(ptr);</strong> — The heap block is returned to the allocator. It\'s marked as freed (shown in red). ptr still holds the address, but the memory is no longer ours!',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400588', RSP:'0x00007fffffffdfe8', RBP:'0x00007fffffffdff8', RAX:'0x0000000000000063'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:HEAP_ADDR, label:'ptr (FREED!)', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'42', label:'val = 42', frame:0, isNew:false},
+    ],
+    heap: [{addr:HEAP_ADDR, value:'99 ← UB!', tag:'freed', isNew:false}],
+    codeLine: 6,
+    narrative: '<strong>*ptr = 99; — USE-AFTER-FREE!</strong> This is undefined behaviour. Writing to freed memory may crash, silently corrupt other data, or enable exploits.',
+    quiz: null, showHeap: true, isUAF: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400590', RSP:'0x00007fffffffdfe8', RBP:'0x00007fffffffdff8', RAX:'0x000000000000002a'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:HEAP_ADDR, label:'ptr', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'42', label:'val = 42', frame:0, isNew:false},
+    ],
+    heap: [{addr:HEAP_ADDR, value:'(corrupted)', tag:'freed', isNew:false}],
+    codeLine: 7,
+    narrative: '<strong>return val;</strong> — val = 42 (the value we copied <em>before</em> freeing). RAX = 42. The program returns the correct value but the use-after-free was a serious bug.',
+    quiz: null, showHeap: true
+  },
+];
+
+// ── Chapter 9 ────────────────────────────────────────────────
+const CH9_CODE = [
+  '// Closure = function ptr + captured env',  // 1
+  'typedef struct {',                           // 2
+  '    int* captured_x;',                       // 3
+  '    int (*fn)(int*, int);',                  // 4
+  '} Closure;',                                 // 5
+  'int adder(int* env, int y) {',               // 6
+  '    return *env + y;',                       // 7
+  '}',                                          // 8
+  'Closure make_adder(int x) {',               // 9
+  '    int* heap_x = malloc(sizeof(int));',    // 10
+  '    *heap_x = x;',                          // 11
+  '    Closure c = { heap_x, adder };',        // 12
+  '    return c;',                              // 13
+  '}',                                          // 14
+  'int main() {',                               // 15
+  '    Closure add5 = make_adder(5);',         // 16
+  '    int result = add5.fn(add5.captured_x, 3);', // 17
+  '    return result;',                         // 18
+  '}',                                          // 19
+];
+
+const CL_HEAP = '0x000055555576f2b0';
+const CH9 = [
+  {
+    registers: regs({RIP:'0x0000000000400700', RSP:'0x00007fffffffe000'}),
+    memory: [],
+    heap: [],
+    codeLine: 15,
+    narrative: '<strong>Chapter 9: Closures.</strong> A closure packages a function with its captured environment. In C we simulate this with a struct. make_adder will allocate x on the heap so it outlives the stack frame.',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400710', RSP:'0x00007fffffffdfe0', RBP:'0x00007fffffffdff8', RDI:'0x0000000000000005'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:true},
+      {addr:'0x00007fffffffdff0', value:'0x00...ret', label:'return addr', frame:0, isNew:true},
+      {addr:'0x00007fffffffdfe0', value:'(saved RBP of main)', label:'make_adder frame', frame:1, isNew:true},
+    ],
+    heap: [],
+    codeLine: 9,
+    narrative: '<strong>make_adder(5) called.</strong> RDI = 5. make_adder\'s frame is created. The problem: if we stored x on this stack frame, it would disappear when make_adder returns!',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400718', RSP:'0x00007fffffffdfd8', RBP:'0x00007fffffffdfe0', RDI:'0x0000000000000005', RAX:CL_HEAP}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'0x00...ret', label:'return addr', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'(saved RBP of main)', label:'make_adder frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:CL_HEAP, label:'heap_x (ptr to heap)', frame:1, isNew:true},
+    ],
+    heap: [{addr:CL_HEAP, value:'(uninitialized)', tag:'alloc', isNew:true}],
+    codeLine: 10,
+    narrative: '<strong>malloc allocates x on the heap</strong> at ' + CL_HEAP + '. heap_x is a local pointer (on the stack). The data it points to lives on the heap — it will survive after make_adder returns.',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400720', RSP:'0x00007fffffffdfd8', RBP:'0x00007fffffffdfe0', RDI:'0x0000000000000005', RAX:CL_HEAP}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'0x00...ret', label:'return addr', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'(saved RBP of main)', label:'make_adder frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:CL_HEAP, label:'heap_x', frame:1, isNew:false},
+    ],
+    heap: [{addr:CL_HEAP, value:'5', tag:'alloc', isNew:false}],
+    codeLine: 11,
+    narrative: '<strong>*heap_x = 5;</strong> — Write x=5 into the heap allocation. The captured value lives on the heap now.',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400728', RSP:'0x00007fffffffdfc0', RBP:'0x00007fffffffdfe0', RDI:'0x0000000000000005', RAX:CL_HEAP}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:'0x00...ret', label:'return addr', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'(saved RBP of main)', label:'make_adder frame', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfd8', value:CL_HEAP, label:'heap_x', frame:1, isNew:false},
+      {addr:'0x00007fffffffdfd0', value:CL_HEAP, label:'c.captured_x', frame:1, isNew:true},
+      {addr:'0x00007fffffffdfc8', value:'0x0000000000400660', label:'c.fn = &adder', frame:1, isNew:true},
+    ],
+    heap: [{addr:CL_HEAP, value:'5', tag:'alloc', isNew:false}],
+    codeLine: 12,
+    narrative: '<strong>Closure c = { heap_x, adder };</strong> — The Closure struct holds two fields: a pointer to heap memory (the environment) and a function pointer to adder.',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400760', RSP:'0x00007fffffffdff0', RBP:'0x00007fffffffdff8', RAX:CL_HEAP}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:CL_HEAP, label:'add5.captured_x', frame:0, isNew:true},
+      {addr:'0x00007fffffffdfe8', value:'0x0000000000400660', label:'add5.fn = &adder', frame:0, isNew:true},
+    ],
+    heap: [{addr:CL_HEAP, value:'5', tag:'alloc', isNew:false}],
+    codeLine: 16,
+    narrative: '<strong>make_adder returned.</strong> Its frame is gone, but heap_x (the captured environment) is still alive on the heap! add5 in main holds the Closure struct — heap pointer + function pointer.',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400660', RSP:'0x00007fffffffdfe0', RBP:'0x00007fffffffdfe8', RDI:CL_HEAP, RSI:'0x0000000000000003', RAX:'0x0000000000000008'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:CL_HEAP, label:'add5.captured_x', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'0x0000000000400660', label:'add5.fn', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'(saved RBP of main)', label:'adder frame', frame:1, isNew:true},
+    ],
+    heap: [{addr:CL_HEAP, value:'5', tag:'alloc', isNew:false}],
+    codeLine: 6,
+    narrative: '<strong>add5.fn(add5.captured_x, 3) calls adder.</strong> RDI = pointer to heap (env), RSI = 3. adder dereferences env to get 5, then computes 5+3 = 8.',
+    quiz: null, showHeap: true
+  },
+  {
+    registers: regs({RIP:'0x0000000000400770', RSP:'0x00007fffffffdff0', RBP:'0x00007fffffffdff8', RAX:'0x0000000000000008'}),
+    memory: [
+      {addr:'0x00007fffffffdff8', value:'(saved RBP)', label:'main frame', frame:0, isNew:false},
+      {addr:'0x00007fffffffdff0', value:CL_HEAP, label:'add5.captured_x', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe8', value:'0x0000000000400660', label:'add5.fn', frame:0, isNew:false},
+      {addr:'0x00007fffffffdfe0', value:'8', label:'result = 8', frame:0, isNew:true},
+    ],
+    heap: [{addr:CL_HEAP, value:'5', tag:'alloc', isNew:false}],
+    codeLine: 18,
+    narrative: '<strong>result = 8.</strong> The closure worked: it "remembered" x=5 from make_adder even though that frame is long gone — because x lived on the heap. This is why real closures (JS, Python) heap-allocate captured variables.',
+    quiz: null, showHeap: true
+  },
+];
+
+/* ───────────────────────────────────────────────────────────────
+   CHAPTERS REGISTRY
+─────────────────────────────────────────────────────────────── */
+const CHAPTERS = [
+  { title: 'First Function Call',   steps: CH1, code: CH1_CODE },
+  { title: 'Nested Calls',          steps: CH2, code: CH2_CODE },
+  { title: 'Recursion (Factorial)', steps: CH3, code: CH3_CODE },
+  { title: 'Stack Overflow',        steps: CH4, code: CH4_CODE },
+  { title: 'Arrays',                steps: CH5, code: CH5_CODE },
+  { title: 'Pointers',              steps: CH6, code: CH6_CODE },
+  { title: 'Structs',               steps: CH7, code: CH7_CODE },
+  { title: 'Heap',                  steps: CH8, code: CH8_CODE },
+  { title: 'Closures',             steps: CH9, code: CH9_CODE },
+];
+
+/* ───────────────────────────────────────────────────────────────
+   STATE
+─────────────────────────────────────────────────────────────── */
+let curChapter = 0;
+let curStep    = 0;
+let autoTimer  = null;
+let quizAnswered = false;
+let prevRegisters = {};
+
+const progress = JSON.parse(localStorage.getItem('fs-progress') || '{}');
+
+/* ───────────────────────────────────────────────────────────────
+   DOM REFS
+─────────────────────────────────────────────────────────────── */
+const regPanel    = document.getElementById('reg-panel');
+const memPanel    = document.getElementById('mem-panel');
+const codePanel   = document.getElementById('code-panel');
+const heapPanel   = document.getElementById('heap-panel');
+const heapRows    = document.getElementById('heap-rows');
+const narrative   = document.getElementById('narrative');
+const quizBox     = document.getElementById('quiz-box');
+const quizQ       = document.getElementById('quiz-q');
+const quizOpts    = document.getElementById('quiz-opts');
+const quizFB      = document.getElementById('quiz-feedback');
+const btnBack     = document.getElementById('btn-back');
+const btnStep     = document.getElementById('btn-step');
+const btnAuto     = document.getElementById('btn-auto');
+const stepCtr     = document.getElementById('step-counter');
+const chLabel     = document.getElementById('chapter-label');
+const pipTrack    = document.getElementById('chapter-pips');
+const chapNav     = document.getElementById('chapter-nav');
+const crashOv     = document.getElementById('crash-overlay');
+const uafOv       = document.getElementById('uaf-overlay');
+
+/* ───────────────────────────────────────────────────────────────
+   RENDER
+─────────────────────────────────────────────────────────────── */
+function renderRegisters(regsObj) {
+  regPanel.innerHTML = '';
+  REG_NAMES.forEach(name => {
+    const val = regsObj[name] || '0x0000000000000000';
+    const prev = prevRegisters[name] || '0x0000000000000000';
+    const changed = val !== prev;
+    const row = document.createElement('div');
+    row.className = 'reg-row' + (changed ? ' changed' : '');
+    row.innerHTML = `<span class="reg-name">${name}</span><span class="reg-value">${esc(val)}</span>`;
+    regPanel.appendChild(row);
+  });
+  prevRegisters = Object.assign({}, regsObj);
+}
+
+function renderMemory(memArr, regsObj) {
+  memPanel.innerHTML = '';
+  const rsp = regsObj.RSP;
+  const rbp = regsObj.RBP;
+  memArr.forEach(row => {
+    const isRSP = row.addr === rsp;
+    const isRBP = row.addr === rbp;
+    const div = document.createElement('div');
+    div.className = 'mem-row' + (row.isNew ? ' new-row' : '');
+    let arrow = '';
+    if (isRSP && isRBP) arrow = '<span class="mem-arrow arrow-both">◀RSP/RBP</span>';
+    else if (isRSP)      arrow = '<span class="mem-arrow arrow-rsp">◀ RSP</span>';
+    else if (isRBP)      arrow = '<span class="mem-arrow arrow-rbp">◀ RBP</span>';
+    else                 arrow = '<span class="mem-arrow"></span>';
+    const labelHtml = row.label ? `<span class="mem-label frame-${row.frame !== undefined ? row.frame : 0}">${esc(row.label)}</span>` : '';
+    div.innerHTML = `<span class="mem-addr">${esc(row.addr)}</span><span class="mem-val">${esc(row.value)}</span>${labelHtml}${arrow}`;
+    memPanel.appendChild(div);
+  });
+  // Scroll to RSP row
+  const rspEl = Array.from(memPanel.children).find(el => el.querySelector('.arrow-rsp') || el.querySelector('.arrow-both'));
+  if (rspEl) rspEl.scrollIntoView({block:'nearest', behavior:'smooth'});
+}
+
+function renderCode(codeArr, activeLine) {
+  codePanel.innerHTML = '';
+  codeArr.forEach((line, idx) => {
+    const lineNum = idx + 1;
+    const isActive = lineNum === activeLine;
+    const div = document.createElement('div');
+    div.className = 'code-line' + (isActive ? ' active' : '');
+    div.innerHTML = `<span class="code-line-num">${lineNum}</span><span class="code-line-arrow">${isActive ? '▶' : ' '}</span><span class="code-text">${syntaxHL(line)}</span>`;
+    codePanel.appendChild(div);
+  });
+  // Scroll active line into view
+  const activeEl = codePanel.querySelector('.active');
+  if (activeEl) activeEl.scrollIntoView({block:'nearest', behavior:'smooth'});
+}
+
+function renderHeap(heapArr, show) {
+  heapPanel.classList.toggle('visible', !!show);
+  heapRows.innerHTML = '';
+  if (!heapArr || !heapArr.length) return;
+  heapArr.forEach(row => {
+    const div = document.createElement('div');
+    div.className = 'heap-row';
+    const tagClass = row.tag === 'freed' ? 'freed' : 'alloc';
+    const tagLabel = row.tag === 'freed' ? 'FREED' : 'ALLOC';
+    div.innerHTML = `<span class="heap-addr">${esc(row.addr)}</span><span class="heap-val">${esc(row.value)}</span><span class="heap-tag ${tagClass}">${tagLabel}</span>`;
+    heapRows.appendChild(div);
+  });
+}
+
+function renderQuiz(quiz) {
+  if (!quiz || quizAnswered) {
+    quizBox.classList.remove('visible');
+    return;
+  }
+  quizBox.classList.add('visible');
+  quizQ.textContent = quiz.question;
+  quizOpts.innerHTML = '';
+  quizFB.className = 'fs-quiz-feedback';
+  quizFB.textContent = '';
+  quiz.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'fs-quiz-opt';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => handleQuizAnswer(i, quiz, btn));
+    quizOpts.appendChild(btn);
+  });
+}
+
+function handleQuizAnswer(idx, quiz, btn) {
+  const opts = quizOpts.querySelectorAll('.fs-quiz-opt');
+  opts.forEach(b => b.disabled = true);
+  if (idx === quiz.correctIdx) {
+    btn.classList.add('correct');
+    quizFB.className = 'fs-quiz-feedback show ok';
+    quizFB.textContent = '✓ ' + quiz.explanation;
+    quizAnswered = true;
+    btnStep.disabled = false;
+  } else {
+    btn.classList.add('wrong');
+    opts[quiz.correctIdx].classList.add('correct');
+    quizFB.className = 'fs-quiz-feedback show bad';
+    quizFB.textContent = '✗ Not quite. ' + quiz.explanation;
+    quizAnswered = true; // still allow moving forward after seeing answer
+    btnStep.disabled = false;
+  }
+}
+
+function renderChapterBar() {
+  chLabel.textContent = `Chapter ${curChapter + 1} of 9 — ${CHAPTERS[curChapter].title}`;
+  pipTrack.innerHTML = '';
+  CHAPTERS.forEach((ch, i) => {
+    const pip = document.createElement('div');
+    pip.className = 'chapter-pip' + (progress[i] ? ' done' : '') + (i === curChapter ? ' active' : '');
+    pip.title = `Chapter ${i+1}: ${ch.title}`;
+    pip.addEventListener('click', () => goChapter(i));
+    pipTrack.appendChild(pip);
+  });
+}
+
+function renderChapterNav() {
+  chapNav.innerHTML = '';
+  CHAPTERS.forEach((ch, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = `${i+1}. ${ch.title}`;
+    if (i === curChapter) btn.classList.add('active');
+    if (progress[i]) btn.classList.add('done');
+    btn.addEventListener('click', () => goChapter(i));
+    chapNav.appendChild(btn);
+  });
+}
+
+function render() {
+  const ch = CHAPTERS[curChapter];
+  const step = ch.steps[curStep];
+
+  renderRegisters(step.registers);
+  renderMemory(step.memory || [], step.registers);
+  renderCode(ch.code, step.codeLine);
+  renderHeap(step.heap, step.showHeap);
+  narrative.innerHTML = step.narrative;
+
+  quizAnswered = false;
+  renderQuiz(step.quiz);
+
+  // Button states
+  btnBack.disabled = curChapter === 0 && curStep === 0;
+  const hasQuiz = !!step.quiz && !quizAnswered;
+  btnStep.disabled = hasQuiz;
+
+  stepCtr.textContent = `Step ${curStep + 1} / ${ch.steps.length}`;
+
+  renderChapterBar();
+  renderChapterNav();
+
+  // Crash
+  if (step.isCrash) {
+    stopAuto();
+    crashOv.classList.add('visible');
+  }
+  // UAF
+  if (step.isUAF) {
+    stopAuto();
+    uafOv.classList.add('visible');
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────
+   NAVIGATION
+─────────────────────────────────────────────────────────────── */
+function goChapter(idx) {
+  stopAuto();
+  curChapter = idx;
+  curStep = 0;
+  quizAnswered = false;
+  prevRegisters = {};
+  render();
+}
+
+function stepForward() {
+  const ch = CHAPTERS[curChapter];
+  const step = ch.steps[curStep];
+
+  // Block if quiz pending
+  if (step.quiz && !quizAnswered) return;
+
+  if (curStep < ch.steps.length - 1) {
+    curStep++;
+    render();
+  } else {
+    // Chapter complete
+    progress[curChapter] = true;
+    localStorage.setItem('fs-progress', JSON.stringify(progress));
+    stopAuto();
+    if (curChapter < CHAPTERS.length - 1) {
+      goChapter(curChapter + 1);
+    } else {
+      narrative.innerHTML = '<strong>You\'ve completed all 9 chapters!</strong> You now understand the x86-64 stack: frames, calling conventions, recursion, overflow, arrays, pointers, structs, heap allocation, and closures.';
+    }
+  }
+}
+
+function stepBack() {
+  stopAuto();
+  if (curStep > 0) {
+    curStep--;
+    quizAnswered = false;
+    render();
+  } else if (curChapter > 0) {
+    curChapter--;
+    curStep = CHAPTERS[curChapter].steps.length - 1;
+    quizAnswered = false;
+    prevRegisters = {};
+    render();
+  }
+}
+
+function startAuto() {
+  if (autoTimer) return;
+  btnAuto.textContent = '⏹ STOP';
+  btnAuto.classList.remove('btn-outline');
+  btnAuto.classList.add('btn-danger');
+  autoTimer = setInterval(() => {
+    const ch = CHAPTERS[curChapter];
+    const step = ch.steps[curStep];
+    if (step.quiz && !quizAnswered) { stopAuto(); return; }
+    if (step.isCrash || step.isUAF) { stopAuto(); return; }
+    stepForward();
+    const done = curStep === ch.steps.length - 1 && progress[curChapter];
+    if (curChapter === CHAPTERS.length - 1 && done) stopAuto();
+  }, 800);
+}
+
+function stopAuto() {
+  if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  btnAuto.textContent = '▶▶ AUTO';
+  btnAuto.classList.remove('btn-danger');
+  btnAuto.classList.add('btn-outline');
+}
+
+/* ───────────────────────────────────────────────────────────────
+   EVENT LISTENERS
+─────────────────────────────────────────────────────────────── */
+btnBack.addEventListener('click', stepBack);
+btnStep.addEventListener('click', () => { stopAuto(); stepForward(); });
+btnAuto.addEventListener('click', () => { if (autoTimer) stopAuto(); else startAuto(); });
+
+document.getElementById('crash-retry').addEventListener('click', () => {
+  crashOv.classList.remove('visible');
+  goChapter(curChapter);
+});
+document.getElementById('uaf-ok').addEventListener('click', () => {
+  uafOv.classList.remove('visible');
+});
+
+/* ───────────────────────────────────────────────────────────────
+   INIT
+─────────────────────────────────────────────────────────────── */
+render();
+</script>
+</body>
+</html>

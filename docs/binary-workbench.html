@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="midnight">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Binary Workbench — BrainStuffer</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── Workbench-specific layout ─────────────────────────────── */
+        .wb-container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 0.35rem;
+        }
+
+        /* ── Converter grid ──────────────────────────────────────── */
+        .converter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem 1.5rem;
+        }
+
+        .conv-field {
+            position: relative;
+        }
+
+        .conv-field label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .base-tag {
+            font-size: 0.65rem;
+            background: var(--bg2);
+            border: 1px solid var(--card-border);
+            border-radius: 4px;
+            padding: 0.1rem 0.4rem;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .conv-field input {
+            margin-bottom: 0;
+            padding-right: 2.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+        }
+
+        .conv-field.has-error input {
+            border-color: var(--danger) !important;
+            box-shadow: 0 0 0 3px rgba(239,68,68,.2) !important;
+        }
+
+        .clear-btn {
+            position: absolute;
+            right: 0.6rem;
+            top: 50%;
+            transform: translateY(20%);
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.2rem 0.3rem;
+            line-height: 1;
+            border-radius: 4px;
+            transition: color 0.15s;
+        }
+
+        .clear-btn:hover { color: var(--danger); }
+
+        .bit-width-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .bit-width-row span {
+            font-size: 0.8rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .bw-btn {
+            padding: 0.3rem 0.85rem;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            background: var(--bg2);
+            border: 1px solid var(--card-border);
+            color: var(--subtle);
+            cursor: pointer;
+            transition: border-color 0.15s, color 0.15s, background 0.15s;
+            font-weight: 600;
+            font-family: inherit;
+        }
+
+        .bw-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--card);
+        }
+
+        /* ── Bit visualiser ──────────────────────────────────────── */
+        .bit-vis-scroll {
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .bit-vis-wrap {
+            min-width: 580px;
+            user-select: none;
+        }
+
+        .byte-labels {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0;
+            margin-bottom: 0.25rem;
+        }
+
+        .byte-label {
+            flex: 0 0 calc(8 * 36px + 3 * 4px);
+            text-align: center;
+            font-size: 0.65rem;
+            color: var(--muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .byte-label + .byte-label {
+            margin-left: 12px;
+        }
+
+        .msb-lsb-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: var(--muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.35rem;
+        }
+
+        .bits-row {
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 3px;
+            flex-wrap: wrap-reverse;
+            justify-content: flex-start;
+        }
+
+        .nibble-group {
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 3px;
+        }
+
+        .nibble-group + .nibble-group {
+            margin-right: 10px;
+        }
+
+        .bit-btn {
+            width: 34px;
+            height: 38px;
+            border-radius: 6px;
+            border: 1.5px solid var(--card-border);
+            background: var(--bg2);
+            color: var(--muted);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.12s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .bit-btn:hover:not(.bit-dim) {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .bit-btn.bit-on {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #000;
+            box-shadow: 0 0 8px var(--glow);
+        }
+
+        .bit-btn.bit-dim {
+            opacity: 0.22;
+            cursor: default;
+        }
+
+        .bit-index-row {
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 3px;
+            margin-top: 3px;
+        }
+
+        .bit-idx {
+            width: 34px;
+            text-align: center;
+            font-size: 0.55rem;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+
+        .bit-idx-gap { width: 10px; flex-shrink: 0; }
+
+        .nibble-sep { width: 10px; flex-shrink: 0; }
+
+        .vis-values {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+
+        .vis-val-box {
+            background: var(--bg2);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 0.6rem 0.9rem;
+        }
+
+        .vis-val-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .vis-val-num {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--accent);
+            word-break: break-all;
+        }
+
+        /* ── Two's complement explorer ───────────────────────────── */
+        .tc-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .tc-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg2);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.3s;
+        }
+
+        .tc-step.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tc-step.highlight {
+            border-color: var(--accent);
+        }
+
+        .tc-step-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #000;
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .tc-step-text {
+            font-size: 0.85rem;
+            color: var(--subtle);
+            min-width: 120px;
+        }
+
+        .tc-bits {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 0.05em;
+            flex: 1;
+        }
+
+        .tc-bits .bit-flip {
+            color: var(--accent2);
+        }
+
+        .tc-bits .bit-carry {
+            color: var(--warning);
+        }
+
+        .tc-result-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.65rem;
+            margin-top: 0.75rem;
+        }
+
+        .tc-result-box {
+            background: var(--bg2);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            text-align: center;
+        }
+
+        .tc-result-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+        }
+
+        .tc-result-val {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 0.2rem;
+        }
+
+        /* ── Bit shift ───────────────────────────────────────────── */
+        .shift-inputs {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .shift-inputs .field-wrap {
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .shift-inputs .field-wrap label { margin-bottom: 0.35rem; }
+        .shift-inputs .field-wrap input { margin-bottom: 0; }
+
+        .shift-btns {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+        }
+
+        .shift-display {
+            background: var(--bg2);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-top: 0.75rem;
+        }
+
+        .shift-before-after {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 0.75rem;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .shift-bits-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            margin-bottom: 0.3rem;
+        }
+
+        .shift-bits {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            word-break: break-all;
+        }
+
+        .shift-bits .moved-out { color: var(--danger); text-decoration: line-through; }
+        .shift-bits .moved-in  { color: var(--success); }
+        .shift-bits .kept      { color: var(--text); }
+
+        .shift-arrow {
+            font-size: 1.5rem;
+            color: var(--accent);
+            text-align: center;
+        }
+
+        .shift-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .shift-meta-item {
+            font-size: 0.85rem;
+        }
+
+        .shift-meta-item strong { color: var(--accent); }
+
+        .shift-info-box {
+            margin-top: 0.75rem;
+            padding: 0.6rem 0.9rem;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-left: 3px solid var(--accent2);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            color: var(--subtle);
+            font-style: italic;
+        }
+
+        /* ── IEEE 754 ────────────────────────────────────────────── */
+        .ieee-input-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .ieee-input-row .field-wrap {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .ieee-input-row .field-wrap input { margin-bottom: 0; }
+        .ieee-input-row .field-wrap label { margin-bottom: 0.35rem; }
+
+        .ieee-common-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .preset-btn {
+            padding: 0.25rem 0.65rem;
+            font-size: 0.78rem;
+            border-radius: 5px;
+            background: var(--bg2);
+            border: 1px solid var(--card-border);
+            color: var(--subtle);
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 600;
+            transition: border-color 0.15s, color 0.15s;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .ieee-bits-display {
+            display: flex;
+            gap: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            flex-wrap: nowrap;
+            min-width: 0;
+        }
+
+        .ieee-sign {
+            background: rgba(34,197,94,.15);
+            border-right: 1px solid var(--card-border);
+            color: var(--success);
+            padding: 0.6rem 0.75rem;
+            flex-shrink: 0;
+            letter-spacing: 0.05em;
+        }
+
+        .ieee-exp {
+            background: rgba(129,140,248,.1);
+            border-right: 1px solid var(--card-border);
+            color: var(--accent);
+            padding: 0.6rem 0.75rem;
+            flex: 0 0 auto;
+            letter-spacing: 0.05em;
+        }
+
+        .ieee-mant {
+            background: rgba(56,189,248,.08);
+            color: var(--accent2);
+            padding: 0.6rem 0.75rem;
+            flex: 1;
+            min-width: 0;
+            word-break: break-all;
+            letter-spacing: 0.05em;
+        }
+
+        .ieee-legend {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.72rem;
+            color: var(--muted);
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .ieee-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .legend-dot.sign  { background: var(--success); }
+        .legend-dot.exp   { background: var(--accent); }
+        .legend-dot.mant  { background: var(--accent2); }
+
+        .ieee-breakdown {
+            background: var(--bg2);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+        }
+
+        .ieee-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid var(--card-border);
+            font-size: 0.875rem;
+            flex-wrap: wrap;
+        }
+
+        .ieee-row:last-child { border-bottom: none; }
+
+        .ieee-row-label {
+            font-weight: 700;
+            color: var(--subtle);
+            min-width: 90px;
+            font-size: 0.8rem;
+        }
+
+        .ieee-row-val {
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .ieee-row-val .em { color: var(--accent); font-weight: 700; }
+
+        /* ── General utility ──────────────────────────────────────── */
+        .mono {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-title h2 {
+            margin-bottom: 0;
+        }
+
+        .title-icon {
+            font-size: 1.3rem;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .back-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .back-link a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .converter-grid { grid-template-columns: 1fr; }
+            .tc-result-row  { grid-template-columns: 1fr 1fr; }
+            .shift-before-after { grid-template-columns: 1fr; }
+            .shift-arrow { transform: rotate(90deg); }
+            .ieee-input-row { flex-direction: column; }
+        }
+
+        /* ── Header (workbench-specific, lighter) ─────────────────── */
+        .wb-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .wb-header h1 {
+            font-size: 1.9rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+        }
+
+        .wb-header p {
+            color: var(--muted);
+            font-size: 0.875rem;
+        }
+
+        /* Flashing bit animation */
+        @keyframes bit-flash {
+            0%   { box-shadow: 0 0 0 4px var(--glow); }
+            50%  { box-shadow: 0 0 12px 6px var(--glow); }
+            100% { box-shadow: 0 0 0 4px var(--glow); }
+        }
+
+        .bit-btn.just-changed {
+            animation: bit-flash 0.35s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skin toggle -->
+    <button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+    <div id="skin-panel" role="listbox" aria-label="Colour skins">
+        <div class="skin-panel-title">Colour Skin</div>
+        <div class="skin-opt" data-skin="midnight" role="option">
+            <span class="skin-swatch" style="background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom
+        </div>
+        <div class="skin-opt" data-skin="neon" role="option">
+            <span class="skin-swatch" style="background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix
+        </div>
+        <div class="skin-opt" data-skin="crimson" role="option">
+            <span class="skin-swatch" style="background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire
+        </div>
+        <div class="skin-opt" data-skin="ocean" role="option">
+            <span class="skin-swatch" style="background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss
+        </div>
+        <div class="skin-opt" data-skin="amber" role="option">
+            <span class="skin-swatch" style="background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor
+        </div>
+        <div class="skin-opt" data-skin="caveman" role="option">
+            <span class="skin-swatch" style="background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman
+        </div>
+        <div class="skin-opt" data-skin="win95" role="option">
+            <span class="skin-swatch" style="background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95
+        </div>
+        <div class="skin-opt" data-skin="aero" role="option">
+            <span class="skin-swatch" style="background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero
+        </div>
+    </div>
+
+    <div class="container wb-container">
+        <div class="wb-header">
+            <h1>Binary Workbench</h1>
+            <p>Interactive Number Systems &amp; Bit Operations Explorer</p>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- Section 1: Live Number Converter                        -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="card" id="s1">
+            <div class="card-title">
+                <span class="title-icon">🔄</span>
+                <h2>Live Number Converter</h2>
+            </div>
+
+            <div class="converter-grid">
+                <div class="conv-field" id="cf-bin">
+                    <label>
+                        <span>Binary</span>
+                        <span class="base-tag">base 2</span>
+                    </label>
+                    <input type="text" id="inp-bin" placeholder="e.g. 1101" autocomplete="off" spellcheck="false">
+                    <button class="clear-btn" data-field="bin" title="Clear" aria-label="Clear binary">×</button>
+                </div>
+                <div class="conv-field" id="cf-oct">
+                    <label>
+                        <span>Octal</span>
+                        <span class="base-tag">base 8</span>
+                    </label>
+                    <input type="text" id="inp-oct" placeholder="e.g. 15" autocomplete="off" spellcheck="false">
+                    <button class="clear-btn" data-field="oct" title="Clear" aria-label="Clear octal">×</button>
+                </div>
+                <div class="conv-field" id="cf-dec">
+                    <label>
+                        <span>Decimal</span>
+                        <span class="base-tag">base 10, signed 32-bit</span>
+                    </label>
+                    <input type="text" id="inp-dec" placeholder="e.g. 13" autocomplete="off" spellcheck="false">
+                    <button class="clear-btn" data-field="dec" title="Clear" aria-label="Clear decimal">×</button>
+                </div>
+                <div class="conv-field" id="cf-hex">
+                    <label>
+                        <span>Hexadecimal</span>
+                        <span class="base-tag">base 16</span>
+                    </label>
+                    <input type="text" id="inp-hex" placeholder="e.g. D" autocomplete="off" spellcheck="false">
+                    <button class="clear-btn" data-field="hex" title="Clear" aria-label="Clear hex">×</button>
+                </div>
+            </div>
+
+            <div class="bit-width-row">
+                <span>Bit width:</span>
+                <button class="bw-btn" data-bits="8">8-bit</button>
+                <button class="bw-btn active" data-bits="16">16-bit</button>
+                <button class="bw-btn" data-bits="32">32-bit</button>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- Section 2: Bit Visualiser                               -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="card" id="s2">
+            <div class="card-title">
+                <span class="title-icon">🧩</span>
+                <h2>Bit Visualiser</h2>
+            </div>
+
+            <div class="bit-vis-scroll">
+                <div class="bit-vis-wrap">
+                    <div class="msb-lsb-row">
+                        <span>MSB (bit 31)</span>
+                        <span>LSB (bit 0)</span>
+                    </div>
+
+                    <!-- byte labels injected by JS -->
+                    <div class="byte-labels" id="byte-labels"></div>
+
+                    <!-- bit buttons injected by JS -->
+                    <div class="bits-row" id="bits-row"></div>
+
+                    <!-- index labels injected by JS -->
+                    <div class="bit-index-row" id="bit-index-row"></div>
+                </div>
+            </div>
+
+            <div class="bit-width-row" style="margin-top:1rem;">
+                <span>Bit width:</span>
+                <button class="bw-btn" data-bits2="8">8-bit</button>
+                <button class="bw-btn active" data-bits2="16">16-bit</button>
+                <button class="bw-btn" data-bits2="32">32-bit</button>
+            </div>
+
+            <div class="vis-values" id="vis-values">
+                <div class="vis-val-box">
+                    <div class="vis-val-label">Unsigned decimal</div>
+                    <div class="vis-val-num" id="vis-unsigned">0</div>
+                </div>
+                <div class="vis-val-box">
+                    <div class="vis-val-label">Signed (2's complement)</div>
+                    <div class="vis-val-num" id="vis-signed">0</div>
+                </div>
+                <div class="vis-val-box">
+                    <div class="vis-val-label">Hex</div>
+                    <div class="vis-val-num" id="vis-hex">0x00000000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- Section 3: Two's Complement Explorer                    -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="card" id="s3">
+            <div class="card-title">
+                <span class="title-icon">🔃</span>
+                <h2>Two's Complement Explorer</h2>
+            </div>
+
+            <p style="font-size:0.875rem;color:var(--subtle);margin-bottom:1rem;">
+                Two's complement is how computers represent signed negative integers.
+                To negate a number: flip all bits, then add 1.
+            </p>
+
+            <div style="display:flex;gap:0.75rem;align-items:flex-end;flex-wrap:wrap;margin-bottom:0.75rem;">
+                <div style="flex:1;min-width:160px;">
+                    <label>Positive decimal input</label>
+                    <input type="text" id="tc-input" placeholder="e.g. 13" style="margin-bottom:0;" autocomplete="off">
+                </div>
+                <button class="btn btn-primary" id="tc-negate-btn" style="flex-shrink:0;margin-bottom:0;">Negate ▶</button>
+            </div>
+
+            <div class="tc-steps" id="tc-steps"></div>
+
+            <div class="tc-result-row" id="tc-result-row" style="display:none;"></div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- Section 4: Bit Shift Operations                         -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="card" id="s4">
+            <div class="card-title">
+                <span class="title-icon">↔️</span>
+                <h2>Bit Shift Operations</h2>
+            </div>
+
+            <div class="shift-inputs">
+                <div class="field-wrap">
+                    <label>Value (decimal)</label>
+                    <input type="text" id="shift-val" placeholder="e.g. 12" autocomplete="off" style="margin-bottom:0;">
+                </div>
+                <div class="field-wrap" style="max-width:140px;">
+                    <label>Shift amount (1–31)</label>
+                    <input type="number" id="shift-amt" min="1" max="31" value="1" style="margin-bottom:0;">
+                </div>
+            </div>
+
+            <div class="shift-btns">
+                <button class="btn btn-outline" data-shift="shl">&lt;&lt; SHL</button>
+                <button class="btn btn-outline" data-shift="shr">&gt;&gt; SHR (logical)</button>
+                <button class="btn btn-outline" data-shift="sar">&gt;&gt; SAR (arithmetic)</button>
+                <button class="btn btn-outline" data-shift="rol">↻ ROL (rotate left)</button>
+            </div>
+
+            <div class="shift-display" id="shift-display" style="display:none;">
+                <div class="shift-before-after" id="shift-before-after">
+                    <div>
+                        <div class="shift-bits-label">Before</div>
+                        <div class="shift-bits" id="shift-before-bits"></div>
+                    </div>
+                    <div class="shift-arrow" id="shift-arrow">→</div>
+                    <div>
+                        <div class="shift-bits-label">After</div>
+                        <div class="shift-bits" id="shift-after-bits"></div>
+                    </div>
+                </div>
+                <div class="shift-meta">
+                    <div class="shift-meta-item">Decimal: <strong id="shift-dec-result">—</strong></div>
+                    <div class="shift-meta-item">Hex: <strong id="shift-hex-result">—</strong></div>
+                    <div class="shift-meta-item">Operation: <strong id="shift-op-name">—</strong></div>
+                </div>
+                <div class="shift-info-box" id="shift-info-box"></div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- Section 5: IEEE 754 Float Explorer                      -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <div class="card" id="s5">
+            <div class="card-title">
+                <span class="title-icon">🔬</span>
+                <h2>IEEE 754 Float Explorer</h2>
+            </div>
+
+            <div class="ieee-input-row">
+                <div class="field-wrap">
+                    <label>Decimal float (e.g. 3.14, -0.5, Infinity, NaN)</label>
+                    <input type="text" id="ieee-float-input" placeholder="e.g. 3.14" autocomplete="off">
+                </div>
+                <div style="display:flex;align-items:center;padding-bottom:0.1rem;color:var(--muted);font-weight:700;font-size:0.9rem;">or</div>
+                <div class="field-wrap">
+                    <label>Hex bits (e.g. 0x40490FDB)</label>
+                    <input type="text" id="ieee-hex-input" placeholder="e.g. 0x40490FDB" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="ieee-common-row">
+                <span style="font-size:0.75rem;color:var(--muted);align-self:center;margin-right:0.25rem;">Presets:</span>
+                <button class="preset-btn" data-val="3.141592653589793">π</button>
+                <button class="preset-btn" data-val="2.718281828459045">e</button>
+                <button class="preset-btn" data-val="1.4142135623730951">√2</button>
+                <button class="preset-btn" data-val="0.1">0.1</button>
+                <button class="preset-btn" data-val="3.4028234663852886e+38">MAX</button>
+                <button class="preset-btn" data-val="1.1754943508222875e-38">MIN+</button>
+                <button class="preset-btn" data-val="Infinity">∞</button>
+                <button class="preset-btn" data-val="-Infinity">−∞</button>
+                <button class="preset-btn" data-val="NaN">NaN</button>
+                <button class="preset-btn" data-val="0">0</button>
+                <button class="preset-btn" data-val="-0">−0</button>
+            </div>
+
+            <div id="ieee-output" style="display:none;">
+                <div class="ieee-bits-display">
+                    <div class="ieee-sign" id="ieee-sign-bits"></div>
+                    <div class="ieee-exp"  id="ieee-exp-bits"></div>
+                    <div class="ieee-mant" id="ieee-mant-bits"></div>
+                </div>
+
+                <div class="ieee-legend">
+                    <div class="ieee-legend-item"><div class="legend-dot sign"></div> Sign (1 bit)</div>
+                    <div class="ieee-legend-item"><div class="legend-dot exp"></div> Exponent (8 bits)</div>
+                    <div class="ieee-legend-item"><div class="legend-dot mant"></div> Mantissa (23 bits)</div>
+                </div>
+
+                <div class="ieee-breakdown" id="ieee-breakdown"></div>
+            </div>
+        </div>
+
+        <!-- Back link -->
+        <div class="back-link">
+            <a href="index.html#learn">← Back to Interactive Learning</a>
+        </div>
+    </div>
+
+    <script>
+    'use strict';
+
+    /* ════════════════════════════════════════════════════════════
+       SKIN SWITCHER
+    ═════════════════════════════════════════════════════════════ */
+    (function() {
+        const SKINS = ['midnight','neon','crimson','ocean','amber','caveman','win95','aero'];
+        const saved = localStorage.getItem('bs-skin') || 'midnight';
+        document.documentElement.setAttribute('data-skin', saved);
+
+        const toggle = document.getElementById('skin-toggle');
+        const panel  = document.getElementById('skin-panel');
+
+        function markActive(skin) {
+            document.querySelectorAll('.skin-opt').forEach(el => {
+                el.classList.toggle('active', el.dataset.skin === skin);
+            });
+        }
+        markActive(saved);
+
+        toggle.addEventListener('click', e => {
+            e.stopPropagation();
+            panel.classList.toggle('open');
+        });
+
+        document.addEventListener('click', () => panel.classList.remove('open'));
+        panel.addEventListener('click', e => e.stopPropagation());
+
+        document.querySelectorAll('.skin-opt').forEach(opt => {
+            opt.addEventListener('click', () => {
+                const skin = opt.dataset.skin;
+                document.documentElement.setAttribute('data-skin', skin);
+                localStorage.setItem('bs-skin', skin);
+                markActive(skin);
+                panel.classList.remove('open');
+            });
+        });
+    })();
+
+    /* ════════════════════════════════════════════════════════════
+       SHARED STATE
+    ═════════════════════════════════════════════════════════════ */
+    // currentBits32: a 32-element array [bit31 ... bit0], bit31 = MSB
+    // We store as Uint32 value internally.
+    let sharedU32 = 0;
+    let bitWidth   = 16; // 8, 16, 32
+    let ignoreSync = false;
+
+    /* ════════════════════════════════════════════════════════════
+       SECTION 1 — LIVE NUMBER CONVERTER
+    ═════════════════════════════════════════════════════════════ */
+    const inpBin = document.getElementById('inp-bin');
+    const inpOct = document.getElementById('inp-oct');
+    const inpDec = document.getElementById('inp-dec');
+    const inpHex = document.getElementById('inp-hex');
+
+    const fields = {
+        bin: { el: inpBin, wrap: document.getElementById('cf-bin') },
+        oct: { el: inpOct, wrap: document.getElementById('cf-oct') },
+        dec: { el: inpDec, wrap: document.getElementById('cf-dec') },
+        hex: { el: inpHex, wrap: document.getElementById('cf-hex') },
+    };
+
+    function maskU32(n) {
+        // Keep only the bits within current bit width
+        const mask = bitWidth === 32 ? 0xFFFFFFFF : (1 << bitWidth) - 1;
+        return (n >>> 0) & mask;
+    }
+
+    function u32ToSigned(u) {
+        // Interpret u as signed within bitWidth
+        const bits = bitWidth;
+        if (bits === 32) {
+            return u | 0; // standard int32
+        }
+        const signBit = 1 << (bits - 1);
+        if (u & signBit) {
+            return u - (1 << bits);
+        }
+        return u;
+    }
+
+    function setError(field, state) {
+        fields[field].wrap.classList.toggle('has-error', state);
+    }
+
+    function updateConverterFromU32(source) {
+        if (ignoreSync) return;
+        ignoreSync = true;
+
+        const u = maskU32(sharedU32);
+        const signed = u32ToSigned(u);
+        const hexPad = bitWidth === 8 ? 2 : bitWidth === 16 ? 4 : 8;
+
+        if (source !== 'bin') {
+            inpBin.value = u.toString(2).padStart(bitWidth, '0');
+            setError('bin', false);
+        }
+        if (source !== 'oct') {
+            inpOct.value = u.toString(8);
+            setError('oct', false);
+        }
+        if (source !== 'dec') {
+            inpDec.value = String(signed);
+            setError('dec', false);
+        }
+        if (source !== 'hex') {
+            inpHex.value = u.toString(16).toUpperCase().padStart(hexPad, '0');
+            setError('hex', false);
+        }
+
+        ignoreSync = false;
+        updateBitVisualiser();
+    }
+
+    inpBin.addEventListener('input', () => {
+        if (ignoreSync) return;
+        const v = inpBin.value.trim();
+        if (v === '') { sharedU32 = 0; setError('bin', false); updateConverterFromU32('bin'); return; }
+        if (!/^[01]+$/.test(v) || v.length > 32) {
+            setError('bin', true); return;
+        }
+        setError('bin', false);
+        sharedU32 = maskU32(parseInt(v, 2));
+        updateConverterFromU32('bin');
+    });
+
+    inpOct.addEventListener('input', () => {
+        if (ignoreSync) return;
+        const v = inpOct.value.trim();
+        if (v === '') { sharedU32 = 0; setError('oct', false); updateConverterFromU32('oct'); return; }
+        if (!/^[0-7]+$/.test(v)) {
+            setError('oct', true); return;
+        }
+        const n = parseInt(v, 8);
+        if (n > 0xFFFFFFFF) { setError('oct', true); return; }
+        setError('oct', false);
+        sharedU32 = maskU32(n);
+        updateConverterFromU32('oct');
+    });
+
+    inpDec.addEventListener('input', () => {
+        if (ignoreSync) return;
+        const v = inpDec.value.trim();
+        if (v === '' || v === '-') { sharedU32 = 0; setError('dec', false); updateConverterFromU32('dec'); return; }
+        if (!/^-?\d+$/.test(v)) { setError('dec', true); return; }
+        const n = parseInt(v, 10);
+        if (n < -2147483648 || n > 4294967295) { setError('dec', true); return; }
+        setError('dec', false);
+        // Treat negative as two's complement 32-bit
+        sharedU32 = maskU32(n < 0 ? (n + 4294967296) : n);
+        updateConverterFromU32('dec');
+    });
+
+    inpHex.addEventListener('input', () => {
+        if (ignoreSync) return;
+        let v = inpHex.value.trim().replace(/^0x/i, '');
+        if (v === '') { sharedU32 = 0; setError('hex', false); updateConverterFromU32('hex'); return; }
+        if (!/^[0-9a-fA-F]+$/.test(v) || v.length > 8) {
+            setError('hex', true); return;
+        }
+        setError('hex', false);
+        sharedU32 = maskU32(parseInt(v, 16));
+        updateConverterFromU32('hex');
+    });
+
+    // Clear buttons
+    document.querySelectorAll('.clear-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            sharedU32 = 0;
+            Object.values(fields).forEach(f => { setError(Object.keys(fields).find(k => fields[k] === f), false); });
+            updateConverterFromU32(null);
+        });
+    });
+
+    // Bit-width toggles (section 1)
+    document.querySelectorAll('.bw-btn[data-bits]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            bitWidth = parseInt(btn.dataset.bits);
+            document.querySelectorAll('.bw-btn[data-bits]').forEach(b => b.classList.toggle('active', b === btn));
+            document.querySelectorAll('.bw-btn[data-bits2]').forEach(b => b.classList.toggle('active', b.dataset.bits2 === String(bitWidth)));
+            sharedU32 = maskU32(sharedU32);
+            updateConverterFromU32(null);
+            renderBitButtons();
+        });
+    });
+
+    // Bit-width toggles (section 2)
+    document.querySelectorAll('.bw-btn[data-bits2]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            bitWidth = parseInt(btn.dataset.bits2);
+            document.querySelectorAll('.bw-btn[data-bits2]').forEach(b => b.classList.toggle('active', b === btn));
+            document.querySelectorAll('.bw-btn[data-bits]').forEach(b => b.classList.toggle('active', b.dataset.bits === String(bitWidth)));
+            sharedU32 = maskU32(sharedU32);
+            updateConverterFromU32(null);
+            renderBitButtons();
+        });
+    });
+
+    /* ════════════════════════════════════════════════════════════
+       SECTION 2 — BIT VISUALISER
+    ═════════════════════════════════════════════════════════════ */
+    const bitsRow     = document.getElementById('bits-row');
+    const bitIndexRow = document.getElementById('bit-index-row');
+    const byteLabels  = document.getElementById('byte-labels');
+
+    function renderBitButtons() {
+        bitsRow.innerHTML = '';
+        bitIndexRow.innerHTML = '';
+        byteLabels.innerHTML = '';
+
+        // We always render 32 bits, but dim the inactive high bits
+        // Bits are displayed MSB→LSB left to right, but the row is flex row-reverse
+        // so we insert bit 0 first and bit 31 last
+
+        // Build nibble groups: bit 0..3, 4..7, 8..11, ..., 28..31
+        // Display order: nibble7 (bits28-31), nibble6 (24-27), ..., nibble0 (0-3)
+        // But since flex-direction is row-reverse we add from bit0 upward
+
+        for (let nibble = 0; nibble < 8; nibble++) {
+            const group = document.createElement('div');
+            group.className = 'nibble-group';
+            // Each nibble: bits (nibble*4) to (nibble*4+3)
+            for (let b = nibble * 4; b < nibble * 4 + 4; b++) {
+                const btn = document.createElement('button');
+                btn.className = 'bit-btn';
+                btn.dataset.bit = b;
+                const isActive = (sharedU32 >>> b) & 1;
+                btn.textContent = isActive ? '1' : '0';
+                if (isActive) btn.classList.add('bit-on');
+                const dimThreshold = bitWidth;
+                if (b >= dimThreshold) btn.classList.add('bit-dim');
+                btn.addEventListener('click', () => {
+                    if (b >= bitWidth) return; // dimmed bits non-interactive
+                    sharedU32 ^= (1 << b);
+                    sharedU32 = maskU32(sharedU32);
+                    updateBitBtn(btn, b);
+                    updateConverterFromU32(null);
+                    btn.classList.add('just-changed');
+                    btn.addEventListener('animationend', () => btn.classList.remove('just-changed'), { once: true });
+                });
+                group.appendChild(btn);
+            }
+            bitsRow.appendChild(group);
+
+            // Index labels — one per nibble-group item
+            const idxGroup = document.createElement('span');
+            idxGroup.style.cssText = 'display:flex;flex-direction:row-reverse;gap:3px;flex-shrink:0;';
+            for (let b = nibble * 4; b < nibble * 4 + 4; b++) {
+                const span = document.createElement('span');
+                span.className = 'bit-idx';
+                span.textContent = b;
+                idxGroup.appendChild(span);
+            }
+            bitIndexRow.appendChild(idxGroup);
+
+            // Gap between nibbles except last
+            if (nibble < 7) {
+                const gap = document.createElement('span');
+                gap.className = 'nibble-sep';
+                bitsRow.appendChild(gap);
+
+                const idxGap = document.createElement('span');
+                idxGap.className = 'bit-idx-gap';
+                bitIndexRow.appendChild(idxGap);
+            }
+        }
+
+        // Byte labels: 4 groups of 8 bits
+        // Byte 3 = bits 24-31, byte 2 = bits 16-23, byte 1 = 8-15, byte 0 = 0-7
+        // They are displayed right-to-left in the flex layout (flex-direction: row-reverse)
+        // byteLabels is flex justify-content: flex-end → leftmost element aligns to center
+        for (let byte = 0; byte < 4; byte++) {
+            const span = document.createElement('span');
+            span.className = 'byte-label';
+            span.textContent = `Byte ${byte}`;
+            if (byte * 8 >= bitWidth) span.style.opacity = '0.25';
+            byteLabels.appendChild(span);
+        }
+    }
+
+    function updateBitBtn(btn, b) {
+        const isActive = (sharedU32 >>> b) & 1;
+        btn.textContent = isActive ? '1' : '0';
+        btn.classList.toggle('bit-on', !!isActive);
+    }
+
+    function updateBitVisualiser() {
+        // Update each bit button
+        bitsRow.querySelectorAll('.bit-btn').forEach(btn => {
+            const b = parseInt(btn.dataset.bit);
+            updateBitBtn(btn, b);
+        });
+
+        const u = maskU32(sharedU32);
+        const signed = u32ToSigned(u);
+        const hexPad = bitWidth === 8 ? 2 : bitWidth === 16 ? 4 : 8;
+
+        document.getElementById('vis-unsigned').textContent = u;
+        document.getElementById('vis-signed').textContent   = signed;
+        document.getElementById('vis-hex').textContent      = '0x' + u.toString(16).toUpperCase().padStart(hexPad, '0');
+    }
+
+    // Initial render
+    renderBitButtons();
+    updateConverterFromU32(null);
+
+    /* ════════════════════════════════════════════════════════════
+       SECTION 3 — TWO'S COMPLEMENT EXPLORER
+    ═════════════════════════════════════════════════════════════ */
+    const tcInput     = document.getElementById('tc-input');
+    const tcNegateBtn = document.getElementById('tc-negate-btn');
+    const tcSteps     = document.getElementById('tc-steps');
+    const tcResultRow = document.getElementById('tc-result-row');
+
+    function formatBits8(n) {
+        const u = (n >>> 0) & 0xFF;
+        return u.toString(2).padStart(8, '0');
+    }
+
+    function renderBitsWithHighlight(bits, highlightIndexes, cls) {
+        return bits.split('').map((b, i) =>
+            highlightIndexes.includes(i)
+                ? `<span class="${cls}">${b}</span>`
+                : b
+        ).join('');
+    }
+
+    tcNegateBtn.addEventListener('click', () => {
+        const raw = tcInput.value.trim();
+        const n   = parseInt(raw, 10);
+        if (isNaN(n) || n < 0 || n > 127) {
+            tcSteps.innerHTML = '<p style="color:var(--danger);font-size:0.85rem;">Enter a positive integer 0–127 for 8-bit demo.</p>';
+            tcResultRow.style.display = 'none';
+            return;
+        }
+
+        const orig    = n & 0xFF;
+        const flipped = (~orig) & 0xFF;
+        const negated = (flipped + 1) & 0xFF;
+        const result  = negated > 127 ? negated - 256 : negated;
+
+        const origBits    = formatBits8(orig);
+        const flippedBits = formatBits8(flipped);
+        const negatedBits = formatBits8(negated);
+
+        // Find which bits changed between orig and flipped
+        const flipIdxs = [...origBits].map((b, i) => (b !== flippedBits[i] ? i : -1)).filter(i => i >= 0);
+        // Find which bits changed between flipped and negated (carry effect)
+        const carryIdxs = [...flippedBits].map((b, i) => (b !== negatedBits[i] ? i : -1)).filter(i => i >= 0);
+
+        const stepsData = [
+            {
+                num: 1,
+                text: `Original: ${n}`,
+                bits: origBits,
+                highlightIdxs: [],
+                cls: '',
+                extra: ''
+            },
+            {
+                num: 2,
+                text: 'Flip all bits',
+                bits: flippedBits,
+                highlightIdxs: flipIdxs,
+                cls: 'bit-flip',
+                extra: ''
+            },
+            {
+                num: 3,
+                text: 'Add 1',
+                bits: negatedBits,
+                highlightIdxs: carryIdxs,
+                cls: 'bit-carry',
+                extra: ` = <strong style="color:var(--accent)">${result}</strong>`
+            }
+        ];
+
+        tcSteps.innerHTML = '';
+
+        stepsData.forEach((step, idx) => {
+            const div = document.createElement('div');
+            div.className = 'tc-step';
+            div.innerHTML = `
+                <div class="tc-step-num">${step.num}</div>
+                <div class="tc-step-text">${step.text}</div>
+                <div class="tc-bits">${renderBitsWithHighlight(step.bits, step.highlightIdxs, step.cls)}${step.extra}</div>
+            `;
+            tcSteps.appendChild(div);
+
+            // Animate with stagger
+            setTimeout(() => {
+                div.classList.add('visible');
+                if (idx === stepsData.length - 1) div.classList.add('highlight');
+            }, idx * 200 + 80);
+        });
+
+        // Result row
+        const u8result = negated;
+        tcResultRow.style.display = 'grid';
+        tcResultRow.innerHTML = `
+            <div class="tc-result-box">
+                <div class="tc-result-label">Binary</div>
+                <div class="tc-result-val">${negatedBits}</div>
+            </div>
+            <div class="tc-result-box">
+                <div class="tc-result-label">Octal</div>
+                <div class="tc-result-val">${u8result.toString(8)}</div>
+            </div>
+            <div class="tc-result-box">
+                <div class="tc-result-label">Decimal</div>
+                <div class="tc-result-val">${result}</div>
+            </div>
+            <div class="tc-result-box">
+                <div class="tc-result-label">Hex</div>
+                <div class="tc-result-val">0x${u8result.toString(16).toUpperCase().padStart(2,'0')}</div>
+            </div>
+        `;
+        setTimeout(() => tcResultRow.classList.add('visible'), 700);
+    });
+
+    /* ════════════════════════════════════════════════════════════
+       SECTION 4 — BIT SHIFT OPERATIONS
+    ═════════════════════════════════════════════════════════════ */
+    const shiftValInput = document.getElementById('shift-val');
+    const shiftAmtInput = document.getElementById('shift-amt');
+    const shiftDisplay  = document.getElementById('shift-display');
+
+    function toBin32(n) {
+        return (n >>> 0).toString(2).padStart(32, '0');
+    }
+
+    function formatShiftBits(before, after, type, amt) {
+        // Highlight moved/changed bits
+        const b = toBin32(before);
+        const a = toBin32(after);
+
+        let beforeHtml = '';
+        let afterHtml  = '';
+
+        // Colour logic depends on shift type
+        if (type === 'shl') {
+            // bits that fell off the left (bits 0..amt-1 of 'before' string = high bits)
+            // bits that were filled with zero on the right
+            for (let i = 0; i < 32; i++) {
+                if (i < amt) {
+                    beforeHtml += `<span class="moved-out">${b[i]}</span>`;
+                } else {
+                    beforeHtml += `<span class="kept">${b[i]}</span>`;
+                }
+            }
+            for (let i = 0; i < 32; i++) {
+                if (i >= 32 - amt) {
+                    afterHtml += `<span class="moved-in">${a[i]}</span>`;
+                } else {
+                    afterHtml += `<span class="kept">${a[i]}</span>`;
+                }
+            }
+        } else if (type === 'shr') {
+            for (let i = 0; i < 32; i++) {
+                if (i >= 32 - amt) {
+                    beforeHtml += `<span class="moved-out">${b[i]}</span>`;
+                } else {
+                    beforeHtml += `<span class="kept">${b[i]}</span>`;
+                }
+            }
+            for (let i = 0; i < 32; i++) {
+                if (i < amt) {
+                    afterHtml += `<span class="moved-in">${a[i]}</span>`;
+                } else {
+                    afterHtml += `<span class="kept">${a[i]}</span>`;
+                }
+            }
+        } else if (type === 'sar') {
+            for (let i = 0; i < 32; i++) {
+                if (i >= 32 - amt) {
+                    beforeHtml += `<span class="moved-out">${b[i]}</span>`;
+                } else {
+                    beforeHtml += `<span class="kept">${b[i]}</span>`;
+                }
+            }
+            const signFill = b[0]; // original sign bit
+            for (let i = 0; i < 32; i++) {
+                if (i < amt) {
+                    afterHtml += `<span class="moved-in">${a[i]}</span>`;
+                } else {
+                    afterHtml += `<span class="kept">${a[i]}</span>`;
+                }
+            }
+        } else if (type === 'rol') {
+            // Rotate left: top 'amt' bits rotate to bottom
+            for (let i = 0; i < 32; i++) {
+                if (i < amt) {
+                    beforeHtml += `<span class="moved-out">${b[i]}</span>`;
+                } else {
+                    beforeHtml += `<span class="kept">${b[i]}</span>`;
+                }
+            }
+            for (let i = 0; i < 32; i++) {
+                if (i >= 32 - amt) {
+                    afterHtml += `<span class="moved-in">${a[i]}</span>`;
+                } else {
+                    afterHtml += `<span class="kept">${a[i]}</span>`;
+                }
+            }
+        }
+
+        // Insert spaces every 4 bits for readability
+        function insertNibbleSpaces(html) {
+            // This is a bit tricky with HTML spans; do it on groups
+            const parts = html.match(/<span[^>]*>.<\/span>/g) || [];
+            let result = '';
+            parts.forEach((p, i) => {
+                result += p;
+                if ((i + 1) % 4 === 0 && i < 31) result += ' ';
+            });
+            return result;
+        }
+
+        return {
+            beforeHtml: insertNibbleSpaces(beforeHtml),
+            afterHtml:  insertNibbleSpaces(afterHtml)
+        };
+    }
+
+    const shiftInfos = {
+        shl: (amt) => `Left shift by ${amt} = multiply by ${Math.pow(2, amt)} (if no overflow). High bits are discarded; zeros fill from the right.`,
+        shr: (amt) => `Logical right shift by ${amt} = divide by ${Math.pow(2, amt)} (unsigned). Zeros fill from the left regardless of sign.`,
+        sar: (amt) => `Arithmetic right shift by ${amt} = floor division by ${Math.pow(2, amt)} (signed). The sign bit is copied into high bits — preserves the sign of negative numbers.`,
+        rol: (amt) => `Rotate left by ${amt}: bits shifted off the left end wrap around to the right end. No bits are lost.`,
+    };
+
+    const shiftOpNames = {
+        shl: 'SHL — Shift Left',
+        shr: 'SHR — Logical Shift Right',
+        sar: 'SAR — Arithmetic Shift Right',
+        rol: 'ROL — Rotate Left',
+    };
+
+    function doShift(type) {
+        const rawVal = shiftValInput.value.trim();
+        const rawAmt = parseInt(shiftAmtInput.value, 10);
+
+        if (rawVal === '' || isNaN(rawAmt) || rawAmt < 1 || rawAmt > 31) return;
+
+        let n;
+        if (/^-?\d+$/.test(rawVal)) {
+            n = parseInt(rawVal, 10);
+        } else if (/^0x[0-9a-fA-F]+$/i.test(rawVal)) {
+            n = parseInt(rawVal, 16);
+        } else {
+            shiftValInput.style.borderColor = 'var(--danger)';
+            return;
+        }
+        shiftValInput.style.borderColor = '';
+
+        const u = n >>> 0; // treat as uint32
+        let result;
+
+        if (type === 'shl') {
+            result = (u << rawAmt) >>> 0;
+        } else if (type === 'shr') {
+            result = u >>> rawAmt;
+        } else if (type === 'sar') {
+            // Signed arithmetic right shift
+            const signed = n | 0;
+            result = (signed >> rawAmt) >>> 0;
+        } else if (type === 'rol') {
+            const amt = rawAmt % 32;
+            result = ((u << amt) | (u >>> (32 - amt))) >>> 0;
+        }
+
+        const { beforeHtml, afterHtml } = formatShiftBits(u, result, type, rawAmt);
+
+        document.getElementById('shift-before-bits').innerHTML = beforeHtml;
+        document.getElementById('shift-after-bits').innerHTML  = afterHtml;
+        document.getElementById('shift-dec-result').textContent = (result | 0) + ' (signed) / ' + result + ' (unsigned)';
+        document.getElementById('shift-hex-result').textContent = '0x' + result.toString(16).toUpperCase().padStart(8, '0');
+        document.getElementById('shift-op-name').textContent   = shiftOpNames[type];
+        document.getElementById('shift-info-box').textContent  = shiftInfos[type](rawAmt);
+
+        // Arrow direction
+        const arrow = document.getElementById('shift-arrow');
+        if (type === 'shl' || type === 'rol') {
+            arrow.textContent = '→';
+        } else {
+            arrow.textContent = '→';
+        }
+
+        shiftDisplay.style.display = 'block';
+    }
+
+    document.querySelectorAll('[data-shift]').forEach(btn => {
+        btn.addEventListener('click', () => doShift(btn.dataset.shift));
+    });
+
+    /* ════════════════════════════════════════════════════════════
+       SECTION 5 — IEEE 754 FLOAT EXPLORER
+    ═════════════════════════════════════════════════════════════ */
+    const ieeeFloatInput = document.getElementById('ieee-float-input');
+    const ieeeHexInput   = document.getElementById('ieee-hex-input');
+    const ieeeOutput     = document.getElementById('ieee-output');
+
+    // Get 32-bit float bits from a JS number
+    function floatToIeeeBits(f) {
+        const buf = new ArrayBuffer(4);
+        new DataView(buf).setFloat32(0, f, false); // big-endian
+        return new DataView(buf).getUint32(0, false);
+    }
+
+    function ieeeBitsToFloat(bits) {
+        const buf = new ArrayBuffer(4);
+        new DataView(buf).setUint32(0, bits, false);
+        return new DataView(buf).getFloat32(0, false);
+    }
+
+    function renderIeeeFromBits(bits32) {
+        const signBit = (bits32 >>> 31) & 1;
+        const expBits = (bits32 >>> 23) & 0xFF;
+        const mantBits = bits32 & 0x7FFFFF;
+
+        const signStr = signBit.toString();
+        const expStr  = expBits.toString(2).padStart(8, '0');
+        const mantStr = mantBits.toString(2).padStart(23, '0');
+
+        document.getElementById('ieee-sign-bits').textContent = signStr;
+        document.getElementById('ieee-exp-bits').textContent  = expStr;
+        document.getElementById('ieee-mant-bits').textContent = mantStr;
+
+        const floatVal = ieeeBitsToFloat(bits32);
+
+        // Build breakdown
+        let breakdownHtml = '';
+
+        // Sign
+        breakdownHtml += `
+            <div class="ieee-row">
+                <div class="ieee-row-label">Sign</div>
+                <div class="ieee-row-val">
+                    <span class="em">${signBit}</span>
+                    — ${signBit === 0 ? 'positive (+)' : 'negative (−)'}
+                </div>
+            </div>`;
+
+        // Exponent
+        let expNote = '';
+        if (expBits === 0) {
+            expNote = expBits === 0 && mantBits === 0
+                ? 'Exponent 0, mantissa 0 → represents <strong style="color:var(--accent)">±Zero</strong>'
+                : 'Exponent 0 → <em>denormalized</em> (subnormal) number';
+        } else if (expBits === 0xFF) {
+            expNote = mantBits === 0
+                ? 'Exponent 255 → represents <strong style="color:var(--accent)">±Infinity</strong>'
+                : 'Exponent 255, non-zero mantissa → represents <strong style="color:var(--danger)">NaN</strong>';
+        } else {
+            expNote = `Biased: <span class="em">${expBits}</span> (= ${expBits} − 127 = <span class="em">${expBits - 127}</span>)`;
+        }
+
+        breakdownHtml += `
+            <div class="ieee-row">
+                <div class="ieee-row-label">Exponent</div>
+                <div class="ieee-row-val"><span class="em">${expStr}</span> = <span class="em">${expBits}</span> → ${expNote}</div>
+            </div>`;
+
+        // Mantissa
+        let mantNote = '';
+        if (expBits === 0 && mantBits === 0) {
+            mantNote = '(zero)';
+        } else if (expBits === 0xFF) {
+            mantNote = mantBits === 0 ? '(infinity)' : '(NaN payload)';
+        } else if (expBits === 0) {
+            // subnormal
+            mantNote = `0.${mantStr} (no implicit leading 1)`;
+        } else {
+            mantNote = `<span class="em">1</span>.${mantStr} (implicit leading 1)`;
+        }
+
+        breakdownHtml += `
+            <div class="ieee-row">
+                <div class="ieee-row-label">Mantissa</div>
+                <div class="ieee-row-val mono">${mantNote}</div>
+            </div>`;
+
+        // Formula
+        let formulaNote = '';
+        if (isNaN(floatVal)) {
+            formulaNote = 'NaN — Not a Number (e.g. 0/0)';
+        } else if (!isFinite(floatVal)) {
+            formulaNote = `${signBit ? '−' : '+'}Infinity`;
+        } else if (floatVal === 0) {
+            formulaNote = `${signBit ? '−' : '+'}0`;
+        } else if (expBits === 0) {
+            // subnormal
+            formulaNote = `(−1)<sup>${signBit}</sup> × 0.${mantStr}<sub>2</sub> × 2<sup>−126</sup> ≈ <strong style="color:var(--accent)">${floatVal}</strong>`;
+        } else {
+            formulaNote = `(−1)<sup>${signBit}</sup> × 1.${mantStr}<sub>2</sub> × 2<sup>${expBits - 127}</sup> ≈ <strong style="color:var(--accent)">${floatVal}</strong>`;
+        }
+
+        breakdownHtml += `
+            <div class="ieee-row">
+                <div class="ieee-row-label">Value</div>
+                <div class="ieee-row-val">${formulaNote}</div>
+            </div>`;
+
+        // Hex representation
+        const hexStr = '0x' + bits32.toString(16).toUpperCase().padStart(8, '0');
+        breakdownHtml += `
+            <div class="ieee-row">
+                <div class="ieee-row-label">Hex bits</div>
+                <div class="ieee-row-val mono"><span class="em">${hexStr}</span></div>
+            </div>`;
+
+        document.getElementById('ieee-breakdown').innerHTML = breakdownHtml;
+        ieeeOutput.style.display = 'block';
+    }
+
+    function renderIeeeFromFloat(f) {
+        const bits = floatToIeeeBits(f);
+        // Update hex input without triggering its own listener
+        ieeeHexInput.value = '0x' + bits.toString(16).toUpperCase().padStart(8, '0');
+        renderIeeeFromBits(bits);
+    }
+
+    ieeeFloatInput.addEventListener('input', () => {
+        const v = ieeeFloatInput.value.trim();
+        if (v === '') { ieeeOutput.style.display = 'none'; ieeeHexInput.value = ''; return; }
+
+        let f;
+        const lower = v.toLowerCase();
+        if (lower === 'infinity' || lower === '+infinity' || lower === 'inf') f = Infinity;
+        else if (lower === '-infinity' || lower === '-inf') f = -Infinity;
+        else if (lower === 'nan') f = NaN;
+        else if (lower === '-0') f = -0;
+        else {
+            f = parseFloat(v);
+            if (isNaN(f) && v !== 'NaN') {
+                ieeeFloatInput.style.borderColor = 'var(--danger)';
+                return;
+            }
+        }
+        ieeeFloatInput.style.borderColor = '';
+        renderIeeeFromFloat(f);
+    });
+
+    ieeeHexInput.addEventListener('input', () => {
+        const v = ieeeHexInput.value.trim();
+        if (v === '') { ieeeOutput.style.display = 'none'; ieeeFloatInput.value = ''; return; }
+        const cleaned = v.replace(/^0x/i, '');
+        if (!/^[0-9a-fA-F]{1,8}$/.test(cleaned)) {
+            ieeeHexInput.style.borderColor = 'var(--danger)';
+            return;
+        }
+        ieeeHexInput.style.borderColor = '';
+        const bits = parseInt(cleaned, 16);
+        const f    = ieeeBitsToFloat(bits);
+        // Update float input
+        if (isNaN(f)) ieeeFloatInput.value = 'NaN';
+        else if (!isFinite(f)) ieeeFloatInput.value = f > 0 ? 'Infinity' : '-Infinity';
+        else ieeeFloatInput.value = String(f);
+        renderIeeeFromBits(bits);
+    });
+
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const val = btn.dataset.val;
+            ieeeFloatInput.value = val;
+            ieeeFloatInput.dispatchEvent(new Event('input'));
+        });
+    });
+
+    // Init with π
+    ieeeFloatInput.value = '3.14159265';
+    ieeeFloatInput.dispatchEvent(new Event('input'));
+    </script>
+</body>
+</html>
