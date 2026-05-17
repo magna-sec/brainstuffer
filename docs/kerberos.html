@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="midnight">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>Kerberos Authentication | BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* ── Kerberos page layout ─────────────────────────────────── */
+body { padding-top: 1.25rem; }
+
+.krb-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+}
+
+.krb-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.krb-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.krb-subtitle { color: var(--muted); font-size: 0.85rem; }
+
+/* ── Section nav ──────────────────────────────────────────── */
+.section-nav {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.sec-btn {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--card-border);
+  background: var(--card);
+  color: var(--subtle);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+.sec-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--bg2);
+  box-shadow: 0 0 8px var(--glow);
+}
+.sec-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+/* ── Section panels ───────────────────────────────────────── */
+.krb-section { display: none; }
+.krb-section.active { display: block; }
+
+.krb-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.krb-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.75rem 0;
+}
+
+/* ── Concept grid ─────────────────────────────────────────── */
+.concept-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+.concept-card {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+}
+.concept-card-icon { font-size: 1.4rem; margin-bottom: 0.35rem; }
+.concept-card h4 { font-size: 0.88rem; font-weight: 800; color: var(--text); margin: 0 0 0.35rem; }
+.concept-card p { font-size: 0.8rem; color: var(--subtle); line-height: 1.55; margin: 0; }
+@media (max-width: 580px) { .concept-grid { grid-template-columns: 1fr; } }
+
+/* ── Flow diagram ─────────────────────────────────────────── */
+.flow-wrap {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+.flow-actors {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem 1rem 0;
+  gap: 0;
+}
+.flow-actor {
+  flex: 0 0 160px;
+  text-align: center;
+  padding: 0.75rem;
+  background: var(--card);
+  border: 1.5px solid var(--card-border);
+  border-radius: 10px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.flow-actor.lit {
+  border-color: var(--accent);
+  box-shadow: 0 0 14px var(--glow);
+}
+.flow-actor.lit-svc {
+  border-color: var(--accent2);
+  box-shadow: 0 0 14px rgba(56,189,248,.4);
+}
+.flow-actor-spacer { flex: 1; }
+.fact-icon { font-size: 1.8rem; line-height: 1; margin-bottom: 0.25rem; }
+.fact-name { font-size: 0.85rem; font-weight: 800; color: var(--text); }
+.fact-sub { font-size: 0.7rem; color: var(--muted); }
+.flow-svg { display: block; width: 100%; padding: 0.75rem 0.5rem; }
+
+/* SVG element classes */
+.lane-line { stroke: var(--card-border); stroke-width: 1.5; stroke-dasharray: 6 4; }
+.exchange-label { fill: var(--muted); font-size: 10px; font-weight: 700; text-anchor: middle; letter-spacing: 0.08em; font-family: inherit; }
+.arr-head { fill: var(--card-border); }
+.arr-head-active { fill: var(--accent); }
+
+.step-line { stroke: var(--card-border); stroke-width: 2; fill: none; }
+.step-line-active { stroke: var(--accent); stroke-width: 2.5; fill: none; display: none; filter: url(#kglow); stroke-dasharray: 10 4; animation: kerbmarch 0.6s linear infinite; }
+.step-msg { fill: var(--muted); font-size: 11px; font-weight: 700; text-anchor: middle; font-family: inherit; }
+.step-detail { fill: var(--muted); font-size: 9px; text-anchor: middle; font-family: 'Courier New', monospace; opacity: 0.6; }
+
+.flow-step.active .step-line { stroke: var(--accent); stroke-width: 2.5; filter: url(#kglow); }
+.flow-step.active .step-line-active { display: block; }
+.flow-step.active .step-msg { fill: var(--accent); font-size: 12px; }
+.flow-step.active .step-detail { fill: var(--subtle); opacity: 1; }
+
+@keyframes kerbmarch { to { stroke-dashoffset: -28; } }
+
+/* ── Packet detail panel ──────────────────────────────────── */
+.flow-detail {
+  border-top: 1px solid var(--card-border);
+  padding: 1rem 1.25rem;
+  background: var(--card);
+}
+.flow-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+.flow-detail-step { font-size: 1rem; font-weight: 800; color: var(--accent); }
+.flow-detail-dir { font-size: 0.82rem; color: var(--subtle); }
+.flow-detail-port {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: 'Courier New', monospace;
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+}
+
+.enc-legend {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+.enc-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.flow-detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.flow-detail-body::-webkit-scrollbar { width: 4px; }
+.flow-detail-body::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+
+.pkt-field {
+  display: grid;
+  grid-template-columns: 160px 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  align-items: center;
+}
+.pkt-field[data-type="plain"]       { background: rgba(34,197,94,0.07); }
+.pkt-field[data-type="user-key"]    { background: rgba(251,191,36,0.09); }
+.pkt-field[data-type="krbtgt-key"]  { background: rgba(239,68,68,0.09); }
+.pkt-field[data-type="tgt-session"] { background: rgba(129,140,248,0.09); }
+.pkt-field[data-type="svc-key"]     { background: rgba(251,146,60,0.09); }
+.pkt-field[data-type="svc-session"] { background: rgba(56,189,248,0.09); }
+.pkt-key { font-family: 'Courier New', monospace; font-weight: 700; color: var(--text); }
+.pkt-val { font-family: 'Courier New', monospace; color: var(--accent2); font-size: 0.75rem; }
+.pkt-desc { color: var(--muted); font-size: 0.72rem; font-style: italic; }
+
+.pkt-enc {
+  border-radius: 8px;
+  border: 1.5px dashed var(--card-border);
+  padding: 0.5rem;
+  margin: 0.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.pkt-enc[data-type="user-key"]    { border-color: rgba(251,191,36,0.5); }
+.pkt-enc[data-type="krbtgt-key"]  { border-color: rgba(239,68,68,0.4); }
+.pkt-enc[data-type="tgt-session"] { border-color: rgba(129,140,248,0.4); }
+.pkt-enc[data-type="svc-key"]     { border-color: rgba(251,146,60,0.4); }
+.pkt-enc[data-type="svc-session"] { border-color: rgba(56,189,248,0.4); }
+.pkt-enc-header { font-size: 0.72rem; font-weight: 700; color: var(--subtle); padding: 0.2rem 0.25rem 0.4rem; }
+
+/* ── Flow nav ─────────────────────────────────────────────── */
+.flow-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--card-border);
+  flex-wrap: wrap;
+}
+.flow-nav-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  flex: 1;
+  text-align: center;
+}
+
+/* ── Ticket anatomy ───────────────────────────────────────── */
+.tkt-sub-nav {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.tkt-sub-btn {
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  border: 1.5px solid var(--card-border);
+  background: var(--card);
+  color: var(--subtle);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.tkt-sub-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(129,140,248,0.08);
+}
+.tkt-panel { display: none; }
+.tkt-panel.active { display: block; }
+
+.tkt-box {
+  border: 2px solid var(--card-border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+}
+.tkt-box.enc-krbtgt  { border-color: rgba(239,68,68,0.5);    border-style: dashed; background: rgba(239,68,68,0.04); }
+.tkt-box.enc-user    { border-color: rgba(251,191,36,0.5);   border-style: dashed; background: rgba(251,191,36,0.04); }
+.tkt-box.enc-svc     { border-color: rgba(251,146,60,0.5);   border-style: dashed; background: rgba(251,146,60,0.04); }
+.tkt-box.enc-tgtsess { border-color: rgba(129,140,248,0.5);  border-style: dashed; background: rgba(129,140,248,0.04); }
+.tkt-box.enc-svcsess { border-color: rgba(56,189,248,0.5);   border-style: dashed; background: rgba(56,189,248,0.04); }
+.tkt-box-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.tkt-field {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.2rem 0;
+  border-bottom: 1px solid var(--card-border);
+  font-size: 0.78rem;
+}
+.tkt-field:last-child { border-bottom: none; }
+.tkt-field-key { font-family: 'Courier New', monospace; color: var(--text); font-weight: 600; min-width: 130px; }
+.tkt-field-val { color: var(--accent2); font-family: 'Courier New', monospace; flex: 1; font-size: 0.74rem; }
+.tkt-field-note { color: var(--muted); font-size: 0.7rem; font-style: italic; }
+
+/* ── Delegation ───────────────────────────────────────────── */
+.deleg-sub-nav {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.deleg-sub-btn {
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  border: 1.5px solid var(--card-border);
+  background: var(--card);
+  color: var(--subtle);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.deleg-sub-btn.active {
+  border-color: var(--accent2);
+  color: var(--accent2);
+  background: rgba(56,189,248,0.08);
+}
+.deleg-panel { display: none; }
+.deleg-panel.active { display: block; }
+
+.deleg-flow { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+.deleg-step { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; flex-wrap: wrap; }
+.deleg-actor {
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+  background: var(--bg2);
+  color: var(--text);
+  font-weight: 700;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+.deleg-msg { color: var(--accent); font-family: 'Courier New', monospace; font-size: 0.75rem; }
+.deleg-arrow { color: var(--muted); font-size: 0.9rem; }
+.deleg-note { color: var(--muted); font-size: 0.72rem; font-style: italic; }
+
+/* ── Attacks ──────────────────────────────────────────────── */
+.attack-sub-nav {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.attack-sub-btn {
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  border: 1.5px solid var(--card-border);
+  background: var(--card);
+  color: var(--subtle);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.attack-sub-btn.active {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(239,68,68,0.08);
+}
+.attack-panel { display: none; }
+.attack-panel.active { display: block; }
+.attack-title { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 0.25rem; }
+.attack-intro { font-size: 0.84rem; color: var(--subtle); margin-bottom: 0.75rem; line-height: 1.55; }
+.attack-highlight {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+.attack-step-badge {
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+.attack-step-badge.targeted {
+  background: rgba(239,68,68,0.15);
+  border: 1.5px solid var(--danger);
+  color: #f87171;
+}
+.attack-step-badge.normal {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  color: var(--muted);
+}
+.attack-section-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin: 0.75rem 0 0.35rem;
+}
+.attack-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--subtle);
+  line-height: 1.5;
+  list-style: none;
+  padding: 0;
+}
+.attack-steps-list li { display: flex; gap: 0.5rem; }
+.attack-steps-list li::before { content: '\2192'; color: var(--danger); font-weight: 700; flex-shrink: 0; }
+.defend-list { font-size: 0.82rem; color: var(--subtle); line-height: 1.7; padding-left: 1.1rem; }
+
+/* ── Quiz ─────────────────────────────────────────────────── */
+.quiz-progress { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; }
+.quiz-question { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 1rem; line-height: 1.5; }
+.quiz-options { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+.quiz-opt-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--card-border);
+  background: var(--bg2);
+  color: var(--text);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  font-family: inherit;
+}
+.quiz-opt-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--card); }
+.quiz-opt-btn:disabled { cursor: default; }
+.quiz-opt-btn.correct { border-color: var(--success); background: rgba(34,197,94,0.12); color: var(--success); }
+.quiz-opt-btn.wrong   { border-color: var(--danger);  background: rgba(239,68,68,0.12);  color: var(--danger); }
+.quiz-opt-btn.reveal-correct { border-color: var(--success); background: rgba(34,197,94,0.08); }
+.quiz-explanation {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 0.65rem 1rem;
+  font-size: 0.83rem;
+  color: var(--subtle);
+  margin-bottom: 1rem;
+  display: none;
+}
+.quiz-explanation.show { display: block; }
+.quiz-results { text-align: center; padding: 1.5rem; display: none; }
+.quiz-results.show { display: block; }
+.quiz-score-big { font-size: 3.5rem; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 0.5rem; }
+.quiz-score-label { font-size: 1rem; color: var(--subtle); margin-bottom: 1.5rem; }
+
+/* ── Shared utilities ─────────────────────────────────────── */
+.section-sub-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+.insight-list { list-style: none; padding: 0; margin: 0.75rem 0 0; }
+.insight-list li {
+  padding: 0.3rem 0 0.3rem 1.4em;
+  font-size: 0.85rem;
+  color: var(--subtle);
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.insight-list li:last-child { border-bottom: none; }
+.insight-list li::before {
+  content: '>';
+  position: absolute;
+  left: 0.2em;
+  color: var(--accent);
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+}
+.back-link { display: inline-block; margin-top: 0.5rem; color: var(--accent); font-size: 0.85rem; text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<script>
+(function() {
+  var sk = localStorage.getItem('bs-skin');
+  if (sk) document.documentElement.setAttribute('data-skin', sk);
+})();
+</script>
+
+<!-- Skin toggle -->
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+
+<!-- Skin panel -->
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="midnight" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom
+  </div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix
+  </div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire
+  </div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss
+  </div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor
+  </div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman
+  </div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95
+  </div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero
+  </div>
+</div>
+
+<div class="krb-container">
+
+  <!-- Header -->
+  <div class="krb-header">
+    <a href="index.html#learn" class="logo-wrap" style="text-decoration:none;color:inherit;flex-direction:row;gap:0.5rem;">
+      <span style="font-size:1.3rem;">&#129504;</span>
+      <span style="font-size:1rem;font-weight:800;color:var(--subtle);">BrainStuffer</span>
+    </a>
+    <div>
+      <div class="krb-title">Kerberos Authentication</div>
+      <div class="krb-subtitle">Kerberos Authentication &mdash; tickets, exchanges &amp; attacks</div>
+    </div>
+  </div>
+
+  <!-- Section nav -->
+  <div class="section-nav" id="section-nav">
+    <button class="sec-btn active" data-sec="concepts">1. Concepts</button>
+    <button class="sec-btn" data-sec="flow">2. Full Flow</button>
+    <button class="sec-btn" data-sec="anatomy">3. Ticket Anatomy</button>
+    <button class="sec-btn" data-sec="delegation">4. Delegation</button>
+    <button class="sec-btn" data-sec="attacks">5. Attacks</button>
+    <button class="sec-btn" data-sec="quiz">6. Quiz</button>
+  </div>
+
+  <!-- ═══════════════ SECTION 1: CONCEPTS ═══════════════════ -->
+  <div class="krb-section active" id="sec-concepts">
+    <div class="krb-card">
+      <h3>Core Kerberos Concepts</h3>
+      <div class="concept-grid">
+
+        <div class="concept-card">
+          <div class="concept-card-icon">🔑</div>
+          <h4>What is Kerberos?</h4>
+          <p>A network authentication protocol using symmetric-key cryptography and trusted third-party tickets. No password ever travels the wire. Provides mutual authentication — both client and service verify each other. Single sign-on (SSO) within a realm. Developed at MIT; used by Active Directory, Linux Kerberos, macOS, and more.</p>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card-icon">🏛</div>
+          <h4>The Three Actors</h4>
+          <p><strong style="color:var(--accent)">Client</strong> — the user/workstation requesting access (Alice).<br>
+          <strong style="color:var(--accent)">KDC</strong> — Key Distribution Centre; runs two logical services: Authentication Service (AS) issues TGTs, Ticket Granting Service (TGS) issues service tickets. In AD, the DC is the KDC.<br>
+          <strong style="color:var(--accent2)">Service</strong> — the resource being accessed (fileserver, MSSQL, etc.).</p>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card-icon">🎫</div>
+          <h4>Tickets</h4>
+          <p><strong style="color:var(--accent)">TGT (Ticket Granting Ticket)</strong> — proof of identity cached on the client. Encrypted with the krbtgt key (only the KDC can read it). Lifetime ~10 hours. Used to request service tickets without re-entering credentials.<br>
+          <strong style="color:var(--accent2)">Service Ticket</strong> — authorises access to one specific service, identified by its SPN. Shorter lived. Encrypted with the service account's key.</p>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card-icon">🗝</div>
+          <h4>Session Keys</h4>
+          <p><strong style="color:var(--accent)">TGT session key</strong> — shared between client and KDC. Created during AS exchange. Client uses it to encrypt Authenticators for TGS requests.<br>
+          <strong style="color:var(--accent2)">Service session key</strong> — shared between client and service. Created during TGS exchange. Used to encrypt Authenticators in AP-REQ and prove mutual auth in AP-REP.<br>
+          Neither key is reused between exchanges. Forward secrecy per session.</p>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card-icon">🛡</div>
+          <h4>Pre-Authentication</h4>
+          <p>By default the client must include <strong style="color:var(--accent)">PA-ENC-TIMESTAMP</strong> — a timestamp encrypted with the user's long-term key — in the AS-REQ. This proves password knowledge before the KDC responds.<br>
+          If pre-auth is <em>disabled</em> on an account, the KDC returns an AS-REP with enc-part encrypted under the user's key to <em>anyone who asks</em> — enabling offline cracking (AS-REP Roasting).</p>
+        </div>
+
+        <div class="concept-card">
+          <div class="concept-card-icon">📋</div>
+          <h4>The PAC</h4>
+          <p><strong style="color:var(--accent)">Privilege Attribute Certificate</strong> — a Microsoft extension embedded inside every ticket. Contains: user SID, group SIDs, logon info, and account flags. Signed by the KDC (krbtgt key) and optionally by the service key. Used for authorisation decisions by services and the OS — group memberships come from here, not from an LDAP lookup at access time.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SECTION 2: FULL FLOW ══════════════════ -->
+  <div class="krb-section" id="sec-flow">
+    <div class="krb-card">
+      <h3>The Six-Message Kerberos Exchange</h3>
+
+      <!-- Flow diagram -->
+      <div class="flow-wrap">
+
+        <!-- Actor headers -->
+        <div class="flow-actors">
+          <div class="flow-actor" id="fact-client">
+            <div class="fact-icon">&#128187;</div>
+            <div class="fact-name">Client</div>
+            <div class="fact-sub">Alice / workstation</div>
+          </div>
+          <div class="flow-actor-spacer"></div>
+          <div class="flow-actor" id="fact-kdc">
+            <div class="fact-icon">&#127963;</div>
+            <div class="fact-name">KDC / DC</div>
+            <div class="fact-sub">AS + TGS services</div>
+          </div>
+          <div class="flow-actor-spacer"></div>
+          <div class="flow-actor" id="fact-service">
+            <div class="fact-icon">&#128193;</div>
+            <div class="fact-name">Service</div>
+            <div class="fact-sub">fileserver$</div>
+          </div>
+        </div>
+
+        <!-- SVG for lanes and arrows -->
+        <svg class="flow-svg" viewBox="0 0 820 380" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <filter id="kglow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <marker id="arr-r" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" class="arr-head"/>
+            </marker>
+            <marker id="arr-l" markerWidth="10" markerHeight="7" refX="1" refY="3.5" orient="auto">
+              <polygon points="10 0, 0 3.5, 10 7" class="arr-head"/>
+            </marker>
+            <marker id="arr-r-active" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" class="arr-head-active"/>
+            </marker>
+            <marker id="arr-l-active" markerWidth="10" markerHeight="7" refX="1" refY="3.5" orient="auto">
+              <polygon points="10 0, 0 3.5, 10 7" class="arr-head-active"/>
+            </marker>
+          </defs>
+
+          <!-- Lane lines -->
+          <line class="lane-line" x1="90" y1="0" x2="90" y2="380"/>
+          <line class="lane-line" x1="410" y1="0" x2="410" y2="380"/>
+          <line class="lane-line" x1="730" y1="0" x2="730" y2="380"/>
+
+          <!-- Exchange group labels -->
+          <text class="exchange-label" x="250" y="22">&#8212;&#8212; AS Exchange &#8212;&#8212;</text>
+          <text class="exchange-label" x="250" y="152">&#8212;&#8212; TGS Exchange &#8212;&#8212;</text>
+          <text class="exchange-label" x="570" y="282">&#8212;&#8212; AP Exchange &#8212;&#8212;</text>
+
+          <!-- Step 1: AS-REQ (Client to KDC) y=50 -->
+          <g class="flow-step" id="fstep-1">
+            <line class="step-line" x1="95" y1="50" x2="400" y2="50" marker-end="url(#arr-r)"/>
+            <line class="step-line-active" x1="95" y1="50" x2="400" y2="50" marker-end="url(#arr-r-active)"/>
+            <text class="step-msg" x="248" y="43">&#9312; AS-REQ</text>
+            <text class="step-detail" x="248" y="64">username &middot; nonce &middot; pre-auth timestamp</text>
+          </g>
+
+          <!-- Step 2: AS-REP (KDC to Client) y=100 -->
+          <g class="flow-step" id="fstep-2">
+            <line class="step-line" x1="405" y1="100" x2="100" y2="100" marker-end="url(#arr-l)"/>
+            <line class="step-line-active" x1="405" y1="100" x2="100" y2="100" marker-end="url(#arr-l-active)"/>
+            <text class="step-msg" x="248" y="93">&#9313; AS-REP</text>
+            <text class="step-detail" x="248" y="114">TGT [krbtgt key] + session key [user key]</text>
+          </g>
+
+          <!-- Step 3: TGS-REQ (Client to KDC) y=180 -->
+          <g class="flow-step" id="fstep-3">
+            <line class="step-line" x1="95" y1="180" x2="400" y2="180" marker-end="url(#arr-r)"/>
+            <line class="step-line-active" x1="95" y1="180" x2="400" y2="180" marker-end="url(#arr-r-active)"/>
+            <text class="step-msg" x="248" y="173">&#9314; TGS-REQ</text>
+            <text class="step-detail" x="248" y="194">TGT + authenticator + target SPN</text>
+          </g>
+
+          <!-- Step 4: TGS-REP (KDC to Client) y=230 -->
+          <g class="flow-step" id="fstep-4">
+            <line class="step-line" x1="405" y1="230" x2="100" y2="230" marker-end="url(#arr-l)"/>
+            <line class="step-line-active" x1="405" y1="230" x2="100" y2="230" marker-end="url(#arr-l-active)"/>
+            <text class="step-msg" x="248" y="223">&#9315; TGS-REP</text>
+            <text class="step-detail" x="248" y="244">Service Ticket [svc key] + session key [TGT session key]</text>
+          </g>
+
+          <!-- Step 5: AP-REQ (Client to Service) y=310 -->
+          <g class="flow-step" id="fstep-5">
+            <line class="step-line" x1="95" y1="310" x2="720" y2="310" marker-end="url(#arr-r)"/>
+            <line class="step-line-active" x1="95" y1="310" x2="720" y2="310" marker-end="url(#arr-r-active)"/>
+            <text class="step-msg" x="413" y="303">&#9316; AP-REQ</text>
+            <text class="step-detail" x="413" y="323">Service Ticket + authenticator</text>
+          </g>
+
+          <!-- Step 6: AP-REP (Service to Client) y=360 -->
+          <g class="flow-step" id="fstep-6">
+            <line class="step-line" x1="725" y1="360" x2="100" y2="360" marker-end="url(#arr-l)"/>
+            <line class="step-line-active" x1="725" y1="360" x2="100" y2="360" marker-end="url(#arr-l-active)"/>
+            <text class="step-msg" x="413" y="353">&#9317; AP-REP</text>
+            <text class="step-detail" x="413" y="373">mutual auth &#8212; timestamp [svc session key]</text>
+          </g>
+        </svg>
+
+        <!-- Packet detail panel -->
+        <div class="flow-detail" id="flow-detail">
+          <div class="flow-detail-header">
+            <span class="flow-detail-step" id="fd-step">&#9312; AS-REQ</span>
+            <span class="flow-detail-dir" id="fd-dir">Client &#8594; KDC / Authentication Service</span>
+            <span class="flow-detail-port" id="fd-port">UDP/TCP :88</span>
+          </div>
+          <div class="enc-legend">
+            <span class="enc-dot" style="background:rgba(34,197,94,0.5)"></span> Plaintext
+            <span class="enc-dot" style="background:rgba(251,191,36,0.7)"></span> User long-term key
+            <span class="enc-dot" style="background:rgba(239,68,68,0.6)"></span> krbtgt key
+            <span class="enc-dot" style="background:rgba(129,140,248,0.7)"></span> TGT session key
+            <span class="enc-dot" style="background:rgba(251,146,60,0.7)"></span> Service long-term key
+            <span class="enc-dot" style="background:rgba(56,189,248,0.7)"></span> Service session key
+          </div>
+          <div class="flow-detail-body" id="fd-body"></div>
+        </div>
+
+        <!-- Step nav -->
+        <div class="flow-nav">
+          <button class="btn btn-outline" id="flow-prev" onclick="flowNav(-1)" disabled>&#8592; Prev</button>
+          <span class="flow-nav-label" id="flow-nav-label">Step 1 of 6</span>
+          <button class="btn btn-primary" id="flow-next" onclick="flowNav(1)">Next &#8594;</button>
+          <button class="btn btn-muted" onclick="flowReset()">Reset</button>
+        </div>
+
+      </div><!-- /flow-wrap -->
+    </div>
+  </div>
+
+  <!-- ═══════════════ SECTION 3: TICKET ANATOMY ═════════════ -->
+  <div class="krb-section" id="sec-anatomy">
+    <div class="krb-card">
+      <h3>Ticket Anatomy</h3>
+      <div class="tkt-sub-nav" id="tkt-sub-nav">
+        <button class="tkt-sub-btn active" data-tkt="tgt">TGT</button>
+        <button class="tkt-sub-btn" data-tkt="svcticket">Service Ticket</button>
+        <button class="tkt-sub-btn" data-tkt="pac">PAC</button>
+      </div>
+
+      <!-- TGT Panel -->
+      <div class="tkt-panel active" id="tkt-tgt">
+        <div class="section-sub-label">AS-REP outer structure</div>
+
+        <div class="tkt-box">
+          <div class="tkt-box-label">AS-REP outer (plaintext)</div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">crealm</span>
+            <span class="tkt-field-val">CORP.LOCAL</span>
+            <span class="tkt-field-note">Client realm</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">cname</span>
+            <span class="tkt-field-val">alice</span>
+            <span class="tkt-field-note">Client principal</span>
+          </div>
+        </div>
+
+        <div class="tkt-box enc-krbtgt">
+          <div class="tkt-box-label">&#128274; TGT &mdash; encrypted with krbtgt long-term key (KDC only can decrypt)</div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">flags</span>
+            <span class="tkt-field-val">FORWARDABLE | RENEWABLE | PRE-AUTHENT</span>
+            <span class="tkt-field-note">Ticket flags</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">key</span>
+            <span class="tkt-field-val">&lt;TGT SESSION KEY (AES256)&gt;</span>
+            <span class="tkt-field-note">New session key shared with client</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">crealm</span>
+            <span class="tkt-field-val">CORP.LOCAL</span>
+            <span class="tkt-field-note">Client realm stored in ticket</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">cname</span>
+            <span class="tkt-field-val">alice</span>
+            <span class="tkt-field-note">Client name in ticket</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">authtime</span>
+            <span class="tkt-field-val">now</span>
+            <span class="tkt-field-note">When Alice authenticated</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">endtime</span>
+            <span class="tkt-field-val">now + 10h</span>
+            <span class="tkt-field-note">Ticket lifetime</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">renew-till</span>
+            <span class="tkt-field-val">now + 7d</span>
+            <span class="tkt-field-note">Max renewable period</span>
+          </div>
+          <div class="tkt-box enc-tgtsess" style="margin-top:0.5rem;">
+            <div class="tkt-box-label">&#128196; PAC &mdash; signed nested structure</div>
+            <div class="tkt-field">
+              <span class="tkt-field-key">UserSID</span>
+              <span class="tkt-field-val">S-1-5-21-...-1234</span>
+              <span class="tkt-field-note">User security identifier</span>
+            </div>
+            <div class="tkt-field">
+              <span class="tkt-field-key">GroupSIDs</span>
+              <span class="tkt-field-val">Domain Users, Domain Admins...</span>
+              <span class="tkt-field-note">Group memberships</span>
+            </div>
+            <div class="tkt-field">
+              <span class="tkt-field-key">LogonInfo</span>
+              <span class="tkt-field-val">display name, logon count, etc.</span>
+              <span class="tkt-field-note">Logon metadata</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tkt-box enc-user">
+          <div class="tkt-box-label">&#128274; enc-part &mdash; encrypted with user's long-term key (client decrypts this)</div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">key</span>
+            <span class="tkt-field-val">&lt;TGT SESSION KEY (AES256)&gt;</span>
+            <span class="tkt-field-note">Same key as inside TGT &mdash; Alice now has it</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">nonce</span>
+            <span class="tkt-field-val">0xA3F1B2C4</span>
+            <span class="tkt-field-note">Must match AS-REQ nonce (replay protection)</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">flags</span>
+            <span class="tkt-field-val">FORWARDABLE | RENEWABLE</span>
+            <span class="tkt-field-note">Matches ticket flags</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">sname</span>
+            <span class="tkt-field-val">krbtgt/CORP.LOCAL</span>
+            <span class="tkt-field-note">Service this TGT is valid for</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">endtime</span>
+            <span class="tkt-field-val">now + 10h</span>
+            <span class="tkt-field-note">When TGT expires</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service Ticket Panel -->
+      <div class="tkt-panel" id="tkt-svcticket">
+        <div class="section-sub-label">TGS-REP outer structure</div>
+
+        <div class="tkt-box">
+          <div class="tkt-box-label">TGS-REP outer (plaintext)</div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">crealm</span>
+            <span class="tkt-field-val">CORP.LOCAL</span>
+            <span class="tkt-field-note">Client realm</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">cname</span>
+            <span class="tkt-field-val">alice</span>
+            <span class="tkt-field-note">Client principal</span>
+          </div>
+        </div>
+
+        <div class="tkt-box enc-svc">
+          <div class="tkt-box-label">&#128274; Service Ticket &mdash; encrypted with service account long-term key (client cannot read)</div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">flags</span>
+            <span class="tkt-field-val">FORWARDABLE | PRE-AUTHENT</span>
+            <span class="tkt-field-note">Inherited from TGT flags</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">key</span>
+            <span class="tkt-field-val">&lt;SVC SESSION KEY (AES256)&gt;</span>
+            <span class="tkt-field-note">New session key for client-service communication</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">crealm</span>
+            <span class="tkt-field-val">CORP.LOCAL</span>
+            <span class="tkt-field-note">Client realm</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">cname</span>
+            <span class="tkt-field-val">alice</span>
+            <span class="tkt-field-note">Client name</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">authtime</span>
+            <span class="tkt-field-val">(from TGT)</span>
+            <span class="tkt-field-note">Original authentication time</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">endtime</span>
+            <span class="tkt-field-val">min(TGT expiry, requested)</span>
+            <span class="tkt-field-note">Service ticket lifetime</span>
+          </div>
+          <div class="tkt-box enc-svcsess" style="margin-top:0.5rem;">
+            <div class="tkt-box-label">&#128196; PAC &mdash; copied and filtered from TGT PAC, dual-signed</div>
+            <div class="tkt-field">
+              <span class="tkt-field-key">UserSID</span>
+              <span class="tkt-field-val">S-1-5-21-...-1234</span>
+              <span class="tkt-field-note">User SID</span>
+            </div>
+            <div class="tkt-field">
+              <span class="tkt-field-key">GroupSIDs</span>
+              <span class="tkt-field-val">Domain Users, ...</span>
+              <span class="tkt-field-note">Group memberships for authorisation</span>
+            </div>
+            <div class="tkt-field">
+              <span class="tkt-field-key">ServerChecksum</span>
+              <span class="tkt-field-val">HMAC [service key]</span>
+              <span class="tkt-field-note">Service can verify PAC integrity</span>
+            </div>
+            <div class="tkt-field">
+              <span class="tkt-field-key">KDCChecksum</span>
+              <span class="tkt-field-val">HMAC [krbtgt key]</span>
+              <span class="tkt-field-note">KDC can verify PAC integrity</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tkt-box enc-tgtsess">
+          <div class="tkt-box-label">&#128274; enc-part &mdash; encrypted with TGT session key (client decrypts)</div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">key</span>
+            <span class="tkt-field-val">&lt;SVC SESSION KEY&gt;</span>
+            <span class="tkt-field-note">Client extracts service session key</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">nonce</span>
+            <span class="tkt-field-val">0xD4E5F6A7</span>
+            <span class="tkt-field-note">Must match TGS-REQ nonce</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">sname</span>
+            <span class="tkt-field-val">cifs/fileserver.corp.local</span>
+            <span class="tkt-field-note">Service this ticket is for</span>
+          </div>
+          <div class="tkt-field">
+            <span class="tkt-field-key">endtime</span>
+            <span class="tkt-field-val">&lt;expiry&gt;</span>
+            <span class="tkt-field-note">Ticket expiry</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAC Panel -->
+      <div class="tkt-panel" id="tkt-pac">
+        <div class="section-sub-label">PAC Buffer Layout</div>
+        <p style="font-size:0.82rem;color:var(--subtle);margin-bottom:1rem;line-height:1.6;">The PAC is a variable-length buffer embedded in the authorization-data field of a ticket. It consists of multiple typed buffers, each describing a different aspect of the principal.</p>
+
+        <div class="tkt-box">
+          <div class="tkt-box-label">KERB_VALIDATION_INFO (Logon Info)</div>
+          <div class="tkt-field"><span class="tkt-field-key">EffectiveName</span><span class="tkt-field-val">alice</span><span class="tkt-field-note">sAMAccountName</span></div>
+          <div class="tkt-field"><span class="tkt-field-key">UserId</span><span class="tkt-field-val">1234 (RID)</span><span class="tkt-field-note">Relative Identifier</span></div>
+          <div class="tkt-field"><span class="tkt-field-key">PrimaryGroupId</span><span class="tkt-field-val">513 (Domain Users)</span><span class="tkt-field-note">Primary group RID</span></div>
+          <div class="tkt-field"><span class="tkt-field-key">GroupIds</span><span class="tkt-field-val">[513, 512, 519, ...]</span><span class="tkt-field-note">All group RIDs</span></div>
+          <div class="tkt-field"><span class="tkt-field-key">LogonCount</span><span class="tkt-field-val">42</span><span class="tkt-field-note">Number of logons</span></div>
+          <div class="tkt-field"><span class="tkt-field-key">UserAccountControl</span><span class="tkt-field-val">0x210</span><span class="tkt-field-note">Account flags</span></div>
+        </div>
+
+        <div class="tkt-box">
+          <div class="tkt-box-label">PAC_CLIENT_INFO</div>
+          <div class="tkt-field"><span class="tkt-field-key">ClientId</span><span class="tkt-field-val">(authentication time)</span><span class="tkt-field-note">Timestamp of auth</span></div>
+          <div class="tkt-field"><span class="tkt-field-key">Name</span><span class="tkt-field-val">alice</span><span class="tkt-field-note">Client name (UTF-16)</span></div>
+        </div>
+
+        <div class="tkt-box">
+          <div class="tkt-box-label">UPN_DNS_INFO</div>
+          <div class="tkt-field"><span class="tkt-field-key">UPN</span><span class="tkt-field-val">alice@corp.local</span><span class="tkt-field-note">User Principal Name</span></div>
+          <div class="tkt-field"><span class="tkt-field-key">DnsDomainName</span><span class="tkt-field-val">CORP.LOCAL</span><span class="tkt-field-note">DNS domain</span></div>
+        </div>
+
+        <div class="tkt-box enc-svc">
+          <div class="tkt-box-label">&#128274; PAC_SERVER_CHECKSUM &mdash; signed with service key</div>
+          <div class="tkt-field"><span class="tkt-field-key">SignatureType</span><span class="tkt-field-val">HMAC_SHA1_96_AES256</span><span class="tkt-field-note">Algorithm used</span></div>
+          <div class="tkt-field"><span class="tkt-field-key">Signature</span><span class="tkt-field-val">&lt;16 bytes HMAC&gt;</span><span class="tkt-field-note">Integrity check for the service</span></div>
+        </div>
+
+        <div class="tkt-box enc-krbtgt">
+          <div class="tkt-box-label">&#128274; PAC_PRIVSVR_CHECKSUM &mdash; signed with krbtgt key</div>
+          <div class="tkt-field"><span class="tkt-field-key">SignatureType</span><span class="tkt-field-val">HMAC_SHA1_96_AES256</span><span class="tkt-field-note">Algorithm used</span></div>
+          <div class="tkt-field"><span class="tkt-field-key">Signature</span><span class="tkt-field-val">&lt;16 bytes HMAC&gt;</span><span class="tkt-field-note">Integrity check for the KDC</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════ SECTION 4: DELEGATION ════════════════= -->
+  <div class="krb-section" id="sec-delegation">
+    <div class="krb-card">
+      <h3>Kerberos Delegation</h3>
+      <p style="font-size:0.84rem;color:var(--subtle);margin-bottom:1rem;line-height:1.6;">Delegation allows a service to act on behalf of a user when accessing backend resources. Two S4U (Service for User) extension protocols enable this.</p>
+
+      <div class="deleg-sub-nav" id="deleg-sub-nav">
+        <button class="deleg-sub-btn active" data-deleg="s4u2self">S4U2Self</button>
+        <button class="deleg-sub-btn" data-deleg="s4u2proxy">S4U2Proxy</button>
+      </div>
+
+      <!-- S4U2Self -->
+      <div class="deleg-panel active" id="deleg-s4u2self">
+        <h4 style="font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;">S4U2Self &mdash; Service requests a ticket for itself on behalf of a user</h4>
+        <p style="font-size:0.82rem;color:var(--subtle);line-height:1.6;margin-bottom:0.75rem;">Used when a user authenticated via NTLM or web forms (not Kerberos) but the service needs a service ticket to delegate further. The service requests a forwardable service ticket for itself naming the user, without the user's involvement.</p>
+
+        <div class="deleg-flow">
+          <div class="deleg-step">
+            <span class="deleg-actor">User</span>
+            <span class="deleg-arrow">&#8594;</span>
+            <span class="deleg-actor">Service A</span>
+            <span class="deleg-msg">NTLM / Forms auth</span>
+            <span class="deleg-note">(not Kerberos)</span>
+          </div>
+          <div class="deleg-step">
+            <span class="deleg-actor">Service A</span>
+            <span class="deleg-arrow">&#8594;</span>
+            <span class="deleg-actor">KDC / TGS</span>
+            <span class="deleg-msg">TGS-REQ with PA-FOR-USER padata naming user</span>
+          </div>
+          <div class="deleg-step">
+            <span class="deleg-actor">KDC / TGS</span>
+            <span class="deleg-arrow">&#8594;</span>
+            <span class="deleg-actor">Service A</span>
+            <span class="deleg-msg">Service ticket for Service A on behalf of user</span>
+            <span class="deleg-note">(FORWARDABLE if service account is trusted)</span>
+          </div>
+          <div class="deleg-step">
+            <span class="deleg-actor">Service A</span>
+            <span class="deleg-note">Now holds a forwardable service ticket it can use with S4U2Proxy</span>
+          </div>
+        </div>
+
+        <div class="section-sub-label">Key Points</div>
+        <ul class="insight-list">
+          <li>The user does not need to be present or even connected during the S4U2Self request.</li>
+          <li>The resulting ticket is marked FORWARDABLE only if the service account has "Trusted to authenticate for delegation" set or is configured for constrained delegation.</li>
+          <li>PA-FOR-USER contains the username and realm of the impersonated user &mdash; the service must have a valid TGT to present with this request.</li>
+          <li>The KDC checks that the service is permitted to impersonate users based on delegation configuration.</li>
+        </ul>
+      </div>
+
+      <!-- S4U2Proxy -->
+      <div class="deleg-panel" id="deleg-s4u2proxy">
+        <h4 style="font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;">S4U2Proxy &mdash; Service delegates to a backend service</h4>
+        <p style="font-size:0.82rem;color:var(--subtle);line-height:1.6;margin-bottom:0.75rem;">Service A uses the S4U2Self ticket (or a forwarded TGT) to request a service ticket for Service B on behalf of the user. Constrained delegation limits which target SPNs are allowed. RBCD stores the allowlist on the target resource.</p>
+
+        <div class="deleg-flow">
+          <div class="deleg-step">
+            <span class="deleg-actor">Service A</span>
+            <span class="deleg-arrow">&#8594;</span>
+            <span class="deleg-actor">KDC / TGS</span>
+            <span class="deleg-msg">TGS-REQ with S4U2Self ticket + Service A TGT + target SPN</span>
+          </div>
+          <div class="deleg-step">
+            <span class="deleg-actor">KDC</span>
+            <span class="deleg-note">Checks: is Service A allowed to delegate to target SPN? (msDS-AllowedToDelegateTo on Service A, or msDS-AllowedToActOnBehalfOfOtherIdentity on Service B for RBCD)</span>
+          </div>
+          <div class="deleg-step">
+            <span class="deleg-actor">KDC / TGS</span>
+            <span class="deleg-arrow">&#8594;</span>
+            <span class="deleg-actor">Service A</span>
+            <span class="deleg-msg">Service ticket for Service B on behalf of user</span>
+          </div>
+          <div class="deleg-step">
+            <span class="deleg-actor">Service A</span>
+            <span class="deleg-arrow">&#8594;</span>
+            <span class="deleg-actor">Service B</span>
+            <span class="deleg-msg">AP-REQ with the delegated service ticket</span>
+          </div>
+        </div>
+
+        <div class="section-sub-label">Constrained vs. RBCD</div>
+        <ul class="insight-list">
+          <li><strong>Classic Constrained Delegation</strong>: the allowlist is on Service A's account object (msDS-AllowedToDelegateTo). Requires Domain Admin to configure.</li>
+          <li><strong>Resource-Based Constrained Delegation (RBCD)</strong>: the allowlist is on Service B's account object (msDS-AllowedToActOnBehalfOfOtherIdentity). Service B's owner can configure it without Domain Admin.</li>
+          <li>RBCD is the modern preferred approach and is required for cross-domain delegation scenarios.</li>
+          <li>Unconstrained delegation (TRUSTED_FOR_DELEGATION) is the legacy dangerous form &mdash; avoid it; attackers can coerce DCs to authenticate and steal the TGT.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════ SECTION 5: ATTACKS ════════════════════ -->
+  <div class="krb-section" id="sec-attacks">
+    <div class="krb-card">
+      <h3>Kerberos Attack Techniques</h3>
+
+      <div class="attack-sub-nav" id="attack-sub-nav">
+        <button class="attack-sub-btn active" data-atk="asrep">AS-REP Roasting</button>
+        <button class="attack-sub-btn" data-atk="kerberoast">Kerberoasting</button>
+        <button class="attack-sub-btn" data-atk="ptt">Pass-the-Ticket</button>
+        <button class="attack-sub-btn" data-atk="golden">Golden Ticket</button>
+        <button class="attack-sub-btn" data-atk="silver">Silver Ticket</button>
+      </div>
+
+      <!-- AS-REP Roasting -->
+      <div class="attack-panel active" id="atk-asrep">
+        <div class="attack-title">AS-REP Roasting</div>
+        <div class="attack-intro">Exploits accounts with pre-authentication disabled to extract an offline-crackable hash without any credentials.</div>
+        <div class="attack-highlight">
+          <span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Targeted steps:</span>
+          <span class="attack-step-badge targeted">&#9312; AS-REQ</span>
+          <span class="attack-step-badge targeted">&#9313; AS-REP</span>
+          <span class="attack-step-badge normal">&#9314;</span>
+          <span class="attack-step-badge normal">&#9315;</span>
+          <span class="attack-step-badge normal">&#9316;</span>
+          <span class="attack-step-badge normal">&#9317;</span>
+        </div>
+        <div class="attack-section-label">What the attacker does</div>
+        <ul class="attack-steps-list">
+          <li>Enumerate accounts with DONT_REQUIRE_PREAUTH flag (via LDAP or BloodHound).</li>
+          <li>Send an AS-REQ for each target account without PA-ENC-TIMESTAMP padata.</li>
+          <li>The KDC responds with an AS-REP containing enc-part encrypted with the user's long-term key.</li>
+          <li>Extract the enc-part and crack offline with Hashcat or John using the $krb5asrep$23$ format.</li>
+        </ul>
+        <div class="attack-section-label">What they gain</div>
+        <p style="font-size:0.82rem;color:var(--subtle);line-height:1.6;">Plaintext password of the target account. If it is a service or admin account, this provides direct access or lateral movement opportunities.</p>
+        <div class="attack-section-label">Detect / Defend</div>
+        <ul class="defend-list">
+          <li>Require Kerberos pre-authentication for all accounts (it is the default; audit for exceptions).</li>
+          <li>Monitor Event ID 4768 with pre-authentication type 0 (no pre-auth).</li>
+          <li>Detect Rubeus/Impacket traffic patterns (rapid AS-REQ bursts without PA data).</li>
+          <li>Enforce strong passwords for any accounts that legitimately cannot use pre-auth.</li>
+        </ul>
+      </div>
+
+      <!-- Kerberoasting -->
+      <div class="attack-panel" id="atk-kerberoast">
+        <div class="attack-title">Kerberoasting</div>
+        <div class="attack-intro">Any authenticated domain user can request a service ticket for any SPN. The ticket is encrypted with the service account's password hash &mdash; extract and crack offline.</div>
+        <div class="attack-highlight">
+          <span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Targeted steps:</span>
+          <span class="attack-step-badge normal">&#9312;</span>
+          <span class="attack-step-badge normal">&#9313;</span>
+          <span class="attack-step-badge targeted">&#9314; TGS-REQ</span>
+          <span class="attack-step-badge targeted">&#9315; TGS-REP</span>
+          <span class="attack-step-badge normal">&#9316;</span>
+          <span class="attack-step-badge normal">&#9317;</span>
+        </div>
+        <div class="attack-section-label">What the attacker does</div>
+        <ul class="attack-steps-list">
+          <li>Authenticate to the domain (any low-privilege account works).</li>
+          <li>Enumerate service accounts with SPNs (LDAP query / BloodHound / Rubeus).</li>
+          <li>Request TGS-REP for each SPN &mdash; requesting RC4 encryption maximises crackability (downgrade the etype if supported).</li>
+          <li>Extract the service ticket blob and crack with Hashcat ($krb5tgs$23$ mode).</li>
+        </ul>
+        <div class="attack-section-label">What they gain</div>
+        <p style="font-size:0.82rem;color:var(--subtle);line-height:1.6;">Plaintext password of the service account. Service accounts often have elevated privileges (local admin, database admin), enabling lateral movement or privilege escalation.</p>
+        <div class="attack-section-label">Detect / Defend</div>
+        <ul class="defend-list">
+          <li>Use 25+ character random passwords (or Group Managed Service Accounts &mdash; gMSA) for all service accounts.</li>
+          <li>Monitor Event ID 4769 with encryption type 0x17 (RC4) &mdash; modern accounts should use AES.</li>
+          <li>Alert on anomalous high-volume TGS requests from a single account.</li>
+          <li>Limit SPN assignments to accounts that genuinely need them; audit periodically.</li>
+        </ul>
+      </div>
+
+      <!-- Pass-the-Ticket -->
+      <div class="attack-panel" id="atk-ptt">
+        <div class="attack-title">Pass-the-Ticket (PtT)</div>
+        <div class="attack-intro">Stolen TGTs or service tickets are injected into a new logon session, impersonating the victim for the ticket's remaining lifetime.</div>
+        <div class="attack-highlight">
+          <span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Bypasses:</span>
+          <span class="attack-step-badge targeted">&#9312; AS-REQ</span>
+          <span class="attack-step-badge targeted">&#9313; AS-REP</span>
+          <span class="attack-step-badge targeted">&#9314; TGS-REQ</span>
+          <span class="attack-step-badge targeted">&#9315; TGS-REP</span>
+          <span class="attack-step-badge targeted">&#9316; AP-REQ</span>
+          <span class="attack-step-badge targeted">&#9317; AP-REP</span>
+        </div>
+        <div class="attack-section-label">What the attacker does</div>
+        <ul class="attack-steps-list">
+          <li>Gain code execution on a target machine (phishing, exploit, etc.).</li>
+          <li>Dump Kerberos tickets from LSASS memory using Mimikatz (sekurlsa::tickets) or Rubeus (dump).</li>
+          <li>Export .kirbi ticket files for TGTs or high-value service tickets.</li>
+          <li>Inject into a new session (Rubeus ptt or Mimikatz kerberos::ptt) and access resources as the victim.</li>
+        </ul>
+        <div class="attack-section-label">What they gain</div>
+        <p style="font-size:0.82rem;color:var(--subtle);line-height:1.6;">Full access to any resources the victim's tickets authorise, for the remaining ticket lifetime (up to 10 hours for TGTs). No need to know the user's password.</p>
+        <div class="attack-section-label">Detect / Defend</div>
+        <ul class="defend-list">
+          <li>Enable Windows Credential Guard (VBS-backed LSASS protection) &mdash; prevents LSASS memory reads.</li>
+          <li>Monitor for LSASS access from unexpected processes (EDR telemetry, Event 10 in Sysmon).</li>
+          <li>Event ID 4624 type 9 (NewCredentials / seclogon) can indicate ticket injection.</li>
+          <li>Reduce ticket lifetimes; limit admin rights to reduce high-value TGTs in memory.</li>
+        </ul>
+      </div>
+
+      <!-- Golden Ticket -->
+      <div class="attack-panel" id="atk-golden">
+        <div class="attack-title">Golden Ticket</div>
+        <div class="attack-intro">With the krbtgt NTLM hash an attacker forges TGTs with arbitrary user names and SIDs &mdash; including Domain Admin &mdash; valid for years.</div>
+        <div class="attack-highlight">
+          <span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Forges / bypasses:</span>
+          <span class="attack-step-badge targeted">&#9312; AS-REQ bypassed</span>
+          <span class="attack-step-badge targeted">&#9313; AS-REP forged</span>
+          <span class="attack-step-badge normal">&#9314;</span>
+          <span class="attack-step-badge normal">&#9315;</span>
+          <span class="attack-step-badge normal">&#9316;</span>
+          <span class="attack-step-badge normal">&#9317;</span>
+        </div>
+        <div class="attack-section-label">What the attacker does</div>
+        <ul class="attack-steps-list">
+          <li>Obtain the krbtgt NTLM hash via DCSync (Mimikatz lsadump::dcsync) or direct domain compromise.</li>
+          <li>Forge a TGT with arbitrary username, domain SID, and RIDs (e.g., RID 512 = Domain Admins).</li>
+          <li>Set ticket lifetime to 10 years (default in Mimikatz golden ticket generation).</li>
+          <li>Inject the ticket and request real service tickets from the KDC &mdash; it validates the TGT with krbtgt and issues them.</li>
+        </ul>
+        <div class="attack-section-label">What they gain</div>
+        <p style="font-size:0.82rem;color:var(--subtle);line-height:1.6;">Complete and persistent domain compromise. Can impersonate any user with any privilege. Survives password resets of individual accounts. Persists until the krbtgt password is reset <em>twice</em>.</p>
+        <div class="attack-section-label">Detect / Defend</div>
+        <ul class="defend-list">
+          <li>Reset the krbtgt password twice in succession (invalidates all outstanding TGTs).</li>
+          <li>Monitor DCSync (Event ID 4662 with GUID 1131f6ad / 1131f6aa on domain objects).</li>
+          <li>Alert on tickets with lifetimes exceeding domain policy, or issued for non-existent users (Event 4769).</li>
+          <li>Enable Protected Users security group and Credential Guard on privileged accounts.</li>
+        </ul>
+      </div>
+
+      <!-- Silver Ticket -->
+      <div class="attack-panel" id="atk-silver">
+        <div class="attack-title">Silver Ticket</div>
+        <div class="attack-intro">Using a compromised service account's key, the attacker forges a service ticket directly &mdash; the KDC is never contacted during the AP exchange.</div>
+        <div class="attack-highlight">
+          <span style="font-size:0.72rem;color:var(--muted);font-weight:700;">Forges / bypasses:</span>
+          <span class="attack-step-badge normal">&#9312;</span>
+          <span class="attack-step-badge normal">&#9313;</span>
+          <span class="attack-step-badge targeted">&#9314; TGS-REQ bypassed</span>
+          <span class="attack-step-badge targeted">&#9315; TGS-REP forged</span>
+          <span class="attack-step-badge targeted">&#9316; AP-REQ forged</span>
+          <span class="attack-step-badge normal">&#9317;</span>
+        </div>
+        <div class="attack-section-label">What the attacker does</div>
+        <ul class="attack-steps-list">
+          <li>Compromise a service host and extract the service account's NTLM hash (Mimikatz sekurlsa::logonpasswords).</li>
+          <li>Forge a service ticket signed with the stolen service key, with a fabricated PAC containing desired SIDs.</li>
+          <li>Present the forged ticket directly to the service in an AP-REQ &mdash; service decrypts with its own key, trusts the PAC.</li>
+          <li>No KDC traffic generated during access &mdash; stealthier than a Golden Ticket.</li>
+        </ul>
+        <div class="attack-section-label">What they gain</div>
+        <p style="font-size:0.82rem;color:var(--subtle);line-height:1.6;">Access to that specific service as any user (including fabricated Domain Admin membership). Stealthier than Golden Ticket since there is no TGS request to log. Impact limited to one service per compromised key.</p>
+        <div class="attack-section-label">Detect / Defend</div>
+        <ul class="defend-list">
+          <li>Enable PAC validation (KDC verification) on services &mdash; adds a network call to the KDC per AP-REQ but catches forged PACs.</li>
+          <li>Alert on absence of Event 4769 (TGS request) before a service access event (4624) for sensitive services.</li>
+          <li>Rotate service account passwords regularly; prefer gMSA (automatic 30-day rotation).</li>
+          <li>Credential Guard prevents LSASS extraction of service account keys from memory.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════ SECTION 6: QUIZ ═══════════════════════ -->
+  <div class="krb-section" id="sec-quiz">
+    <div class="krb-card">
+      <h3>Kerberos Quiz</h3>
+      <div id="cq-area">
+        <div class="quiz-progress" id="cq-progress">Question 1 of 15</div>
+        <div class="quiz-question" id="cq-question"></div>
+        <div class="quiz-options" id="cq-options"></div>
+        <div class="quiz-explanation" id="cq-explanation"></div>
+        <button class="btn btn-primary" id="cq-next" style="display:none;">Next Question &#9654;</button>
+      </div>
+      <div class="quiz-results" id="cq-results">
+        <div class="quiz-score-big" id="cq-score-big"></div>
+        <div class="quiz-score-label" id="cq-score-label"></div>
+        <button class="btn btn-primary" id="cq-restart">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <nav style="margin-top:1rem;">
+    <a class="back-link" href="index.html#learn">&#8592; Back to Interactive Learning</a>
+  </nav>
+
+</div><!-- /krb-container -->
+
+<script>
+'use strict';
+
+/* ── Skin switcher ────────────────────────────────────────────── */
+(function() {
+  var toggle = document.getElementById('skin-toggle');
+  var panel  = document.getElementById('skin-panel');
+  if (!toggle || !panel) return;
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    panel.classList.toggle('open');
+  });
+  document.addEventListener('click', function() { panel.classList.remove('open'); });
+  panel.addEventListener('click', function(e) { e.stopPropagation(); });
+  panel.querySelectorAll('.skin-opt').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      var sk = opt.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      panel.classList.remove('open');
+    });
+  });
+})();
+
+/* ── Section nav ──────────────────────────────────────────────── */
+(function() {
+  var nav = document.getElementById('section-nav');
+  var btns = nav.querySelectorAll('.sec-btn');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var sec = btn.getAttribute('data-sec');
+      document.querySelectorAll('.krb-section').forEach(function(s) { s.classList.remove('active'); });
+      document.getElementById('sec-' + sec).classList.add('active');
+      if (sec === 'quiz' && !cqStarted) { cqStart(); }
+    });
+  });
+})();
+
+/* ── Ticket anatomy sub-tabs ──────────────────────────────────── */
+(function() {
+  var nav = document.getElementById('tkt-sub-nav');
+  var btns = nav.querySelectorAll('.tkt-sub-btn');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var key = btn.getAttribute('data-tkt');
+      document.querySelectorAll('.tkt-panel').forEach(function(p) { p.classList.remove('active'); });
+      document.getElementById('tkt-' + key).classList.add('active');
+    });
+  });
+})();
+
+/* ── Delegation sub-tabs ──────────────────────────────────────── */
+(function() {
+  var nav = document.getElementById('deleg-sub-nav');
+  var btns = nav.querySelectorAll('.deleg-sub-btn');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var key = btn.getAttribute('data-deleg');
+      document.querySelectorAll('.deleg-panel').forEach(function(p) { p.classList.remove('active'); });
+      document.getElementById('deleg-' + key).classList.add('active');
+    });
+  });
+})();
+
+/* ── Attack sub-tabs ──────────────────────────────────────────── */
+(function() {
+  var nav = document.getElementById('attack-sub-nav');
+  var btns = nav.querySelectorAll('.attack-sub-btn');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var key = btn.getAttribute('data-atk');
+      document.querySelectorAll('.attack-panel').forEach(function(p) { p.classList.remove('active'); });
+      document.getElementById('atk-' + key).classList.add('active');
+    });
+  });
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   FLOW DIAGRAM
+══════════════════════════════════════════════════════════════ */
+
+function pf(type, key, val, desc) {
+  return '<div class="pkt-field" data-type="' + type + '">' +
+    '<span class="pkt-key">' + key + '</span>' +
+    '<span class="pkt-val">' + val + '</span>' +
+    '<span class="pkt-desc">' + desc + '</span>' +
+    '</div>';
+}
+
+function pe(type, header, fields) {
+  return '<div class="pkt-enc" data-type="' + type + '">' +
+    '<div class="pkt-enc-header">' + header + '</div>' +
+    fields +
+    '</div>';
+}
+
+var FLOW_STEPS = [
+  {
+    id: 1,
+    label: '① AS-REQ',
+    dir: 'Client → KDC / Authentication Service',
+    port: 'UDP/TCP :88',
+    actors: ['client', 'kdc'],
+    body: (function() {
+      return pf('plain','pvno','5','Kerberos protocol version') +
+        pf('plain','msg-type','10','AS-REQ message type code') +
+        pe('user-key','🔒 Encrypted with user long-term key (password-derived)',
+          pf('user-key','PA-ENC-TIMESTAMP','now ± 5 min','Pre-auth: proves password knowledge, prevents AS-REP Roasting')
+        ) +
+        pf('plain','kdc-options','FORWARDABLE, RENEWABLE','Flags requested for the TGT') +
+        pf('plain','cname','alice@CORP.LOCAL','Client principal name') +
+        pf('plain','realm','CORP.LOCAL','Client realm') +
+        pf('plain','sname','krbtgt/CORP.LOCAL','Service = the TGT service itself') +
+        pf('plain','till','20270101000000Z','Requested expiry') +
+        pf('plain','nonce','0xA3F1B2C4','Random 32-bit replay prevention') +
+        pf('plain','etype','AES256-CTS-HMAC-SHA1-96','Supported encryption types');
+    })()
+  },
+  {
+    id: 2,
+    label: '② AS-REP',
+    dir: 'KDC / Authentication Service → Client',
+    port: 'UDP/TCP :88',
+    actors: ['kdc', 'client'],
+    body: (function() {
+      return pf('plain','pvno','5','Kerberos protocol version') +
+        pf('plain','msg-type','11','AS-REP type code') +
+        pf('plain','crealm','CORP.LOCAL','Client realm') +
+        pf('plain','cname','alice','Client principal') +
+        pe('krbtgt-key','🎫 TGT — encrypted with krbtgt long-term key (KDC only can read this)',
+          pf('krbtgt-key','flags','FORWARDABLE, RENEWABLE, PRE-AUTHENT','Ticket flags') +
+          pf('krbtgt-key','key','<TGT SESSION KEY (AES256)>','New session key shared with client') +
+          pf('krbtgt-key','crealm','CORP.LOCAL','Client realm stored in ticket') +
+          pf('krbtgt-key','cname','alice','Client name in ticket') +
+          pf('krbtgt-key','transited','[]','Trust path (empty = direct)') +
+          pf('krbtgt-key','authtime','now','When Alice authenticated') +
+          pf('krbtgt-key','endtime','now + 10h','Ticket lifetime') +
+          pf('krbtgt-key','renew-till','now + 7d','Max renewable period') +
+          pf('krbtgt-key','[PAC]','SID, GroupSIDs, logon info','Privilege Attribute Certificate')
+        ) +
+        pe('user-key','🔒 enc-part — client decrypts this with user key to get session key',
+          pf('user-key','key','<TGT SESSION KEY (AES256)>','Same key as inside TGT — Alice now has it') +
+          pf('user-key','last-req','<last logon time>','Last time Alice authenticated') +
+          pf('user-key','nonce','0xA3F1B2C4','Must match AS-REQ nonce (replay protection)') +
+          pf('user-key','flags','FORWARDABLE, RENEWABLE','Matches ticket flags') +
+          pf('user-key','realm','CORP.LOCAL','KDC realm') +
+          pf('user-key','sname','krbtgt/CORP.LOCAL','Service this TGT is valid for') +
+          pf('user-key','endtime','now + 10h','When TGT expires')
+        );
+    })()
+  },
+  {
+    id: 3,
+    label: '③ TGS-REQ',
+    dir: 'Client → KDC / Ticket Granting Service',
+    port: 'TCP :88',
+    actors: ['client', 'kdc'],
+    body: (function() {
+      return pf('plain','pvno','5','Kerberos protocol version') +
+        pf('plain','msg-type','12','TGS-REQ type code') +
+        pe('tgt-session','🔒 Authenticator — proves TGT belongs to Alice (encrypted with TGT session key)',
+          pf('tgt-session','crealm','CORP.LOCAL','Client realm') +
+          pf('tgt-session','cname','alice','Client name') +
+          pf('tgt-session','cusec','microseconds','Sub-second timestamp precision') +
+          pf('tgt-session','ctime','now','Must be within ±5 min of KDC clock') +
+          pf('tgt-session','subkey','<optional new subkey>','Client can propose a sub-session key') +
+          pf('tgt-session','seq-number','0xB1C2','Sequence number for replay protection')
+        ) +
+        pf('plain','[TGT]','(opaque blob, KDC decrypts it)','Client forwards TGT as-is') +
+        pf('plain','kdc-options','0','Request flags') +
+        pf('plain','realm','CORP.LOCAL','Target realm') +
+        pf('plain','sname','cifs/fileserver.corp.local','Target service SPN') +
+        pf('plain','till','20270101000000Z','Requested expiry') +
+        pf('plain','nonce','0xD4E5F6A7','New random nonce');
+    })()
+  },
+  {
+    id: 4,
+    label: '④ TGS-REP',
+    dir: 'KDC / Ticket Granting Service → Client',
+    port: 'TCP :88',
+    actors: ['kdc', 'client'],
+    body: (function() {
+      return pf('plain','pvno','5','Kerberos protocol version') +
+        pf('plain','msg-type','13','TGS-REP type code') +
+        pf('plain','crealm','CORP.LOCAL','Client realm') +
+        pf('plain','cname','alice','Client principal') +
+        pe('svc-key','🔒 Service Ticket — encrypted with service long-term key (client cannot read)',
+          pf('svc-key','flags','FORWARDABLE, PRE-AUTHENT','Inherited from TGT flags') +
+          pf('svc-key','key','<SERVICE SESSION KEY (AES256)>','New session key for client-service') +
+          pf('svc-key','crealm','CORP.LOCAL','Client realm') +
+          pf('svc-key','cname','alice','Client name') +
+          pf('svc-key','transited','[]','Trust path') +
+          pf('svc-key','authtime','(from TGT)','Original authentication time') +
+          pf('svc-key','endtime','min(TGT expiry, requested)','Service ticket lifetime') +
+          pf('svc-key','[PAC]','SID, GroupSIDs, logon info','Copied/filtered from TGT PAC')
+        ) +
+        pe('tgt-session','🔒 enc-part — client decrypts with TGT session key',
+          pf('tgt-session','key','<SERVICE SESSION KEY>','Client extracts service session key') +
+          pf('tgt-session','nonce','0xD4E5F6A7','Must match TGS-REQ nonce') +
+          pf('tgt-session','flags','FORWARDABLE, PRE-AUTHENT','Ticket flags') +
+          pf('tgt-session','realm','CORP.LOCAL','KDC realm') +
+          pf('tgt-session','sname','cifs/fileserver.corp.local','Service this ticket is for') +
+          pf('tgt-session','endtime','<expiry>','Ticket expiry')
+        );
+    })()
+  },
+  {
+    id: 5,
+    label: '⑤ AP-REQ',
+    dir: 'Client → Service',
+    port: 'TCP (port varies by service)',
+    actors: ['client', 'service'],
+    body: (function() {
+      return pf('plain','pvno','5','Kerberos protocol version') +
+        pf('plain','msg-type','14','AP-REQ type code') +
+        pf('plain','ap-options','MUTUAL-REQUIRED','Client requests mutual authentication') +
+        pf('plain','[Service Ticket]','(opaque blob, only service can read)','Client forwards ticket as-is') +
+        pe('svc-session','🔒 Authenticator — encrypted with service session key, proves ticket ownership',
+          pf('svc-session','crealm','CORP.LOCAL','Client realm') +
+          pf('svc-session','cname','alice','Client name') +
+          pf('svc-session','ctime','now','Must be within ±5 min of service clock') +
+          pf('svc-session','cusec','microseconds','Sub-second precision') +
+          pf('svc-session','subkey','<optional>','Client-proposed sub-session key') +
+          pf('svc-session','seq-number','0xC3D4','Replay protection')
+        );
+    })()
+  },
+  {
+    id: 6,
+    label: '⑥ AP-REP',
+    dir: 'Service → Client (mutual auth)',
+    port: 'TCP (port varies by service)',
+    actors: ['service', 'client'],
+    body: (function() {
+      return pf('plain','pvno','5','Kerberos protocol version') +
+        pf('plain','msg-type','15','AP-REP type code') +
+        pe('svc-session','🔒 enc-part — proves service decrypted AP-REQ and holds the session key',
+          pf('svc-session','ctime','(echo from AP-REQ authenticator)','Proves service decrypted AP-REQ') +
+          pf('svc-session','cusec','(echo from AP-REQ)','Time echo') +
+          pf('svc-session','subkey','<service proposed subkey>','Service can propose a sub-session key') +
+          pf('svc-session','seq-number','0xE5F6','Service sequence number')
+        );
+    })()
+  }
+];
+
+var flowCurrent = 0;
+
+function flowGo(n) {
+  document.querySelectorAll('.flow-step').forEach(function(g) { g.classList.remove('active'); });
+  document.getElementById('fact-client').className = 'flow-actor';
+  document.getElementById('fact-kdc').className = 'flow-actor';
+  document.getElementById('fact-service').className = 'flow-actor';
+
+  var s = FLOW_STEPS[n];
+  document.getElementById('fstep-' + s.id).classList.add('active');
+  s.actors.forEach(function(a) {
+    var el = document.getElementById('fact-' + a);
+    if (el) el.classList.add(a === 'service' ? 'lit-svc' : 'lit');
+  });
+
+  document.getElementById('fd-step').textContent = s.label;
+  document.getElementById('fd-dir').textContent = s.dir;
+  document.getElementById('fd-port').textContent = s.port;
+  document.getElementById('fd-body').innerHTML = s.body;
+  document.getElementById('flow-nav-label').textContent = 'Step ' + (n + 1) + ' of ' + FLOW_STEPS.length;
+  document.getElementById('flow-prev').disabled = (n === 0);
+  document.getElementById('flow-next').disabled = (n === FLOW_STEPS.length - 1);
+  flowCurrent = n;
+}
+
+function flowNav(dir) { flowGo(flowCurrent + dir); }
+function flowReset() { flowGo(0); }
+
+/* initialise on page load */
+flowGo(0);
+
+/* ══════════════════════════════════════════════════════════════
+   QUIZ
+══════════════════════════════════════════════════════════════ */
+var cqStarted = false;
+var cqCurrent = 0;
+var cqScore   = 0;
+var cqAnswered = false;
+
+var CQ_QUESTIONS = [
+  {
+    q: 'What is the purpose of a Ticket Granting Ticket (TGT)?',
+    opts: [
+      'Acts as a proof of identity cached on the client to get service tickets without re-entering credentials',
+      'Grants direct access to all services without further tickets',
+      'Is sent directly to services to authenticate',
+      'Contains the user\'s password hash for the KDC to verify'
+    ],
+    correct: 0,
+    explain: 'The TGT is issued by the AS after successful authentication. It is encrypted with the krbtgt key so only the KDC can read it. The client caches it and presents it to the TGS whenever it needs a service ticket, enabling SSO without re-entering credentials.'
+  },
+  {
+    q: 'Which component of the KDC issues TGTs?',
+    opts: [
+      'Authentication Service (AS)',
+      'Ticket Granting Service (TGS)',
+      'Domain Controller\'s LDAP service',
+      'Certificate Authority'
+    ],
+    correct: 0,
+    explain: 'The Authentication Service (AS) is the KDC sub-service that handles AS-REQ/AS-REP messages. It verifies the client\'s identity (via pre-authentication) and issues the TGT. The TGS handles subsequent TGS-REQ/TGS-REP exchanges using the TGT.'
+  },
+  {
+    q: 'What prevents an attacker from reusing a captured Authenticator to replay a request?',
+    opts: [
+      'The Authenticator contains a timestamp that must be within ±5 minutes of the KDC clock',
+      'The nonce in the request is one-time-use and burned on the server',
+      'The TGT includes a sequence counter checked by the KDC',
+      'Kerberos uses HTTPS which prevents replay'
+    ],
+    correct: 0,
+    explain: 'The Authenticator includes the current time (ctime/cusec). The KDC and service maintain a replay cache of recently seen Authenticators and reject any whose timestamp falls outside the ±5-minute clock skew window. This makes captured Authenticators useless after a few minutes.'
+  },
+  {
+    q: 'Why does the KDC include the TGT session key twice in the AS-REP — once inside the TGT and once in enc-part?',
+    opts: [
+      'The TGT is encrypted with the krbtgt key (client cannot read it); enc-part lets the client retrieve the session key',
+      'It is a backup in case decryption of one fails',
+      'The client sends one copy to the service during AP-REQ',
+      'Both copies are encrypted with the user\'s key for redundancy'
+    ],
+    correct: 0,
+    explain: 'The TGT is an opaque blob for the KDC\'s own use — the client cannot decrypt it. The enc-part (encrypted with the user\'s long-term key) is how the client learns the TGT session key it will need to build Authenticators. This design means the client carries the TGT without being able to read or forge it.'
+  },
+  {
+    q: 'In Kerberoasting, what exactly does the attacker crack offline?',
+    opts: [
+      'The service ticket encrypted with the service account\'s long-term key (password hash)',
+      'The TGT encrypted with the krbtgt hash',
+      'The AS-REP enc-part encrypted with the target user\'s password',
+      'The Authenticator encrypted with the TGT session key'
+    ],
+    correct: 0,
+    explain: 'The TGS-REP service ticket is encrypted with the target service account\'s long-term key (derived from its password). Any authenticated domain user can request this ticket, extract the encrypted blob, and attempt to crack the password offline using tools like Hashcat ($krb5tgs$ mode).'
+  },
+  {
+    q: 'What is the PAC (Privilege Attribute Certificate)?',
+    opts: [
+      'A structure inside every ticket containing user SID, group SIDs, and logon info; signed by the KDC',
+      'A certificate used for PKINIT smart card authentication',
+      'A Windows certificate that proves the KDC\'s identity to the client',
+      'A list of SPNs the user is allowed to request tickets for'
+    ],
+    correct: 0,
+    explain: 'The PAC is a Microsoft extension in the authorization-data field of Kerberos tickets. It carries the KERB_VALIDATION_INFO structure with user and group SIDs used for Windows access control decisions. It is signed (HMAC) by both the krbtgt key and the service key to prevent tampering.'
+  },
+  {
+    q: 'What is the key difference between a Golden Ticket and a Silver Ticket attack?',
+    opts: [
+      'Golden Ticket forges a TGT using the krbtgt hash (domain-wide); Silver Ticket forges a service ticket using a service key (one service)',
+      'Silver Ticket is more powerful as it bypasses both AS and TGS exchanges',
+      'Golden Ticket targets a single service while Silver Ticket is domain-wide',
+      'They are the same attack with different tool names'
+    ],
+    correct: 0,
+    explain: 'A Golden Ticket requires the krbtgt hash and forges a TGT — the KDC accepts it and issues real service tickets for any service in the domain. A Silver Ticket only requires one service account\'s hash and forges a service ticket for that specific service — the KDC is not involved at all during access.'
+  },
+  {
+    q: 'What must happen before a client can request a service ticket?',
+    opts: [
+      'The client must possess a valid TGT and present it to the TGS with an Authenticator',
+      'The client must authenticate directly to the service with their credentials',
+      'The client must contact the service to get a service ticket request token',
+      'The client must enumerate all SPNs in the domain'
+    ],
+    correct: 0,
+    explain: 'The TGS-REQ includes the TGT (opaque to the client) and an Authenticator encrypted with the TGT session key. The TGS decrypts the TGT with the krbtgt key to extract the TGT session key, then decrypts the Authenticator to verify the client\'s identity before issuing the service ticket.'
+  },
+  {
+    q: 'What does pre-authentication (PA-ENC-TIMESTAMP) prevent?',
+    opts: [
+      'AS-REP Roasting — without it the KDC returns hash-encrypted data to anyone who asks',
+      'Replay attacks using captured Authenticators',
+      'Pass-the-Ticket attacks targeting LSASS',
+      'Silver Ticket forging using compromised service keys'
+    ],
+    correct: 0,
+    explain: 'Without pre-authentication, any unauthenticated attacker can send an AS-REQ for a username and receive an AS-REP with enc-part encrypted under that user\'s key. They can then crack the hash offline to recover the password. PA-ENC-TIMESTAMP forces the requester to prove they know the password before the KDC responds.'
+  },
+  {
+    q: 'What is S4U2Proxy used for?',
+    opts: [
+      'Allows a service to request a service ticket for a backend service on behalf of an authenticated user',
+      'Allows a proxy server to intercept and decrypt Kerberos traffic',
+      'Enables the KDC to act on behalf of a service for authentication',
+      'Allows service accounts to request tickets without pre-authentication'
+    ],
+    correct: 0,
+    explain: 'S4U2Proxy (Service for User to Proxy) is used for constrained delegation. Service A presents a forwardable service ticket (obtained via S4U2Self or forwarded by the user) to the KDC to request a service ticket for Service B on the user\'s behalf. The KDC checks the delegation allowlist before issuing the ticket.'
+  },
+  {
+    q: 'Why is resetting the krbtgt password once insufficient after a Golden Ticket compromise?',
+    opts: [
+      'Attacker can still use old krbtgt hash cached in their ticket; second reset invalidates all outstanding TGTs',
+      'The first reset only changes half the key material; both halves need separate resets',
+      'Kerberos caches the krbtgt hash for 24 hours; one reset only clears half the cache time',
+      'A single reset triggers a domain-wide re-authentication that can lock out users'
+    ],
+    correct: 0,
+    explain: 'Kerberos keeps the previous krbtgt key to handle TGTs issued just before the reset (for replication lag). After the first reset, the attacker\'s forged TGT — signed with the old hash — may still be accepted if the previous key is still held. The second reset removes the previous key entirely, invalidating all outstanding TGTs including forged ones.'
+  },
+  {
+    q: 'What does the AP-REP message prove during mutual authentication?',
+    opts: [
+      'The service decrypted the AP-REQ and knows the session key — proves the service\'s identity to the client',
+      'The client\'s credentials are valid and the service has accepted them',
+      'The KDC has verified the service ticket on behalf of the client',
+      'The service has registered the client\'s PAC with the domain controller'
+    ],
+    correct: 0,
+    explain: 'The AP-REP contains the ctime and cusec from the client\'s Authenticator, encrypted with the service session key. Only the legitimate service — which decrypted the service ticket with its own long-term key to get the session key — could have produced this response. This mutual authentication prevents impersonation of the service.'
+  },
+  {
+    q: 'What encryption key protects the contents of a Service Ticket?',
+    opts: [
+      'The service account\'s long-term key (password-derived) — only the KDC and service can read it',
+      'The TGT session key shared between client and KDC',
+      'The service session key sent to the client in TGS-REP',
+      'The krbtgt long-term key'
+    ],
+    correct: 0,
+    explain: 'The service ticket body (containing the PAC, session key, client name, etc.) is encrypted with the service account\'s long-term key. This is why the client forwards the service ticket opaquely to the service — only the service (and the KDC that created it) can decrypt its contents.'
+  },
+  {
+    q: 'In a Pass-the-Ticket attack, where are tickets typically stolen from?',
+    opts: [
+      'LSASS process memory, extracted using tools like Mimikatz or Rubeus',
+      'Kerberos ticket files written to disk by the OS',
+      'The Windows Credential Manager store',
+      'The user\'s profile directory in %APPDATA%'
+    ],
+    correct: 0,
+    explain: 'Windows stores Kerberos tickets in LSASS process memory. Tools like Mimikatz (sekurlsa::tickets) and Rubeus (dump) read LSASS memory to extract .kirbi-format ticket structures. Windows Credential Guard (VBS/HVCI) prevents this by isolating LSASS in a protected memory region.'
+  },
+  {
+    q: 'What network port does Kerberos primarily use?',
+    opts: [
+      '88 (UDP and TCP)',
+      '389 (LDAP)',
+      '445 (SMB)',
+      '636 (LDAPS)'
+    ],
+    correct: 0,
+    explain: 'Kerberos operates on port 88. Historically UDP was used for small messages, but modern implementations (especially Windows) use TCP to handle larger tickets (with PACs). Port 464 is also used by the Kerberos password-change protocol (kpasswd). Ports 389/636 are LDAP/LDAPS, and 445 is SMB.'
+  }
+];
+
+function cqStart() {
+  cqStarted = true;
+  cqCurrent = 0;
+  cqScore = 0;
+  cqAnswered = false;
+  document.getElementById('cq-area').style.display = 'block';
+  document.getElementById('cq-results').classList.remove('show');
+  document.getElementById('cq-next').textContent = 'Next Question ▶';
+  cqRenderQ();
+}
+
+function cqRenderQ() {
+  cqAnswered = false;
+  var q = CQ_QUESTIONS[cqCurrent];
+  document.getElementById('cq-progress').textContent = 'Question ' + (cqCurrent + 1) + ' of ' + CQ_QUESTIONS.length;
+  document.getElementById('cq-question').textContent = q.q;
+  document.getElementById('cq-explanation').classList.remove('show');
+  document.getElementById('cq-explanation').innerHTML = '';
+  document.getElementById('cq-next').style.display = 'none';
+
+  var optEl = document.getElementById('cq-options');
+  optEl.innerHTML = '';
+  q.opts.forEach(function(opt, i) {
+    var btn = document.createElement('button');
+    btn.className = 'quiz-opt-btn';
+    btn.textContent = opt;
+    btn.addEventListener('click', function() { cqAnswer(i); });
+    optEl.appendChild(btn);
+  });
+}
+
+function cqAnswer(chosen) {
+  if (cqAnswered) return;
+  cqAnswered = true;
+  var q = CQ_QUESTIONS[cqCurrent];
+  var allBtns = document.getElementById('cq-options').querySelectorAll('.quiz-opt-btn');
+  allBtns.forEach(function(b) { b.disabled = true; });
+  if (chosen === q.correct) {
+    allBtns[chosen].classList.add('correct');
+    cqScore++;
+  } else {
+    allBtns[chosen].classList.add('wrong');
+    allBtns[q.correct].classList.add('reveal-correct');
+  }
+  var explEl = document.getElementById('cq-explanation');
+  explEl.innerHTML = q.explain;
+  explEl.classList.add('show');
+  var nextBtn = document.getElementById('cq-next');
+  if (cqCurrent === CQ_QUESTIONS.length - 1) {
+    nextBtn.textContent = 'See Results';
+  } else {
+    nextBtn.textContent = 'Next Question ▶';
+  }
+  nextBtn.style.display = 'inline-block';
+}
+
+document.getElementById('cq-next').addEventListener('click', function() {
+  if (cqCurrent < CQ_QUESTIONS.length - 1) {
+    cqCurrent++;
+    cqRenderQ();
+  } else {
+    cqShowResult();
+  }
+});
+
+function cqShowResult() {
+  document.getElementById('cq-area').style.display = 'none';
+  var resultsEl = document.getElementById('cq-results');
+  resultsEl.classList.add('show');
+  document.getElementById('cq-score-big').textContent = cqScore + ' / ' + CQ_QUESTIONS.length;
+  var pct = Math.round((cqScore / CQ_QUESTIONS.length) * 100);
+  var lbl;
+  if (pct >= 90)      lbl = 'Excellent! You know your Kerberos.';
+  else if (pct >= 70) lbl = 'Good work! A few gaps to fill.';
+  else if (pct >= 50) lbl = 'Not bad, but review the sections above.';
+  else                lbl = 'Keep studying — the interactive sections will help!';
+  document.getElementById('cq-score-label').innerHTML = pct + '% &mdash; ' + lbl;
+}
+
+document.getElementById('cq-restart').addEventListener('click', function() {
+  cqStart();
+});
+
+/* auto-start quiz so it is ready if user navigates directly */
+cqStart();
+
+</script>
+</body>
+</html>

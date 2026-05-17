@@ -1735,3 +1735,21 @@ body.quiz-mode .logo-tagline { display: none; }
     .learn-hub    { grid-template-columns: 1fr; }
     .learn-card   { padding: 1.25rem 1rem; }
 }
+
+/* ── Learn hub category headers ───────────────────────────────── */
+.learn-cat-header {
+    grid-column: 1 / -1;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    padding: 0.75rem 0 0.2rem;
+    border-top: 1px solid var(--card-border);
+    margin-top: 0.1rem;
+}
+.learn-cat-header:first-child {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
