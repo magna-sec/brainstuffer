@@ -2,86 +2,103 @@
   {
     "file": "generic_cyber.json",
     "label": "Generic Cyber",
-    "count": 428
-  },
-  {
-    "file": "classic_literature.json",
-    "label": "Classic Literature & Authors",
-    "count": 75
-  },
-  {
-    "file": "science_discovery.json",
-    "label": "Science & Discovery",
-    "count": 74
-  },
-  {
-    "file": "world_history.json",
-    "label": "World History",
-    "count": 99
-  },
-  {
-    "file": "geography.json",
-    "label": "Geography",
-    "count": 78
-  },
-  {
-    "file": "mathematics_logic.json",
-    "label": "Mathematics & Logic",
-    "count": 50
-  },
-  {
-    "file": "philosophy.json",
-    "label": "Philosophy",
-    "count": 59
-  },
-  {
-    "file": "astronomy_space.json",
-    "label": "Astronomy & Space",
-    "count": 76
-  },
-  {
-    "file": "antiques_collecting.json",
-    "label": "Antiques & Collecting",
-    "count": 70
-  },
-  {
-    "file": "chess.json",
-    "label": "Chess",
-    "count": 100
-  },
-  {
-    "file": "book_collecting.json",
-    "label": "Book Collecting (ABC)",
-    "count": 65
-  },
-  {
-    "file": "cooking.json",
-    "label": "Cooking & Food Science",
-    "count": 100
-  },
-  {
-    "file": "music_theory.json",
-    "label": "Music Theory",
-    "count": 88
+    "count": 428,
+    "category": "Technology"
   },
   {
     "file": "windows_api.json",
     "label": "Win32 API",
-    "count": 59
+    "count": 59,
+    "category": "Technology"
   },
   {
     "file": "windows_internals_re.json",
     "label": "Windows Internals RE",
-    "count": 61
+    "count": 61,
+    "category": "Technology"
   },
   {
     "file": "c_programming.json",
     "label": "C Programming",
-    "count": 49
+    "count": 49,
+    "category": "Technology"
   },
   {
     "file": "intel_x86_asm.json",
     "label": "Intel x86 Assembly",
-    "count": 54
+    "count": 54,
+    "category": "Technology"
+  },
+  {
+    "file": "science_discovery.json",
+    "label": "Science & Discovery",
+    "count": 74,
+    "category": "Science & Mathematics"
+  },
+  {
+    "file": "mathematics_logic.json",
+    "label": "Mathematics & Logic",
+    "count": 50,
+    "category": "Science & Mathematics"
+  },
+  {
+    "file": "astronomy_space.json",
+    "label": "Astronomy & Space",
+    "count": 76,
+    "category": "Science & Mathematics"
+  },
+  {
+    "file": "classic_literature.json",
+    "label": "Classic Literature & Authors",
+    "count": 75,
+    "category": "Humanities"
+  },
+  {
+    "file": "world_history.json",
+    "label": "World History",
+    "count": 99,
+    "category": "Humanities"
+  },
+  {
+    "file": "geography.json",
+    "label": "Geography",
+    "count": 78,
+    "category": "Humanities"
+  },
+  {
+    "file": "philosophy.json",
+    "label": "Philosophy",
+    "count": 59,
+    "category": "Humanities"
+  },
+  {
+    "file": "music_theory.json",
+    "label": "Music Theory",
+    "count": 88,
+    "category": "Arts & Hobbies"
+  },
+  {
+    "file": "antiques_collecting.json",
+    "label": "Antiques & Collecting",
+    "count": 70,
+    "category": "Arts & Hobbies"
+  },
+  {
+    "file": "chess.json",
+    "label": "Chess",
+    "count": 100,
+    "category": "Arts & Hobbies"
+  },
+  {
+    "file": "book_collecting.json",
+    "label": "Book Collecting (ABC)",
+    "count": 65,
+    "category": "Arts & Hobbies"
+  },
+  {
+    "file": "cooking.json",
+    "label": "Cooking & Food Science",
+    "count": 100,
+    "category": "Arts & Hobbies"
   }
 ]

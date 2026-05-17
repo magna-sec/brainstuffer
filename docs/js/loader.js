@@ -12,15 +12,25 @@ async function loadManifest() {
         newOpt.value = 'creator:new';
         newOpt.textContent = '\u270E New / blank quiz \u2014 open Creator';
         sel.appendChild(newOpt);
-        const sep = document.createElement('option');
-        sep.disabled = true;
-        sep.textContent = '\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500';
-        sel.appendChild(sep);
+
+        // Group by category
+        const grouped = {};
         manifest.forEach(m => {
-            const opt = document.createElement('option');
-            opt.value = m.file;
-            opt.textContent = m.label + ' (' + m.count + ' questions)';
-            sel.appendChild(opt);
+            const cat = m.category || 'Other';
+            if (!grouped[cat]) grouped[cat] = [];
+            grouped[cat].push(m);
+        });
+
+        Object.keys(grouped).forEach(cat => {
+            const group = document.createElement('optgroup');
+            group.label = cat;
+            grouped[cat].forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m.file;
+                opt.textContent = m.label + ' (' + m.count + ' questions)';
+                group.appendChild(opt);
+            });
+            sel.appendChild(group);
         });
     } catch (e) {
         console.error('Failed to load manifest:', e);
