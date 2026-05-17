@@ -1,4 +1,4 @@
-﻿// ══════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
 // MAIN — EVENT WIRING & INIT
 // ══════════════════════════════════════════════════════════════════
 
@@ -32,11 +32,16 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'ArrowLeft') fcMissed();
 });
 
-// Hash-based navigation for dragons page
+// Section picker navigation
+document.getElementById('tile-quizzes').addEventListener('click', function() { showPage('home'); });
+document.getElementById('tile-learn').addEventListener('click', function() { showPage('learn'); });
+document.getElementById('learn-home-link').addEventListener('click', function() { showPage('picker'); });
+
+// Hash-based routing
 function checkHash() {
-    if (window.location.hash === '#herebedragons') {
+    var hash = window.location.hash;
+    if (hash === '#herebedragons') {
         showPage('dragons');
-        // Reset and animate dragon lab ring
         var ring = document.getElementById('lab-ring');
         if (ring) {
             ring.style.transition = 'none';
@@ -48,9 +53,16 @@ function checkHash() {
                 });
             });
         }
+    } else if (hash === '#learn') {
+        showPage('learn');
+    } else if (hash === '#quizzes') {
+        showPage('home');
+    } else {
+        showPage('picker');
     }
 }
 window.addEventListener('hashchange', checkHash);
+window.addEventListener('popstate', checkHash);
 
 // ══════════════════════════════════════════════════════════════════
 // iOS ZOOM RESET — reset viewport scale after any input loses focus
@@ -88,7 +100,7 @@ document.getElementById('btn-xp-cheat').addEventListener('click', function() {
         toggle.dispatchEvent(new Event('change'));
     }
     if (window.applyXP) window.applyXP(100);
-    this.textContent = '\u2620 XP added \u2014 you\u2019re tagged as a cheater';
+    this.textContent = ‘☠ XP added — you’re tagged as a cheater’;
 });
 
 // Quiz Creator
