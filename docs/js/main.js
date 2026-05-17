@@ -1,4 +1,4 @@
-// ══════════════════════════════════════════════════════════════════
+﻿// ══════════════════════════════════════════════════════════════════
 // MAIN — EVENT WIRING & INIT
 // ══════════════════════════════════════════════════════════════════
 
@@ -100,7 +100,7 @@ document.getElementById('btn-xp-cheat').addEventListener('click', function() {
         toggle.dispatchEvent(new Event('change'));
     }
     if (window.applyXP) window.applyXP(100);
-    this.textContent = ‘☠ XP added — you’re tagged as a cheater’;
+    this.textContent = '☠ XP added — you’re tagged as a cheater';
 });
 
 // Quiz Creator
