@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="midnight">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>COMplexity &mdash; Windows COM | BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* ── COMplexity-specific layout ────────────────────────────── */
+body { padding-top: 1.25rem; }
+
+.com-container {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+}
+
+.com-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.com-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.com-subtitle { color: var(--muted); font-size: 0.85rem; }
+
+/* ── Section nav ─────────────────────────────────────────── */
+.section-nav {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.sec-btn {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--card-border);
+  background: var(--card);
+  color: var(--subtle);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+.sec-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--bg2);
+  box-shadow: 0 0 8px var(--glow);
+}
+.sec-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+/* ── Section panels ──────────────────────────────────────── */
+.com-section { display: none; }
+.com-section.active { display: block; }
+
+.com-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.com-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.75rem 0;
+}
+
+/* ── Memory box ──────────────────────────────────────────── */
+.mem-box {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  margin-bottom: 1rem;
+}
+.mem-row-com {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.mem-row-com:last-child { border-bottom: none; }
+.mem-row-com:hover { background: rgba(255,255,255,0.04); }
+.mem-row-com.lit { background: rgba(129,140,248,0.08); }
+.mem-offset { color: var(--muted); min-width: 50px; }
+.mem-vptr { color: var(--accent); flex: 1; }
+.mem-desc { color: var(--subtle); font-size: 0.75rem; }
+.mem-data { color: var(--text); flex: 1; }
+
+/* ── Vtable boxes ────────────────────────────────────────── */
+.vtable-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 600px) { .vtable-grid { grid-template-columns: 1fr; } }
+
+.vtable-box {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  opacity: 0.5;
+  transition: opacity 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.vtable-box.lit {
+  opacity: 1;
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--glow);
+}
+.vtable-box.lit2 {
+  opacity: 1;
+  border-color: var(--accent2);
+  box-shadow: 0 0 12px rgba(56,189,248,0.35);
+}
+.vtable-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+.vtable-entry {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.22rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.vtable-entry:last-child { border-bottom: none; }
+.vtable-method { color: var(--text); }
+.vtable-method.iunknown { color: var(--accent2); }
+.vtable-addr { color: var(--muted); }
+
+/* ── RefCount simulator ──────────────────────────────────── */
+.refcount-display {
+  text-align: center;
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+  margin: 1rem 0;
+  color: var(--success);
+  transition: color 0.3s;
+  transform-origin: center;
+}
+.refcount-display.dead { color: var(--danger); }
+@keyframes rc-bump {
+  0%   { transform: scale(1.0); }
+  40%  { transform: scale(1.18); }
+  100% { transform: scale(1.0); }
+}
+.refcount-display.bump { animation: rc-bump 0.3s ease-out; }
+
+.refcount-label {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  min-height: 1.2em;
+}
+
+.rc-btns {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.op-log {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.op-log::-webkit-scrollbar { width: 4px; }
+.op-log::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+.log-entry {
+  padding: 0.2rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--subtle);
+}
+.log-entry:last-child { border-bottom: none; }
+.log-entry .log-op { color: var(--accent); }
+.log-entry .log-res { color: var(--text); }
+.log-entry.log-destroy { color: var(--danger); }
+
+/* ── Lifecycle steps ─────────────────────────────────────── */
+.lifecycle-state {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 600px) {
+  .lifecycle-state { grid-template-columns: repeat(3, 1fr); }
+}
+.lc-state-box {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  text-align: center;
+}
+.lc-state-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+.lc-state-val {
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--success);
+}
+.lc-state-val.null { color: var(--danger); }
+.lc-state-val.zero { color: var(--danger); }
+
+.lifecycle-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.lc-step {
+  background: var(--bg2);
+  border: 1.5px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: var(--muted);
+  opacity: 0.45;
+  transition: opacity 0.3s, border-color 0.3s, box-shadow 0.3s, color 0.3s;
+  cursor: default;
+}
+.lc-step.done {
+  opacity: 1;
+  border-color: var(--success);
+  color: var(--subtle);
+}
+.lc-step.active {
+  opacity: 1;
+  border-color: var(--accent);
+  color: var(--text);
+  box-shadow: 0 0 10px var(--glow);
+}
+.lc-controls {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* ── HRESULT decoder ─────────────────────────────────────── */
+.hr-input-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.hr-input-row input {
+  flex: 1;
+  min-width: 180px;
+  font-family: 'Courier New', monospace;
+  margin-bottom: 0;
+}
+.hr-quick-btns {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.hr-quick-btn {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  border-radius: 6px;
+  border: 1px solid var(--card-border);
+  background: var(--bg2);
+  color: var(--subtle);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.hr-quick-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.hr-bits {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 0.35rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+.hr-bit-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+.hr-bit-box {
+  width: 20px;
+  height: 28px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Courier New', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.hr-bit-box.sev-0  { background: rgba(100,100,120,0.25); color: var(--muted); }
+.hr-bit-box.sev-1  { background: rgba(239,68,68,0.35); color: #fca5a5; box-shadow: 0 0 6px rgba(239,68,68,0.4); }
+.hr-bit-box.res-0  { background: rgba(80,80,100,0.2); color: var(--muted); }
+.hr-bit-box.res-1  { background: rgba(156,163,175,0.3); color: var(--text); }
+.hr-bit-box.fac-0  { background: rgba(56,189,248,0.1); color: var(--muted); }
+.hr-bit-box.fac-1  { background: rgba(56,189,248,0.35); color: #7dd3fc; box-shadow: 0 0 6px rgba(56,189,248,0.35); }
+.hr-bit-box.cod-0  { background: rgba(129,140,248,0.1); color: var(--muted); }
+.hr-bit-box.cod-1  { background: rgba(129,140,248,0.35); color: #c7d2fe; box-shadow: 0 0 6px rgba(129,140,248,0.35); }
+.hr-bit-num {
+  font-size: 0.52rem;
+  color: var(--muted);
+  margin-top: 2px;
+  font-family: 'Courier New', monospace;
+}
+
+.hr-legend {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.hr-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  color: var(--subtle);
+}
+.hr-leg-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.hr-fields {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 600px) { .hr-fields { grid-template-columns: repeat(2, 1fr); } }
+.hr-field-box {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+  text-align: center;
+}
+.hr-field-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+.hr-field-val {
+  font-family: 'Courier New', monospace;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.hr-field-val.success { color: var(--success); }
+.hr-field-val.failure { color: var(--danger); }
+
+.hr-known {
+  background: var(--bg2);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  display: none;
+}
+.hr-known.show { display: block; }
+.hr-known-name {
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+}
+.hr-known-desc { font-size: 0.85rem; color: var(--subtle); }
+
+/* ── Apartment visualiser ────────────────────────────────── */
+.apt-scenario-btns {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.apt-diagram {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.apt-side {
+  background: var(--bg2);
+  border: 1.5px solid var(--card-border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  text-align: center;
+  transition: border-color 0.3s;
+}
+.apt-side-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+.apt-side-type {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: 'Courier New', monospace;
+}
+.apt-side-thread {
+  font-size: 0.75rem;
+  color: var(--subtle);
+  margin-top: 0.2rem;
+}
+.apt-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+.apt-arrow {
+  font-size: 1.4rem;
+  color: var(--accent);
+  transition: color 0.3s;
+}
+.apt-arrow.marshal { color: #f97316; }
+.apt-proxy-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  text-align: center;
+}
+.apt-proxy-box {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.7rem;
+  color: var(--subtle);
+  text-align: center;
+  min-width: 80px;
+  transition: border-color 0.3s, color 0.3s;
+}
+.apt-proxy-box.active-marshal {
+  border-color: #f97316;
+  color: #f97316;
+}
+
+.apt-explain {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: var(--subtle);
+  margin-bottom: 1rem;
+  min-height: 3em;
+}
+
+/* ── Quiz ────────────────────────────────────────────────── */
+.quiz-progress {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+.quiz-question {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.quiz-opt-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--card-border);
+  background: var(--bg2);
+  color: var(--text);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  font-family: inherit;
+}
+.quiz-opt-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--card); }
+.quiz-opt-btn:disabled { cursor: default; }
+.quiz-opt-btn.correct { border-color: var(--success); background: rgba(34,197,94,0.12); color: var(--success); }
+.quiz-opt-btn.wrong   { border-color: var(--danger);  background: rgba(239,68,68,0.12);  color: var(--danger);  }
+.quiz-opt-btn.reveal-correct { border-color: var(--success); background: rgba(34,197,94,0.08); }
+
+.quiz-explanation {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 0.65rem 1rem;
+  font-size: 0.83rem;
+  color: var(--subtle);
+  margin-bottom: 1rem;
+  display: none;
+}
+.quiz-explanation.show { display: block; }
+
+.quiz-results {
+  text-align: center;
+  padding: 1.5rem;
+  display: none;
+}
+.quiz-results.show { display: block; }
+.quiz-score-big {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.quiz-score-label {
+  font-size: 1rem;
+  color: var(--subtle);
+  margin-bottom: 1.5rem;
+}
+
+/* ── Shared utilities ────────────────────────────────────── */
+.insight-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}
+.insight-list li {
+  padding: 0.3rem 0 0.3rem 1.4em;
+  font-size: 0.85rem;
+  color: var(--subtle);
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.insight-list li:last-child { border-bottom: none; }
+.insight-list li::before {
+  content: '>';
+  position: absolute;
+  left: 0.2em;
+  color: var(--accent);
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+}
+
+.section-sub-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.4rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--accent);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<script>
+(function() {
+  var sk = localStorage.getItem('bs-skin');
+  if (sk) document.documentElement.setAttribute('data-skin', sk);
+})();
+</script>
+
+<!-- Skin toggle button -->
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+
+<!-- Skin panel -->
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="midnight" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom
+  </div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix
+  </div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire
+  </div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss
+  </div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor
+  </div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman
+  </div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95
+  </div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero
+  </div>
+</div>
+
+<div class="com-container">
+
+  <!-- Header -->
+  <div class="com-header">
+    <div class="logo-wrap"><a href="index.html#learn" style="text-decoration:none;color:inherit;">&#129504; BrainStuffer</a></div>
+    <div>
+      <div class="com-title">COMplexity</div>
+      <div class="com-subtitle">COMplexity &mdash; Windows COM</div>
+    </div>
+  </div>
+
+  <!-- Section nav -->
+  <div class="section-nav" id="section-nav">
+    <button class="sec-btn active" data-sec="vtable">1. Vtable Visualiser</button>
+    <button class="sec-btn" data-sec="refcount">2. Reference Count</button>
+    <button class="sec-btn" data-sec="lifecycle">3. Object Lifecycle</button>
+    <button class="sec-btn" data-sec="hresult">4. HRESULT Decoder</button>
+    <button class="sec-btn" data-sec="apartment">5. Apartments</button>
+    <button class="sec-btn" data-sec="quiz">6. Quiz</button>
+  </div>
+
+  <!-- ═══════════════════ SECTION 1: VTABLE ═══════════════════ -->
+  <div class="com-section active" id="sec-vtable">
+    <div class="com-card">
+      <h3>COM Object in Memory &mdash; click a vptr row to light up its vtable</h3>
+
+      <div class="section-sub-label">Object Layout (CShape @ 0x0020A000)</div>
+      <div class="mem-box" id="vtable-mem-box">
+        <div class="mem-row-com" id="vptr-row-0" data-vtable="0">
+          <span class="mem-offset">+0x00</span>
+          <span class="mem-vptr">vptr &rarr; 0x140001000</span>
+          <span class="mem-desc">IShape vtable ptr</span>
+        </div>
+        <div class="mem-row-com" id="vptr-row-1" data-vtable="1">
+          <span class="mem-offset">+0x08</span>
+          <span class="mem-vptr">vptr &rarr; 0x140001028</span>
+          <span class="mem-desc">IDrawable vtable ptr</span>
+        </div>
+        <div class="mem-row-com" style="cursor:default;">
+          <span class="mem-offset">+0x10</span>
+          <span class="mem-data">m_color: DWORD</span>
+          <span class="mem-desc">e.g. 0x00FF0000</span>
+        </div>
+        <div class="mem-row-com" style="cursor:default;">
+          <span class="mem-offset">+0x14</span>
+          <span class="mem-data">m_x: float</span>
+          <span class="mem-desc">e.g. 100.0f</span>
+        </div>
+        <div class="mem-row-com" style="cursor:default;">
+          <span class="mem-offset">+0x18</span>
+          <span class="mem-data">m_y: float</span>
+          <span class="mem-desc">e.g. 200.0f</span>
+        </div>
+        <div class="mem-row-com" style="cursor:default;">
+          <span class="mem-offset">+0x1C</span>
+          <span class="mem-data">m_refCount: LONG</span>
+          <span class="mem-desc">1 initially</span>
+        </div>
+      </div>
+
+      <div class="vtable-grid">
+        <!-- IShape vtable -->
+        <div class="vtable-box" id="vtable-box-0">
+          <div class="vtable-title">IShape vtable @ 0x140001000</div>
+          <div class="vtable-entry">
+            <span class="vtable-method iunknown">QueryInterface</span>
+            <span class="vtable-addr">0x14000A1B0</span>
+          </div>
+          <div class="vtable-entry">
+            <span class="vtable-method iunknown">AddRef</span>
+            <span class="vtable-addr">0x14000A220</span>
+          </div>
+          <div class="vtable-entry">
+            <span class="vtable-method iunknown">Release</span>
+            <span class="vtable-addr">0x14000A260</span>
+          </div>
+          <div class="vtable-entry">
+            <span class="vtable-method">GetArea</span>
+            <span class="vtable-addr">0x14000A300</span>
+          </div>
+          <div class="vtable-entry">
+            <span class="vtable-method">GetPerimeter</span>
+            <span class="vtable-addr">0x14000A350</span>
+          </div>
+        </div>
+        <!-- IDrawable vtable -->
+        <div class="vtable-box" id="vtable-box-1">
+          <div class="vtable-title">IDrawable vtable @ 0x140001028</div>
+          <div class="vtable-entry">
+            <span class="vtable-method iunknown">QueryInterface</span>
+            <span class="vtable-addr">0x14000A1B0</span>
+          </div>
+          <div class="vtable-entry">
+            <span class="vtable-method iunknown">AddRef</span>
+            <span class="vtable-addr">0x14000A220</span>
+          </div>
+          <div class="vtable-entry">
+            <span class="vtable-method iunknown">Release</span>
+            <span class="vtable-addr">0x14000A260</span>
+          </div>
+          <div class="vtable-entry">
+            <span class="vtable-method">Draw</span>
+            <span class="vtable-addr">0x14000A400</span>
+          </div>
+          <div class="vtable-entry">
+            <span class="vtable-method">SetColour</span>
+            <span class="vtable-addr">0x14000A450</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="vtable-explain" style="min-height:2.5em;font-size:0.85rem;color:var(--subtle);padding:0.5rem 0.75rem;background:var(--bg2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;margin-bottom:0.75rem;">
+        Click a <strong style="color:var(--accent)">vptr row</strong> in the object layout to see which vtable it points to.
+      </div>
+
+      <div class="section-sub-label">Key Insights</div>
+      <ul class="insight-list">
+        <li>Each interface a COM object implements adds one vptr to the object&rsquo;s memory layout.</li>
+        <li>The vptr is the very first field for each interface &mdash; the pointer you pass around IS a pointer to that vptr slot.</li>
+        <li>IUnknown methods (QueryInterface, AddRef, Release) are always the first three entries in every vtable.</li>
+        <li>Both vtables here share the same QI/AddRef/Release implementation addresses &mdash; one C++ class, two interfaces.</li>
+        <li>Casting between interface pointers changes which vptr the callee dereferences, not the underlying object.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SECTION 2: REFCOUNT ═══════════════════ -->
+  <div class="com-section" id="sec-refcount">
+    <div class="com-card">
+      <h3>Reference Count Simulator</h3>
+      <div class="refcount-display" id="rc-display">1</div>
+      <div class="refcount-label" id="rc-label">Object alive</div>
+      <div class="rc-btns">
+        <button class="btn btn-primary" id="rc-addref">AddRef()</button>
+        <button class="btn btn-danger" id="rc-release">Release()</button>
+        <button class="btn btn-outline" id="rc-qi">QueryInterface()</button>
+        <button class="btn btn-muted" id="rc-reset">Reset</button>
+      </div>
+      <div class="section-sub-label">Operation Log</div>
+      <div class="op-log" id="rc-log">
+        <div class="log-entry"><span class="log-op">CoCreateInstance</span> &mdash; <span class="log-res">refcount = 1, IShape* returned</span></div>
+      </div>
+
+      <div class="section-sub-label" style="margin-top:1rem;">Rules</div>
+      <ul class="insight-list">
+        <li>AddRef() must be called whenever an interface pointer is copied to a new owner.</li>
+        <li>Release() must be called when an owner no longer needs the pointer &mdash; set it to NULL immediately after.</li>
+        <li>QueryInterface() internally calls AddRef() on the returned pointer &mdash; so the caller must Release() it.</li>
+        <li>The refcount is advisory for debugging only; never branch on its return value for lifetime decisions.</li>
+        <li>When refcount reaches zero, the object must destroy itself (typically <code>delete this</code>).</li>
+        <li>COM smart pointers (ATL CComPtr, WRL ComPtr) manage AddRef/Release automatically.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SECTION 3: LIFECYCLE ═══════════════════ -->
+  <div class="com-section" id="sec-lifecycle">
+    <div class="com-card">
+      <h3>Object Lifecycle Step-Through</h3>
+
+      <!-- State panel -->
+      <div class="lifecycle-state" id="lc-state">
+        <div class="lc-state-box">
+          <div class="lc-state-label">COM Init</div>
+          <div class="lc-state-val null" id="ls-init">No</div>
+        </div>
+        <div class="lc-state-box">
+          <div class="lc-state-label">Object Exists</div>
+          <div class="lc-state-val null" id="ls-obj">No</div>
+        </div>
+        <div class="lc-state-box">
+          <div class="lc-state-label">IShape*</div>
+          <div class="lc-state-val null" id="ls-pshape">NULL</div>
+        </div>
+        <div class="lc-state-box">
+          <div class="lc-state-label">IDrawable*</div>
+          <div class="lc-state-val null" id="ls-pdraw">NULL</div>
+        </div>
+        <div class="lc-state-box">
+          <div class="lc-state-label">RefCount</div>
+          <div class="lc-state-val zero" id="ls-rc">0</div>
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div class="lifecycle-steps" id="lc-steps">
+        <div class="lc-step" data-step="0">CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);</div>
+        <div class="lc-step" data-step="1">CoCreateInstance(CLSID_Shape, NULL, CLSCTX_INPROC_SERVER, IID_IShape, &amp;pShape);</div>
+        <div class="lc-step" data-step="2">pShape-&gt;QueryInterface(IID_IDrawable, &amp;pDraw);</div>
+        <div class="lc-step" data-step="3">pShape-&gt;GetArea();  pDraw-&gt;Draw();</div>
+        <div class="lc-step" data-step="4">pDraw-&gt;Release();  pDraw = NULL;</div>
+        <div class="lc-step" data-step="5">pShape-&gt;Release();  pShape = NULL;</div>
+        <div class="lc-step" data-step="6">CoUninitialize();</div>
+      </div>
+
+      <div id="lc-explain" style="background:var(--bg2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:0.65rem 1rem;font-size:0.85rem;color:var(--subtle);margin-bottom:1rem;min-height:2.5em;">
+        Press <strong style="color:var(--accent)">Next</strong> to step through the COM object lifecycle.
+      </div>
+
+      <div class="lc-controls">
+        <button class="btn btn-muted" id="lc-prev">&#9664; Prev</button>
+        <button class="btn btn-primary" id="lc-next">Next &#9654;</button>
+        <button class="btn btn-outline" id="lc-resetbtn">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SECTION 4: HRESULT ═══════════════════ -->
+  <div class="com-section" id="sec-hresult">
+    <div class="com-card">
+      <h3>HRESULT Decoder</h3>
+
+      <div class="hr-input-row">
+        <input type="text" id="hr-input" placeholder="e.g. 0x80004005 or 2147500037" spellcheck="false">
+        <button class="btn btn-primary" id="hr-decode-btn">Decode</button>
+      </div>
+
+      <div class="hr-quick-btns" id="hr-quick-btns">
+        <button class="hr-quick-btn" data-val="0x00000000">S_OK</button>
+        <button class="hr-quick-btn" data-val="0x00000001">S_FALSE</button>
+        <button class="hr-quick-btn" data-val="0x80004001">E_NOTIMPL</button>
+        <button class="hr-quick-btn" data-val="0x80004002">E_NOINTERFACE</button>
+        <button class="hr-quick-btn" data-val="0x80004003">E_POINTER</button>
+        <button class="hr-quick-btn" data-val="0x80004005">E_FAIL</button>
+        <button class="hr-quick-btn" data-val="0x8007000E">E_OUTOFMEMORY</button>
+        <button class="hr-quick-btn" data-val="0x80070057">E_INVALIDARG</button>
+        <button class="hr-quick-btn" data-val="0x80040110">CLASS_E_NOAGGREGATION</button>
+        <button class="hr-quick-btn" data-val="0x800401F0">CO_E_NOTINITIALIZED</button>
+      </div>
+
+      <div class="section-sub-label">Bit Layout</div>
+      <div class="hr-legend">
+        <div class="hr-leg-item"><span class="hr-leg-swatch" style="background:rgba(239,68,68,0.5)"></span> Severity (bit 31)</div>
+        <div class="hr-leg-item"><span class="hr-leg-swatch" style="background:rgba(156,163,175,0.4)"></span> Reserved (bits 30&ndash;28)</div>
+        <div class="hr-leg-item"><span class="hr-leg-swatch" style="background:rgba(56,189,248,0.4)"></span> Facility (bits 27&ndash;16)</div>
+        <div class="hr-leg-item"><span class="hr-leg-swatch" style="background:rgba(129,140,248,0.4)"></span> Code (bits 15&ndash;0)</div>
+      </div>
+      <div class="hr-bits" id="hr-bits"></div>
+
+      <div class="hr-fields" id="hr-fields">
+        <div class="hr-field-box">
+          <div class="hr-field-label">Severity</div>
+          <div class="hr-field-val" id="hrf-sev">&mdash;</div>
+        </div>
+        <div class="hr-field-box">
+          <div class="hr-field-label">Facility</div>
+          <div class="hr-field-val" id="hrf-fac">&mdash;</div>
+        </div>
+        <div class="hr-field-box">
+          <div class="hr-field-label">Code</div>
+          <div class="hr-field-val" id="hrf-code">&mdash;</div>
+        </div>
+        <div class="hr-field-box">
+          <div class="hr-field-label">Full Hex</div>
+          <div class="hr-field-val" id="hrf-hex">&mdash;</div>
+        </div>
+      </div>
+
+      <div class="hr-known" id="hr-known">
+        <div class="hr-known-name" id="hr-known-name"></div>
+        <div class="hr-known-desc" id="hr-known-desc"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SECTION 5: APARTMENT ═══════════════════ -->
+  <div class="com-section" id="sec-apartment">
+    <div class="com-card">
+      <h3>Apartment Model Visualiser</h3>
+
+      <div class="apt-scenario-btns" id="apt-btns">
+        <button class="btn btn-primary" data-apt="same-sta">Same-STA call</button>
+        <button class="btn btn-outline" data-apt="cross-sta">Cross-STA call</button>
+        <button class="btn btn-outline" data-apt="mta-to-sta">MTA to STA call</button>
+        <button class="btn btn-outline" data-apt="mta-same">Same-MTA call</button>
+      </div>
+
+      <div class="apt-diagram">
+        <div class="apt-side" id="apt-left">
+          <div class="apt-side-label">Object resides in</div>
+          <div class="apt-side-type" id="apt-left-type">STA</div>
+          <div class="apt-side-thread" id="apt-left-thread">Thread 1</div>
+        </div>
+        <div class="apt-center">
+          <div class="apt-proxy-label" id="apt-proxy-label">Direct</div>
+          <div class="apt-arrow" id="apt-arrow">&#8596;</div>
+          <div class="apt-proxy-box" id="apt-proxy-box">vtable call</div>
+        </div>
+        <div class="apt-side" id="apt-right">
+          <div class="apt-side-label">Caller lives in</div>
+          <div class="apt-side-type" id="apt-right-type">STA</div>
+          <div class="apt-side-thread" id="apt-right-thread">Thread 1</div>
+        </div>
+      </div>
+
+      <div class="apt-explain" id="apt-explain">
+        Select a scenario above to see how COM routes the call between apartments.
+      </div>
+
+      <div class="section-sub-label">Apartment Rules</div>
+      <ul class="insight-list">
+        <li>STA (Single-Threaded Apartment): one thread, one object. All calls serialised through the message loop.</li>
+        <li>MTA (Multi-Threaded Apartment): any MTA thread can call any MTA object directly &mdash; but the object must be thread-safe.</li>
+        <li>Calling across apartment boundaries always requires a proxy/stub pair and marshaling.</li>
+        <li>STA threads must pump their message loop, or cross-apartment calls will deadlock.</li>
+        <li>CoInitializeEx(NULL, COINIT_APARTMENTTHREADED) creates an STA; COINIT_MULTITHREADED joins the MTA.</li>
+        <li>Interface pointers cannot be passed raw across apartment boundaries &mdash; use CoMarshalInterfaceInStream / IGlobalInterfaceTable.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SECTION 6: QUIZ ═══════════════════ -->
+  <div class="com-section" id="sec-quiz">
+    <div class="com-card">
+      <h3>COM Quiz</h3>
+      <div id="quiz-area">
+        <div class="quiz-progress" id="quiz-progress">Question 1 of 15</div>
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-explanation" id="quiz-explanation"></div>
+        <button class="btn btn-primary" id="quiz-next" style="display:none;">Next Question &#9654;</button>
+      </div>
+      <div class="quiz-results" id="quiz-results">
+        <div class="quiz-score-big" id="quiz-score-big"></div>
+        <div class="quiz-score-label" id="quiz-score-label"></div>
+        <button class="btn btn-primary" id="quiz-restart">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <nav style="margin-top:1rem;">
+    <a class="back-link" href="index.html#learn">&#8592; Back to Interactive Learning</a>
+  </nav>
+
+</div><!-- /com-container -->
+
+<script>
+'use strict';
+
+/* ── Skin switcher ──────────────────────────────────────────── */
+(function() {
+  var toggle = document.getElementById('skin-toggle');
+  var panel  = document.getElementById('skin-panel');
+  if (!toggle || !panel) return;
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    panel.classList.toggle('open');
+  });
+  document.addEventListener('click', function() { panel.classList.remove('open'); });
+  panel.addEventListener('click', function(e) { e.stopPropagation(); });
+  panel.querySelectorAll('.skin-opt').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      var sk = opt.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      panel.classList.remove('open');
+    });
+  });
+})();
+
+/* ── Section nav ────────────────────────────────────────────── */
+(function() {
+  var nav = document.getElementById('section-nav');
+  var btns = nav.querySelectorAll('.sec-btn');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var sec = btn.getAttribute('data-sec');
+      document.querySelectorAll('.com-section').forEach(function(s) { s.classList.remove('active'); });
+      document.getElementById('sec-' + sec).classList.add('active');
+    });
+  });
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   SECTION 1 — VTABLE VISUALISER
+══════════════════════════════════════════════════════════════ */
+(function() {
+  var explains = [
+    'The <strong style="color:var(--accent)">+0x00 vptr</strong> points to the <strong>IShape vtable</strong> at 0x140001000. When you call pShape->GetArea(), the CPU dereferences this vptr, looks up slot [3] in the table, and jumps to 0x14000A300.',
+    'The <strong style="color:var(--accent2)">+0x08 vptr</strong> points to the <strong>IDrawable vtable</strong> at 0x140001028. When a caller has an IDrawable* pointer, it is actually pointing to offset +0x08 inside the CShape instance, and method calls go through this separate vtable.'
+  ];
+
+  var rows = document.querySelectorAll('[data-vtable]');
+  rows.forEach(function(row) {
+    row.addEventListener('click', function() {
+      var idx = parseInt(row.getAttribute('data-vtable'), 10);
+      rows.forEach(function(r) { r.classList.remove('lit'); });
+      row.classList.add('lit');
+
+      var boxes = [document.getElementById('vtable-box-0'), document.getElementById('vtable-box-1')];
+      boxes[0].classList.remove('lit', 'lit2');
+      boxes[1].classList.remove('lit', 'lit2');
+      boxes[idx].classList.add(idx === 0 ? 'lit' : 'lit2');
+
+      document.getElementById('vtable-explain').innerHTML = explains[idx];
+    });
+  });
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   SECTION 2 — REFERENCE COUNT SIMULATOR
+══════════════════════════════════════════════════════════════ */
+(function() {
+  var rc = 1;
+  var destroyed = false;
+
+  var display = document.getElementById('rc-display');
+  var label   = document.getElementById('rc-label');
+  var log     = document.getElementById('rc-log');
+  var btnAdd  = document.getElementById('rc-addref');
+  var btnRel  = document.getElementById('rc-release');
+  var btnQi   = document.getElementById('rc-qi');
+  var btnRst  = document.getElementById('rc-reset');
+
+  function addLogEntry(op, result, isDestroy) {
+    var entry = document.createElement('div');
+    entry.className = 'log-entry' + (isDestroy ? ' log-destroy' : '');
+    entry.innerHTML = '<span class="log-op">' + op + '</span> &mdash; <span class="log-res">' + result + '</span>';
+    log.appendChild(entry);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function bumpAnim() {
+    display.classList.remove('bump');
+    void display.offsetWidth;
+    display.classList.add('bump');
+  }
+
+  function updateDisplay() {
+    display.textContent = destroyed ? '0' : String(rc);
+    display.classList.toggle('dead', destroyed || rc === 0);
+    label.textContent = destroyed ? 'Object destroyed' : (rc === 1 ? 'Object alive (sole owner)' : 'Object alive (shared, refcount = ' + rc + ')');
+    bumpAnim();
+  }
+
+  function destroy() {
+    destroyed = true;
+    addLogEntry('~CShape (destructor)', 'delete this called, memory freed', true);
+    updateDisplay();
+    btnAdd.disabled = true;
+    btnRel.disabled = true;
+    btnQi.disabled  = true;
+  }
+
+  btnAdd.addEventListener('click', function() {
+    if (destroyed) return;
+    rc++;
+    addLogEntry('AddRef()', 'refcount = ' + rc);
+    updateDisplay();
+  });
+
+  btnRel.addEventListener('click', function() {
+    if (destroyed) return;
+    rc--;
+    addLogEntry('Release()', 'refcount = ' + rc);
+    if (rc <= 0) {
+      rc = 0;
+      destroy();
+    } else {
+      updateDisplay();
+    }
+  });
+
+  btnQi.addEventListener('click', function() {
+    if (destroyed) return;
+    rc++;
+    addLogEntry('QueryInterface(IID_IDrawable, &pDraw)', 'S_OK, AddRef called internally, refcount = ' + rc + ', IDrawable* returned');
+    updateDisplay();
+  });
+
+  btnRst.addEventListener('click', function() {
+    rc = 1;
+    destroyed = false;
+    btnAdd.disabled = false;
+    btnRel.disabled = false;
+    btnQi.disabled  = false;
+    log.innerHTML = '<div class="log-entry"><span class="log-op">CoCreateInstance</span> &mdash; <span class="log-res">refcount = 1, IShape* returned</span></div>';
+    updateDisplay();
+  });
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   SECTION 3 — LIFECYCLE STEP-THROUGH
+══════════════════════════════════════════════════════════════ */
+(function() {
+  var steps = [
+    {
+      code: 'CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);',
+      init: 'Yes', initNull: false,
+      obj: 'No', objNull: true,
+      pshape: 'NULL', pshapeNull: true,
+      pdraw: 'NULL', pdrawNull: true,
+      rc: '0', rcZero: true,
+      explain: '<strong>CoInitializeEx</strong> initialises COM on the current thread and creates a Single-Threaded Apartment (STA). Must be called before any other COM API. Returns S_OK on first call, S_FALSE if COM was already initialised on this thread.'
+    },
+    {
+      code: 'CoCreateInstance(CLSID_Shape, NULL, CLSCTX_INPROC_SERVER, IID_IShape, &pShape);',
+      init: 'Yes', initNull: false,
+      obj: 'Yes', objNull: false,
+      pshape: '0x0020A000', pshapeNull: false,
+      pdraw: 'NULL', pdrawNull: true,
+      rc: '1', rcZero: false,
+      explain: '<strong>CoCreateInstance</strong> looks up CLSID_Shape in the registry, loads the DLL, calls DllGetClassObject to get the IClassFactory, then calls CreateInstance. The factory internally calls new CShape() and returns an IShape* with refcount = 1.'
+    },
+    {
+      code: 'pShape->QueryInterface(IID_IDrawable, &pDraw);',
+      init: 'Yes', initNull: false,
+      obj: 'Yes', objNull: false,
+      pshape: '0x0020A000', pshapeNull: false,
+      pdraw: '0x0020A008', pdrawNull: false,
+      rc: '2', rcZero: false,
+      explain: '<strong>QueryInterface</strong> asks the same object whether it also implements IDrawable. It does, so it returns a pointer to the IDrawable vptr (at offset +0x08 in the object), calls AddRef internally, and returns S_OK. RefCount is now 2.'
+    },
+    {
+      code: 'pShape->GetArea();  pDraw->Draw();',
+      init: 'Yes', initNull: false,
+      obj: 'Yes', objNull: false,
+      pshape: '0x0020A000', pshapeNull: false,
+      pdraw: '0x0020A008', pdrawNull: false,
+      rc: '2', rcZero: false,
+      explain: 'Using both interface pointers to call interface-specific methods. <strong>GetArea()</strong> goes through the IShape vtable; <strong>Draw()</strong> goes through the IDrawable vtable. Both ultimately call into the same CShape C++ object. RefCount unchanged at 2.'
+    },
+    {
+      code: 'pDraw->Release();  pDraw = NULL;',
+      init: 'Yes', initNull: false,
+      obj: 'Yes', objNull: false,
+      pshape: '0x0020A000', pshapeNull: false,
+      pdraw: 'NULL', pdrawNull: true,
+      rc: '1', rcZero: false,
+      explain: 'We are done with IDrawable. <strong>Release()</strong> decrements refcount to 1. Setting pDraw to NULL immediately is critical &mdash; it prevents accidental use-after-release. The object is still alive because pShape still holds a reference.'
+    },
+    {
+      code: 'pShape->Release();  pShape = NULL;',
+      init: 'Yes', initNull: false,
+      obj: 'No', objNull: true,
+      pshape: 'NULL', pshapeNull: true,
+      pdraw: 'NULL', pdrawNull: true,
+      rc: '0', rcZero: true,
+      explain: 'The last Release() decrements refcount to 0. CShape::Release calls <code>delete this</code>, freeing the object. Set pShape = NULL. The object no longer exists in memory.'
+    },
+    {
+      code: 'CoUninitialize();',
+      init: 'No', initNull: true,
+      obj: 'No', objNull: true,
+      pshape: 'NULL', pshapeNull: true,
+      pdraw: 'NULL', pdrawNull: true,
+      rc: '0', rcZero: true,
+      explain: '<strong>CoUninitialize</strong> tears down the COM apartment on this thread. Must be called once for each successful CoInitializeEx call. After this, no COM calls should be made on this thread without reinitialising.'
+    }
+  ];
+
+  var current = -1;
+  var stepEls = document.querySelectorAll('.lc-step');
+  var explainEl = document.getElementById('lc-explain');
+  var prevBtn = document.getElementById('lc-prev');
+  var nextBtn = document.getElementById('lc-next');
+  var resetBtn = document.getElementById('lc-resetbtn');
+
+  function setStateVal(id, val, isNull, isZero) {
+    var el = document.getElementById(id);
+    el.textContent = val;
+    el.classList.remove('null', 'zero');
+    if (isNull) el.classList.add('null');
+    if (isZero) el.classList.add('zero');
+  }
+
+  function applyState(s) {
+    setStateVal('ls-init',   s.init,   s.initNull,   false);
+    setStateVal('ls-obj',    s.obj,    s.objNull,    false);
+    setStateVal('ls-pshape', s.pshape, s.pshapeNull, false);
+    setStateVal('ls-pdraw',  s.pdraw,  s.pdrawNull,  false);
+    setStateVal('ls-rc',     s.rc,     false,        s.rcZero);
+  }
+
+  function render() {
+    stepEls.forEach(function(el, i) {
+      el.classList.remove('active', 'done');
+      if (i < current) el.classList.add('done');
+      if (i === current) el.classList.add('active');
+    });
+    if (current >= 0 && current < steps.length) {
+      applyState(steps[current]);
+      explainEl.innerHTML = steps[current].explain;
+    } else {
+      explainEl.innerHTML = 'Press <strong style="color:var(--accent)">Next</strong> to step through the COM object lifecycle.';
+      setStateVal('ls-init',   'No',   true,  false);
+      setStateVal('ls-obj',    'No',   true,  false);
+      setStateVal('ls-pshape', 'NULL', true,  false);
+      setStateVal('ls-pdraw',  'NULL', true,  false);
+      setStateVal('ls-rc',     '0',    false, true);
+    }
+    prevBtn.disabled = current <= -1;
+    nextBtn.disabled = current >= steps.length - 1;
+  }
+
+  nextBtn.addEventListener('click', function() { if (current < steps.length - 1) { current++; render(); } });
+  prevBtn.addEventListener('click', function() { if (current > -1) { current--; render(); } });
+  resetBtn.addEventListener('click', function() { current = -1; render(); });
+
+  render();
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   SECTION 4 — HRESULT DECODER
+══════════════════════════════════════════════════════════════ */
+(function() {
+  var knownHR = {
+    0x00000000: { name: 'S_OK',                   desc: 'Success. The operation completed successfully.' },
+    0x00000001: { name: 'S_FALSE',                desc: 'Success, but with a semantically false result. Interpretation is method-specific.' },
+    0x80004001: { name: 'E_NOTIMPL',              desc: 'Method is declared in the interface but this object has not provided an implementation.' },
+    0x80004002: { name: 'E_NOINTERFACE',          desc: 'QueryInterface was called for an IID this object does not implement. Returned pointer is NULL.' },
+    0x80004003: { name: 'E_POINTER',              desc: 'A required pointer argument was NULL, or the output pointer could not be written to.' },
+    0x80004004: { name: 'E_ABORT',                desc: 'Operation aborted before it completed.' },
+    0x80004005: { name: 'E_FAIL',                 desc: 'Unspecified failure. A catch-all for errors without a more specific HRESULT.' },
+    0x8000FFFF: { name: 'E_UNEXPECTED',           desc: 'Catastrophic failure. Usually indicates a programming error or corrupt state.' },
+    0x8007000E: { name: 'E_OUTOFMEMORY',          desc: 'The operation could not be completed because the system ran out of memory.' },
+    0x80070057: { name: 'E_INVALIDARG',           desc: 'One or more arguments are invalid.' },
+    0x80040110: { name: 'CLASS_E_NOAGGREGATION',  desc: 'This class cannot be aggregated.' },
+    0x800401F0: { name: 'CO_E_NOTINITIALIZED',    desc: 'COM was not initialised on this thread. Call CoInitialize(Ex) first.' },
+    0x80070005: { name: 'E_ACCESSDENIED',         desc: 'The caller does not have the required permissions.' }
+  };
+
+  var facilityNames = {
+    0: 'FACILITY_NULL',
+    1: 'FACILITY_RPC',
+    2: 'FACILITY_DISPATCH',
+    3: 'FACILITY_STORAGE',
+    4: 'FACILITY_ITF',
+    7: 'FACILITY_WIN32',
+    8: 'FACILITY_WINDOWS',
+    9: 'FACILITY_SECURITY'
+  };
+
+  var bitsEl   = document.getElementById('hr-bits');
+  var sevEl    = document.getElementById('hrf-sev');
+  var facEl    = document.getElementById('hrf-fac');
+  var codeEl   = document.getElementById('hrf-code');
+  var hexEl    = document.getElementById('hrf-hex');
+  var knownEl  = document.getElementById('hr-known');
+  var knownName= document.getElementById('hr-known-name');
+  var knownDesc= document.getElementById('hr-known-desc');
+  var input    = document.getElementById('hr-input');
+
+  function decode(val32) {
+    val32 = val32 >>> 0;
+    var sev  = (val32 >>> 31) & 1;
+    var res  = (val32 >>> 28) & 7;
+    var fac  = (val32 >>> 16) & 0xFFF;
+    var code = val32 & 0xFFFF;
+
+    // Build bit display
+    bitsEl.innerHTML = '';
+    for (var bit = 31; bit >= 0; bit--) {
+      var b = (val32 >>> bit) & 1;
+      var cls;
+      if (bit === 31)            cls = 'sev-'  + b;
+      else if (bit >= 28)        cls = 'res-'  + b;
+      else if (bit >= 16)        cls = 'fac-'  + b;
+      else                       cls = 'cod-'  + b;
+
+      var col = document.createElement('div');
+      col.className = 'hr-bit-col';
+      col.innerHTML =
+        '<div class="hr-bit-box ' + cls + '">' + b + '</div>' +
+        '<div class="hr-bit-num">' + bit + '</div>';
+      bitsEl.appendChild(col);
+    }
+
+    // Severity
+    sevEl.textContent = sev ? 'FAILURE' : 'SUCCESS';
+    sevEl.className = 'hr-field-val ' + (sev ? 'failure' : 'success');
+
+    // Facility
+    var facName = facilityNames.hasOwnProperty(fac) ? facilityNames[fac] : 'FACILITY_' + fac;
+    facEl.textContent = facName + ' (' + fac + ')';
+    facEl.className = 'hr-field-val';
+
+    // Code
+    codeEl.textContent = '0x' + code.toString(16).toUpperCase().padStart(4, '0') + ' (' + code + ')';
+    codeEl.className = 'hr-field-val';
+
+    // Full hex
+    hexEl.textContent = '0x' + val32.toString(16).toUpperCase().padStart(8, '0');
+    hexEl.className = 'hr-field-val';
+
+    // Known lookup
+    if (knownHR.hasOwnProperty(val32)) {
+      var k = knownHR[val32];
+      knownName.textContent = k.name;
+      knownDesc.textContent = k.desc;
+      knownEl.classList.add('show');
+    } else {
+      knownEl.classList.remove('show');
+    }
+  }
+
+  function tryDecode(raw) {
+    raw = raw.trim();
+    var val;
+    if (/^0x[0-9a-fA-F]+$/i.test(raw)) {
+      val = parseInt(raw, 16);
+    } else if (/^[0-9]+$/.test(raw)) {
+      val = parseInt(raw, 10);
+    } else {
+      return;
+    }
+    decode(val);
+  }
+
+  input.addEventListener('input', function() { tryDecode(input.value); });
+  document.getElementById('hr-decode-btn').addEventListener('click', function() { tryDecode(input.value); });
+
+  document.querySelectorAll('.hr-quick-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      input.value = btn.getAttribute('data-val');
+      tryDecode(input.value);
+    });
+  });
+
+  // Pre-load E_FAIL
+  input.value = '0x80004005';
+  tryDecode(input.value);
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   SECTION 5 — APARTMENT VISUALISER
+══════════════════════════════════════════════════════════════ */
+(function() {
+  var scenarios = {
+    'same-sta': {
+      leftType: 'STA', leftThread: 'Thread 1',
+      rightType: 'STA', rightThread: 'Thread 1 (same)',
+      proxyLabel: 'Direct', proxyBox: 'vtable call', marshal: false,
+      explain: 'Both the object and caller are in the <strong>same STA</strong> on the same thread. COM does not need to marshal anything &mdash; the call goes directly through the vtable pointer. No proxy, no window messages, no overhead. This is the fastest COM call path.'
+    },
+    'cross-sta': {
+      leftType: 'STA', leftThread: 'Thread 1 (object)',
+      rightType: 'STA', rightThread: 'Thread 2 (caller)',
+      proxyLabel: 'Proxy / Stub', proxyBox: 'Window message', marshal: true,
+      explain: 'The caller is on STA Thread 2 but the object lives in STA Thread 1. COM automatically uses a <strong>proxy/stub pair</strong>. The proxy packages (marshals) the call arguments into a window message, posts it to Thread 1\'s message queue, and blocks. Thread 1 must be pumping its message loop or the call will deadlock. The stub unpacks the message and makes the real vtable call.'
+    },
+    'mta-to-sta': {
+      leftType: 'STA', leftThread: 'Thread 1 (object)',
+      rightType: 'MTA', rightThread: 'MTA Thread (caller)',
+      proxyLabel: 'Proxy / Stub', proxyBox: 'Window message', marshal: true,
+      explain: '<strong style="color:var(--danger)">Deadlock risk.</strong> An MTA thread is calling an STA object. COM marshals the call via the STA\'s message queue. The STA thread must be actively pumping its message loop. If the STA thread is blocked waiting for the MTA thread (circular wait), a <strong style="color:var(--danger)">deadlock</strong> will occur. Design carefully to avoid bidirectional cross-apartment waits.'
+    },
+    'mta-same': {
+      leftType: 'MTA', leftThread: 'Thread A (object)',
+      rightType: 'MTA', rightThread: 'Thread B (caller)',
+      proxyLabel: 'Direct', proxyBox: 'vtable call', marshal: false,
+      explain: 'Both caller and object are in the <strong>MTA</strong>. COM allows direct vtable calls with no marshaling &mdash; no proxy needed. However, since multiple MTA threads can call the object concurrently, the object implementation <strong style="color:var(--danger)">must be thread-safe</strong>. Use critical sections, mutexes, or lock-free structures to protect shared state.'
+    }
+  };
+
+  var currentApt = 'same-sta';
+
+  function applyScenario(key) {
+    var s = scenarios[key];
+    document.getElementById('apt-left-type').textContent   = s.leftType;
+    document.getElementById('apt-left-thread').textContent = s.leftThread;
+    document.getElementById('apt-right-type').textContent  = s.rightType;
+    document.getElementById('apt-right-thread').textContent = s.rightThread;
+    document.getElementById('apt-proxy-label').textContent = s.proxyLabel;
+    document.getElementById('apt-proxy-box').textContent   = s.proxyBox;
+    document.getElementById('apt-explain').innerHTML        = s.explain;
+
+    var arrow = document.getElementById('apt-arrow');
+    var proxy = document.getElementById('apt-proxy-box');
+    if (s.marshal) {
+      arrow.classList.add('marshal');
+      proxy.classList.add('active-marshal');
+    } else {
+      arrow.classList.remove('marshal');
+      proxy.classList.remove('active-marshal');
+    }
+
+    document.querySelectorAll('[data-apt]').forEach(function(btn) {
+      btn.className = btn.getAttribute('data-apt') === key ? 'btn btn-primary' : 'btn btn-outline';
+    });
+  }
+
+  document.querySelectorAll('[data-apt]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      currentApt = btn.getAttribute('data-apt');
+      applyScenario(currentApt);
+    });
+  });
+
+  applyScenario(currentApt);
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   SECTION 6 — QUIZ
+══════════════════════════════════════════════════════════════ */
+(function() {
+  var questions = [
+    {
+      q: 'What does QueryInterface() return if the object does NOT support the requested interface?',
+      opts: [
+        'E_NOINTERFACE and sets the output pointer to NULL',
+        'S_FALSE to indicate soft failure',
+        'E_FAIL with an undefined output pointer',
+        'Throws a C++ exception'
+      ],
+      correct: 0,
+      explain: 'QueryInterface must set the output pointer to NULL and return E_NOINTERFACE when the interface is unsupported. This is a strict COM contract that callers rely on.'
+    },
+    {
+      q: 'What is the return value of AddRef() legitimately useful for?',
+      opts: [
+        'Diagnostics only — never use it to make lifetime decisions',
+        'Determining when the object will be destroyed',
+        'Synchronising threads that share the same pointer',
+        'Checking whether IUnknown is supported'
+      ],
+      correct: 0,
+      explain: 'AddRef() returns the new refcount, but the COM spec says this value is for diagnostic/debugging purposes only. You must never branch on it to decide whether an object is still alive.'
+    },
+    {
+      q: 'A COM object implements IShape and IDrawable. How many vptrs are in a single instance?',
+      opts: [
+        '2 (one per implemented interface)',
+        '1 (COM always uses a single vtable)',
+        '3 (IUnknown, IShape, IDrawable)',
+        'Depends on the compiler settings'
+      ],
+      correct: 0,
+      explain: 'Each interface implemented via C++ multiple inheritance adds one vptr to the object. IShape and IDrawable each add one, so a CShape object that implements both has exactly two vptr fields at offsets +0x00 and +0x08.'
+    },
+    {
+      q: 'Which COM method is contractually required to call AddRef on the pointer it returns?',
+      opts: [
+        'QueryInterface',
+        'AddRef itself',
+        'Release',
+        'CoCreateInstance (only the factory, not the interface)'
+      ],
+      correct: 0,
+      explain: 'The COM rules require QueryInterface to call AddRef on the returned interface pointer before handing it to the caller. The caller is then responsible for calling Release when done. CoCreateInstance also AddRefs, but that is its factory behaviour, not a general rule.'
+    },
+    {
+      q: 'What happens when an object\'s reference count reaches zero?',
+      opts: [
+        'The object calls delete this to free itself',
+        'The garbage collector reclaims it on the next GC cycle',
+        'It is returned to the class factory\'s object pool',
+        'It waits until CoUninitialize() is called'
+      ],
+      correct: 0,
+      explain: 'When Release() decrements the refcount to zero, the implementation must destroy itself, typically with delete this. COM has no garbage collector and no pool — the reference count IS the ownership model.'
+    },
+    {
+      q: 'What is FACILITY_ITF (facility code 4) used for?',
+      opts: [
+        'Interface-specific error codes defined by the interface designer',
+        'General Win32 API error codes',
+        'COM+ runtime infrastructure errors',
+        'DirectX and multimedia errors'
+      ],
+      correct: 0,
+      explain: 'FACILITY_ITF (4) is reserved for interface-specific HRESULTs. When you define a custom COM interface, your custom error codes should use MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, your_code). The code field is meaningful only in the context of that specific interface.'
+    },
+    {
+      q: 'What does CoInitializeEx(NULL, COINIT_MULTITHREADED) do?',
+      opts: [
+        'Joins the current thread to the Multi-Threaded Apartment (MTA)',
+        'Creates a new Single-Threaded Apartment for this thread',
+        'Creates a Neutral-Threaded Apartment',
+        'Creates a Free-Threaded Apartment separate from the MTA'
+      ],
+      correct: 0,
+      explain: 'COINIT_MULTITHREADED joins the current thread to the process-wide MTA. There is only one MTA per process; multiple threads can join it. MTA threads can call MTA objects directly without marshaling, but the objects must be thread-safe.'
+    },
+    {
+      q: 'Which interface must every COM object implement?',
+      opts: [
+        'IUnknown',
+        'IDispatch',
+        'IPersist',
+        'IClassFactory'
+      ],
+      correct: 0,
+      explain: 'IUnknown is the root of all COM interfaces. It provides QueryInterface (interface discovery), AddRef, and Release (lifetime management). Every COM interface inherits from IUnknown, and every COM object must implement it.'
+    },
+    {
+      q: 'What is the primary purpose of IDispatch?',
+      opts: [
+        'Late-binding automation for scripting clients such as VBScript or PowerShell',
+        'Early-binding vtable calls for maximum performance',
+        'Managing apartment threads and message loops',
+        'Providing type-safe QueryInterface with GUID validation'
+      ],
+      correct: 0,
+      explain: 'IDispatch enables late binding: a scripting host can call Invoke() with a dispatch ID (DISPID) and VARIANT arguments without knowing the interface at compile time. This is the basis for COM automation used by Office macros, VBScript, and legacy scripting engines.'
+    },
+    {
+      q: 'An STA object lives on Thread A. Thread B (also an STA) wants to call it. What must happen?',
+      opts: [
+        'Thread B must use a COM proxy, which routes the call through Thread A\'s message loop',
+        'Thread B can call it directly via the raw interface pointer',
+        'Thread B must call CoInitialize() again before using the pointer',
+        'The object must be moved to the MTA before cross-thread calls'
+      ],
+      correct: 0,
+      explain: 'STA objects are apartment-affine. A call from a different STA must go through the proxy/stub infrastructure. The proxy marshals the call arguments into a window message posted to Thread A\'s queue. Thread A must be pumping its message loop or the call will block forever.'
+    },
+    {
+      q: 'What does S_FALSE (0x00000001) indicate?',
+      opts: [
+        'A successful operation with a semantically false or empty result; interpretation is method-specific',
+        'A partial failure that can be retried',
+        'The server is shutting down gracefully',
+        '0x00000001 is not a valid HRESULT value'
+      ],
+      correct: 0,
+      explain: 'S_FALSE has severity bit 0 (success) but code = 1. Many COM methods use it to mean "succeeded, but the result is logically false or empty" — for example, IEnumXxx::Next returns S_FALSE when there are no more elements. Always check the specific method documentation.'
+    },
+    {
+      q: 'You just called Release() on an interface pointer. What should you do immediately?',
+      opts: [
+        'Set the pointer to NULL to prevent accidental use-after-release',
+        'Call AddRef() to verify the object is still alive',
+        'Check the returned refcount and release again if it is still > 0',
+        'Call QueryInterface() to get a fresh copy of the pointer'
+      ],
+      correct: 0,
+      explain: 'Setting the pointer to NULL after Release() is a critical safety habit. After Release, the pointer may be invalid (if it was the last reference). A NULL pointer will cause an immediate, obvious crash rather than silent memory corruption or a use-after-free security bug.'
+    },
+    {
+      q: 'What is COM object aggregation?',
+      opts: [
+        'An inner object delegates IUnknown to an outer object so its interfaces appear as the outer object\'s own',
+        'Multiple objects sharing the same CLSID in the registry',
+        'Combining vtables from two objects at runtime',
+        'Creating a COM object without going through CoCreateInstance'
+      ],
+      correct: 0,
+      explain: 'Aggregation is a COM composition pattern. The outer object creates the inner object passing its own IUnknown as the "controlling unknown". The inner object\'s QI/AddRef/Release delegate to the outer, so clients see a single unified object that exposes interfaces from both inner and outer.'
+    },
+    {
+      q: 'What is CoMarshalInterfaceInStream() used for?',
+      opts: [
+        'Packaging an interface pointer into a stream so it can be safely transferred across apartment boundaries',
+        'Serialising the full object state to a disk file for persistence',
+        'Compressing vtable entries to reduce memory usage',
+        'Converting a raw C++ pointer to a smart ComPtr'
+      ],
+      correct: 0,
+      explain: 'CoMarshalInterfaceInStream packages a proxy for an interface pointer into an IStream. The stream can then be passed to another thread or apartment, which calls CoGetInterfaceAndReleaseStream to unmarshal it and get a valid, apartment-correct proxy. This is the canonical way to transfer interface pointers across apartment boundaries.'
+    },
+    {
+      q: 'What does CLSCTX_INPROC_SERVER mean in a CoCreateInstance call?',
+      opts: [
+        'Create the object inside the calling process, loaded from a DLL',
+        'Create the object in a separate server process via DCOM',
+        'Create the object inside a Windows Service',
+        'Create the object on a remote machine via RPC'
+      ],
+      correct: 0,
+      explain: 'CLSCTX_INPROC_SERVER tells COM to load the class from an in-process server (a DLL). The DLL is mapped into the calling process\'s address space. This is the fastest activation context because there is no IPC overhead. CLSCTX_LOCAL_SERVER uses an out-of-process EXE; CLSCTX_REMOTE_SERVER goes across the network.'
+    }
+  ];
+
+  var current = 0;
+  var score   = 0;
+  var answered = false;
+
+  var progressEl  = document.getElementById('quiz-progress');
+  var questionEl  = document.getElementById('quiz-question');
+  var optionsEl   = document.getElementById('quiz-options');
+  var explainEl   = document.getElementById('quiz-explanation');
+  var nextBtn     = document.getElementById('quiz-next');
+  var resultsEl   = document.getElementById('quiz-results');
+  var areaEl      = document.getElementById('quiz-area');
+  var scoreBig    = document.getElementById('quiz-score-big');
+  var scoreLabel  = document.getElementById('quiz-score-label');
+  var restartBtn  = document.getElementById('quiz-restart');
+
+  function renderQuestion() {
+    answered = false;
+    var q = questions[current];
+    progressEl.textContent = 'Question ' + (current + 1) + ' of ' + questions.length;
+    questionEl.textContent = q.q;
+    explainEl.classList.remove('show');
+    explainEl.innerHTML = '';
+    nextBtn.style.display = 'none';
+
+    optionsEl.innerHTML = '';
+    q.opts.forEach(function(opt, i) {
+      var btn = document.createElement('button');
+      btn.className = 'quiz-opt-btn';
+      btn.textContent = opt;
+      btn.addEventListener('click', function() {
+        if (answered) return;
+        answered = true;
+        var correct = q.correct;
+        var allBtns = optionsEl.querySelectorAll('.quiz-opt-btn');
+        allBtns.forEach(function(b) { b.disabled = true; });
+        if (i === correct) {
+          btn.classList.add('correct');
+          score++;
+        } else {
+          btn.classList.add('wrong');
+          allBtns[correct].classList.add('reveal-correct');
+        }
+        explainEl.innerHTML = q.explain;
+        explainEl.classList.add('show');
+        nextBtn.style.display = (current < questions.length - 1) ? 'inline-block' : 'none';
+        if (current === questions.length - 1) {
+          // Show finish button
+          nextBtn.textContent = 'See Results';
+          nextBtn.style.display = 'inline-block';
+        }
+      });
+      optionsEl.appendChild(btn);
+    });
+  }
+
+  nextBtn.addEventListener('click', function() {
+    if (current < questions.length - 1) {
+      current++;
+      nextBtn.textContent = 'Next Question ▶';
+      renderQuestion();
+    } else {
+      // Show results
+      areaEl.style.display = 'none';
+      resultsEl.classList.add('show');
+      scoreBig.textContent = score + ' / ' + questions.length;
+      var pct = Math.round((score / questions.length) * 100);
+      var label;
+      if (pct >= 90)      label = 'Excellent! You know your COM.';
+      else if (pct >= 70) label = 'Good work! A few gaps to fill.';
+      else if (pct >= 50) label = 'Not bad, but review the sections above.';
+      else                label = 'Keep studying &mdash; the interactive sections will help!';
+      scoreLabel.innerHTML = pct + '% &mdash; ' + label;
+    }
+  });
+
+  restartBtn.addEventListener('click', function() {
+    current = 0;
+    score   = 0;
+    answered = false;
+    areaEl.style.display = 'block';
+    resultsEl.classList.remove('show');
+    nextBtn.textContent = 'Next Question ▶';
+    renderQuestion();
+  });
+
+  renderQuestion();
+})();
+
+</script>
+</body>
+</html>
