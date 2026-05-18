@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="midnight">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>Memory Attacks | BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<style>
+body { padding-top: 1.25rem; }
+
+.ma-container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+}
+
+.ma-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.ma-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.ma-subtitle { color: var(--muted); font-size: 0.85rem; }
+
+/* Section nav */
+.section-nav {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.sec-btn {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--card-border);
+  background: var(--card);
+  color: var(--subtle);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+.sec-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--bg2);
+  box-shadow: 0 0 8px var(--glow);
+}
+.sec-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+.atk-section { display: none; }
+.atk-section.active { display: block; }
+
+.ma-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.ma-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.75rem 0;
+}
+.ma-card p {
+  font-size: 0.85rem;
+  color: var(--subtle);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Memory Grid ─────────────────────────────────────────── */
+.mem-grid {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+.mem-cell {
+  display: grid;
+  grid-template-columns: 120px 160px 1fr;
+  align-items: center;
+  border-bottom: 1px solid var(--card-border);
+  transition: background 0.4s, border-left-color 0.4s, color 0.4s;
+  border-left: 4px solid transparent;
+}
+.mem-cell:last-child { border-bottom: none; }
+.mem-cell .mc-addr { padding: 0.35rem 0.6rem; color: var(--muted); }
+.mem-cell .mc-label { padding: 0.35rem 0.6rem; color: var(--subtle); font-size: 0.75rem; }
+.mem-cell .mc-val { padding: 0.35rem 0.6rem; font-weight: 600; color: var(--text); }
+
+.mem-cell.normal      { background: transparent; border-left-color: transparent; }
+.mem-cell.buffer      { background: rgba(34,197,94,0.08);   border-left-color: var(--success); }
+.mem-cell.buffer .mc-val { color: var(--success); }
+.mem-cell.overflow    { background: rgba(251,191,36,0.12);  border-left-color: #f59e0b; }
+.mem-cell.overflow .mc-val { color: #f59e0b; }
+.mem-cell.corrupted   { background: rgba(239,68,68,0.14);   border-left-color: var(--danger); animation: pulse-bad 0.6s ease; }
+.mem-cell.corrupted .mc-val { color: var(--danger); }
+.mem-cell.hijacked    { background: rgba(168,85,247,0.18);  border-left-color: #a855f7; animation: pulse-bad 0.6s ease; }
+.mem-cell.hijacked .mc-val { color: #a855f7; font-weight: 800; }
+.mem-cell.freed       { background: rgba(148,163,184,0.1);  border-left-color: var(--muted); }
+.mem-cell.freed .mc-val { color: var(--muted); font-style: italic; }
+.mem-cell.reallocated { background: rgba(251,146,60,0.12);  border-left-color: #f97316; }
+.mem-cell.reallocated .mc-val { color: #f97316; }
+.mem-cell.attacker    { background: rgba(239,68,68,0.2);    border-left-color: var(--danger); }
+.mem-cell.attacker .mc-val { color: var(--danger); font-weight: 800; }
+.mem-cell.safe        { background: rgba(34,197,94,0.05);   border-left-color: var(--success); }
+.mem-cell.safe .mc-val { color: var(--success); }
+
+.mem-cell .mc-label .label-tag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  color: var(--muted);
+  margin-left: 0.4rem;
+}
+
+.mem-divider {
+  background: var(--bg2);
+  border-bottom: 2px dashed var(--card-border);
+  padding: 0.25rem 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+@keyframes pulse-bad {
+  0%   { box-shadow: 0 0 0 0 rgba(239,68,68,.5); }
+  70%  { box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+  100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+}
+
+/* ── Legend ─────────────────────────────────────────────── */
+.mem-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+  line-height: 1.5;
+}
+.leg-item { display: flex; align-items: center; gap: 0.3rem; }
+.leg-swatch {
+  width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0;
+}
+.leg-green   { background: rgba(34,197,94,0.55); }
+.leg-yellow  { background: rgba(251,191,36,0.6); }
+.leg-red     { background: rgba(239,68,68,0.6); }
+.leg-purple  { background: rgba(168,85,247,0.6); }
+.leg-grey    { background: rgba(148,163,184,0.45); }
+.leg-orange  { background: rgba(251,146,60,0.6); }
+
+/* ── Attack layout ──────────────────────────────────────── */
+.attack-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+.attack-left  { display: flex; flex-direction: column; gap: 0.75rem; }
+.attack-right { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.code-panel {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  line-height: 1.8;
+  overflow-x: auto;
+}
+.code-line {
+  display: block;
+  padding: 0 0.25rem;
+  border-radius: 3px;
+  border-left: 3px solid transparent;
+  transition: background 0.2s, border-color 0.2s;
+  white-space: pre;
+}
+.code-line.active      { background: rgba(129,140,248,0.13); border-left-color: var(--accent); }
+.code-line.danger-line { background: rgba(239,68,68,0.1);    border-left-color: var(--danger); }
+
+.kw { color: var(--accent); }
+.fn { color: var(--accent2); }
+.cm { color: var(--muted); font-style: italic; }
+.nm { color: var(--success); }
+.ty { color: #f59e0b; }
+
+.step-nav { display: flex; align-items: center; gap: 0.75rem; }
+.step-counter { flex: 1; text-align: center; font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+.btn-sm { padding: 0.3rem 0.85rem; font-size: 0.78rem; }
+
+.step-explain {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.83rem;
+  color: var(--subtle);
+  line-height: 1.6;
+  min-height: 80px;
+}
+.step-explain code {
+  background: var(--bg2);
+  border-radius: 3px;
+  padding: 0.1rem 0.3rem;
+  font-family: 'Courier New', monospace;
+  color: var(--accent2);
+  font-size: 0.88em;
+}
+
+.impact-box {
+  background: rgba(239,68,68,0.1);
+  border: 1.5px solid var(--danger);
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.impact-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--danger);
+  white-space: nowrap;
+}
+.impact-text { font-size: 0.82rem; color: var(--text); }
+
+.mitigation-box {
+  background: rgba(34,197,94,0.08);
+  border: 1px solid var(--success);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-top: 0.75rem;
+}
+.mit-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--success);
+  margin-bottom: 0.4rem;
+}
+.mit-list {
+  font-size: 0.8rem;
+  color: var(--subtle);
+  line-height: 1.7;
+  padding-left: 1.1rem;
+  margin: 0;
+}
+.mit-list code {
+  background: var(--bg2);
+  border-radius: 3px;
+  padding: 0.1rem 0.3rem;
+  font-family: 'Courier New', monospace;
+  color: var(--accent2);
+  font-size: 0.88em;
+}
+
+/* dangling pointer badge */
+.dangling-badge {
+  display: inline-block;
+  background: rgba(239,68,68,0.15);
+  border: 1px solid var(--danger);
+  border-radius: 6px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--danger);
+  font-family: 'Courier New', monospace;
+  margin-bottom: 0.5rem;
+  display: none;
+}
+.dangling-badge.show { display: inline-block; }
+
+/* ── TOCTOU Timeline ────────────────────────────────────── */
+.timeline-wrap { position: relative; margin-bottom: 1rem; }
+.timeline-grid {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: 0;
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+}
+.tl-col-header {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 2px solid var(--card-border);
+  text-align: center;
+  background: var(--bg2);
+}
+.tl-col-victim  { color: var(--accent);  border-right: 1px solid var(--card-border); }
+.tl-col-time    { color: var(--muted);   border-right: 1px solid var(--card-border); }
+.tl-col-atk     { color: var(--danger); }
+
+.tl-event {
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px dashed var(--card-border);
+  font-size: 0.78rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  transition: background 0.3s, opacity 0.3s;
+}
+.tl-event:last-child { border-bottom: none; }
+.tl-event.dimmed { opacity: 0.25; }
+.tl-event.active { background: rgba(129,140,248,0.1); }
+.tl-event.active-danger { background: rgba(239,68,68,0.12); }
+.tl-event.race-window { background: rgba(239,68,68,0.07); }
+.tl-time-cell {
+  padding: 0.45rem 0;
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--muted);
+  border-bottom: 1px dashed var(--card-border);
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--card-border);
+}
+.tl-time-cell:last-child { border-bottom: none; }
+.tl-time-cell.race { background: rgba(239,68,68,0.08); }
+.race-badge {
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--danger);
+}
+
+/* ── Data Race ──────────────────────────────────────────── */
+.race-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.race-thread {
+  background: var(--bg2);
+  border: 1.5px solid var(--card-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.race-thread-header {
+  padding: 0.5rem 0.85rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--card-border);
+}
+.race-thread-header.t1 { color: var(--accent); }
+.race-thread-header.t2 { color: var(--accent2); }
+.race-reg-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0.85rem;
+  border-bottom: 1px solid var(--card-border);
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+}
+.race-reg-row:last-child { border-bottom: none; }
+.reg-name { color: var(--muted); }
+.reg-val { font-weight: 700; color: var(--text); transition: color 0.3s; }
+.reg-val.changed { color: var(--accent); }
+.reg-val.danger  { color: var(--danger); }
+
+.shared-mem-box {
+  background: var(--card);
+  border: 1.5px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.85rem 1.25rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s;
+}
+.shared-var-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+.shared-var-val {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+  transition: color 0.3s;
+}
+.shared-var-val.wrong   { color: var(--danger); }
+.shared-var-val.correct { color: var(--success); }
+.expected-label { font-size: 0.72rem; color: var(--muted); margin-top: 0.25rem; }
+
+/* ── Quiz ───────────────────────────────────────────────── */
+.quiz-progress {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+.quiz-q-wrap { margin-bottom: 0.5rem; }
+.q-number {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.q-text {
+  font-size: 1rem;
+  line-height: 1.65;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  color: var(--text);
+}
+.answer-correct {
+  background: rgba(34,197,94,0.12) !important;
+  border-color: var(--success) !important;
+  color: var(--success) !important;
+}
+.answer-wrong {
+  background: rgba(239,68,68,0.12) !important;
+  border-color: var(--danger) !important;
+  color: var(--danger) !important;
+}
+.quiz-feedback {
+  margin-top: 0.75rem;
+  font-size: 0.83rem;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct { background: rgba(34,197,94,0.1); border: 1px solid var(--success); color: var(--success); }
+.quiz-feedback.wrong   { background: rgba(239,68,68,0.1);  border: 1px solid var(--danger);  color: #fca5a5; }
+.quiz-nav { display: flex; gap: 0.75rem; margin-top: 1rem; align-items: center; flex-wrap: wrap; }
+.quiz-score-box {
+  text-align: center;
+  padding: 2rem;
+  display: none;
+}
+.quiz-score-box.show { display: block; }
+.score-big {
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.score-label { font-size: 1rem; color: var(--muted); margin-bottom: 1.5rem; }
+
+/* Responsive */
+@media (max-width: 700px) {
+  .attack-wrap { grid-template-columns: 1fr; }
+  .mem-cell { grid-template-columns: 90px 120px 1fr; }
+  .race-wrap { grid-template-columns: 1fr; }
+  .timeline-grid { grid-template-columns: 1fr 60px 1fr; }
+}
+@media (max-width: 480px) {
+  .mem-cell { grid-template-columns: 80px 1fr; }
+  .mc-label { display: none; }
+  .timeline-grid { grid-template-columns: 1fr 50px 1fr; }
+  .tl-event { font-size: 0.7rem; padding: 0.35rem 0.4rem; }
+}
+</style>
+</head>
+<body>
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="midnight" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="ma-container">
+
+  <div class="ma-header">
+    <a href="index.html#learn" class="logo-wrap" style="text-decoration:none;color:inherit;flex-direction:row;gap:.5rem;">
+      <span style="font-size:1.3rem;">&#128128;</span>
+      <span style="font-size:1rem;font-weight:800;color:var(--subtle);">BrainStuffer</span>
+    </a>
+    <div>
+      <div class="ma-title">Memory Attacks</div>
+      <div class="ma-subtitle">Stack overflow, heap corruption, UAF, TOCTOU, data races — interactive step-by-step</div>
+    </div>
+  </div>
+
+  <!-- Section nav -->
+  <div class="section-nav" id="secNav">
+    <button class="sec-btn active" data-sec="bof">Buffer Overflow</button>
+    <button class="sec-btn" data-sec="heap">Heap Overflow</button>
+    <button class="sec-btn" data-sec="uaf">Use-After-Free</button>
+    <button class="sec-btn" data-sec="toctou">TOCTOU</button>
+    <button class="sec-btn" data-sec="race">Data Race</button>
+    <button class="sec-btn" data-sec="quiz">Quiz</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 1: Buffer Overflow                                  -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="atk-section active" id="sec-bof">
+    <div class="ma-card">
+      <h3>Stack Buffer Overflow</h3>
+      <p>Write past the end of a stack-allocated buffer to overwrite the return address (RIP/EIP) and redirect execution to attacker-controlled code. The classic vulnerability — enabled by unsafe string functions like <code>strcpy</code> that perform no bounds checking.</p>
+    </div>
+
+    <div class="attack-wrap">
+      <div class="attack-left">
+        <div class="code-panel" id="code-bof">
+          <span class="code-line" id="bof-L0"><span class="kw">#include</span> &lt;string.h&gt;</span>
+          <span class="code-line" id="bof-L1"><span class="kw">#include</span> &lt;stdio.h&gt;</span>
+          <span class="code-line" id="bof-L2"></span>
+          <span class="code-line" id="bof-L3"><span class="ty">void</span> <span class="fn">vulnerable</span>(<span class="ty">char</span> *input) {</span>
+          <span class="code-line" id="bof-L4">    <span class="ty">char</span> buf[<span class="nm">8</span>];</span>
+          <span class="code-line" id="bof-L5">    <span class="fn">strcpy</span>(buf, input);  <span class="cm">// no bounds check!</span></span>
+          <span class="code-line" id="bof-L6">    <span class="fn">printf</span>(<span class="nm">"Hello, %s\n"</span>, buf);</span>
+          <span class="code-line" id="bof-L7">}</span>
+          <span class="code-line" id="bof-L8"></span>
+          <span class="code-line" id="bof-L9"><span class="ty">int</span> <span class="fn">main</span>() {</span>
+          <span class="code-line" id="bof-L10">    <span class="cm">// Safe call</span></span>
+          <span class="code-line" id="bof-L11">    <span class="fn">vulnerable</span>(<span class="nm">"Alice"</span>);</span>
+          <span class="code-line" id="bof-L12">    <span class="cm">// Attack: 24 bytes overwrites RIP</span></span>
+          <span class="code-line" id="bof-L13">    <span class="fn">vulnerable</span>(<span class="nm">"AAAAAAAA" "BBBBBBBB" "\x41\x13\x40"</span>);</span>
+          <span class="code-line" id="bof-L14">}</span>
+        </div>
+        <div class="step-nav">
+          <button class="btn btn-outline btn-sm" id="prev-bof" disabled>&#8592; Prev</button>
+          <span class="step-counter" id="counter-bof">Step 1 / 7</span>
+          <button class="btn btn-primary btn-sm" id="next-bof">Next &#8594;</button>
+        </div>
+        <div class="step-explain" id="explain-bof">Loading...</div>
+        <div class="mitigation-box" id="mit-bof" style="display:none">
+          <div class="mit-label">Mitigations</div>
+          <ul class="mit-list">
+            <li><code>-fstack-protector-all</code> &mdash; stack canary inserted by GCC/Clang</li>
+            <li>ASLR &mdash; randomises stack, heap, and library base addresses each run</li>
+            <li>NX bit / DEP &mdash; marks the stack non-executable (no shellcode on stack)</li>
+            <li>Replace <code>strcpy</code> with <code>strncpy</code>, <code>strlcpy</code>, or <code>snprintf</code></li>
+          </ul>
+        </div>
+      </div>
+      <div class="attack-right">
+        <div class="mem-legend">
+          <span class="leg-item"><span class="leg-swatch leg-green"></span>in-bounds write</span>
+          <span class="leg-item"><span class="leg-swatch leg-yellow"></span>overflow</span>
+          <span class="leg-item"><span class="leg-swatch leg-red"></span>corrupted</span>
+          <span class="leg-item"><span class="leg-swatch leg-purple"></span>hijacked</span>
+          <span class="leg-item"><span class="leg-swatch leg-grey"></span>freed</span>
+          <span class="leg-item"><span class="leg-swatch leg-orange"></span>reallocated</span>
+        </div>
+        <div class="mem-grid" id="grid-bof">
+          <!-- High address at top, low address at bottom -->
+          <div class="mem-cell normal" id="bof-c0"><span class="mc-addr">0x7fff_ffc8</span><span class="mc-label">Return Addr (RIP)<span class="label-tag">RIP</span></span><span class="mc-val">0x0040_1234</span></div>
+          <div class="mem-cell normal" id="bof-c1"><span class="mc-addr">0x7fff_ffc0</span><span class="mc-label">Saved RBP<span class="label-tag">RBP</span></span><span class="mc-val">0x7fff_ffd0</span></div>
+          <div class="mem-cell normal" id="bof-c2"><span class="mc-addr">0x7fff_ffbf</span><span class="mc-label">buf[7]</span><span class="mc-val">0x00</span></div>
+          <div class="mem-cell normal" id="bof-c3"><span class="mc-addr">0x7fff_ffbe</span><span class="mc-label">buf[6]</span><span class="mc-val">0x00</span></div>
+          <div class="mem-cell normal" id="bof-c4"><span class="mc-addr">0x7fff_ffbd</span><span class="mc-label">buf[5]</span><span class="mc-val">0x00</span></div>
+          <div class="mem-cell normal" id="bof-c5"><span class="mc-addr">0x7fff_ffbc</span><span class="mc-label">buf[4]</span><span class="mc-val">0x00</span></div>
+          <div class="mem-cell normal" id="bof-c6"><span class="mc-addr">0x7fff_ffbb</span><span class="mc-label">buf[3]</span><span class="mc-val">0x00</span></div>
+          <div class="mem-cell normal" id="bof-c7"><span class="mc-addr">0x7fff_ffba</span><span class="mc-label">buf[2]</span><span class="mc-val">0x00</span></div>
+          <div class="mem-cell normal" id="bof-c8"><span class="mc-addr">0x7fff_ffb9</span><span class="mc-label">buf[1]</span><span class="mc-val">0x00</span></div>
+          <div class="mem-cell normal" id="bof-c9"><span class="mc-addr">0x7fff_ffb8</span><span class="mc-label">buf[0] <span class="label-tag">RSP</span></span><span class="mc-val">0x00</span></div>
+        </div>
+        <div class="impact-box" id="impact-bof" style="display:none">
+          <span class="impact-label">&#9888; Impact</span>
+          <span class="impact-text" id="impact-bof-text">Attacker controls RIP &mdash; arbitrary code execution</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 2: Heap Overflow                                    -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="atk-section" id="sec-heap">
+    <div class="ma-card">
+      <h3>Heap Buffer Overflow</h3>
+      <p>Overflowing a heap-allocated buffer corrupts the malloc chunk metadata of adjacent allocations. By crafting fake size/prev_size fields, an attacker can manipulate the allocator during a subsequent <code>free()</code> into performing an arbitrary write to any memory address.</p>
+    </div>
+
+    <div class="attack-wrap">
+      <div class="attack-left">
+        <div class="code-panel" id="code-heap">
+          <span class="code-line" id="heap-L0"><span class="kw">#include</span> &lt;stdlib.h&gt;</span>
+          <span class="code-line" id="heap-L1"><span class="kw">#include</span> &lt;string.h&gt;</span>
+          <span class="code-line" id="heap-L2"></span>
+          <span class="code-line" id="heap-L3"><span class="ty">int</span> <span class="fn">main</span>() {</span>
+          <span class="code-line" id="heap-L4">    <span class="ty">char</span> *a = <span class="fn">malloc</span>(<span class="nm">32</span>);  <span class="cm">// chunk A</span></span>
+          <span class="code-line" id="heap-L5">    <span class="ty">char</span> *b = <span class="fn">malloc</span>(<span class="nm">32</span>);  <span class="cm">// chunk B</span></span>
+          <span class="code-line" id="heap-L6"></span>
+          <span class="code-line" id="heap-L7">    <span class="cm">// Overflow: 48 bytes into 32-byte chunk</span></span>
+          <span class="code-line" id="heap-L8">    <span class="fn">memcpy</span>(a, attacker_data, <span class="nm">32</span>);  <span class="cm">// safe</span></span>
+          <span class="code-line" id="heap-L9">    <span class="fn">memcpy</span>(a, attacker_data, <span class="nm">48</span>);  <span class="cm">// overflow!</span></span>
+          <span class="code-line" id="heap-L10"></span>
+          <span class="code-line" id="heap-L11">    <span class="fn">free</span>(b);   <span class="cm">// uses corrupted metadata</span></span>
+          <span class="code-line" id="heap-L12">    <span class="fn">malloc</span>(<span class="nm">8</span>); <span class="cm">// arbitrary write primitive</span></span>
+          <span class="code-line" id="heap-L13">}</span>
+        </div>
+        <div class="step-nav">
+          <button class="btn btn-outline btn-sm" id="prev-heap" disabled>&#8592; Prev</button>
+          <span class="step-counter" id="counter-heap">Step 1 / 6</span>
+          <button class="btn btn-primary btn-sm" id="next-heap">Next &#8594;</button>
+        </div>
+        <div class="step-explain" id="explain-heap">Loading...</div>
+        <div class="mitigation-box" id="mit-heap" style="display:none">
+          <div class="mit-label">Mitigations</div>
+          <ul class="mit-list">
+            <li>Safe unlinking checks &mdash; glibc 2.17+ validates fd/bk pointer integrity</li>
+            <li>Heap canaries &mdash; glibc 2.26+ tcache stores a secret cookie per chunk</li>
+            <li><code>-fsanitize=address</code> &mdash; AddressSanitizer detects OOB writes at runtime</li>
+            <li>ASLR + PIE &mdash; randomises heap base address each run</li>
+            <li>Hardened allocators &mdash; jemalloc, tcmalloc add extra integrity checks</li>
+          </ul>
+        </div>
+      </div>
+      <div class="attack-right">
+        <div class="mem-legend">
+          <span class="leg-item"><span class="leg-swatch leg-green"></span>in-bounds write</span>
+          <span class="leg-item"><span class="leg-swatch leg-yellow"></span>overflow</span>
+          <span class="leg-item"><span class="leg-swatch leg-red"></span>corrupted</span>
+          <span class="leg-item"><span class="leg-swatch leg-purple"></span>hijacked</span>
+        </div>
+        <div class="mem-grid" id="grid-heap">
+          <div class="mem-cell normal" id="heap-c0"><span class="mc-addr">0x601000</span><span class="mc-label">A: prev_size<span class="label-tag">meta</span></span><span class="mc-val">0x0000_0000_0000_0000</span></div>
+          <div class="mem-cell normal" id="heap-c1"><span class="mc-addr">0x601008</span><span class="mc-label">A: size+flags<span class="label-tag">meta</span></span><span class="mc-val">0x0000_0000_0000_0031</span></div>
+          <div class="mem-cell normal" id="heap-c2"><span class="mc-addr">0x601010</span><span class="mc-label">A: data[0..7]</span><span class="mc-val">0x00000000_00000000</span></div>
+          <div class="mem-cell normal" id="heap-c3"><span class="mc-addr">0x601018</span><span class="mc-label">A: data[8..15]</span><span class="mc-val">0x00000000_00000000</span></div>
+          <div class="mem-cell normal" id="heap-c4"><span class="mc-addr">0x601020</span><span class="mc-label">A: data[16..23]</span><span class="mc-val">0x00000000_00000000</span></div>
+          <div class="mem-cell normal" id="heap-c5"><span class="mc-addr">0x601028</span><span class="mc-label">A: data[24..31]</span><span class="mc-val">0x00000000_00000000</span></div>
+          <div class="mem-divider" id="heap-div">&#8212; Chunk B starts here &#8212;</div>
+          <div class="mem-cell normal" id="heap-c6"><span class="mc-addr">0x601030</span><span class="mc-label">B: prev_size<span class="label-tag">meta</span></span><span class="mc-val">0x0000_0000_0000_0030</span></div>
+          <div class="mem-cell normal" id="heap-c7"><span class="mc-addr">0x601038</span><span class="mc-label">B: size+flags<span class="label-tag">meta</span></span><span class="mc-val">0x0000_0000_0000_0031</span></div>
+          <div class="mem-cell normal" id="heap-c8"><span class="mc-addr">0x601040</span><span class="mc-label">B: data[0..7]</span><span class="mc-val">0x00000000_00000000</span></div>
+          <div class="mem-cell normal" id="heap-c9"><span class="mc-addr">0x601048</span><span class="mc-label">B: data[8..15]</span><span class="mc-val">0x00000000_00000000</span></div>
+          <div class="mem-cell normal" id="heap-c10"><span class="mc-addr">0x601050</span><span class="mc-label">B: data[16..23]</span><span class="mc-val">0x00000000_00000000</span></div>
+          <div class="mem-cell normal" id="heap-c11"><span class="mc-addr">0x601058</span><span class="mc-label">B: data[24..31]</span><span class="mc-val">0x00000000_00000000</span></div>
+        </div>
+        <div class="impact-box" id="impact-heap" style="display:none">
+          <span class="impact-label">&#9888; Impact</span>
+          <span class="impact-text" id="impact-heap-text">Arbitrary write &mdash; attacker controls a pointer dereference in free()</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 3: Use-After-Free                                   -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="atk-section" id="sec-uaf">
+    <div class="ma-card">
+      <h3>Use-After-Free (UAF)</h3>
+      <p>Free a heap object, then let the allocator give the same memory to a different allocation. If the original pointer is used again, it now reads or writes the new owner's data. When the freed object contained a function pointer, UAF achieves control-flow hijacking.</p>
+    </div>
+
+    <div class="attack-wrap">
+      <div class="attack-left">
+        <div class="code-panel" id="code-uaf">
+          <span class="code-line" id="uaf-L0"><span class="kw">typedef struct</span> {</span>
+          <span class="code-line" id="uaf-L1">    <span class="ty">void</span> (*callback)(<span class="ty">void</span>);</span>
+          <span class="code-line" id="uaf-L2">    <span class="ty">int</span>   value;</span>
+          <span class="code-line" id="uaf-L3">} Widget;</span>
+          <span class="code-line" id="uaf-L4"></span>
+          <span class="code-line" id="uaf-L5">Widget *w = <span class="fn">malloc</span>(<span class="kw">sizeof</span>(Widget));</span>
+          <span class="code-line" id="uaf-L6">w-&gt;callback = &amp;<span class="fn">safe_function</span>;</span>
+          <span class="code-line" id="uaf-L7">w-&gt;value    = <span class="nm">42</span>;</span>
+          <span class="code-line" id="uaf-L8"></span>
+          <span class="code-line" id="uaf-L9"><span class="fn">free</span>(w);  <span class="cm">// freed -- w still = 0x601000!</span></span>
+          <span class="code-line" id="uaf-L10"></span>
+          <span class="code-line" id="uaf-L11"><span class="cm">// ... later ...</span></span>
+          <span class="code-line" id="uaf-L12"><span class="ty">char</span> *buf = <span class="fn">malloc</span>(<span class="kw">sizeof</span>(Widget));</span>
+          <span class="code-line" id="uaf-L13"><span class="fn">memcpy</span>(buf, attacker_payload, <span class="kw">sizeof</span>(Widget));</span>
+          <span class="code-line" id="uaf-L14"></span>
+          <span class="code-line" id="uaf-L15">w-&gt;<span class="fn">callback</span>();  <span class="cm">// UAF: calls attacker ptr!</span></span>
+        </div>
+        <div class="step-nav">
+          <button class="btn btn-outline btn-sm" id="prev-uaf" disabled>&#8592; Prev</button>
+          <span class="step-counter" id="counter-uaf">Step 1 / 7</span>
+          <button class="btn btn-primary btn-sm" id="next-uaf">Next &#8594;</button>
+        </div>
+        <div class="step-explain" id="explain-uaf">Loading...</div>
+        <div class="mitigation-box" id="mit-uaf" style="display:none">
+          <div class="mit-label">Mitigations</div>
+          <ul class="mit-list">
+            <li>Always null the pointer after free: <code>free(p); p = NULL;</code></li>
+            <li>C++ smart pointers (<code>unique_ptr</code>, <code>shared_ptr</code>) &mdash; auto-null on release</li>
+            <li><code>-fsanitize=address</code> &mdash; AddressSanitizer detects UAF at runtime</li>
+            <li>Memory-safe languages &mdash; Rust borrow checker makes UAF impossible at compile time</li>
+            <li>Pointer encryption &mdash; glibc 2.32+ tcache stores encrypted fd pointers</li>
+          </ul>
+        </div>
+      </div>
+      <div class="attack-right">
+        <div class="mem-legend">
+          <span class="leg-item"><span class="leg-swatch leg-green"></span>allocated / in use</span>
+          <span class="leg-item"><span class="leg-swatch leg-grey"></span>freed (dangling)</span>
+          <span class="leg-item"><span class="leg-swatch leg-orange"></span>reallocated</span>
+          <span class="leg-item"><span class="leg-swatch leg-red"></span>attacker data</span>
+          <span class="leg-item"><span class="leg-swatch leg-purple"></span>hijacked</span>
+        </div>
+        <div id="dangling-badge" class="dangling-badge">w = 0x601000 (DANGLING POINTER)</div>
+        <div class="mem-grid" id="grid-uaf">
+          <div class="mem-cell normal" id="uaf-c0"><span class="mc-addr">0x601000</span><span class="mc-label">Widget: callback<span class="label-tag">fn ptr</span></span><span class="mc-val">0x0040_1234</span></div>
+          <div class="mem-cell normal" id="uaf-c1"><span class="mc-addr">0x601008</span><span class="mc-label">Widget: value</span><span class="mc-val">0x0000_002A</span></div>
+          <div class="mem-cell normal" id="uaf-c2"><span class="mc-addr">0x601010</span><span class="mc-label">[padding]</span><span class="mc-val">0x00000000</span></div>
+        </div>
+        <div class="impact-box" id="impact-uaf" style="display:none">
+          <span class="impact-label">&#9888; Impact</span>
+          <span class="impact-text" id="impact-uaf-text">w-&gt;callback reads 0xDEAD_BEEF &mdash; CPU jumps to attacker shellcode</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 4: TOCTOU                                           -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="atk-section" id="sec-toctou">
+    <div class="ma-card">
+      <h3>TOCTOU &mdash; Time of Check to Time of Use</h3>
+      <p>A race condition between a security check and the operation it guards. If an attacker can change the resource between the check and the use, the check becomes meaningless. Classic example: a setuid program calls <code>access()</code> then <code>open()</code> &mdash; with a symlink swap in between.</p>
+    </div>
+
+    <div class="attack-wrap">
+      <div class="attack-left">
+        <div class="code-panel" id="code-toctou">
+          <span class="code-line" id="toc-L0"><span class="cm">// Vulnerable: check-then-use</span></span>
+          <span class="code-line" id="toc-L1"><span class="kw">if</span> (<span class="fn">access</span>(<span class="nm">"/tmp/file"</span>, R_OK) == <span class="nm">0</span>) {</span>
+          <span class="code-line" id="toc-L2">    <span class="cm">// RACE WINDOW here</span></span>
+          <span class="code-line" id="toc-L3">    <span class="ty">int</span> fd = <span class="fn">open</span>(<span class="nm">"/tmp/file"</span>, O_RDONLY);</span>
+          <span class="code-line" id="toc-L4">    <span class="fn">read</span>(fd, buffer, <span class="kw">sizeof</span>(buffer));</span>
+          <span class="code-line" id="toc-L5">}</span>
+        </div>
+        <div class="step-nav">
+          <button class="btn btn-outline btn-sm" id="prev-toctou" disabled>&#8592; Prev</button>
+          <span class="step-counter" id="counter-toctou">Step 1 / 6</span>
+          <button class="btn btn-primary btn-sm" id="next-toctou">Next &#8594;</button>
+        </div>
+        <div class="step-explain" id="explain-toctou">Loading...</div>
+        <div class="mitigation-box" id="mit-toctou" style="display:none">
+          <div class="mit-label">Mitigations</div>
+          <ul class="mit-list">
+            <li>Open first, check the fd &mdash; use <code>open()</code> then <code>fstat()</code> on the descriptor</li>
+            <li><code>O_NOFOLLOW</code> &mdash; <code>open()</code> refuses to follow symlinks</li>
+            <li><code>openat()</code> &mdash; careful directory-fd based path resolution</li>
+            <li>Drop privileges early &mdash; setuid programs should shed root as soon as possible</li>
+            <li>Use atomic OS operations &mdash; e.g. <code>rename()</code> is atomic on POSIX</li>
+          </ul>
+        </div>
+      </div>
+      <div class="attack-right">
+        <div class="timeline-wrap">
+          <div class="timeline-grid" id="tl-grid">
+            <div class="tl-col-header tl-col-victim">Victim Process</div>
+            <div class="tl-col-header tl-col-time">T</div>
+            <div class="tl-col-header tl-col-atk">Attacker Process</div>
+
+            <div class="tl-event" id="tl-v0">access("/tmp/file", R_OK) &#10003;</div>
+            <div class="tl-time-cell" id="tl-t0">T1</div>
+            <div class="tl-event" id="tl-a0"></div>
+
+            <div class="tl-event" id="tl-v1">&#8212; check passes, file readable</div>
+            <div class="tl-time-cell" id="tl-t1">T2</div>
+            <div class="tl-event" id="tl-a1"></div>
+
+            <div class="tl-event" id="tl-v2"></div>
+            <div class="tl-time-cell race" id="tl-t2">T3<br><span class="race-badge">RACE</span></div>
+            <div class="tl-event race-window" id="tl-a2">unlink("/tmp/file")</div>
+
+            <div class="tl-event" id="tl-v3"></div>
+            <div class="tl-time-cell race" id="tl-t3">T4<br><span class="race-badge">RACE</span></div>
+            <div class="tl-event race-window" id="tl-a3">symlink("/etc/shadow", "/tmp/file")</div>
+
+            <div class="tl-event" id="tl-v4">open("/tmp/file") &#8594; /etc/shadow!</div>
+            <div class="tl-time-cell" id="tl-t4">T5</div>
+            <div class="tl-event" id="tl-a4"></div>
+
+            <div class="tl-event" id="tl-v5">read() &#8594; password hashes</div>
+            <div class="tl-time-cell" id="tl-t5">T6</div>
+            <div class="tl-event" id="tl-a5"></div>
+          </div>
+        </div>
+        <div class="impact-box" id="impact-toctou" style="display:none">
+          <span class="impact-label">&#9888; Impact</span>
+          <span class="impact-text">Privilege escalation &mdash; attacker caused privileged process to read /etc/shadow</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 5: Data Race                                        -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="atk-section" id="sec-race">
+    <div class="ma-card">
+      <h3>Data Race</h3>
+      <p>Two threads concurrently read-modify-write a shared variable without synchronisation. Because <code>counter++</code> is not atomic (it compiles to READ + ADD + WRITE), threads can interleave and produce incorrect results &mdash; from lost updates to corrupted security state.</p>
+    </div>
+
+    <div class="attack-wrap">
+      <div class="attack-left">
+        <div class="code-panel" id="code-race">
+          <span class="code-line" id="race-L0"><span class="cm">// Vulnerable: unsynchronised counter</span></span>
+          <span class="code-line" id="race-L1"><span class="ty">int</span> counter = <span class="nm">5</span>;</span>
+          <span class="code-line" id="race-L2"></span>
+          <span class="code-line" id="race-L3"><span class="cm">// Thread 1 and Thread 2 both run:</span></span>
+          <span class="code-line" id="race-L4">counter++;  <span class="cm">// compiles to 3 instructions!</span></span>
+          <span class="code-line" id="race-L5"><span class="cm">// MOV RAX, [counter]  ; read</span></span>
+          <span class="code-line" id="race-L6"><span class="cm">// ADD RAX, 1          ; increment</span></span>
+          <span class="code-line" id="race-L7"><span class="cm">// MOV [counter], RAX  ; write back</span></span>
+          <span class="code-line" id="race-L8"></span>
+          <span class="code-line" id="race-L9"><span class="cm">// Fix 1: mutex</span></span>
+          <span class="code-line" id="race-L10"><span class="fn">pthread_mutex_lock</span>(&amp;lock);</span>
+          <span class="code-line" id="race-L11">counter++;</span>
+          <span class="code-line" id="race-L12"><span class="fn">pthread_mutex_unlock</span>(&amp;lock);</span>
+          <span class="code-line" id="race-L13"></span>
+          <span class="code-line" id="race-L14"><span class="cm">// Fix 2: C11 atomic</span></span>
+          <span class="code-line" id="race-L15"><span class="fn">atomic_fetch_add</span>(&amp;counter, <span class="nm">1</span>);</span>
+        </div>
+        <div class="step-nav">
+          <button class="btn btn-outline btn-sm" id="prev-race" disabled>&#8592; Prev</button>
+          <span class="step-counter" id="counter-race">Step 1 / 7</span>
+          <button class="btn btn-primary btn-sm" id="next-race">Next &#8594;</button>
+        </div>
+        <div class="step-explain" id="explain-race">Loading...</div>
+        <div class="mitigation-box" id="mit-race" style="display:none">
+          <div class="mit-label">Mitigations</div>
+          <ul class="mit-list">
+            <li><code>pthread_mutex_lock/unlock</code> &mdash; mutual exclusion for the critical section</li>
+            <li>C11 <code>_Atomic</code> / <code>atomic_fetch_add</code> &mdash; hardware-level atomic RMW</li>
+            <li>C++ <code>std::atomic&lt;int&gt;</code> &mdash; lock-free atomic integer operations</li>
+            <li>Java <code>synchronized</code> / <code>AtomicInteger.incrementAndGet()</code></li>
+            <li>Rust &mdash; ownership model prevents data races at compile time without <code>unsafe</code></li>
+          </ul>
+        </div>
+      </div>
+      <div class="attack-right">
+        <div class="shared-mem-box" id="shared-box">
+          <div class="shared-var-label">Shared Memory &mdash; counter</div>
+          <div class="shared-var-val" id="shared-val">5</div>
+          <div class="expected-label" id="expected-lbl">Expected after both threads: 7</div>
+        </div>
+        <div class="race-wrap">
+          <div class="race-thread">
+            <div class="race-thread-header t1">Thread 1</div>
+            <div class="race-reg-row"><span class="reg-name">RAX</span><span class="reg-val" id="t1-rax">&mdash;</span></div>
+            <div class="race-reg-row"><span class="reg-name">instruction</span><span class="reg-val" id="t1-ins" style="font-size:0.72rem;">MOV RAX, [counter]</span></div>
+          </div>
+          <div class="race-thread">
+            <div class="race-thread-header t2">Thread 2</div>
+            <div class="race-reg-row"><span class="reg-name">RAX</span><span class="reg-val" id="t2-rax">&mdash;</span></div>
+            <div class="race-reg-row"><span class="reg-name">instruction</span><span class="reg-val" id="t2-ins" style="font-size:0.72rem;">MOV RAX, [counter]</span></div>
+          </div>
+        </div>
+        <div class="impact-box" id="impact-race" style="display:none">
+          <span class="impact-label">&#9888; Impact</span>
+          <span class="impact-text">Lost update &mdash; counter = 6 instead of 7. Non-deterministic, scales to security bypass at high concurrency.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SECTION 6: Quiz                                             -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div class="atk-section" id="sec-quiz">
+    <div class="ma-card">
+      <h3>Knowledge Check &mdash; 15 Questions</h3>
+      <p>Test your understanding of stack overflows, heap corruption, use-after-free, TOCTOU races, and data races.</p>
+    </div>
+    <div class="ma-card" id="quiz-card">
+      <div class="quiz-progress" id="quiz-progress">Question 1 of 15</div>
+      <div class="quiz-q-wrap" id="quiz-q-wrap">
+        <!-- filled by JS -->
+      </div>
+      <div class="quiz-feedback" id="quiz-feedback"></div>
+      <div class="quiz-nav">
+        <button class="btn btn-primary" id="quiz-submit">Submit Answer</button>
+        <button class="btn btn-outline" id="quiz-next" style="display:none">Next Question &#8594;</button>
+      </div>
+      <div class="quiz-score-box" id="quiz-score">
+        <div class="score-big" id="score-big">0/15</div>
+        <div class="score-label" id="score-label">Loading...</div>
+        <button class="btn btn-outline" onclick="resetQuiz()">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <nav><a href="index.html#learn">&#8592; Back to Interactive Learning</a></nav>
+</div>
+
+<script>
+// ── Skin switcher ──────────────────────────────────────────────
+(function() {
+  var tog = document.getElementById('skin-toggle');
+  var pan = document.getElementById('skin-panel');
+  tog.addEventListener('click', function(e) {
+    e.stopPropagation();
+    pan.classList.toggle('open');
+  });
+  document.addEventListener('click', function() { pan.classList.remove('open'); });
+  pan.addEventListener('click', function(e) { e.stopPropagation(); });
+  var opts = pan.querySelectorAll('.skin-opt');
+  opts.forEach(function(o) {
+    o.addEventListener('click', function() {
+      var sk = o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      opts.forEach(function(x) { x.classList.remove('active'); });
+      o.classList.add('active');
+      pan.classList.remove('open');
+    });
+  });
+  var cur = document.documentElement.getAttribute('data-skin') || 'midnight';
+  opts.forEach(function(o) {
+    if (o.getAttribute('data-skin') === cur) o.classList.add('active');
+  });
+})();
+
+// ── Section nav ────────────────────────────────────────────────
+var sectionInited = {};
+document.getElementById('secNav').addEventListener('click', function(e) {
+  var btn = e.target.closest('.sec-btn');
+  if (!btn) return;
+  var sec = btn.getAttribute('data-sec');
+  document.querySelectorAll('.sec-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.atk-section').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('sec-' + sec).classList.add('active');
+  if (!sectionInited[sec]) {
+    sectionInited[sec] = true;
+    if (sec === 'bof')    initBof();
+    if (sec === 'heap')   initHeap();
+    if (sec === 'uaf')    initUaf();
+    if (sec === 'toctou') initToctou();
+    if (sec === 'race')   initRace();
+    if (sec === 'quiz')   initQuiz();
+  }
+});
+
+// ── Generic step engine ────────────────────────────────────────
+function makeEngine(id, steps, codeLinePrefix, numLines, cellIds, impactId, explainId, counterId, prevId, nextId, extraRender) {
+  var cur = 0;
+  var cellStates = {};
+
+  function setCell(cellId, state, val) {
+    var el = document.getElementById(cellId);
+    if (!el) return;
+    el.className = 'mem-cell ' + state;
+    var valEl = el.querySelector('.mc-val');
+    if (valEl && val !== undefined) valEl.textContent = val;
+    cellStates[cellId] = { state: state, val: val };
+  }
+
+  function resetCells(defaultState) {
+    cellIds.forEach(function(cid) {
+      var el = document.getElementById(cid);
+      if (!el) return;
+      el.className = 'mem-cell ' + (defaultState || 'normal');
+    });
+    cellStates = {};
+  }
+
+  function render() {
+    var step = steps[cur];
+
+    // code lines
+    for (var i = 0; i < numLines; i++) {
+      var el = document.getElementById(codeLinePrefix + i);
+      if (el) {
+        el.classList.remove('active', 'danger-line');
+      }
+    }
+    if (step.activeLine !== undefined && step.activeLine >= 0) {
+      var al = document.getElementById(codeLinePrefix + step.activeLine);
+      if (al) al.classList.add('active');
+    }
+    if (step.dangerLine !== undefined && step.dangerLine >= 0) {
+      var dl = document.getElementById(codeLinePrefix + step.dangerLine);
+      if (dl) dl.classList.add('danger-line');
+    }
+
+    // cells
+    if (step.resetCells) resetCells(step.resetCells === true ? 'normal' : step.resetCells);
+    if (step.cells) {
+      step.cells.forEach(function(c) {
+        setCell(c.id, c.state, c.val);
+      });
+    }
+
+    // explain
+    document.getElementById(explainId).innerHTML = step.explain;
+
+    // impact
+    var impactEl = document.getElementById(impactId);
+    if (step.showImpact) {
+      impactEl.style.display = 'flex';
+      if (step.impactText) {
+        var it = impactEl.querySelector('.impact-text');
+        if (it) it.textContent = step.impactText;
+      }
+    } else {
+      impactEl.style.display = 'none';
+    }
+
+    // counter
+    document.getElementById(counterId).textContent = 'Step ' + (cur + 1) + ' / ' + steps.length;
+    document.getElementById(prevId).disabled = (cur === 0);
+    document.getElementById(nextId).disabled = (cur === steps.length - 1);
+
+    if (extraRender) extraRender(step, cur);
+  }
+
+  document.getElementById(nextId).addEventListener('click', function() {
+    if (cur < steps.length - 1) { cur++; render(); }
+  });
+  document.getElementById(prevId).addEventListener('click', function() {
+    if (cur > 0) { cur--; render(); }
+  });
+
+  render();
+}
+
+// ══════════════════════════════════════════════════════════════
+// BUFFER OVERFLOW
+// ══════════════════════════════════════════════════════════════
+function initBof() {
+  var BOF_CELLS = ['bof-c0','bof-c1','bof-c2','bof-c3','bof-c4','bof-c5','bof-c6','bof-c7','bof-c8','bof-c9'];
+  var steps = [
+    {
+      activeLine: 5,
+      cells: [
+        {id:'bof-c9', state:'buffer', val:"'A'"},
+        {id:'bof-c8', state:'buffer', val:"'l'"},
+        {id:'bof-c7', state:'buffer', val:"'i'"},
+        {id:'bof-c6', state:'buffer', val:"'c'"},
+        {id:'bof-c5', state:'buffer', val:"'e'"},
+        {id:'bof-c4', state:'normal', val:'0x00'},
+        {id:'bof-c3', state:'normal', val:'0x00'},
+        {id:'bof-c2', state:'normal', val:'0x00'},
+        {id:'bof-c1', state:'normal', val:'0x7fff_ffd0'},
+        {id:'bof-c0', state:'normal', val:'0x0040_1234'}
+      ],
+      explain: 'Safe call: <code>vulnerable("Alice")</code>. <code>strcpy</code> writes 5 chars + null terminator into buf[0..5]. All within the 8-byte buffer. Nothing overflows &mdash; the saved RBP and return address are untouched.',
+      showImpact: false
+    },
+    {
+      activeLine: 13,
+      resetCells: 'normal',
+      cells: [
+        {id:'bof-c9', state:'buffer', val:"'A' 0x41"},
+        {id:'bof-c8', state:'buffer', val:"'A' 0x41"},
+        {id:'bof-c7', state:'buffer', val:"'A' 0x41"},
+        {id:'bof-c6', state:'buffer', val:"'A' 0x41"},
+        {id:'bof-c5', state:'buffer', val:"'A' 0x41"},
+        {id:'bof-c4', state:'buffer', val:"'A' 0x41"},
+        {id:'bof-c3', state:'buffer', val:"'A' 0x41"},
+        {id:'bof-c2', state:'buffer', val:"'A' 0x41"}
+      ],
+      explain: 'Attack call starts. The first 8 bytes (all 0x41 = \'A\') exactly fill <code>buf[0..7]</code>. Nothing bad yet &mdash; we are still inside the allocation boundary.',
+      showImpact: false
+    },
+    {
+      activeLine: 13,
+      dangerLine: 13,
+      cells: [
+        {id:'bof-c1', state:'corrupted', val:'BBBBBBBB (0x4242...)'}
+      ],
+      explain: '<code>strcpy</code> has no bounds check. Bytes 9&ndash;16 (all 0x42 = \'B\') overwrite the saved frame pointer (RBP). The caller\'s frame is now garbage &mdash; but we have not touched the return address yet.',
+      showImpact: false
+    },
+    {
+      activeLine: 13,
+      dangerLine: 13,
+      cells: [
+        {id:'bof-c0', state:'hijacked', val:'0x0040_1341 (attacker)'}
+      ],
+      explain: 'Bytes 17&ndash;24 overwrite the 8-byte return address slot. RIP now holds <code>0x0040_1341</code> &mdash; an attacker-chosen address pointing to shellcode or a ROP gadget.',
+      showImpact: false
+    },
+    {
+      activeLine: 7,
+      cells: [],
+      explain: 'The function executes its epilogue (RET instruction). RET pops the value at RSP into RIP and jumps there. Since the attacker controls that value, execution jumps to their shellcode or ROP chain.',
+      showImpact: true,
+      impactText: 'Attacker controls RIP — CPU jumps to 0x0040_1341. Arbitrary code execution achieved.'
+    },
+    {
+      activeLine: 5,
+      resetCells: 'normal',
+      cells: [
+        {id:'bof-c9', state:'normal', val:'0x00'},
+        {id:'bof-c8', state:'normal', val:'0x00'},
+        {id:'bof-c7', state:'normal', val:'0x00'},
+        {id:'bof-c6', state:'normal', val:'0x00'},
+        {id:'bof-c5', state:'normal', val:'0x00'},
+        {id:'bof-c4', state:'normal', val:'0x00'},
+        {id:'bof-c3', state:'normal', val:'0x00'},
+        {id:'bof-c2', state:'normal', val:'0x00'},
+        {id:'bof-c1', state:'normal', val:'0x7fff_ffd0'},
+        {id:'bof-c0', state:'normal', val:'0x0040_1234'}
+      ],
+      explain: 'With a <strong>stack canary</strong> mitigation: a random secret value is placed between <code>buf</code> and the saved RBP. Before returning, the compiler-inserted check compares the canary to its original value. Any overflow that reaches the return address must first corrupt the canary.',
+      showImpact: false,
+      extraOp: 'add-canary'
+    },
+    {
+      activeLine: 5,
+      cells: [
+        {id:'bof-canary', state:'corrupted', val:'0xDEAD_DEAD (mismatch!)'}
+      ],
+      explain: 'The overflow overwrites the canary on its way to the return address. The compiler-inserted epilogue check detects the mismatch and calls <code>__stack_chk_fail()</code> &mdash; program terminates before RET executes. Exploit blocked.',
+      showImpact: false,
+      extraOp: 'show-abort'
+    }
+  ];
+
+  var canaryInserted = false;
+
+  makeEngine('bof', steps, 'bof-L', 15, BOF_CELLS, 'impact-bof', 'explain-bof', 'counter-bof', 'prev-bof', 'next-bof', function(step, idx) {
+    if (step.extraOp === 'add-canary' && !canaryInserted) {
+      canaryInserted = true;
+      var grid = document.getElementById('grid-bof');
+      // Insert canary row between bof-c2 (buf[7]) and bof-c1 (savedRBP)
+      var c1 = document.getElementById('bof-c1');
+      var canaryRow = document.createElement('div');
+      canaryRow.className = 'mem-cell safe';
+      canaryRow.id = 'bof-canary';
+      canaryRow.innerHTML = '<span class="mc-addr">0x7fff_ffbf+</span><span class="mc-label">Stack Canary<span class="label-tag">guard</span></span><span class="mc-val">0x3d7a_f819_c2e6_0042</span>';
+      grid.insertBefore(canaryRow, c1);
+      BOF_CELLS.push('bof-canary');
+    }
+    if (step.extraOp === 'show-abort') {
+      var grid2 = document.getElementById('grid-bof');
+      var existing = document.getElementById('bof-abort');
+      if (!existing) {
+        var abortRow = document.createElement('div');
+        abortRow.className = 'mem-cell safe';
+        abortRow.id = 'bof-abort';
+        abortRow.innerHTML = '<span class="mc-addr">kernel</span><span class="mc-label">__stack_chk_fail()</span><span class="mc-val">ABORT</span>';
+        grid2.insertBefore(abortRow, grid2.firstChild);
+        BOF_CELLS.push('bof-abort');
+      }
+    }
+    // show/hide mitigation box
+    var mitEl = document.getElementById('mit-bof');
+    if (idx >= 5) mitEl.style.display = 'block';
+    else mitEl.style.display = 'none';
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+// HEAP OVERFLOW
+// ══════════════════════════════════════════════════════════════
+function initHeap() {
+  var HEAP_CELLS = ['heap-c0','heap-c1','heap-c2','heap-c3','heap-c4','heap-c5','heap-c6','heap-c7','heap-c8','heap-c9','heap-c10','heap-c11'];
+  var steps = [
+    {
+      activeLine: 4,
+      cells: [],
+      explain: 'glibc <code>malloc</code> allocates two adjacent heap chunks A and B. Each chunk has 16 bytes of metadata (prev_size + size+flags) followed by 32 bytes of user data. The size field <code>0x31</code> = 48 bytes with the PREV_INUSE flag (0x1) set in the low bit.',
+      showImpact: false
+    },
+    {
+      activeLine: 8,
+      cells: [
+        {id:'heap-c2', state:'buffer', val:'AAAA_AAAA...'},
+        {id:'heap-c3', state:'buffer', val:'AAAA_AAAA...'},
+        {id:'heap-c4', state:'buffer', val:'AAAA_AAAA...'},
+        {id:'heap-c5', state:'buffer', val:'AAAA_AAAA...'}
+      ],
+      explain: 'Writing exactly 32 bytes fills chunk A\'s user data area (<code>0x601010</code>&ndash;<code>0x60102f</code>). Chunk B\'s metadata is completely untouched.',
+      showImpact: false
+    },
+    {
+      activeLine: 9,
+      dangerLine: 9,
+      cells: [
+        {id:'heap-c6', state:'corrupted', val:'0xDEAD_BEEF_DEAD_BEEF'},
+        {id:'heap-c7', state:'corrupted', val:'0x0000_0000_0000_0080'}
+      ],
+      explain: '<code>memcpy</code> writes 16 bytes past the end of chunk A, directly into chunk B\'s malloc metadata. The attacker now controls chunk B\'s <code>prev_size</code> and <code>size+flags</code> fields &mdash; <code>0x80</code> is a fake size.',
+      showImpact: false
+    },
+    {
+      activeLine: 9,
+      cells: [],
+      explain: 'The corruption sits silently. No immediate crash &mdash; glibc does not validate chunk metadata on allocation, only on free. The bug lies dormant until chunk B participates in a free/malloc operation.',
+      showImpact: false
+    },
+    {
+      activeLine: 11,
+      dangerLine: 11,
+      cells: [
+        {id:'heap-c7', state:'hijacked', val:'0x0000_0000_0000_0080 (FAKE)'}
+      ],
+      explain: '<code>free(b)</code> reads the corrupted size field to find adjacent chunks and update the freelist (unlink). With a carefully crafted fake size, the unlink operation dereferences pointers derived from the metadata &mdash; writing an attacker-controlled value to an attacker-controlled address (e.g., a GOT/PLT entry).',
+      showImpact: true,
+      impactText: 'Arbitrary write primitive — free() corrupted metadata allows writing any value to any address via the unlink operation.'
+    },
+    {
+      resetCells: 'safe',
+      cells: [],
+      explain: 'With modern mitigations: glibc 2.17+ safe-unlinking checks verify that <code>fd-&gt;bk == p</code> and <code>bk-&gt;fd == p</code> before unlinking. Heap canaries in tcache (glibc 2.26+) detect chunk tampering. AddressSanitizer catches the overflow at the memcpy site.',
+      showImpact: false,
+      extraOp: 'show-mit'
+    }
+  ];
+
+  makeEngine('heap', steps, 'heap-L', 14, HEAP_CELLS, 'impact-heap', 'explain-heap', 'counter-heap', 'prev-heap', 'next-heap', function(step, idx) {
+    var mitEl = document.getElementById('mit-heap');
+    if (idx >= 5) mitEl.style.display = 'block';
+    else mitEl.style.display = 'none';
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+// USE-AFTER-FREE
+// ══════════════════════════════════════════════════════════════
+function initUaf() {
+  var UAF_CELLS = ['uaf-c0','uaf-c1','uaf-c2'];
+  var steps = [
+    {
+      activeLine: 5,
+      cells: [
+        {id:'uaf-c0', state:'buffer', val:'0x0040_1234'},
+        {id:'uaf-c1', state:'buffer', val:'0x0000_002A'},
+        {id:'uaf-c2', state:'buffer', val:'0x00000000'}
+      ],
+      explain: 'A <code>Widget</code> struct is allocated on the heap at <code>0x601000</code>. It holds a function pointer (<code>callback</code>) and an integer. <code>w = 0x601000</code>.',
+      showImpact: false
+    },
+    {
+      activeLine: 6,
+      cells: [
+        {id:'uaf-c0', state:'buffer', val:'0x0040_1234 (&safe_function)'},
+        {id:'uaf-c1', state:'buffer', val:'0x0000_002A (= 42)'}
+      ],
+      explain: '<code>safe_function</code> is assigned as the callback. Everything is valid and in-bounds. Calling <code>w-&gt;callback()</code> would safely invoke <code>safe_function</code>.',
+      showImpact: false
+    },
+    {
+      activeLine: 9,
+      dangerLine: 9,
+      cells: [
+        {id:'uaf-c0', state:'freed', val:'freelist fd ptr'},
+        {id:'uaf-c1', state:'freed', val:'freelist bk ptr'},
+        {id:'uaf-c2', state:'freed', val:'(free)'}
+      ],
+      explain: '<code>free()</code> returns the chunk to the allocator freelist. The memory at <code>0x601000</code> is now available for reuse. BUT <code>w</code> still holds <code>0x601000</code>. Any dereference of <code>w</code> is undefined behaviour.',
+      showImpact: false,
+      extraOp: 'show-dangling'
+    },
+    {
+      activeLine: 12,
+      cells: [
+        {id:'uaf-c0', state:'reallocated', val:'(tcache returns 0x601000)'},
+        {id:'uaf-c1', state:'reallocated', val:'(new owner)'},
+        {id:'uaf-c2', state:'reallocated', val:'(new owner)'}
+      ],
+      explain: 'The allocator tcache returns the same chunk at <code>0x601000</code> for the new <code>malloc(sizeof(Widget))</code>. <code>buf = 0x601000</code>. The Widget\'s old memory is now owned by <code>buf</code>.',
+      showImpact: false
+    },
+    {
+      activeLine: 13,
+      cells: [
+        {id:'uaf-c0', state:'attacker', val:'0xDEAD_BEEF (fake fn ptr)'},
+        {id:'uaf-c1', state:'attacker', val:'0x4141_4141'}
+      ],
+      explain: 'The attacker writes a fake function pointer at offset 0 (the callback field). From <code>w</code>\'s perspective, its <code>callback</code> field now points to attacker-controlled code at <code>0xDEAD_BEEF</code>.',
+      showImpact: false
+    },
+    {
+      activeLine: 15,
+      dangerLine: 15,
+      cells: [
+        {id:'uaf-c0', state:'hijacked', val:'0xDEAD_BEEF (CALLED!)'}
+      ],
+      explain: '<code>w</code> still points to <code>0x601000</code>. The UAF dereference reads the fake function pointer the attacker planted there and calls it. Control flow is hijacked to attacker-chosen code.',
+      showImpact: true,
+      impactText: 'w->callback reads 0xDEAD_BEEF — CPU jumps to attacker shellcode or ROP chain.'
+    },
+    {
+      cells: [],
+      explain: 'Key mitigations: null pointers after free (<code>p = NULL</code>), C++ smart pointers (<code>unique_ptr</code>), AddressSanitizer, Rust borrow checker (compile-time UAF prevention), and glibc 2.32+ pointer encryption in tcache.',
+      showImpact: false,
+      extraOp: 'show-mit'
+    }
+  ];
+
+  makeEngine('uaf', steps, 'uaf-L', 16, UAF_CELLS, 'impact-uaf', 'explain-uaf', 'counter-uaf', 'prev-uaf', 'next-uaf', function(step, idx) {
+    var badge = document.getElementById('dangling-badge');
+    if (step.extraOp === 'show-dangling' || idx >= 3) badge.classList.add('show');
+    else badge.classList.remove('show');
+
+    var mitEl = document.getElementById('mit-uaf');
+    if (idx >= 6) mitEl.style.display = 'block';
+    else mitEl.style.display = 'none';
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+// TOCTOU
+// ══════════════════════════════════════════════════════════════
+function initToctou() {
+  var TL_ROWS = 6; // 0..5
+
+  // victim col ids: tl-v0..tl-v5, time: tl-t0..tl-t5, atk: tl-a0..tl-a5
+  var steps = [
+    {
+      activeLine: 1,
+      highlight: { victim: [0], time: [], atk: [], danger: [] },
+      explain: '<code>access()</code> checks whether the real user (not effective UID) can read <code>/tmp/file</code>. It resolves symlinks at check time. This syscall and the later <code>open()</code> are two separate, non-atomic operations &mdash; creating a window of vulnerability.',
+      showImpact: false
+    },
+    {
+      activeLine: 1,
+      highlight: { victim: [1], time: [], atk: [], danger: [] },
+      explain: 'The OS confirms the file exists and is readable by the caller. The victim process "knows" the file is safe to open. But it has not opened it yet &mdash; this gap between check and use is the vulnerability.',
+      showImpact: false
+    },
+    {
+      activeLine: 2,
+      highlight: { victim: [], time: [], atk: [2], danger: [2] },
+      explain: 'The attacker, running concurrently, calls <code>unlink("/tmp/file")</code>. The path <code>/tmp/file</code> now resolves to nothing. The race window is open.',
+      showImpact: false
+    },
+    {
+      activeLine: 2,
+      highlight: { victim: [], time: [], atk: [3], danger: [3] },
+      explain: 'The attacker creates a symlink: <code>/tmp/file</code> &rarr; <code>/etc/shadow</code>. The path now resolves to the shadow password database &mdash; which the victim process has privilege to read.',
+      showImpact: false
+    },
+    {
+      activeLine: 3,
+      highlight: { victim: [4], time: [], atk: [], danger: [4] },
+      explain: '<code>open()</code> now follows <code>/tmp/file</code> &rarr; <code>/etc/shadow</code>. The kernel opens the shadow password file on behalf of the privileged victim process. The earlier <code>access()</code> check is irrelevant &mdash; it was performed on a different file.',
+      showImpact: false
+    },
+    {
+      activeLine: 4,
+      highlight: { victim: [5], time: [], atk: [], danger: [5] },
+      explain: '<code>read()</code> returns the shadow password file\'s contents. The attacker has exploited the gap between check and use to cause a privileged process to leak sensitive data.',
+      showImpact: true,
+      extraOp: 'show-mit'
+    }
+  ];
+
+  var cur = 0;
+
+  function renderToctou() {
+    var step = steps[cur];
+    // code lines
+    for (var i = 0; i <= 5; i++) {
+      var el = document.getElementById('toc-L' + i);
+      if (el) el.classList.remove('active', 'danger-line');
+    }
+    if (step.activeLine !== undefined) {
+      var al = document.getElementById('toc-L' + step.activeLine);
+      if (al) al.classList.add('active');
+    }
+
+    // timeline rows
+    for (var r = 0; r < TL_ROWS; r++) {
+      var vEl = document.getElementById('tl-v' + r);
+      var aEl = document.getElementById('tl-a' + r);
+      var tEl = document.getElementById('tl-t' + r);
+      if (vEl) { vEl.classList.remove('active', 'active-danger', 'dimmed'); }
+      if (aEl) { aEl.classList.remove('active', 'active-danger', 'dimmed'); }
+    }
+
+    var h = step.highlight;
+    for (var r2 = 0; r2 < TL_ROWS; r2++) {
+      var vEl2 = document.getElementById('tl-v' + r2);
+      var aEl2 = document.getElementById('tl-a' + r2);
+      var isVActive   = h.victim.indexOf(r2) >= 0;
+      var isAActive   = h.atk.indexOf(r2) >= 0;
+      var isVDanger   = h.danger && h.danger.indexOf(r2) >= 0 && isVActive;
+      var isADanger   = h.danger && h.danger.indexOf(r2) >= 0 && isAActive;
+
+      if (vEl2) {
+        if (isVDanger) vEl2.classList.add('active-danger');
+        else if (isVActive) vEl2.classList.add('active');
+      }
+      if (aEl2) {
+        if (isADanger) aEl2.classList.add('active-danger');
+        else if (isAActive) aEl2.classList.add('active');
+      }
+    }
+
+    document.getElementById('explain-toctou').innerHTML = step.explain;
+    var impEl = document.getElementById('impact-toctou');
+    if (step.showImpact) impEl.style.display = 'flex';
+    else impEl.style.display = 'none';
+
+    document.getElementById('counter-toctou').textContent = 'Step ' + (cur + 1) + ' / ' + steps.length;
+    document.getElementById('prev-toctou').disabled = (cur === 0);
+    document.getElementById('next-toctou').disabled = (cur === steps.length - 1);
+
+    var mitEl = document.getElementById('mit-toctou');
+    if (cur >= 5) mitEl.style.display = 'block';
+    else mitEl.style.display = 'none';
+  }
+
+  document.getElementById('next-toctou').addEventListener('click', function() {
+    if (cur < steps.length - 1) { cur++; renderToctou(); }
+  });
+  document.getElementById('prev-toctou').addEventListener('click', function() {
+    if (cur > 0) { cur--; renderToctou(); }
+  });
+
+  renderToctou();
+}
+
+// ══════════════════════════════════════════════════════════════
+// DATA RACE
+// ══════════════════════════════════════════════════════════════
+function initRace() {
+  var steps = [
+    {
+      activeLine: 4,
+      t1Rax: '—', t1Ins: 'MOV RAX, [counter]',
+      t2Rax: '—', t2Ins: 'MOV RAX, [counter]',
+      t1RaxClass: '', t2RaxClass: '',
+      counter: '5', counterClass: '',
+      explain: '<code>counter++</code> is NOT atomic. The CPU executes it as three instructions: READ counter into register, ADD 1 to register, WRITE register back to counter. If two threads interleave between these instructions, both can read the same stale value.',
+      showImpact: false
+    },
+    {
+      activeLine: 5,
+      t1Rax: '5', t1Ins: 'MOV RAX, [counter] ← reading',
+      t2Rax: '—', t2Ins: '(waiting for scheduler)',
+      t1RaxClass: 'changed', t2RaxClass: '',
+      counter: '5', counterClass: '',
+      explain: 'Thread 1 reads <code>counter</code> (= 5) into its RAX register. The OS scheduler might context-switch to Thread 2 right here, before Thread 1 writes back.',
+      showImpact: false
+    },
+    {
+      activeLine: 5,
+      dangerLine: 5,
+      t1Rax: '5', t1Ins: '(preempted — waiting)',
+      t2Rax: '5', t2Ins: 'MOV RAX, [counter] ← RACE!',
+      t1RaxClass: 'changed', t2RaxClass: 'danger',
+      counter: '5', counterClass: 'wrong',
+      explain: 'Before Thread 1 writes back, Thread 2 also reads <code>counter</code> &mdash; and gets 5, the same stale value. Both threads now hold 5 in their private RAX. This is the data race.',
+      showImpact: false
+    },
+    {
+      activeLine: 6,
+      t1Rax: '6', t1Ins: 'ADD RAX, 1  →  MOV [counter], RAX',
+      t2Rax: '5', t2Ins: '(waiting)',
+      t1RaxClass: 'changed', t2RaxClass: '',
+      counter: '6', counterClass: 'changed',
+      explain: 'Thread 1 increments RAX (5 + 1 = 6) and writes 6 back to <code>counter</code>. Correct so far.',
+      showImpact: false
+    },
+    {
+      activeLine: 7,
+      dangerLine: 7,
+      t1Rax: '6', t1Ins: '(done)',
+      t2Rax: '6', t2Ins: 'ADD RAX, 1  →  MOV [counter], RAX',
+      t1RaxClass: '', t2RaxClass: 'danger',
+      counter: '6', counterClass: 'wrong',
+      explain: 'Thread 2 adds 1 to its stale copy (5 + 1 = 6) and writes 6 back. But counter was already 6! Thread 1\'s update is overwritten by the same value &mdash; a lost update. Expected: 7, Actual: 6.',
+      showImpact: false
+    },
+    {
+      activeLine: 4,
+      t1Rax: '6', t1Ins: '(done)',
+      t2Rax: '6', t2Ins: '(done)',
+      t1RaxClass: '', t2RaxClass: '',
+      counter: '6', counterClass: 'wrong',
+      explain: 'Final state: counter = 6 instead of the correct 7. At 1000 iterations with many threads, counter could be anywhere from 1000 to 2000. Security checks, transaction totals, authentication token counters are all vulnerable to this class of bug.',
+      showImpact: true
+    },
+    {
+      activeLine: 10,
+      t1Rax: '7', t1Ins: 'atomic_fetch_add(&counter, 1)',
+      t2Rax: '8', t2Ins: 'atomic_fetch_add(&counter, 1)',
+      t1RaxClass: 'changed', t2RaxClass: 'changed',
+      counter: '7', counterClass: 'correct',
+      explain: 'With <code>atomic_fetch_add</code> or a mutex, the read-modify-write is indivisible. No other thread can observe or modify <code>counter</code> between the read and write. Result is always correct.',
+      showImpact: false,
+      extraOp: 'show-mit'
+    }
+  ];
+
+  var cur = 0;
+
+  function renderRace() {
+    var step = steps[cur];
+
+    for (var i = 0; i <= 15; i++) {
+      var el = document.getElementById('race-L' + i);
+      if (el) el.classList.remove('active', 'danger-line');
+    }
+    if (step.activeLine !== undefined) {
+      var al = document.getElementById('race-L' + step.activeLine);
+      if (al) al.classList.add('active');
+    }
+    if (step.dangerLine !== undefined) {
+      var dl = document.getElementById('race-L' + step.dangerLine);
+      if (dl) dl.classList.add('danger-line');
+    }
+
+    var t1r = document.getElementById('t1-rax');
+    var t2r = document.getElementById('t2-rax');
+    var t1i = document.getElementById('t1-ins');
+    var t2i = document.getElementById('t2-ins');
+    t1r.textContent = step.t1Rax;
+    t2r.textContent = step.t2Rax;
+    t1i.textContent = step.t1Ins;
+    t2i.textContent = step.t2Ins;
+    t1r.className = 'reg-val ' + step.t1RaxClass;
+    t2r.className = 'reg-val ' + step.t2RaxClass;
+
+    var sv = document.getElementById('shared-val');
+    sv.textContent = step.counter;
+    sv.className = 'shared-var-val ' + step.counterClass;
+
+    var expLbl = document.getElementById('expected-lbl');
+    expLbl.textContent = step.counterClass === 'wrong' ? 'Expected: 7   Actual: ' + step.counter + ' (LOST UPDATE)' : 'Expected after both threads: 7';
+
+    document.getElementById('explain-race').innerHTML = step.explain;
+
+    var impEl = document.getElementById('impact-race');
+    if (step.showImpact) impEl.style.display = 'flex';
+    else impEl.style.display = 'none';
+
+    document.getElementById('counter-race').textContent = 'Step ' + (cur + 1) + ' / ' + steps.length;
+    document.getElementById('prev-race').disabled = (cur === 0);
+    document.getElementById('next-race').disabled = (cur === steps.length - 1);
+
+    var mitEl = document.getElementById('mit-race');
+    if (cur >= 6) mitEl.style.display = 'block';
+    else mitEl.style.display = 'none';
+  }
+
+  document.getElementById('next-race').addEventListener('click', function() {
+    if (cur < steps.length - 1) { cur++; renderRace(); }
+  });
+  document.getElementById('prev-race').addEventListener('click', function() {
+    if (cur > 0) { cur--; renderRace(); }
+  });
+
+  renderRace();
+}
+
+// ══════════════════════════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════════════════════════
+var QUIZ = [
+  {
+    q: 'In a stack buffer overflow, what is the attacker\'s primary goal when overwriting the return address?',
+    opts: [
+      'Redirect execution to attacker-controlled code',
+      'Crash the program to cause a denial of service',
+      'Read data from the stack below the buffer',
+      'Overwrite the stack canary to disable it'
+    ],
+    correct: 0
+  },
+  {
+    q: 'What does a stack canary protect against?',
+    opts: [
+      'Sequential stack buffer overflows that overwrite the return address',
+      'Heap buffer overflows',
+      'Use-After-Free vulnerabilities',
+      'Integer overflows'
+    ],
+    correct: 0
+  },
+  {
+    q: 'Why does strcpy() enable buffer overflows?',
+    opts: [
+      'It copies bytes until a null terminator with no bounds check on the destination',
+      'It always copies exactly 256 bytes',
+      'It allocates extra heap memory for the destination',
+      'It only works with static arrays'
+    ],
+    correct: 0
+  },
+  {
+    q: 'In a heap overflow, what is corrupted to enable exploitation?',
+    opts: [
+      'The malloc chunk metadata (size/prev_size fields) of an adjacent allocation',
+      'The stack return address of the allocating function',
+      'The GOT/PLT directly without any heap corruption',
+      'The TLS (thread-local storage) of the victim thread'
+    ],
+    correct: 0
+  },
+  {
+    q: 'What is a Use-After-Free vulnerability?',
+    opts: [
+      'Dereferencing a pointer after the memory it points to has been freed',
+      'Using stack memory after a function returns',
+      'Reading past the end of a heap allocation',
+      'Freeing the same pointer twice (double-free)'
+    ],
+    correct: 0
+  },
+  {
+    q: 'Why is setting a pointer to NULL after free() important?',
+    opts: [
+      'It prevents Use-After-Free -- NULL dereference causes an immediate detectable crash instead of silent corruption',
+      'It returns the memory to the OS immediately',
+      'It prevents the allocator from reusing the same address',
+      'NULL pointers are automatically garbage collected'
+    ],
+    correct: 0
+  },
+  {
+    q: 'In the TOCTOU example, what is the "race window"?',
+    opts: [
+      'The time between the access() check and the open() call where the attacker can swap the file',
+      'The time the victim process holds the file descriptor open',
+      'The time between fork() and exec() in a setuid program',
+      'The time the kernel takes to resolve a symlink'
+    ],
+    correct: 0
+  },
+  {
+    q: 'What syscall pattern eliminates the TOCTOU vulnerability shown?',
+    opts: [
+      'Open the file first with open(), then use fstat() on the fd to check permissions',
+      'Use stat() instead of access()',
+      'Check permissions twice before opening',
+      'Use a mutex around access() and open()'
+    ],
+    correct: 0
+  },
+  {
+    q: 'Why is counter++ not thread-safe without synchronisation?',
+    opts: [
+      'It compiles to three non-atomic instructions: read, increment, write -- threads can interleave between them',
+      'The ++ operator is not defined for shared memory',
+      'CPUs cannot increment values faster than thread switches',
+      'It is thread-safe on x86 but not ARM'
+    ],
+    correct: 0
+  },
+  {
+    q: 'What does std::atomic<int> guarantee that int does not?',
+    opts: [
+      'Read-modify-write operations are indivisible -- no other thread sees an intermediate state',
+      'The value is stored in registers instead of memory',
+      'Other threads are blocked from reading the variable',
+      'The variable is allocated on the stack instead of the heap'
+    ],
+    correct: 0
+  },
+  {
+    q: 'Which tool detects Use-After-Free bugs at runtime?',
+    opts: [
+      'AddressSanitizer (-fsanitize=address)',
+      'gdb',
+      'strace',
+      'perf'
+    ],
+    correct: 0
+  },
+  {
+    q: 'What is the key difference between a stack buffer overflow and a heap buffer overflow?',
+    opts: [
+      'Stack overflow overwrites the return address on the call stack; heap overflow corrupts adjacent malloc chunk metadata or data',
+      'Heap overflows are always more dangerous',
+      'Buffer overflows only affect global variables',
+      'There is no meaningful difference -- both overwrite adjacent memory'
+    ],
+    correct: 0
+  },
+  {
+    q: 'ASLR (Address Space Layout Randomisation) makes exploitation harder because...',
+    opts: [
+      'The attacker cannot predict where the stack, heap, and libraries are loaded each run',
+      'It encrypts all memory contents',
+      'It prevents any code from being executed on the stack',
+      'It checks every pointer dereference for validity'
+    ],
+    correct: 0
+  },
+  {
+    q: 'What makes Rust immune to Use-After-Free vulnerabilities at compile time?',
+    opts: [
+      'The borrow checker enforces that only one owner can free memory, and no references can outlive the allocation',
+      'Rust uses garbage collection that prevents early frees',
+      'Rust pointers are always NULL after free',
+      'Rust has no heap allocation'
+    ],
+    correct: 0
+  },
+  {
+    q: 'A process runs as root and does: if (access(path, W_OK)==0) { unlink(path); }. What is the vulnerability?',
+    opts: [
+      'TOCTOU -- an attacker can replace path with a symlink to a sensitive file between access() and unlink()',
+      'Stack buffer overflow in the path string',
+      'Integer overflow in the permission flags',
+      'Use-After-Free in the path pointer'
+    ],
+    correct: 0
+  }
+];
+
+var qCur = 0;
+var qScore = 0;
+var qAnswered = false;
+
+function initQuiz() {
+  qCur = 0;
+  qScore = 0;
+  qAnswered = false;
+  renderQuiz();
+}
+
+function resetQuiz() {
+  qCur = 0;
+  qScore = 0;
+  qAnswered = false;
+  document.getElementById('quiz-score').classList.remove('show');
+  document.getElementById('quiz-card').querySelector('.quiz-q-wrap').style.display = 'block';
+  document.getElementById('quiz-card').querySelector('.quiz-progress').style.display = 'block';
+  document.getElementById('quiz-card').querySelector('.quiz-feedback').style.display = 'none';
+  document.getElementById('quiz-nav').style.display = 'flex';
+  renderQuiz();
+}
+
+function renderQuiz() {
+  var q = QUIZ[qCur];
+  document.getElementById('quiz-progress').textContent = 'Question ' + (qCur + 1) + ' of ' + QUIZ.length;
+  var wrap = document.getElementById('quiz-q-wrap');
+  var html = '<div class="q-number">Q' + (qCur + 1) + '</div>';
+  html += '<div class="q-text">' + escHtml(q.q) + '</div>';
+  html += '<ul class="answer-list" id="quiz-opts">';
+  for (var i = 0; i < q.opts.length; i++) {
+    html += '<li><label><input type="radio" name="quiz-opt" value="' + i + '"> ' + escHtml(q.opts[i]) + '</label></li>';
+  }
+  html += '</ul>';
+  wrap.innerHTML = html;
+  document.getElementById('quiz-feedback').className = 'quiz-feedback';
+  document.getElementById('quiz-feedback').textContent = '';
+  document.getElementById('quiz-submit').style.display = 'inline-block';
+  document.getElementById('quiz-next').style.display = 'none';
+  qAnswered = false;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+document.getElementById('quiz-submit').addEventListener('click', function() {
+  if (qAnswered) return;
+  var sel = document.querySelector('input[name="quiz-opt"]:checked');
+  if (!sel) return;
+  var chosen = parseInt(sel.value, 10);
+  var correct = QUIZ[qCur].correct;
+  qAnswered = true;
+
+  var labels = document.querySelectorAll('#quiz-opts label');
+  labels[correct].classList.add('answer-correct');
+  if (chosen !== correct) labels[chosen].classList.add('answer-wrong');
+  if (chosen === correct) qScore++;
+
+  var fb = document.getElementById('quiz-feedback');
+  if (chosen === correct) {
+    fb.className = 'quiz-feedback show correct';
+    fb.textContent = 'Correct!';
+  } else {
+    fb.className = 'quiz-feedback show wrong';
+    fb.textContent = 'Incorrect. The correct answer is: ' + QUIZ[qCur].opts[correct];
+  }
+
+  document.getElementById('quiz-submit').style.display = 'none';
+  if (qCur < QUIZ.length - 1) {
+    document.getElementById('quiz-next').style.display = 'inline-block';
+  } else {
+    // show score
+    setTimeout(function() {
+      document.getElementById('quiz-q-wrap').style.display = 'none';
+      document.getElementById('quiz-progress').style.display = 'none';
+      document.getElementById('quiz-feedback').style.display = 'none';
+      document.getElementById('quiz-nav').style.display = 'none';
+      var sc = document.getElementById('quiz-score');
+      sc.classList.add('show');
+      document.getElementById('score-big').textContent = qScore + '/' + QUIZ.length;
+      var pct = Math.round(qScore / QUIZ.length * 100);
+      var lbl = pct === 100 ? 'Perfect score! Expert-level memory safety knowledge.' :
+                pct >= 80  ? 'Great work! Strong understanding of memory vulnerabilities.' :
+                pct >= 60  ? 'Good foundation. Review the sections where you struggled.' :
+                             'Keep studying! Work through each interactive section above.';
+      document.getElementById('score-label').textContent = pct + '% — ' + lbl;
+    }, 900);
+  }
+});
+
+document.getElementById('quiz-next').addEventListener('click', function() {
+  if (qCur < QUIZ.length - 1) {
+    qCur++;
+    renderQuiz();
+  }
+});
+
+// ── Init first section ─────────────────────────────────────────
+sectionInited['bof'] = true;
+initBof();
+</script>
+</body>
+</html>

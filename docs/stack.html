@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="midnight">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>The Stack — Interactive Learning | BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css?v=2.0.2">
+<style>
+body { padding-top: 1.25rem; }
+
+.stk-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.stk-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.stk-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stk-subtitle { color: var(--muted); font-size: 0.85rem; }
+
+/* ── Section nav ─────────────────────────────────────────── */
+.section-nav {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.sec-btn {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--card-border);
+  background: var(--card);
+  color: var(--subtle);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+.sec-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--bg2);
+  box-shadow: 0 0 8px var(--glow);
+}
+.sec-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+/* ── Section panels ──────────────────────────────────────── */
+.stk-section { display: none; }
+.stk-section.active { display: block; }
+
+/* ── Cards ───────────────────────────────────────────────── */
+.stk-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.stk-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.75rem;
+}
+.stk-card p {
+  color: var(--subtle);
+  font-size: 0.88rem;
+  line-height: 1.65;
+  margin: 0 0 0.6rem;
+}
+.stk-card p:last-child { margin-bottom: 0; }
+
+/* ── Concept chips ───────────────────────────────────────── */
+.concept-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.concept-chip {
+  flex: 1;
+  min-width: 160px;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.concept-chip.push-chip {
+  background: rgba(129,140,248,0.1);
+  border-color: rgba(129,140,248,0.25);
+}
+.concept-chip.pop-chip {
+  background: rgba(251,191,36,0.1);
+  border-color: rgba(251,191,36,0.25);
+}
+.concept-chip.lifo-chip {
+  background: rgba(56,189,248,0.08);
+  border-color: rgba(56,189,248,0.2);
+}
+.concept-chip-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+.concept-chip-name {
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+.push-chip .concept-chip-name { color: var(--accent); }
+.pop-chip  .concept-chip-name { color: var(--warning); }
+.lifo-chip .concept-chip-name { color: var(--accent2); }
+.concept-chip-asm {
+  font-family: 'Courier New', monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+  background: rgba(0,0,0,0.25);
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+  display: inline-block;
+  margin: 0.1rem 0;
+}
+.concept-chip-desc {
+  font-size: 0.78rem;
+  color: var(--subtle);
+  line-height: 1.5;
+}
+
+/* ── Region concept strip ────────────────────────────────── */
+.region-strip {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.region-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 130px;
+}
+.region-badge.r-text   { background: rgba(56,189,248,0.1);   border: 1px solid rgba(56,189,248,0.25); }
+.region-badge.r-heap   { background: rgba(34,197,94,0.1);    border: 1px solid rgba(34,197,94,0.25); }
+.region-badge.r-stack  { background: rgba(129,140,248,0.12); border: 1px solid rgba(129,140,248,0.3); }
+.region-badge.r-kernel { background: rgba(239,68,68,0.08);   border: 1px solid rgba(239,68,68,0.2); }
+.region-dot {
+  width: 10px; height: 10px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.r-text   .region-dot { background: var(--accent2); }
+.r-heap   .region-dot { background: var(--success); }
+.r-stack  .region-dot { background: var(--accent); }
+.r-kernel .region-dot { background: var(--danger); }
+.region-badge-text {}
+.region-badge-name { font-size: 0.78rem; font-weight: 700; }
+.r-text   .region-badge-name { color: var(--accent2); }
+.r-heap   .region-badge-name { color: var(--success); }
+.r-stack  .region-badge-name { color: var(--accent); }
+.r-kernel .region-badge-name { color: var(--danger); }
+.region-badge-desc { font-size: 0.7rem; color: var(--muted); line-height: 1.4; }
+
+/* ── Frame anatomy chips ─────────────────────────────────── */
+.frame-anatomy {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.fa-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 7px;
+  font-size: 0.78rem;
+  flex: 1;
+  min-width: 120px;
+}
+.fa-chip.fa-local  { background: rgba(129,140,248,0.12); border: 1px solid rgba(129,140,248,0.3); }
+.fa-chip.fa-rbp    { background: rgba(245,158,11,0.12);  border: 1px solid rgba(245,158,11,0.3); }
+.fa-chip.fa-ret    { background: rgba(239,68,68,0.12);   border: 1px solid rgba(239,68,68,0.3); }
+.fa-chip .fa-dot   { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.fa-chip.fa-local .fa-dot  { background: var(--accent); }
+.fa-chip.fa-rbp   .fa-dot  { background: var(--warning); }
+.fa-chip.fa-ret   .fa-dot  { background: var(--danger); }
+.fa-chip-name { font-weight: 700; }
+.fa-chip.fa-local .fa-chip-name { color: var(--accent); }
+.fa-chip.fa-rbp   .fa-chip-name { color: var(--warning); }
+.fa-chip.fa-ret   .fa-chip-name { color: var(--danger); }
+.fa-chip-desc { font-size: 0.68rem; color: var(--muted); margin-left: 0.1rem; }
+
+/* ── Push / Pop interactive stack ─────────────────────────── */
+.pushpop-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 640px) { .pushpop-layout { grid-template-columns: 1fr; } }
+
+.stack-tower {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 0.75rem;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+.stack-tower-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--card-border);
+}
+.stack-items-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 3px;
+  justify-content: flex-start;
+  min-height: 230px;
+  overflow: hidden;
+  padding-top: 0.25rem;
+}
+.stack-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.42rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  border: 1px solid transparent;
+  animation: stack-slide-in 0.25s ease;
+}
+@keyframes stack-slide-in {
+  from { opacity: 0; transform: translateY(-12px) scaleY(0.7); }
+  to   { opacity: 1; transform: translateY(0) scaleY(1); }
+}
+.stack-item.top-item {
+  background: rgba(129,140,248,0.18);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.stack-item:not(.top-item) {
+  background: rgba(148,163,184,0.07);
+  border-color: var(--card-border);
+  color: var(--subtle);
+}
+.item-addr { font-size: 0.66rem; color: var(--muted); font-weight: 400; }
+.stack-empty-msg {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 2rem 0;
+  font-style: italic;
+}
+.rsp-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: rgba(56,189,248,0.07);
+  border: 1px solid rgba(56,189,248,0.2);
+  border-radius: 6px;
+  margin-top: 0.5rem;
+}
+.rsp-bar-label  { font-size: 0.72rem; font-weight: 800; color: var(--accent2); font-family: 'Courier New', monospace; }
+.rsp-bar-val    { font-family: 'Courier New', monospace; font-size: 0.78rem; color: var(--text); font-weight: 700; }
+.rsp-bar-desc   { font-size: 0.64rem; color: var(--muted); margin-left: auto; }
+
+.pp-controls { display: flex; flex-direction: column; gap: 0.75rem; }
+.pp-input-row { display: flex; gap: 0.5rem; }
+.pp-input {
+  flex: 1;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--card-border);
+  background: var(--bg2);
+  color: var(--text);
+  font-size: 0.88rem;
+  font-family: 'Courier New', monospace;
+  outline: none;
+}
+.pp-input:focus { border-color: var(--accent); }
+.btn-push, .btn-pop, .btn-clear {
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.btn-push  { background: var(--accent); color: #fff; }
+.btn-pop   { background: var(--warning); color: #000; }
+.btn-clear { background: transparent; border: 1.5px solid var(--card-border); color: var(--subtle); padding: 0.4rem 0.85rem; }
+.btn-push:hover, .btn-pop:hover { opacity: 0.85; }
+.btn-push:active, .btn-pop:active { transform: scale(0.97); }
+.pp-op-log {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.76rem;
+  font-family: 'Courier New', monospace;
+  color: var(--subtle);
+  min-height: 96px;
+  max-height: 148px;
+  overflow-y: auto;
+}
+.pp-op-log .log-push { color: var(--accent); }
+.pp-op-log .log-pop  { color: var(--warning); }
+.pp-op-log .log-err  { color: var(--danger); }
+
+/* ── Address space + zoom ─────────────────────────────────── */
+.mem-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 640px) { .mem-layout { grid-template-columns: 1fr; } }
+
+.addr-space { display: flex; flex-direction: column; gap: 2px; }
+.addr-region {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+}
+.addr-region.kernel   { background: rgba(239,68,68,0.1);    border-color: rgba(239,68,68,0.2); }
+.addr-region.stack    { background: rgba(129,140,248,0.12); border-color: rgba(129,140,248,0.3); }
+.addr-region.mmap     { background: rgba(148,163,184,0.06); border-color: var(--card-border); }
+.addr-region.heap     { background: rgba(34,197,94,0.1);    border-color: rgba(34,197,94,0.2); }
+.addr-region.data     { background: rgba(245,158,11,0.1);   border-color: rgba(245,158,11,0.2); }
+.addr-region.text     { background: rgba(56,189,248,0.1);   border-color: rgba(56,189,248,0.22); }
+.addr-region.nullpage { background: rgba(100,116,139,0.06); border-color: var(--card-border); }
+.addr-dot  { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.addr-region.kernel   .addr-dot { background: var(--danger); }
+.addr-region.stack    .addr-dot { background: var(--accent); }
+.addr-region.heap     .addr-dot { background: var(--success); }
+.addr-region.data     .addr-dot { background: var(--warning); }
+.addr-region.text     .addr-dot { background: var(--accent2); }
+.addr-region.mmap     .addr-dot,
+.addr-region.nullpage .addr-dot { background: var(--card-border); }
+.addr-name { font-size: 0.78rem; font-weight: 700; min-width: 64px; }
+.addr-region.kernel   .addr-name { color: var(--danger); }
+.addr-region.stack    .addr-name { color: var(--accent); }
+.addr-region.heap     .addr-name { color: var(--success); }
+.addr-region.data     .addr-name { color: var(--warning); }
+.addr-region.text     .addr-name { color: var(--accent2); }
+.addr-region.mmap     .addr-name,
+.addr-region.nullpage .addr-name { color: var(--muted); }
+.addr-info { flex: 1; }
+.addr-desc  { font-size: 0.72rem; color: var(--subtle); }
+.addr-range { font-size: 0.62rem; color: var(--muted); font-family: 'Courier New', monospace; margin-top: 1px; }
+
+.grows-arrow {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  color: var(--muted);
+  padding: 0.1rem 0.85rem;
+}
+.grows-arrow strong { color: var(--accent); }
+
+/* ── Zoomed stack frame ───────────────────────────────────── */
+.stack-zoom {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.stack-zoom-header {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(129,140,248,0.08);
+  border-bottom: 1px solid var(--card-border);
+}
+.sz-row {
+  display: flex;
+  align-items: stretch;
+  min-height: 38px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.sz-row:last-child { border-bottom: none; }
+.sz-addr {
+  width: 84px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.62rem;
+  font-family: 'Courier New', monospace;
+  color: var(--muted);
+  background: var(--bg);
+  border-right: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.sz-cell {
+  flex: 1;
+  padding: 0.3rem 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.sz-cell-val  { font-size: 0.78rem; font-weight: 700; font-family: 'Courier New', monospace; }
+.sz-cell-desc { font-size: 0.65rem; padding: 0.1rem 0.35rem; border-radius: 3px; white-space: nowrap; }
+.sz-cell.local   { background: rgba(129,140,248,0.1); }
+.sz-cell.savedrbp{ background: rgba(245,158,11,0.1); }
+.sz-cell.retaddr { background: rgba(239,68,68,0.1); }
+.sz-cell.args    { background: rgba(56,189,248,0.08); }
+.sz-cell.local    .sz-cell-val  { color: var(--accent); }
+.sz-cell.savedrbp .sz-cell-val  { color: var(--warning); }
+.sz-cell.retaddr  .sz-cell-val  { color: #fca5a5; }
+.sz-cell.args     .sz-cell-val  { color: var(--accent2); }
+.sz-cell.local    .sz-cell-desc { background: rgba(129,140,248,0.15); color: var(--accent); }
+.sz-cell.savedrbp .sz-cell-desc { background: rgba(245,158,11,0.15);  color: var(--warning); }
+.sz-cell.retaddr  .sz-cell-desc { background: rgba(239,68,68,0.15);   color: #fca5a5; }
+.sz-cell.args     .sz-cell-desc { background: rgba(56,189,248,0.12);  color: var(--accent2); }
+.sz-pointer {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.66rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  border-bottom: 1px dashed var(--card-border);
+}
+.sz-pointer.rsp { color: var(--accent); }
+.sz-pointer.rbp { color: var(--warning); }
+
+/* ── Call frames step-through ─────────────────────────────── */
+.cf-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 680px) { .cf-layout { grid-template-columns: 1fr; } }
+
+.step-nav {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.btn-prev, .btn-next {
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--card-border);
+  background: var(--card);
+  color: var(--subtle);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-next { border-color: var(--accent); color: var(--accent); background: var(--bg2); }
+.btn-prev:hover { border-color: var(--accent); color: var(--accent); }
+.btn-prev:disabled, .btn-next:disabled { opacity: 0.3; cursor: default; }
+.step-counter { font-size: 0.78rem; color: var(--muted); }
+.step-pips { display: flex; gap: 5px; align-items: center; }
+.step-pip {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--card-border); cursor: pointer;
+  transition: background 0.3s;
+}
+.step-pip.done   { background: var(--success); }
+.step-pip.active { background: var(--accent); box-shadow: 0 0 5px var(--glow); }
+
+.step-desc {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  min-height: 60px;
+}
+.step-desc-title { font-size: 0.72rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+.step-desc-body  { font-size: 0.83rem; color: var(--subtle); line-height: 1.6; }
+
+.cf-code {
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  line-height: 1.75;
+  overflow-x: auto;
+}
+.cf-code .hl  { background: rgba(129,140,248,0.2); border-radius: 2px; padding: 0 2px; color: var(--accent); font-weight: 700; }
+.cf-code .kw  { color: var(--accent2); }
+.cf-code .fn  { color: #f9a8d4; }
+.cf-code .cmt { color: var(--muted); }
+
+.cf-label { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: center; padding: 0.3rem 0 0.4rem; }
+
+.cf-frame {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  animation: frame-in 0.28s ease;
+  margin-bottom: 3px;
+}
+@keyframes frame-in { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+.cf-frame.active-frame { border-color: var(--accent); box-shadow: 0 0 10px var(--glow); }
+.cf-frame-header { padding: 0.3rem 0.75rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+.cf-frame.main-frame .cf-frame-header { background: rgba(56,189,248,0.14); color: var(--accent2); }
+.cf-frame.add-frame  .cf-frame-header { background: rgba(129,140,248,0.14); color: var(--accent); }
+.cf-frame-body { background: var(--bg2); padding: 0.4rem 0.75rem; }
+.cf-var { display: flex; justify-content: space-between; align-items: center; padding: 0.2rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.77rem; font-family: 'Courier New', monospace; }
+.cf-var:last-child { border-bottom: none; }
+.cf-var-name  { color: var(--muted); }
+.cf-var-val   { color: var(--text); font-weight: 700; }
+.cf-var-val.hi{ color: var(--accent); }
+
+/* ── Recursion ───────────────────────────────────────────── */
+.rec-layout {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 640px) { .rec-layout { grid-template-columns: 1fr; } }
+
+.rec-frame {
+  border-radius: 7px; overflow: hidden;
+  border: 1px solid var(--card-border);
+  animation: frame-in 0.28s ease;
+  transition: border-color 0.3s;
+  margin-bottom: 3px;
+}
+.rec-frame.active    { border-color: var(--accent); box-shadow: 0 0 8px var(--glow); }
+.rec-frame.returning { border-color: var(--success); box-shadow: 0 0 8px rgba(34,197,94,0.2); }
+.rec-frame-hdr {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem; font-weight: 700;
+  font-family: 'Courier New', monospace;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.rec-frame.active    .rec-frame-hdr { background: rgba(129,140,248,0.14); color: var(--accent); }
+.rec-frame.returning .rec-frame-hdr { background: rgba(34,197,94,0.1);   color: var(--success); }
+.rec-frame:not(.active):not(.returning) .rec-frame-hdr { background: var(--bg2); color: var(--subtle); }
+.rec-frame-ret { font-size: 0.68rem; color: var(--muted); }
+.rec-frame-body { background: var(--bg2); padding: 0.3rem 0.75rem; }
+.rec-var { display: flex; justify-content: space-between; font-size: 0.74rem; font-family: 'Courier New', monospace; padding: 0.15rem 0; color: var(--subtle); }
+.rec-var span { color: var(--text); }
+
+.overflow-demo {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.overflow-demo h4 { font-size: 0.82rem; font-weight: 700; color: var(--danger); margin: 0 0 0.4rem; }
+.overflow-demo p  { font-size: 0.75rem; color: var(--muted); margin: 0 0 0.75rem; line-height: 1.55; }
+.overflow-bar { height: 10px; border-radius: 5px; background: var(--card-border); overflow: hidden; margin-bottom: 0.4rem; }
+.overflow-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--success), var(--warning), var(--danger)); transition: width 0.35s ease; width: 0%; }
+.overflow-counter { font-size: 0.75rem; color: var(--muted); font-family: 'Courier New', monospace; }
+.overflow-status  { font-size: 0.75rem; margin-top: 0.3rem; min-height: 1.2em; }
+.overflow-status.ok  { color: var(--success); }
+.overflow-status.err { color: var(--danger); font-weight: 700; }
+.btn-overflow { margin-top: 0.6rem; padding: 0.38rem 0.9rem; border-radius: 7px; border: none; background: var(--danger); color: #fff; font-weight: 700; font-size: 0.8rem; cursor: pointer; font-family: inherit; }
+.btn-reset-sm { padding: 0.35rem 0.7rem; border-radius: 7px; border: 1.5px solid var(--card-border); background: transparent; color: var(--subtle); font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: inherit; margin-left: 0.4rem; }
+
+/* ── Stack vs Heap ───────────────────────────────────────── */
+.svh-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 580px) { .svh-grid { grid-template-columns: 1fr; } }
+.svh-col { background: var(--bg2); border: 1px solid var(--card-border); border-radius: 10px; overflow: hidden; }
+.svh-col-header { padding: 0.55rem 1rem; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
+.svh-col.sc .svh-col-header { background: rgba(129,140,248,0.14); color: var(--accent); }
+.svh-col.hc .svh-col-header { background: rgba(34,197,94,0.1);    color: var(--success); }
+.svh-row { display: flex; align-items: baseline; gap: 0.5rem; padding: 0.55rem 1rem; border-top: 1px solid var(--card-border); font-size: 0.82rem; }
+.svh-row-label { font-weight: 700; color: var(--muted); min-width: 80px; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.svh-row-val   { color: var(--text); line-height: 1.5; }
+.svh-code-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem; }
+@media (max-width: 580px) { .svh-code-row { grid-template-columns: 1fr; } }
+.svh-code { background: var(--bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 0.75rem 1rem; font-family: 'Courier New', monospace; font-size: 0.78rem; line-height: 1.75; }
+.svh-code .kw  { color: var(--accent2); }
+.svh-code .fn  { color: #f9a8d4; }
+.svh-code .cmt { color: var(--muted); }
+.svh-code .str { color: var(--success); }
+
+/* ── Quiz ─────────────────────────────────────────────────── */
+.quiz-prog-bar { height: 4px; background: var(--card-border); border-radius: 2px; margin-bottom: 1.25rem; overflow: hidden; }
+.quiz-prog-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+.quiz-q-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+.quiz-q-num  { font-size: 0.64rem; font-weight: 800; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.5rem; }
+.quiz-q-text { font-size: 0.94rem; font-weight: 600; color: var(--text); margin-bottom: 1rem; line-height: 1.5; }
+.quiz-opts { display: flex; flex-direction: column; gap: 0.5rem; }
+.quiz-opt {
+  padding: 0.6rem 1rem; border-radius: 8px; border: 1.5px solid var(--card-border);
+  background: var(--bg2); color: var(--subtle); font-size: 0.88rem;
+  cursor: pointer; transition: border-color 0.2s, color 0.2s, background 0.2s;
+  text-align: left; font-family: inherit;
+}
+.quiz-opt:hover:not(:disabled) { border-color: var(--accent); color: var(--text); }
+.quiz-opt.correct  { border-color: var(--success); background: rgba(34,197,94,0.1);  color: var(--success); }
+.quiz-opt.wrong    { border-color: var(--danger);  background: rgba(239,68,68,0.1);  color: var(--danger); }
+.quiz-opt.revealed { border-color: var(--success); background: rgba(34,197,94,0.07); color: var(--success); }
+.quiz-opt:disabled { cursor: default; }
+.quiz-fb { margin-top: 0.75rem; padding: 0.6rem 0.9rem; border-radius: 7px; font-size: 0.84rem; line-height: 1.5; display: none; }
+.quiz-fb.show { display: block; }
+.quiz-fb.ok  { background: rgba(34,197,94,0.1);  color: var(--success); border: 1px solid rgba(34,197,94,0.2); }
+.quiz-fb.bad { background: rgba(239,68,68,0.1);  color: #fca5a5;        border: 1px solid rgba(239,68,68,0.2); }
+.quiz-nav { display: flex; justify-content: flex-end; margin-top: 1rem; }
+.btn-q-next { padding: 0.5rem 1.25rem; border-radius: 8px; border: none; background: var(--accent); color: #fff; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+.btn-q-next:disabled { opacity: 0.35; cursor: default; }
+.quiz-score { text-align: center; padding: 2.5rem 1.5rem; }
+.quiz-score-num { font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+.quiz-score-pct { font-size: 1rem; color: var(--muted); margin-top: 0.4rem; }
+.quiz-score-msg { font-size: 0.9rem; color: var(--subtle); margin: 1rem 0; }
+.btn-retry { padding: 0.55rem 1.5rem; border-radius: 8px; border: none; background: var(--accent); color: #fff; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+@media (max-width: 480px) {
+  .stk-title { font-size: 1.2rem; }
+  .stk-card  { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+<script>
+(function() {
+  var sk = localStorage.getItem('bs-skin');
+  if (sk) document.documentElement.setAttribute('data-skin', sk);
+})();
+</script>
+
+<!-- Skin toggle -->
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+
+<!-- Skin panel -->
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="midnight" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom
+  </div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix
+  </div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire
+  </div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss
+  </div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor
+  </div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman
+  </div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95
+  </div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
+    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero
+  </div>
+</div>
+
+<div class="stk-container">
+
+  <!-- Header -->
+  <div class="stk-header">
+    <a href="index.html#learn" class="logo-wrap" style="text-decoration:none;color:inherit;flex-direction:row;gap:0.5rem;">
+      <span style="font-size:1.3rem;">&#129504;</span>
+      <span style="font-size:1rem;font-weight:800;color:var(--subtle);">BrainStuffer</span>
+    </a>
+    <div>
+      <div class="stk-title">The Stack</div>
+      <div class="stk-subtitle">Push, pop, frames &amp; memory &mdash; visually explained</div>
+    </div>
+  </div>
+
+  <!-- Section nav -->
+  <div class="section-nav" id="section-nav">
+    <button class="sec-btn active" data-sec="pushpop">1. Push &amp; Pop</button>
+    <button class="sec-btn" data-sec="memory">2. Stack in Memory</button>
+    <button class="sec-btn" data-sec="frames">3. Call Frames</button>
+    <button class="sec-btn" data-sec="recursion">4. Recursion</button>
+    <button class="sec-btn" data-sec="vsheap">5. Stack vs Heap</button>
+    <button class="sec-btn" data-sec="quiz">6. Quiz</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 1: Push & Pop                                   -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="stk-section active" id="sec-pushpop">
+
+    <!-- Concept chips -->
+    <div class="concept-row">
+      <div class="concept-chip push-chip">
+        <div class="concept-chip-icon">&#9650;</div>
+        <div class="concept-chip-name">PUSH</div>
+        <div class="concept-chip-asm">sub rsp, 8 &nbsp;&bull;&nbsp; mov [rsp], val</div>
+        <div class="concept-chip-desc">Decreases RSP by 8 (makes space), then writes the value there. Stack grows <em>down</em> in memory.</div>
+      </div>
+      <div class="concept-chip pop-chip">
+        <div class="concept-chip-icon">&#9660;</div>
+        <div class="concept-chip-name">POP</div>
+        <div class="concept-chip-asm">mov reg, [rsp] &nbsp;&bull;&nbsp; add rsp, 8</div>
+        <div class="concept-chip-desc">Reads the value at RSP into a register, then increases RSP by 8 (releases the slot).</div>
+      </div>
+      <div class="concept-chip lifo-chip">
+        <div class="concept-chip-icon">&#127963;</div>
+        <div class="concept-chip-name">LIFO</div>
+        <div class="concept-chip-asm">Last-In, First-Out</div>
+        <div class="concept-chip-desc">Like a stack of plates &mdash; you can only add or remove from the top. Always O(1): one register change + one memory access.</div>
+      </div>
+    </div>
+
+    <div class="stk-card">
+      <h3>Try it &mdash; Interactive Stack</h3>
+      <div class="pushpop-layout">
+        <div>
+          <div class="stack-tower">
+            <div class="stack-tower-label">Stack &mdash; top of memory (low addr) at top</div>
+            <div class="stack-items-wrap" id="stackTower">
+              <div class="stack-empty-msg">stack is empty &mdash; push something!</div>
+            </div>
+          </div>
+          <div class="rsp-bar">
+            <span class="rsp-bar-label">RSP</span>
+            <span class="rsp-bar-val" id="rspDisplay">0x7ffd_5000</span>
+            <span class="rsp-bar-desc">stack pointer (top of stack)</span>
+          </div>
+        </div>
+        <div class="pp-controls">
+          <div class="pp-input-row">
+            <input class="pp-input" id="pushInput" type="text" placeholder="value to push (e.g. 42)" maxlength="20">
+            <button class="btn-push" onclick="doPush()">PUSH</button>
+          </div>
+          <div style="display:flex;gap:0.5rem">
+            <button class="btn-pop" onclick="doPop()" style="flex:1">POP</button>
+            <button class="btn-clear" onclick="doClear()">Clear</button>
+          </div>
+          <div>
+            <div style="font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.3rem">Operation Log</div>
+            <div class="pp-op-log" id="opLog"></div>
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--card-border);border-radius:8px;padding:0.7rem 0.85rem;">
+            <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent2);margin-bottom:0.4rem">What you are seeing</div>
+            <div style="font-size:0.78rem;color:var(--subtle);line-height:1.6">
+              The <strong style="color:var(--accent)">top item</strong> is what RSP points to right now. Each push decreases the address by 8; each pop increases it. Notice the address in the log changes by exactly 8 bytes each time.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 2: Stack in Memory                              -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="stk-section" id="sec-memory">
+
+    <!-- Region key -->
+    <div class="region-strip">
+      <div class="region-badge r-text">
+        <div class="region-dot"></div>
+        <div class="region-badge-text">
+          <div class="region-badge-name">Text (.text)</div>
+          <div class="region-badge-desc">Your compiled machine code. Read-only.</div>
+        </div>
+      </div>
+      <div class="region-badge r-heap">
+        <div class="region-dot"></div>
+        <div class="region-badge-text">
+          <div class="region-badge-name">Heap</div>
+          <div class="region-badge-desc">malloc/new live here. Grows upward.</div>
+        </div>
+      </div>
+      <div class="region-badge r-stack">
+        <div class="region-dot"></div>
+        <div class="region-badge-text">
+          <div class="region-badge-name">Stack</div>
+          <div class="region-badge-desc">Local vars, return addrs. Grows downward.</div>
+        </div>
+      </div>
+      <div class="region-badge r-kernel">
+        <div class="region-dot"></div>
+        <div class="region-badge-text">
+          <div class="region-badge-name">Kernel</div>
+          <div class="region-badge-desc">OS memory. User code cannot touch this.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stk-card">
+      <div class="mem-layout">
+        <!-- Address space map -->
+        <div>
+          <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem">Virtual Address Space (x86-64, high&#8594;low)</div>
+          <div class="addr-space">
+            <div class="addr-region kernel">
+              <div class="addr-dot"></div>
+              <div class="addr-info">
+                <div class="addr-name">Kernel</div>
+                <div class="addr-desc">OS code &amp; data. Inaccessible from user space.</div>
+                <div class="addr-range">0xffff800000000000+</div>
+              </div>
+            </div>
+            <div class="grows-arrow">&#8593; <strong>Stack grows DOWN</strong> &mdash; RSP decreases on each push</div>
+            <div class="addr-region stack">
+              <div class="addr-dot"></div>
+              <div class="addr-info">
+                <div class="addr-name">Stack</div>
+                <div class="addr-desc">Local variables, saved registers, return addresses. Each thread gets its own. Default ~8 MB limit.</div>
+                <div class="addr-range">~0x7fff_xxxx_xxxx</div>
+              </div>
+            </div>
+            <div class="addr-region mmap">
+              <div class="addr-dot"></div>
+              <div class="addr-info">
+                <div class="addr-name">mmap</div>
+                <div class="addr-desc">Shared libraries (.so/.dll), anonymous mappings.</div>
+                <div class="addr-range">varies (ASLR)</div>
+              </div>
+            </div>
+            <div class="grows-arrow">&#8595; <strong>Heap grows UP</strong> &mdash; brk pointer increases on malloc</div>
+            <div class="addr-region heap">
+              <div class="addr-dot"></div>
+              <div class="addr-info">
+                <div class="addr-name">Heap</div>
+                <div class="addr-desc">malloc() / new allocations. Managed by the allocator. Lifetime is manual.</div>
+                <div class="addr-range">varies (ASLR)</div>
+              </div>
+            </div>
+            <div class="addr-region data">
+              <div class="addr-dot"></div>
+              <div class="addr-info">
+                <div class="addr-name">BSS / Data</div>
+                <div class="addr-desc">Global and static variables. BSS = uninitialised (zeroed by OS), Data = initialised.</div>
+                <div class="addr-range">fixed at link time</div>
+              </div>
+            </div>
+            <div class="addr-region text">
+              <div class="addr-dot"></div>
+              <div class="addr-info">
+                <div class="addr-name">Text</div>
+                <div class="addr-desc">Executable machine code. Read-only &amp; NX-protected &mdash; cannot be written at runtime.</div>
+                <div class="addr-range">~0x400000</div>
+              </div>
+            </div>
+            <div class="addr-region nullpage">
+              <div class="addr-dot"></div>
+              <div class="addr-info">
+                <div class="addr-name">Null page</div>
+                <div class="addr-desc">Unmapped on purpose. Dereferencing a null pointer faults here.</div>
+                <div class="addr-range">0x0000</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Zoomed frame -->
+        <div>
+          <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem">Zoom: one stack frame</div>
+          <div class="stack-zoom">
+            <div class="stack-zoom-header">Inside a function call &mdash; add(a=3, b=8)</div>
+            <div class="sz-pointer rsp">&#9658; RSP &rarr; top of frame (lowest address)</div>
+            <div class="sz-row">
+              <div class="sz-addr">rsp+0x00</div>
+              <div class="sz-cell local"><span class="sz-cell-val">local_b = 8</span><span class="sz-cell-desc">local var</span></div>
+            </div>
+            <div class="sz-row">
+              <div class="sz-addr">rsp+0x08</div>
+              <div class="sz-cell local"><span class="sz-cell-val">local_a = 3</span><span class="sz-cell-desc">local var</span></div>
+            </div>
+            <div class="sz-pointer rbp">&#9658; RBP &rarr; frame base (anchor)</div>
+            <div class="sz-row">
+              <div class="sz-addr">rsp+0x10</div>
+              <div class="sz-cell savedrbp"><span class="sz-cell-val">saved RBP</span><span class="sz-cell-desc">caller's frame base</span></div>
+            </div>
+            <div class="sz-row">
+              <div class="sz-addr">rsp+0x18</div>
+              <div class="sz-cell retaddr"><span class="sz-cell-val">return address</span><span class="sz-cell-desc">&#9888; jump here on RET</span></div>
+            </div>
+            <div class="sz-row">
+              <div class="sz-addr">rsp+0x20</div>
+              <div class="sz-cell args"><span class="sz-cell-val">arg a = 3</span><span class="sz-cell-desc">passed by caller</span></div>
+            </div>
+          </div>
+          <!-- colour key for frame -->
+          <div style="display:flex;flex-direction:column;gap:0.35rem;margin-top:0.75rem">
+            <div style="font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.1rem">What each colour means</div>
+            <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.74rem">
+              <div style="width:10px;height:10px;border-radius:2px;background:var(--accent);flex-shrink:0"></div>
+              <strong style="color:var(--accent)">Local vars</strong>
+              <span style="color:var(--muted)">— space the function reserved for its own data</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.74rem">
+              <div style="width:10px;height:10px;border-radius:2px;background:var(--warning);flex-shrink:0"></div>
+              <strong style="color:var(--warning)">Saved RBP</strong>
+              <span style="color:var(--muted)">— remembers where the caller's frame started</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.74rem">
+              <div style="width:10px;height:10px;border-radius:2px;background:#f87171;flex-shrink:0"></div>
+              <strong style="color:#fca5a5">Return address</strong>
+              <span style="color:var(--muted)">— where to jump when the function returns</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.74rem">
+              <div style="width:10px;height:10px;border-radius:2px;background:var(--accent2);flex-shrink:0"></div>
+              <strong style="color:var(--accent2)">Arguments</strong>
+              <span style="color:var(--muted)">— values the caller passed in (extra ones go on stack)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 3: Call Frames                                  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="stk-section" id="sec-frames">
+
+    <!-- Frame anatomy strip -->
+    <div class="frame-anatomy">
+      <div class="fa-chip fa-local">
+        <div class="fa-dot"></div>
+        <div>
+          <div class="fa-chip-name">Local variables</div>
+          <div class="fa-chip-desc">int x, char buf[] — live here until return</div>
+        </div>
+      </div>
+      <div class="fa-chip fa-rbp">
+        <div class="fa-dot"></div>
+        <div>
+          <div class="fa-chip-name">Saved RBP</div>
+          <div class="fa-chip-desc">Caller's frame base — restored on return</div>
+        </div>
+      </div>
+      <div class="fa-chip fa-ret">
+        <div class="fa-dot"></div>
+        <div>
+          <div class="fa-chip-name">Return address</div>
+          <div class="fa-chip-desc">RET pops this into RIP — jumps back to caller</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stk-card">
+      <h3>Step Through: main() calls add(3, 5)</h3>
+      <div class="step-nav">
+        <button class="btn-prev" id="cfPrev" onclick="cfStep(-1)">&#8592; Prev</button>
+        <button class="btn-next" id="cfNext" onclick="cfStep(1)">Next &#8594;</button>
+        <span class="step-counter" id="cfCounter">Step 1 / 7</span>
+        <div class="step-pips" id="cfPips"></div>
+      </div>
+      <div class="step-desc">
+        <div class="step-desc-title" id="cfDescTitle"></div>
+        <div class="step-desc-body"  id="cfDescBody"></div>
+      </div>
+      <div class="cf-layout">
+        <div class="cf-code" id="cfCode"></div>
+        <div>
+          <div class="cf-label">Stack (current frame at top)</div>
+          <div id="cfStackVis"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 4: Recursion                                    -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="stk-section" id="sec-recursion">
+    <div class="stk-card">
+      <h3>Recursion &amp; the Call Stack</h3>
+      <p>Every function call adds a frame. A recursive function calls itself, stacking frame after frame until the base case. Walk through <code>factorial(4)</code> &mdash; watch the frames pile up, then unwind in reverse order as values are returned (LIFO at work).</p>
+      <div style="display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center">
+        <button class="btn-next" onclick="recStep()" id="recNextBtn">Next step &#8594;</button>
+        <button class="btn-reset-sm" onclick="recReset()">Reset</button>
+        <span style="font-size:0.78rem;color:var(--muted)" id="recCounter">Step 0 / 9</span>
+      </div>
+      <div class="rec-layout">
+        <div>
+          <div class="step-desc" id="recDesc">
+            <div class="step-desc-title" id="recDescTitle">Ready</div>
+            <div class="step-desc-body"  id="recDescBody">Press "Next step" to start calling factorial(4).</div>
+          </div>
+          <div id="recStack"></div>
+        </div>
+        <div>
+          <div class="overflow-demo">
+            <h4>&#9888; Stack Overflow</h4>
+            <p>What if recursion never hits a base case? Frames pile up forever until the OS kills the process with SIGSEGV (default stack limit ~8 MB on Linux).</p>
+            <div class="overflow-bar"><div class="overflow-fill" id="ovFill"></div></div>
+            <div class="overflow-counter" id="ovCount">depth: 0 / 100</div>
+            <div class="overflow-status" id="ovStatus"></div>
+            <button class="btn-overflow" onclick="runOv()">Simulate infinite recursion</button>
+            <button class="btn-reset-sm" onclick="resetOv()">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 5: Stack vs Heap                                -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="stk-section" id="sec-vsheap">
+    <div class="stk-card">
+      <h3>Stack vs Heap &mdash; Quick Reference</h3>
+      <div class="svh-grid">
+        <div class="svh-col sc">
+          <div class="svh-col-header">&#9650; Stack</div>
+          <div class="svh-row"><div class="svh-row-label">Allocation</div><div class="svh-row-val">Automatic &mdash; compiler emits <code>sub rsp, N</code></div></div>
+          <div class="svh-row"><div class="svh-row-label">Free</div><div class="svh-row-val">Automatic &mdash; RSP restored on return</div></div>
+          <div class="svh-row"><div class="svh-row-label">Speed</div><div class="svh-row-val">O(1) &mdash; single register move</div></div>
+          <div class="svh-row"><div class="svh-row-label">Max size</div><div class="svh-row-val">~1–8 MB per thread (OS default)</div></div>
+          <div class="svh-row"><div class="svh-row-label">Lifetime</div><div class="svh-row-val">Until the function returns</div></div>
+          <div class="svh-row"><div class="svh-row-label">Threads</div><div class="svh-row-val">Each thread gets its own stack &mdash; safe</div></div>
+          <div class="svh-row"><div class="svh-row-label">Size known?</div><div class="svh-row-val">Must be fixed at compile time</div></div>
+          <div class="svh-row"><div class="svh-row-label">Danger</div><div class="svh-row-val">Stack overflow (too deep recursion)</div></div>
+        </div>
+        <div class="svh-col hc">
+          <div class="svh-col-header">&#9670; Heap</div>
+          <div class="svh-row"><div class="svh-row-label">Allocation</div><div class="svh-row-val">Manual &mdash; <code>malloc()</code> / <code>new</code></div></div>
+          <div class="svh-row"><div class="svh-row-label">Free</div><div class="svh-row-val">Manual &mdash; <code>free()</code> / <code>delete</code> (or GC)</div></div>
+          <div class="svh-row"><div class="svh-row-label">Speed</div><div class="svh-row-val">Slower &mdash; allocator searches free list</div></div>
+          <div class="svh-row"><div class="svh-row-label">Max size</div><div class="svh-row-val">Limited only by virtual memory</div></div>
+          <div class="svh-row"><div class="svh-row-label">Lifetime</div><div class="svh-row-val">Until you explicitly free it</div></div>
+          <div class="svh-row"><div class="svh-row-label">Threads</div><div class="svh-row-val">Shared &mdash; allocator must lock</div></div>
+          <div class="svh-row"><div class="svh-row-label">Size known?</div><div class="svh-row-val">Can be determined at runtime</div></div>
+          <div class="svh-row"><div class="svh-row-label">Danger</div><div class="svh-row-val">Memory leak, use-after-free, heap overflow</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="stk-card">
+      <h3>In Code</h3>
+      <div class="svh-code-row">
+        <div>
+          <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:0.4rem">Stack (C)</div>
+          <div class="svh-code"><span class="kw">void</span> <span class="fn">foo</span>() {
+  <span class="cmt">// both live on the stack</span>
+  <span class="kw">int</span> x = 42;
+  <span class="kw">char</span> buf[256];
+  process(buf);
+} <span class="cmt">// freed automatically</span></div>
+        </div>
+        <div>
+          <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--success);margin-bottom:0.4rem">Heap (C)</div>
+          <div class="svh-code"><span class="kw">void</span> <span class="fn">bar</span>() {
+  <span class="kw">char</span> *p = <span class="fn">malloc</span>(256);
+  process(p);
+  <span class="fn">free</span>(p); <span class="cmt">// you MUST do this</span>
+  <span class="cmt">// forget -> memory leak!</span>
+}</div>
+        </div>
+      </div>
+      <div class="svh-code-row" style="margin-top:1rem">
+        <div>
+          <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:0.4rem">Stack (C++)</div>
+          <div class="svh-code">std::string s = <span class="str">"hello"</span>;
+<span class="cmt">// s is on the stack</span>
+<span class="cmt">// ~string() called auto</span>
+<span class="cmt">// when scope exits (RAII)</span></div>
+        </div>
+        <div>
+          <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--success);margin-bottom:0.4rem">Heap (C++ smart ptr)</div>
+          <div class="svh-code"><span class="kw">auto</span> p = std::<span class="fn">make_unique</span>
+  &lt;Widget&gt;(args);
+<span class="cmt">// heap, but RAII:</span>
+<span class="cmt">// unique_ptr frees it</span>
+<span class="cmt">// automatically</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 6: Quiz                                         -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="stk-section" id="sec-quiz">
+    <div class="stk-card">
+      <h3>Quiz &mdash; Test Your Stack Knowledge</h3>
+      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizProg"></div></div>
+      <div id="quizBody"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer style="text-align:center;padding:2rem 1rem;font-size:0.72rem;color:var(--muted)">
+  BrainStuffer &mdash; <a href="index.html#learn" style="color:var(--muted)">back to hub</a>
+</footer>
+
+<script>
+'use strict';
+
+/* ── Skin switcher ────────────────────────────────────────────── */
+(function() {
+  var toggle = document.getElementById('skin-toggle');
+  var panel  = document.getElementById('skin-panel');
+  if (!toggle || !panel) return;
+  toggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    panel.classList.toggle('open');
+  });
+  document.addEventListener('click', function() { panel.classList.remove('open'); });
+  panel.addEventListener('click', function(e) { e.stopPropagation(); });
+  panel.querySelectorAll('.skin-opt').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      var sk = opt.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      panel.classList.remove('open');
+    });
+  });
+})();
+
+/* ── Section nav ──────────────────────────────────────────────── */
+(function() {
+  var nav  = document.getElementById('section-nav');
+  var btns = nav.querySelectorAll('.sec-btn');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var secId = 'sec-' + btn.getAttribute('data-sec');
+      document.querySelectorAll('.stk-section').forEach(function(s) { s.classList.remove('active'); });
+      var sec = document.getElementById(secId);
+      if (sec) sec.classList.add('active');
+    });
+  });
+})();
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 1: Push & Pop
+══════════════════════════════════════════════════════════ */
+var stackItems = [];
+var BASE_RSP = 0x7ffd5000;
+
+function hexRsp(depth) {
+  var offset = depth * 8;
+  var val = BASE_RSP - offset;
+  var h = val.toString(16).toUpperCase();
+  while (h.length < 12) h = '0' + h;
+  return '0x' + h.slice(0, 4) + '_' + h.slice(4, 8) + '_' + h.slice(8);
+}
+
+function renderStack() {
+  var tower = document.getElementById('stackTower');
+  var rspEl = document.getElementById('rspDisplay');
+  if (stackItems.length === 0) {
+    tower.innerHTML = '<div class="stack-empty-msg">stack is empty &mdash; push something!</div>';
+    rspEl.textContent = hexRsp(0);
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < stackItems.length; i++) {
+    var isTop = (i === stackItems.length - 1);
+    var addr  = hexRsp(i + 1);
+    html += '<div class="stack-item' + (isTop ? ' top-item' : '') + '">' +
+            '<span>' + escHtml(String(stackItems[i])) + '</span>' +
+            '<span class="item-addr">' + addr.slice(-7) + '</span>' +
+            '</div>';
+  }
+  tower.innerHTML = html;
+  rspEl.textContent = hexRsp(stackItems.length);
+}
+
+function logOp(msg, cls) {
+  var log = document.getElementById('opLog');
+  var div = document.createElement('div');
+  if (cls) div.className = cls;
+  div.textContent = msg;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+
+function doPush() {
+  var input = document.getElementById('pushInput');
+  var val   = input.value.trim();
+  if (!val)                   { logOp('! enter a value first', 'log-err'); return; }
+  if (stackItems.length >= 10){ logOp('! stack full (max 10)',  'log-err'); return; }
+  stackItems.push(val);
+  input.value = '';
+  renderStack();
+  logOp('PUSH ' + val + '  -> RSP = ' + hexRsp(stackItems.length), 'log-push');
+}
+
+function doPop() {
+  if (stackItems.length === 0) { logOp('! stack underflow', 'log-err'); return; }
+  var val = stackItems.pop();
+  renderStack();
+  logOp('POP  -> ' + val + '  RSP = ' + hexRsp(stackItems.length), 'log-pop');
+}
+
+function doClear() {
+  stackItems = [];
+  renderStack();
+  document.getElementById('opLog').innerHTML = '';
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+document.getElementById('pushInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doPush();
+});
+
+renderStack();
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 3: Call Frames
+══════════════════════════════════════════════════════════ */
+var CF_STEPS = [
+  {
+    title: 'Before the call',
+    body: 'main() is running. RSP points to the top of main\'s frame. We\'re about to call add(3, 5) &mdash; which will push a new frame on top.',
+    code: '<span class="kw">int</span> <span class="fn">add</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) {\n  <span class="kw">int</span> result = a + b;\n  <span class="kw">return</span> result;\n}\n\n<span class="kw">int</span> <span class="fn">main</span>() {\n  <span class="kw">int</span> x = 10;\n  <span class="hl">int r = add(3, 5);</span>  <span class="cmt">// next</span>\n  <span class="kw">return</span> r;\n}',
+    frames: [{ cls: 'main-frame', label: 'main()', active: true, vars: [{ n: 'x', v: '10' }, { n: '(calling add...)', v: '' }] }]
+  },
+  {
+    title: 'Arguments: RDI=3, RSI=5',
+    body: 'The System V AMD64 ABI passes the first 6 integer args in registers: RDI=3, RSI=5. No stack space needed for args here.',
+    code: '<span class="cmt">; compiler output</span>\n<span class="hl">mov edi, 3</span>   <span class="cmt">; arg1 -> RDI</span>\n<span class="hl">mov esi, 5</span>   <span class="cmt">; arg2 -> RSI</span>\ncall add',
+    frames: [{ cls: 'main-frame', label: 'main()', active: true, vars: [{ n: 'x', v: '10' }, { n: 'RDI (a)', v: '3', hi: true }, { n: 'RSI (b)', v: '5', hi: true }] }]
+  },
+  {
+    title: 'CALL: push return address, jump',
+    body: 'CALL pushes the address of the NEXT instruction after the call (so we know where to return to), then jumps into add(). RSP decreases by 8.',
+    code: '<span class="cmt">; CALL does two things:</span>\n<span class="hl">push rip_next</span>  <span class="cmt">; return address</span>\njmp  add       <span class="cmt">; jump to add()</span>',
+    frames: [
+      { cls: 'main-frame', label: 'main()', active: false, vars: [{ n: 'x', v: '10' }] },
+      { cls: 'add-frame',  label: 'add() building', active: true, vars: [{ n: 'return addr', v: 'main+42', hi: true }] }
+    ]
+  },
+  {
+    title: 'Prologue: push RBP, mov RBP RSP',
+    body: 'add() starts its prologue: save the caller\'s RBP (so we can restore main\'s frame later), then set RBP = RSP to mark the base of the new frame.',
+    code: '<span class="fn">add</span>:\n  <span class="hl">push rbp</span>      <span class="cmt">; save main\'s RBP</span>\n  <span class="hl">mov  rbp, rsp</span> <span class="cmt">; new frame base</span>\n  sub  rsp, 8   <span class="cmt">; space for result</span>',
+    frames: [
+      { cls: 'main-frame', label: 'main()', active: false, vars: [{ n: 'x', v: '10' }] },
+      { cls: 'add-frame',  label: 'add()', active: true, vars: [{ n: 'saved RBP', v: "main's RBP", hi: true }, { n: 'return addr', v: 'main+42' }, { n: 'result', v: '(uninit)' }] }
+    ]
+  },
+  {
+    title: 'Body: compute 3 + 5 = 8',
+    body: 'add() computes the result using RDI and RSI (which still hold 3 and 5). The answer (8) goes into EAX &mdash; the return value register per the ABI.',
+    code: '<span class="cmt">; a=RDI=3, b=RSI=5</span>\n<span class="hl">mov  eax, edi</span>  <span class="cmt">; eax = 3</span>\n<span class="hl">add  eax, esi</span>  <span class="cmt">; eax = 8</span>\nmov  [rbp-4], eax',
+    frames: [
+      { cls: 'main-frame', label: 'main()', active: false, vars: [{ n: 'x', v: '10' }] },
+      { cls: 'add-frame',  label: 'add()', active: true, vars: [{ n: 'saved RBP', v: "main's RBP" }, { n: 'return addr', v: 'main+42' }, { n: 'result', v: '8', hi: true }, { n: 'RAX', v: '8', hi: true }] }
+    ]
+  },
+  {
+    title: 'Epilogue: restore RBP, unwind frame',
+    body: 'The epilogue tears down the frame: mov RSP, RBP discards locals, pop RBP restores main\'s frame base. Now RET can safely pop the return address.',
+    code: '<span class="hl">mov  rsp, rbp</span>  <span class="cmt">; discard locals</span>\n<span class="hl">pop  rbp</span>       <span class="cmt">; restore main\'s RBP</span>\nret            <span class="cmt">; pop ret addr -> RIP</span>',
+    frames: [
+      { cls: 'main-frame', label: 'main()', active: false, vars: [{ n: 'x', v: '10' }] },
+      { cls: 'add-frame',  label: 'add() unwinding', active: true, vars: [{ n: 'RBP restored', v: "main's RBP", hi: true }, { n: 'RAX', v: '8' }] }
+    ]
+  },
+  {
+    title: 'RET: back in main(), r = 8',
+    body: 'RET pops the return address into RIP &mdash; we jump back to main(). add()\'s frame is gone. RAX=8 is the return value, stored into r.',
+    code: '<span class="cmt">; back in main()</span>\n<span class="cmt">; RAX = 8</span>\n<span class="hl">mov  [rbp-8], eax</span>  <span class="cmt">; r = 8</span>',
+    frames: [{ cls: 'main-frame', label: 'main()', active: true, vars: [{ n: 'x', v: '10' }, { n: 'r', v: '8', hi: true }] }]
+  }
+];
+
+var cfIdx = 0;
+
+function cfRender() {
+  var step = CF_STEPS[cfIdx];
+  document.getElementById('cfDescTitle').textContent = 'Step ' + (cfIdx + 1) + ': ' + step.title;
+  document.getElementById('cfDescBody').textContent  = step.body;
+  document.getElementById('cfCode').innerHTML        = step.code;
+  document.getElementById('cfCounter').textContent   = 'Step ' + (cfIdx + 1) + ' / ' + CF_STEPS.length;
+
+  var vis  = document.getElementById('cfStackVis');
+  var html = '';
+  for (var i = step.frames.length - 1; i >= 0; i--) {
+    var f = step.frames[i];
+    html += '<div class="cf-frame ' + f.cls + (f.active ? ' active-frame' : '') + '">';
+    html += '<div class="cf-frame-header">' + f.label + '</div>';
+    html += '<div class="cf-frame-body">';
+    for (var j = 0; j < f.vars.length; j++) {
+      var v = f.vars[j];
+      html += '<div class="cf-var"><span class="cf-var-name">' + v.n + '</span>' +
+              '<span class="cf-var-val' + (v.hi ? ' hi' : '') + '">' + v.v + '</span></div>';
+    }
+    html += '</div></div>';
+  }
+  vis.innerHTML = html;
+
+  var pips = document.getElementById('cfPips');
+  var ph = '';
+  for (var k = 0; k < CF_STEPS.length; k++) {
+    ph += '<div class="step-pip ' + (k < cfIdx ? 'done' : k === cfIdx ? 'active' : '') + '" onclick="cfGoto(' + k + ')"></div>';
+  }
+  pips.innerHTML = ph;
+
+  document.getElementById('cfPrev').disabled = cfIdx === 0;
+  document.getElementById('cfNext').disabled = cfIdx === CF_STEPS.length - 1;
+}
+
+function cfStep(d) { cfIdx = Math.max(0, Math.min(CF_STEPS.length - 1, cfIdx + d)); cfRender(); }
+function cfGoto(i) { cfIdx = i; cfRender(); }
+cfRender();
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 4: Recursion
+══════════════════════════════════════════════════════════ */
+var REC_STEPS = [
+  { title: 'Call factorial(4)',     body: 'We call factorial(4). A frame is pushed. n=4 fails the base case (n<=1), so we recurse.', frames: [{ n:4, st:'active', ret:'? (waiting for factorial(3))' }] },
+  { title: 'Call factorial(3)',     body: 'factorial(4) suspends and calls factorial(3). Two frames on the stack now.',                frames: [{ n:4, st:'waiting', ret:'4 * factorial(3)' }, { n:3, st:'active', ret:'? (waiting for factorial(2))' }] },
+  { title: 'Call factorial(2)',     body: 'factorial(3) calls factorial(2). Three frames deep.',                                       frames: [{ n:4, st:'waiting', ret:'4 * factorial(3)' }, { n:3, st:'waiting', ret:'3 * factorial(2)' }, { n:2, st:'active', ret:'? (waiting for factorial(1))' }] },
+  { title: 'Call factorial(1)',     body: 'factorial(2) calls factorial(1). Four frames deep.',                                        frames: [{ n:4, st:'waiting', ret:'4 * factorial(3)' }, { n:3, st:'waiting', ret:'3 * factorial(2)' }, { n:2, st:'waiting', ret:'2 * factorial(1)' }, { n:1, st:'active', ret:'? (base case check)' }] },
+  { title: 'Base case! n=1 -> 1',  body: 'n<=1 is true! factorial(1) returns 1 without recursing. This frame is popped.',            frames: [{ n:4, st:'waiting', ret:'4 * factorial(3)' }, { n:3, st:'waiting', ret:'3 * factorial(2)' }, { n:2, st:'active', ret:'2 * 1 = ?' }, { n:1, st:'returning', ret:'returns 1' }] },
+  { title: 'factorial(2) = 2',     body: 'factorial(2) gets the value 1, computes 2*1=2, returns. Frame popped.',                    frames: [{ n:4, st:'waiting', ret:'4 * factorial(3)' }, { n:3, st:'active', ret:'3 * 2 = ?' }, { n:2, st:'returning', ret:'returns 2' }] },
+  { title: 'factorial(3) = 6',     body: 'factorial(3) gets 2, computes 3*2=6, returns. Frame popped.',                              frames: [{ n:4, st:'active', ret:'4 * 6 = ?' }, { n:3, st:'returning', ret:'returns 6' }] },
+  { title: 'factorial(4) = 24',    body: 'factorial(4) gets 6, computes 4*6=24, returns. All recursive frames are gone.',            frames: [{ n:4, st:'returning', ret:'returns 24' }] },
+  { title: 'Done! Answer = 24',    body: 'The stack is empty. factorial(4) = 24. Notice: LIFO in action &mdash; frames built up in order 4,3,2,1 and unwound in reverse 1,2,3,4.',  frames: [] }
+];
+var recIdx = 0;
+
+function recRender() {
+  var step = REC_STEPS[recIdx];
+  document.getElementById('recDescTitle').textContent = 'Step ' + recIdx + ': ' + step.title;
+  document.getElementById('recDescBody').textContent  = step.body;
+  document.getElementById('recCounter').textContent   = 'Step ' + recIdx + ' / ' + (REC_STEPS.length - 1);
+  var stackEl = document.getElementById('recStack');
+  if (step.frames.length === 0) {
+    stackEl.innerHTML = '<div style="text-align:center;color:var(--success);font-weight:700;padding:1.5rem;font-size:0.9rem">Stack clear &mdash; factorial(4) = 24 &#10003;</div>';
+  } else {
+    var html = '';
+    for (var i = step.frames.length - 1; i >= 0; i--) {
+      var f = step.frames[i];
+      html += '<div class="rec-frame ' + f.st + '">';
+      html += '<div class="rec-frame-hdr">factorial(n=' + f.n + ')<span class="rec-frame-ret">' + f.ret + '</span></div>';
+      html += '<div class="rec-frame-body"><div class="rec-var">n = <span>' + f.n + '</span></div></div></div>';
+    }
+    stackEl.innerHTML = html;
+  }
+  document.getElementById('recNextBtn').disabled = recIdx >= REC_STEPS.length - 1;
+}
+
+function recStep()  { if (recIdx < REC_STEPS.length - 1) { recIdx++; recRender(); } }
+function recReset() { recIdx = 0; recRender(); }
+recRender();
+
+/* Overflow demo */
+var ovDepth = 0, ovTimer = null;
+function runOv() {
+  if (ovTimer) return;
+  ovTimer = setInterval(function() {
+    ovDepth++;
+    var pct = Math.min(100, ovDepth);
+    document.getElementById('ovFill').style.width  = pct + '%';
+    document.getElementById('ovCount').textContent = 'depth: ' + ovDepth + ' / 100';
+    if (ovDepth >= 100) {
+      clearInterval(ovTimer); ovTimer = null;
+      document.getElementById('ovStatus').textContent  = 'SIGSEGV: stack overflow! Process killed.';
+      document.getElementById('ovStatus').className    = 'overflow-status err';
+    } else {
+      document.getElementById('ovStatus').textContent  = 'calling... factorial(' + ovDepth + ')';
+      document.getElementById('ovStatus').className    = 'overflow-status ok';
+    }
+  }, 55);
+}
+function resetOv() {
+  if (ovTimer) { clearInterval(ovTimer); ovTimer = null; }
+  ovDepth = 0;
+  document.getElementById('ovFill').style.width  = '0%';
+  document.getElementById('ovCount').textContent = 'depth: 0 / 100';
+  document.getElementById('ovStatus').textContent = '';
+  document.getElementById('ovStatus').className  = 'overflow-status';
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 6: Quiz
+══════════════════════════════════════════════════════════ */
+var QUIZ = [
+  { q:'What discipline does the stack use for adding and removing items?', opts:['FIFO (First-In-First-Out)','LIFO (Last-In-First-Out)','Random access','Priority order'], ans:1, fb:'The stack is LIFO: the last item pushed is the first popped. Like a stack of plates.' },
+  { q:'On x86-64, which register always points to the top of the stack?', opts:['RBP','RAX','RSP','RIP'], ans:2, fb:'RSP (Stack Pointer) always tracks the current top. RBP (Base Pointer) anchors the current frame.' },
+  { q:'When you PUSH a value on x86-64, what happens to RSP?', opts:['RSP increases by 8','RSP decreases by 8','RSP is unchanged','RSP is set to the pushed value'], ans:1, fb:'The stack grows downward: PUSH decrements RSP by 8, then writes at [RSP].' },
+  { q:'What does the x86-64 CALL instruction push onto the stack?', opts:['The function arguments','The return address (next instruction after CALL)','The current RBP','The value of RAX'], ans:1, fb:'CALL pushes the address of the instruction immediately after the CALL, then jumps to the target. RET pops this back into RIP.' },
+  { q:'In the System V AMD64 ABI, how are the first integer function arguments passed?', opts:['Pushed onto the stack','In registers RDI, RSI, RDX, RCX, R8, R9','Via a global variable','In a heap-allocated struct'], ans:1, fb:'First 6 integer/pointer args go in RDI, RSI, RDX, RCX, R8, R9. Extra args use the stack.' },
+  { q:'What is the purpose of "push rbp" in a function prologue?', opts:['To set up the new frame base pointer','To save the caller\'s frame base so it can be restored on return','To allocate space for local variables','To push the return address'], ans:1, fb:'push rbp saves the caller\'s RBP. The next instruction (mov rbp, rsp) sets the new frame base. pop rbp on return restores the caller\'s.' },
+  { q:'What is a stack frame?', opts:['A single byte on the stack','A dedicated block of stack memory for one function call: locals, saved RBP, and return address','The entire stack memory region','A hardware register'], ans:1, fb:'Each function call creates a frame containing its local variables, the saved RBP, and the return address.' },
+  { q:'What is a stack overflow?', opts:['When malloc runs out of memory','When too-deep recursion or huge locals exhaust the stack size limit','When you push a value larger than 8 bytes','When the heap and stack collide'], ans:1, fb:'Infinite/deep recursion walks RSP into unmapped memory, triggering SIGSEGV. Default stack limit is ~8 MB on Linux.' },
+  { q:'What is the main performance advantage of stack allocation over heap allocation?', opts:['Larger maximum size','Can survive beyond function scope','Extremely fast: just a single RSP decrement, no allocator','Thread-shared access'], ans:2, fb:'Stack allocation is O(1): just adjust RSP. No free-list search, no locking. Free is also automatic on return.' },
+  { q:'Where does a function place its integer return value on x86-64?', opts:['RSP','RBP','RAX','RDI'], ans:2, fb:'By convention, integer and pointer return values go in RAX. Float results use XMM0.' }
+];
+
+var qCur = 0, qScore = 0, qAnswered = false;
+
+function renderQuiz() {
+  if (qCur >= QUIZ.length) {
+    var pct = Math.round((qScore / QUIZ.length) * 100);
+    var msg = pct >= 80 ? 'Excellent! You really know your stack.' : pct >= 60 ? 'Good work! Review the sections you missed.' : 'Keep practising &mdash; revisit the earlier sections.';
+    document.getElementById('quizBody').innerHTML =
+      '<div class="quiz-score">' +
+      '<div class="quiz-score-num">' + qScore + '/' + QUIZ.length + '</div>' +
+      '<div class="quiz-score-pct">' + pct + '% correct</div>' +
+      '<div class="quiz-score-msg">' + msg + '</div>' +
+      '<button class="btn-retry" onclick="quizRetry()">Try again</button></div>';
+    document.getElementById('quizProg').style.width = '100%';
+    return;
+  }
+  var q = QUIZ[qCur];
+  document.getElementById('quizProg').style.width = (qCur / QUIZ.length * 100) + '%';
+  qAnswered = false;
+  var html = '<div class="quiz-q-card">';
+  html += '<div class="quiz-q-num">Question ' + (qCur + 1) + ' of ' + QUIZ.length + '</div>';
+  html += '<div class="quiz-q-text">' + escHtml(q.q) + '</div>';
+  html += '<div class="quiz-opts">';
+  for (var i = 0; i < q.opts.length; i++) {
+    html += '<button class="quiz-opt" onclick="quizAns(' + i + ')">' + escHtml(q.opts[i]) + '</button>';
+  }
+  html += '</div>';
+  html += '<div class="quiz-fb" id="qFb"></div>';
+  html += '<div class="quiz-nav"><button class="btn-q-next" id="qNext" onclick="quizNext()" disabled>Next &#8594;</button></div>';
+  html += '</div>';
+  document.getElementById('quizBody').innerHTML = html;
+}
+
+function quizAns(i) {
+  if (qAnswered) return;
+  qAnswered = true;
+  var q    = QUIZ[qCur];
+  var opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(function(o) { o.disabled = true; });
+  var fb = document.getElementById('qFb');
+  if (i === q.ans) {
+    opts[i].classList.add('correct');
+    fb.className = 'quiz-fb show ok';
+    fb.textContent = 'Correct! ' + q.fb;
+    qScore++;
+  } else {
+    opts[i].classList.add('wrong');
+    opts[q.ans].classList.add('revealed');
+    fb.className = 'quiz-fb show bad';
+    fb.textContent = 'Not quite. ' + q.fb;
+  }
+  document.getElementById('qNext').disabled = false;
+}
+
+function quizNext()  { qCur++; renderQuiz(); }
+function quizRetry() { qCur = 0; qScore = 0; qAnswered = false; renderQuiz(); }
+renderQuiz();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="midnight">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>Linux File Descriptors — Interactive Learning | BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css?v=2.0.2">
+<style>
+body { padding-top: 1.25rem; }
+
+.fd-container {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.fd-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #22c55e, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.fd-subtitle { color: var(--muted); font-size: 0.85rem; }
+.fd-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+
+/* ── Section nav ─────────────────────────────────────────── */
+.section-nav { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.sec-btn {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--card-border);
+  background: var(--card);
+  color: var(--subtle);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+.sec-btn.active { border-color: #22c55e; color: #22c55e; background: var(--bg2); box-shadow: 0 0 8px rgba(34,197,94,0.18); }
+.sec-btn:hover:not(.active) { border-color: #22c55e; color: #22c55e; }
+
+/* ── Sections ─────────────────────────────────────────────── */
+.fd-section { display: none; }
+.fd-section.active { display: block; }
+
+/* ── Cards ───────────────────────────────────────────────── */
+.fd-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.fd-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0 0 0.75rem; }
+.fd-card p  { color: var(--subtle); font-size: 0.88rem; line-height: 1.65; margin: 0 0 0.6rem; }
+.fd-card p:last-child { margin-bottom: 0; }
+
+/* ══════════════════════════════════════════════════════════
+   FD TYPE COLOUR SYSTEM
+   stdin=cyan  stdout=green  stderr=red  file=amber
+   pipe=purple  socket=orange  tty=teal  null=muted  epoll=pink
+══════════════════════════════════════════════════════════ */
+:root {
+  --fd-stdin:   #38bdf8;
+  --fd-stdout:  #22c55e;
+  --fd-stderr:  #ef4444;
+  --fd-file:    #fbbf24;
+  --fd-pipe:    #a855f7;
+  --fd-socket:  #f97316;
+  --fd-tty:     #2dd4bf;
+  --fd-null:    #64748b;
+  --fd-epoll:   #ec4899;
+  --fd-empty:   #1e293b;
+}
+
+.fd-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.fd-badge.stdin  { background: rgba(56,189,248,0.15);  color: var(--fd-stdin);  border: 1px solid rgba(56,189,248,0.3); }
+.fd-badge.stdout { background: rgba(34,197,94,0.15);   color: var(--fd-stdout); border: 1px solid rgba(34,197,94,0.3); }
+.fd-badge.stderr { background: rgba(239,68,68,0.15);   color: var(--fd-stderr); border: 1px solid rgba(239,68,68,0.3); }
+.fd-badge.file   { background: rgba(251,191,36,0.12);  color: var(--fd-file);   border: 1px solid rgba(251,191,36,0.28); }
+.fd-badge.pipe   { background: rgba(168,85,247,0.15);  color: var(--fd-pipe);   border: 1px solid rgba(168,85,247,0.3); }
+.fd-badge.socket { background: rgba(249,115,22,0.15);  color: var(--fd-socket); border: 1px solid rgba(249,115,22,0.3); }
+.fd-badge.tty    { background: rgba(45,212,191,0.12);  color: var(--fd-tty);    border: 1px solid rgba(45,212,191,0.28); }
+.fd-badge.null   { background: rgba(100,116,139,0.15); color: var(--fd-null);   border: 1px solid rgba(100,116,139,0.3); }
+.fd-badge.epoll  { background: rgba(236,72,153,0.14);  color: var(--fd-epoll);  border: 1px solid rgba(236,72,153,0.28); }
+
+/* ── Section 1: Concept cards grid ───────────────────────── */
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.concept-card {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+}
+.concept-card-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.concept-card h4 { font-size: 0.88rem; font-weight: 700; color: var(--text); margin: 0 0 0.4rem; }
+.concept-card p  { font-size: 0.8rem; color: var(--subtle); line-height: 1.6; margin: 0; }
+
+/* ── 3-tier diagram ───────────────────────────────────────── */
+.tier-diagram {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  margin: 0.75rem 0;
+  overflow-x: auto;
+}
+.tier-col {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.tier-header {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+  border-radius: 6px 6px 0 0;
+  margin-bottom: 2px;
+}
+.tier-col.tc-proc   .tier-header { background: rgba(129,140,248,0.15); color: var(--accent); }
+.tier-col.tc-ofile  .tier-header { background: rgba(34,197,94,0.12);   color: var(--success); }
+.tier-col.tc-inode  .tier-header { background: rgba(251,191,36,0.12);  color: var(--warning); }
+.tier-cell {
+  padding: 0.45rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-family: 'Courier New', monospace;
+  border: 1px solid var(--card-border);
+  background: var(--bg2);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.tier-cell.active { border-color: var(--accent); box-shadow: 0 0 8px var(--glow); }
+.tier-cell .tc-num { font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 1px; }
+.tier-cell .tc-val { font-weight: 700; }
+.tier-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.4rem;
+  color: var(--muted);
+  font-size: 1rem;
+  align-self: center;
+  margin-top: 18px;
+}
+
+/* ── Section 2: Type explorer ─────────────────────────────── */
+.type-picker {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.type-btn {
+  padding: 0.35rem 0.75rem;
+  border-radius: 7px;
+  border: 1.5px solid var(--card-border);
+  background: var(--bg2);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.type-btn[data-type="stdin"]  { color: var(--fd-stdin);  }
+.type-btn[data-type="stdout"] { color: var(--fd-stdout); }
+.type-btn[data-type="stderr"] { color: var(--fd-stderr); }
+.type-btn[data-type="file"]   { color: var(--fd-file);   }
+.type-btn[data-type="pipe"]   { color: var(--fd-pipe);   }
+.type-btn[data-type="socket"] { color: var(--fd-socket); }
+.type-btn[data-type="tty"]    { color: var(--fd-tty);    }
+.type-btn[data-type="null"]   { color: var(--fd-null);   }
+.type-btn[data-type="epoll"]  { color: var(--fd-epoll);  }
+.type-btn.active[data-type="stdin"]  { border-color: var(--fd-stdin);  box-shadow: 0 0 7px rgba(56,189,248,0.25); }
+.type-btn.active[data-type="stdout"] { border-color: var(--fd-stdout); box-shadow: 0 0 7px rgba(34,197,94,0.25); }
+.type-btn.active[data-type="stderr"] { border-color: var(--fd-stderr); box-shadow: 0 0 7px rgba(239,68,68,0.25); }
+.type-btn.active[data-type="file"]   { border-color: var(--fd-file);   box-shadow: 0 0 7px rgba(251,191,36,0.25); }
+.type-btn.active[data-type="pipe"]   { border-color: var(--fd-pipe);   box-shadow: 0 0 7px rgba(168,85,247,0.25); }
+.type-btn.active[data-type="socket"] { border-color: var(--fd-socket); box-shadow: 0 0 7px rgba(249,115,22,0.25); }
+.type-btn.active[data-type="tty"]    { border-color: var(--fd-tty);    box-shadow: 0 0 7px rgba(45,212,191,0.25); }
+.type-btn.active[data-type="null"]   { border-color: var(--fd-null);   box-shadow: 0 0 7px rgba(100,116,139,0.2); }
+.type-btn.active[data-type="epoll"]  { border-color: var(--fd-epoll);  box-shadow: 0 0 7px rgba(236,72,153,0.25); }
+
+.type-detail {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.type-detail-header {
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.type-detail-icon { font-size: 1.6rem; line-height: 1; }
+.type-detail-name { font-size: 1rem; font-weight: 800; }
+.type-detail-tagline { font-size: 0.78rem; color: var(--subtle); margin-top: 1px; }
+.type-detail-body {
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--card-border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+@media (max-width: 580px) { .type-detail-body { grid-template-columns: 1fr; } }
+.type-detail-code {
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.76rem;
+  line-height: 1.75;
+  overflow-x: auto;
+}
+.type-detail-code .kw  { color: var(--accent2); }
+.type-detail-code .fn  { color: #f9a8d4; }
+.type-detail-code .str { color: var(--success); }
+.type-detail-code .num { color: var(--fd-socket); }
+.type-detail-code .cmt { color: var(--muted); font-style: italic; }
+.type-detail-facts { display: flex; flex-direction: column; gap: 0.4rem; }
+.type-fact {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+.type-fact-label { font-weight: 700; min-width: 80px; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.type-fact-val   { color: var(--subtle); line-height: 1.5; }
+
+/* ── Section 3: FD Table Simulator ───────────────────────── */
+.fdt-layout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 1rem;
+  align-items: start;
+}
+@media (max-width: 680px) { .fdt-layout { grid-template-columns: 1fr; } }
+
+.fdt-table {
+  background: var(--bg2);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+}
+.fdt-thead {
+  display: grid;
+  grid-template-columns: 48px 80px 1fr 70px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  background: var(--bg);
+  border-bottom: 1px solid var(--card-border);
+}
+.fdt-row {
+  display: grid;
+  grid-template-columns: 48px 80px 1fr 70px;
+  align-items: center;
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.25s;
+  animation: row-in 0.22s ease;
+  min-height: 44px;
+}
+.fdt-row:last-child { border-bottom: none; }
+@keyframes row-in { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: none; } }
+.fdt-row.empty { opacity: 0.4; }
+.fdt-row.highlighted { background: rgba(129,140,248,0.07); }
+.fdt-num {
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: var(--text);
+}
+.fdt-desc {
+  font-size: 0.75rem;
+  color: var(--subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fdt-desc .path { color: var(--text); font-weight: 600; }
+.fdt-actions { display: flex; gap: 0.3rem; justify-content: flex-end; }
+.btn-close-fd {
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+  border: 1px solid rgba(239,68,68,0.3);
+  background: rgba(239,68,68,0.1);
+  color: var(--danger);
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+.btn-close-fd:hover { opacity: 0.8; }
+
+.fdt-ops {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.fdt-op-btn {
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--card-border);
+  background: var(--bg2);
+  color: var(--subtle);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.fdt-op-btn:hover { border-color: var(--accent); color: var(--text); }
+.fdt-op-icon { font-size: 1rem; }
+
+.fdt-log {
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.74rem;
+  color: var(--subtle);
+  min-height: 80px;
+  max-height: 130px;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+}
+.fdt-log .lg-ok   { color: var(--success); }
+.fdt-log .lg-err  { color: var(--danger); }
+.fdt-log .lg-info { color: var(--accent2); }
+
+/* ── Section 4: Operations step-through ──────────────────── */
+.step-nav {
+  display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem;
+}
+.btn-prev, .btn-next {
+  padding: 0.4rem 1rem; border-radius: 8px; border: 1.5px solid var(--card-border);
+  background: var(--card); color: var(--subtle); font-size: 0.82rem; font-weight: 700;
+  cursor: pointer; font-family: inherit; transition: border-color 0.2s, color 0.2s;
+}
+.btn-next { border-color: #22c55e; color: #22c55e; background: var(--bg2); }
+.btn-prev:hover { border-color: #22c55e; color: #22c55e; }
+.btn-prev:disabled, .btn-next:disabled { opacity: 0.3; cursor: default; }
+.step-counter { font-size: 0.78rem; color: var(--muted); }
+.step-pips { display: flex; gap: 5px; align-items: center; }
+.step-pip { width: 8px; height: 8px; border-radius: 50%; background: var(--card-border); cursor: pointer; transition: background 0.3s; }
+.step-pip.done   { background: var(--success); }
+.step-pip.active { background: #22c55e; box-shadow: 0 0 5px rgba(34,197,94,0.4); }
+
+.step-desc {
+  background: var(--bg2); border: 1px solid var(--card-border);
+  border-left: 3px solid #22c55e; border-radius: 8px;
+  padding: 0.75rem 1rem; margin-bottom: 1rem; min-height: 58px;
+}
+.step-desc-title { font-size: 0.72rem; font-weight: 800; color: #22c55e; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+.step-desc-body  { font-size: 0.83rem; color: var(--subtle); line-height: 1.6; }
+
+.ops-layout {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 640px) { .ops-layout { grid-template-columns: 1fr; } }
+
+.ops-code {
+  background: var(--bg); border: 1px solid var(--card-border); border-radius: 8px;
+  padding: 0.85rem 1rem; font-family: 'Courier New', monospace;
+  font-size: 0.78rem; line-height: 1.75; overflow-x: auto;
+}
+.ops-code .hl  { background: rgba(34,197,94,0.15); border-radius: 2px; padding: 0 2px; color: #4ade80; font-weight: 700; }
+.ops-code .kw  { color: var(--accent2); }
+.ops-code .fn  { color: #f9a8d4; }
+.ops-code .str { color: var(--success); }
+.ops-code .num { color: var(--fd-socket); }
+.ops-code .cmt { color: var(--muted); }
+
+/* mini FD table for ops section */
+.mini-fdt {
+  background: var(--bg2); border: 1px solid var(--card-border);
+  border-radius: 8px; overflow: hidden; font-family: 'Courier New', monospace;
+}
+.mini-fdt-title {
+  padding: 0.35rem 0.75rem; font-size: 0.62rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+  background: var(--bg); border-bottom: 1px solid var(--card-border);
+}
+.mini-fdt-row {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.38rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.76rem; transition: background 0.28s;
+  animation: row-in 0.22s ease;
+}
+.mini-fdt-row:last-child { border-bottom: none; }
+.mini-fdt-row.new-row { background: rgba(34,197,94,0.08); }
+.mini-fdt-row.closing { background: rgba(239,68,68,0.08); opacity: 0.55; text-decoration: line-through; }
+.mini-fdt-row.dup-row { background: rgba(168,85,247,0.1); }
+.mini-fdt-num  { font-weight: 900; font-size: 0.88rem; color: var(--text); min-width: 22px; }
+.mini-fdt-desc { color: var(--subtle); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.72rem; }
+
+/* ── Section 5: Redirection ───────────────────────────────── */
+.redir-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.redir-card {
+  background: var(--bg2); border: 1px solid var(--card-border);
+  border-radius: 10px; overflow: hidden;
+  cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.redir-card:hover, .redir-card.active { border-color: var(--accent); box-shadow: 0 0 8px var(--glow); }
+.redir-card-header {
+  padding: 0.5rem 0.85rem; display: flex; align-items: center; gap: 0.6rem;
+  border-bottom: 1px solid var(--card-border);
+}
+.redir-syntax {
+  font-family: 'Courier New', monospace; font-size: 0.9rem; font-weight: 800;
+  padding: 0.15rem 0.45rem; border-radius: 4px;
+}
+.redir-name { font-size: 0.8rem; font-weight: 700; color: var(--text); }
+.redir-card-body { padding: 0.65rem 0.85rem; }
+.redir-card-desc { font-size: 0.79rem; color: var(--subtle); margin-bottom: 0.6rem; line-height: 1.55; }
+.redir-before-after {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;
+}
+.redir-ba-col { background: var(--bg); border-radius: 6px; padding: 0.4rem 0.55rem; }
+.redir-ba-label { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.3rem; }
+.redir-ba-row { font-size: 0.7rem; font-family: 'Courier New', monospace; display: flex; align-items: center; gap: 0.3rem; padding: 0.12rem 0; }
+.redir-ba-row .rn { font-weight: 900; color: var(--text); min-width: 16px; }
+
+/* ── Quiz ─────────────────────────────────────────────────── */
+.quiz-prog-bar { height: 4px; background: var(--card-border); border-radius: 2px; margin-bottom: 1.25rem; overflow: hidden; }
+.quiz-prog-fill { height: 100%; background: #22c55e; border-radius: 2px; transition: width 0.4s ease; width: 0%; }
+.quiz-q-card { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+.quiz-q-num  { font-size: 0.64rem; font-weight: 800; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.5rem; }
+.quiz-q-text { font-size: 0.94rem; font-weight: 600; color: var(--text); margin-bottom: 1rem; line-height: 1.5; }
+.quiz-opts { display: flex; flex-direction: column; gap: 0.5rem; }
+.quiz-opt {
+  padding: 0.6rem 1rem; border-radius: 8px; border: 1.5px solid var(--card-border);
+  background: var(--bg2); color: var(--subtle); font-size: 0.88rem;
+  cursor: pointer; transition: border-color 0.2s, color 0.2s;
+  text-align: left; font-family: inherit;
+}
+.quiz-opt:hover:not(:disabled) { border-color: #22c55e; color: var(--text); }
+.quiz-opt.correct  { border-color: var(--success); background: rgba(34,197,94,0.1);  color: var(--success); }
+.quiz-opt.wrong    { border-color: var(--danger);  background: rgba(239,68,68,0.1);  color: var(--danger); }
+.quiz-opt.revealed { border-color: var(--success); background: rgba(34,197,94,0.07); color: var(--success); }
+.quiz-opt:disabled { cursor: default; }
+.quiz-fb { margin-top: 0.75rem; padding: 0.6rem 0.9rem; border-radius: 7px; font-size: 0.84rem; line-height: 1.5; display: none; }
+.quiz-fb.show { display: block; }
+.quiz-fb.ok  { background: rgba(34,197,94,0.1);  color: var(--success); border: 1px solid rgba(34,197,94,0.2); }
+.quiz-fb.bad { background: rgba(239,68,68,0.1);  color: #fca5a5;        border: 1px solid rgba(239,68,68,0.2); }
+.quiz-nav { display: flex; justify-content: flex-end; margin-top: 1rem; }
+.btn-q-next { padding: 0.5rem 1.25rem; border-radius: 8px; border: none; background: #22c55e; color: #fff; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+.btn-q-next:disabled { opacity: 0.35; cursor: default; }
+.quiz-score { text-align: center; padding: 2.5rem 1.5rem; }
+.quiz-score-num { font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #22c55e, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+.quiz-score-pct { font-size: 1rem; color: var(--muted); margin-top: 0.4rem; }
+.quiz-score-msg { font-size: 0.9rem; color: var(--subtle); margin: 1rem 0; }
+.btn-retry { padding: 0.55rem 1.5rem; border-radius: 8px; border: none; background: #22c55e; color: #fff; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+
+@media (max-width: 480px) {
+  .fd-title { font-size: 1.2rem; }
+  .fd-card  { padding: 1rem; }
+  .fdt-thead, .fdt-row { grid-template-columns: 40px 74px 1fr 60px; }
+}
+</style>
+</head>
+<body>
+<script>
+(function() {
+  var sk = localStorage.getItem('bs-skin');
+  if (sk) document.documentElement.setAttribute('data-skin', sk);
+})();
+</script>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="midnight" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="fd-container">
+
+  <div class="fd-header">
+    <a href="index.html#learn" class="logo-wrap" style="text-decoration:none;color:inherit;flex-direction:row;gap:0.5rem;">
+      <span style="font-size:1.3rem;">&#129504;</span>
+      <span style="font-size:1rem;font-weight:800;color:var(--subtle);">BrainStuffer</span>
+    </a>
+    <div>
+      <div class="fd-title">Linux File Descriptors</div>
+      <div class="fd-subtitle">Every I/O resource as a number &mdash; types, operations &amp; redirection</div>
+    </div>
+  </div>
+
+  <div class="section-nav" id="section-nav">
+    <button class="sec-btn active" data-sec="concepts">1. What is an FD?</button>
+    <button class="sec-btn" data-sec="types">2. FD Types</button>
+    <button class="sec-btn" data-sec="simulator">3. FD Table</button>
+    <button class="sec-btn" data-sec="ops">4. Operations</button>
+    <button class="sec-btn" data-sec="redir">5. Redirection</button>
+    <button class="sec-btn" data-sec="quiz">6. Quiz</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 1: What is an FD?                               -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="fd-section active" id="sec-concepts">
+
+    <div class="fd-card">
+      <h3>File Descriptors &mdash; everything is a file</h3>
+      <p>A <strong>file descriptor (FD)</strong> is just a small non-negative integer that your process uses as a handle to any open I/O resource. The kernel keeps a table mapping those integers to the actual underlying objects &mdash; whether that's a file on disk, a pipe, a network socket, a terminal, or a special device.</p>
+      <p>When you call <code>open()</code>, <code>socket()</code>, <code>pipe()</code>, or <code>accept()</code>, the kernel finds the lowest available slot in your process's FD table and returns that number. You pass it to <code>read()</code>, <code>write()</code>, <code>close()</code>, etc.</p>
+    </div>
+
+    <!-- Concept cards -->
+    <div class="fd-card">
+      <h3>Core concepts</h3>
+      <div class="concept-grid">
+        <div class="concept-card">
+          <div class="concept-card-icon">&#128220;</div>
+          <h4>Process FD table</h4>
+          <p>Every process has its own array of FD slots (default limit 1024, raised with <code>ulimit -n</code>). Slot 0, 1, 2 are pre-filled by the shell with stdin, stdout, stderr. You fill the rest with <code>open()</code> calls.</p>
+        </div>
+        <div class="concept-card">
+          <div class="concept-card-icon">&#128190;</div>
+          <h4>Open file table</h4>
+          <p>Each FD slot points to a kernel-side <em>open file description</em> (OFD). The OFD stores the file offset and open flags. Two FDs (even in different processes) can share one OFD &mdash; that's what <code>dup()</code> and <code>fork()</code> create.</p>
+        </div>
+        <div class="concept-card">
+          <div class="concept-card-icon">&#128196;</div>
+          <h4>Inode / resource</h4>
+          <p>The OFD points to the inode (for files) or kernel object (for pipes, sockets, etc.). Multiple OFDs can reference the same inode &mdash; when all FDs pointing to it are closed, the kernel frees the resource.</p>
+        </div>
+        <div class="concept-card">
+          <div class="concept-card-icon">&#128203;</div>
+          <h4>Everything is a file</h4>
+          <p>Linux extends the UNIX philosophy: sockets, pipes, terminals, <code>/dev/null</code>, <code>/proc</code> entries, timerfd, eventfd &mdash; all appear as FDs. Your code calls the same <code>read()</code>/<code>write()</code> regardless of what lies underneath.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Three-tier diagram -->
+    <div class="fd-card">
+      <h3>Three-tier structure &mdash; click a row to trace the link</h3>
+      <p style="margin-bottom:0.85rem">Every FD goes through two indirections before reaching the actual resource. Click any row to highlight the chain.</p>
+      <div class="tier-diagram" id="tierDiagram">
+        <!-- rendered by JS -->
+      </div>
+      <div style="font-size:0.75rem;color:var(--muted);margin-top:0.75rem;line-height:1.6" id="tierExplain">
+        Click a row above to see how the FD connects through to the underlying resource.
+      </div>
+    </div>
+
+    <!-- Colour legend -->
+    <div class="fd-card">
+      <h3>FD type colour legend &mdash; used throughout this page</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.25rem">
+        <span class="fd-badge stdin">&#9679; stdin</span>
+        <span class="fd-badge stdout">&#9679; stdout</span>
+        <span class="fd-badge stderr">&#9679; stderr</span>
+        <span class="fd-badge file">&#9679; regular file</span>
+        <span class="fd-badge pipe">&#9679; pipe</span>
+        <span class="fd-badge socket">&#9679; socket</span>
+        <span class="fd-badge tty">&#9679; tty/terminal</span>
+        <span class="fd-badge null">&#9679; /dev/null</span>
+        <span class="fd-badge epoll">&#9679; epoll/event</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 2: FD Types                                     -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="fd-section" id="sec-types">
+    <div class="fd-card">
+      <h3>Pick an FD type to explore</h3>
+      <div class="type-picker" id="typePicker">
+        <button class="type-btn active" data-type="stdin">stdin (0)</button>
+        <button class="type-btn" data-type="stdout">stdout (1)</button>
+        <button class="type-btn" data-type="stderr">stderr (2)</button>
+        <button class="type-btn" data-type="file">Regular file</button>
+        <button class="type-btn" data-type="pipe">Pipe</button>
+        <button class="type-btn" data-type="socket">Socket</button>
+        <button class="type-btn" data-type="tty">TTY</button>
+        <button class="type-btn" data-type="null">/dev/null</button>
+        <button class="type-btn" data-type="epoll">epoll/eventfd</button>
+      </div>
+      <div class="type-detail" id="typeDetail"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 3: Interactive FD Table                         -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="fd-section" id="sec-simulator">
+    <div class="fd-card">
+      <h3>Interactive FD Table Simulator</h3>
+      <p>Simulate a process's file descriptor table. Use the buttons on the right to open resources, create pipes, and close FDs. Watch how the kernel fills the lowest available slot.</p>
+      <div class="fdt-layout">
+        <div>
+          <div class="fdt-table">
+            <div class="fdt-thead">
+              <div>fd</div>
+              <div>type</div>
+              <div>resource</div>
+              <div></div>
+            </div>
+            <div id="fdtBody"></div>
+          </div>
+          <div class="fdt-log" id="fdtLog"></div>
+        </div>
+        <div class="fdt-ops">
+          <div style="font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.25rem">Operations</div>
+          <button class="fdt-op-btn" onclick="fdtOp('openfile')"><span class="fdt-op-icon">&#128196;</span> open("/tmp/data.txt")</button>
+          <button class="fdt-op-btn" onclick="fdtOp('openlog')"><span class="fdt-op-icon">&#128196;</span> open("/var/log/app.log")</button>
+          <button class="fdt-op-btn" onclick="fdtOp('pipe')"><span class="fdt-op-icon">&#128249;</span> pipe() &rarr; two FDs</button>
+          <button class="fdt-op-btn" onclick="fdtOp('socket')"><span class="fdt-op-icon">&#128247;</span> socket(AF_INET, SOCK_STREAM)</button>
+          <button class="fdt-op-btn" onclick="fdtOp('null')"><span class="fdt-op-icon">&#128683;</span> open("/dev/null")</button>
+          <button class="fdt-op-btn" onclick="fdtOp('dup')"><span class="fdt-op-icon">&#128260;</span> dup(1) &rarr; copies stdout</button>
+          <button class="fdt-op-btn" onclick="fdtOp('epoll')"><span class="fdt-op-icon">&#128163;</span> epoll_create1()</button>
+          <button class="fdt-op-btn" onclick="fdtOp('reset')" style="border-color:var(--danger);color:var(--danger)"><span class="fdt-op-icon">&#8635;</span> Reset to default</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 4: Operations Step-Through                      -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="fd-section" id="sec-ops">
+    <div class="fd-card">
+      <h3>Key FD Operations &mdash; Step Through</h3>
+      <div class="step-nav">
+        <button class="btn-prev" id="opsPrev" onclick="opsStep(-1)">&#8592; Prev</button>
+        <button class="btn-next" id="opsNext" onclick="opsStep(1)">Next &#8594;</button>
+        <span class="step-counter" id="opsCounter">Step 1 / 8</span>
+        <div class="step-pips" id="opsPips"></div>
+      </div>
+      <div class="step-desc">
+        <div class="step-desc-title" id="opsDescTitle"></div>
+        <div class="step-desc-body"  id="opsDescBody"></div>
+      </div>
+      <div class="ops-layout">
+        <div class="ops-code" id="opsCode"></div>
+        <div>
+          <div class="mini-fdt">
+            <div class="mini-fdt-title">FD table</div>
+            <div id="opsFdt"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 5: Redirection                                  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="fd-section" id="sec-redir">
+    <div class="fd-card">
+      <h3>Shell Redirection &mdash; how it works under the hood</h3>
+      <p>When you write <code>./prog &gt; out.txt</code>, the shell does NOT pass a flag to the program. Instead it manipulates the FD table using <code>open()</code> and <code>dup2()</code> between <code>fork()</code> and <code>exec()</code>. The program runs completely unaware; it just writes to fd 1 as always.</p>
+      <p>Click any redirection to see exactly what FD moves happen.</p>
+      <div class="redir-grid" id="redirGrid"></div>
+      <div id="redirDetail"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SECTION 6: Quiz                                         -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="fd-section" id="sec-quiz">
+    <div class="fd-card">
+      <h3>Quiz &mdash; Linux File Descriptors</h3>
+      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizProg"></div></div>
+      <div id="quizBody"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer style="text-align:center;padding:2rem 1rem;font-size:0.72rem;color:var(--muted)">
+  BrainStuffer &mdash; <a href="index.html#learn" style="color:var(--muted)">back to hub</a>
+</footer>
+
+<script>
+'use strict';
+
+/* ── Skin switcher ─────────────────────────────────────────── */
+(function() {
+  var toggle = document.getElementById('skin-toggle');
+  var panel  = document.getElementById('skin-panel');
+  if (!toggle || !panel) return;
+  toggle.addEventListener('click', function(e) { e.stopPropagation(); panel.classList.toggle('open'); });
+  document.addEventListener('click', function() { panel.classList.remove('open'); });
+  panel.addEventListener('click', function(e) { e.stopPropagation(); });
+  panel.querySelectorAll('.skin-opt').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      var sk = opt.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      panel.classList.remove('open');
+    });
+  });
+})();
+
+/* ── Section nav ───────────────────────────────────────────── */
+(function() {
+  var nav  = document.getElementById('section-nav');
+  var btns = nav.querySelectorAll('.sec-btn');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('.fd-section').forEach(function(s) { s.classList.remove('active'); });
+      var sec = document.getElementById('sec-' + btn.getAttribute('data-sec'));
+      if (sec) sec.classList.add('active');
+    });
+  });
+})();
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ══════════════════════════════════════════════════════════
+   COLOUR MAP
+══════════════════════════════════════════════════════════ */
+var TYPE_COLOR = {
+  stdin:  '#38bdf8', stdout: '#22c55e', stderr: '#ef4444',
+  file:   '#fbbf24', pipe:   '#a855f7', socket: '#f97316',
+  tty:    '#2dd4bf', 'null': '#64748b', epoll:  '#ec4899'
+};
+var TYPE_RGBA = {
+  stdin:  'rgba(56,189,248,',  stdout: 'rgba(34,197,94,',  stderr: 'rgba(239,68,68,',
+  file:   'rgba(251,191,36,',  pipe:   'rgba(168,85,247,', socket: 'rgba(249,115,22,',
+  tty:    'rgba(45,212,191,',  'null': 'rgba(100,116,139,',epoll:  'rgba(236,72,153,'
+};
+
+function badgeHtml(type, label) {
+  var c = TYPE_COLOR[type] || '#64748b';
+  var r = TYPE_RGBA[type]  || 'rgba(100,116,139,';
+  return '<span style="display:inline-flex;align-items:center;gap:0.25rem;padding:0.15rem 0.5rem;border-radius:4px;font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;background:' + r + '0.15);color:' + c + ';border:1px solid ' + r + '0.3)">' + escHtml(label || type) + '</span>';
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 1: Three-tier diagram
+══════════════════════════════════════════════════════════ */
+var TIER_ROWS = [
+  { fd: 0, type: 'stdin',  ofd: 'OFD #0',   offset: 'pos: 0',    inode: '/dev/pts/0',   inodeType: 'char device (tty)' },
+  { fd: 1, type: 'stdout', ofd: 'OFD #1',   offset: 'pos: 0',    inode: '/dev/pts/0',   inodeType: 'char device (tty, shared)' },
+  { fd: 2, type: 'stderr', ofd: 'OFD #2',   offset: 'pos: 0',    inode: '/dev/pts/0',   inodeType: 'char device (tty, shared)' },
+  { fd: 3, type: 'file',   ofd: 'OFD #5',   offset: 'pos: 4096', inode: 'inode 12345',  inodeType: '/home/user/data.txt' },
+  { fd: 4, type: 'socket', ofd: 'OFD #9',   offset: 'n/a',       inode: 'socket:8080',  inodeType: 'TCP socket, ESTABLISHED' }
+];
+
+var tierActive = -1;
+
+function renderTier() {
+  var el = document.getElementById('tierDiagram');
+  var colProc  = '<div class="tier-col tc-proc"><div class="tier-header">Process FD table</div>';
+  var colArrow = '<div class="tier-arrow" style="flex:0;padding:0 0.25rem">';
+  var colOfd   = '<div class="tier-col tc-ofile"><div class="tier-header">Open file table</div>';
+  var colArrow2= '<div class="tier-arrow" style="flex:0;padding:0 0.25rem">';
+  var colInode = '<div class="tier-col tc-inode"><div class="tier-header">Inode / resource</div>';
+
+  TIER_ROWS.forEach(function(r, i) {
+    var act = tierActive === i ? ' active' : '';
+    var c   = TYPE_COLOR[r.type];
+    colProc  += '<div class="tier-cell' + act + '" onclick="tierClick(' + i + ')" style="' + (tierActive===i?'border-color:'+c+';box-shadow:0 0 8px '+c+'40':'') + '">' +
+                '<span class="tc-num">fd[' + r.fd + ']</span>' +
+                '<span class="tc-val" style="color:' + c + '">' + badgeHtml(r.type, r.type) + '</span></div>';
+    colOfd   += '<div class="tier-cell' + act + '" onclick="tierClick(' + i + ')" style="' + (tierActive===i?'border-color:'+c+';box-shadow:0 0 8px '+c+'40':'') + '">' +
+                '<span class="tc-num">' + r.ofd + '</span>' +
+                '<span class="tc-val" style="color:var(--subtle);font-size:0.72rem">' + r.offset + '</span></div>';
+    colInode += '<div class="tier-cell' + act + '" onclick="tierClick(' + i + ')" style="' + (tierActive===i?'border-color:'+c+';box-shadow:0 0 8px '+c+'40':'') + '">' +
+                '<span class="tc-num">' + escHtml(r.inode) + '</span>' +
+                '<span class="tc-val" style="color:var(--subtle);font-size:0.72rem">' + escHtml(r.inodeType) + '</span></div>';
+    colArrow  += '<div style="height:' + (i===0?'18':'') + 'px"></div><div style="text-align:center;padding:9px 0;color:var(--card-border)">&#8594;</div>';
+    colArrow2 += '<div style="height:' + (i===0?'18':'') + 'px"></div><div style="text-align:center;padding:9px 0;color:var(--card-border)">&#8594;</div>';
+  });
+
+  el.innerHTML = colProc+'</div>' + colArrow+'</div>' + colOfd+'</div>' + colArrow2+'</div>' + colInode+'</div>';
+}
+
+function tierClick(i) {
+  tierActive = (tierActive === i) ? -1 : i;
+  renderTier();
+  var r = TIER_ROWS[i];
+  var msgs = [
+    'fd[0] (stdin, ' + r.type + ') -> ' + r.ofd + ' -> ' + r.inode + ': stdin and stdout both point to the same terminal inode (/dev/pts/0). The OFD tracks the file position and flags separately for each.',
+    'fd[1] (stdout, ' + r.type + ') -> ' + r.ofd + ' -> ' + r.inode + ': stdout also points to /dev/pts/0. Writes go to the terminal. Since multiple OFDs reference the same inode, all output appears on the same screen.',
+    'fd[2] (stderr, ' + r.type + ') -> ' + r.ofd + ' -> ' + r.inode + ': stderr is also the terminal by default. That\'s why you see error messages mixed with normal output unless you redirect.',
+    'fd[3] (file) -> ' + r.ofd + ' (pos=' + r.offset + ') -> ' + r.inode + ': A regular file. The OFD stores the current byte offset (position). If you dup() fd 3, both FDs share the same offset; seeking one affects the other.',
+    'fd[4] (socket) -> ' + r.ofd + ' -> ' + r.inode + ': A TCP socket. There is no meaningful byte offset. The kernel object stores connection state (ESTABLISHED, LISTEN, etc.). read/write become recv/send under the hood.'
+  ];
+  var expl = document.getElementById('tierExplain');
+  if (tierActive === -1) { expl.textContent = 'Click a row above to see how the FD connects through to the underlying resource.'; }
+  else { expl.textContent = msgs[i]; expl.style.color = TYPE_COLOR[r.type]; }
+}
+
+renderTier();
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 2: Type Explorer
+══════════════════════════════════════════════════════════ */
+var TYPE_DATA = {
+  stdin: {
+    icon: '&#9654;', name: 'stdin', badge: 'stdin', tagline: 'fd 0 &mdash; standard input stream',
+    color: '#38bdf8',
+    code: '<span class="cmt">/* stdin is pre-opened by the shell */</span>\n<span class="cmt">/* fd 0 = /dev/pts/N or a pipe */</span>\n<span class="kw">char</span> buf[256];\n<span class="fn">read</span>(<span class="num">0</span>, buf, <span class="kw">sizeof</span>(buf));\n\n<span class="cmt">/* or via libc wrapper: */</span>\n<span class="fn">fgets</span>(buf, <span class="kw">sizeof</span>(buf), stdin);',
+    facts: [
+      { l: 'FD number', v: '0 (always)' },
+      { l: 'Created by', v: 'Shell, before exec()' },
+      { l: 'Usually is', v: 'Terminal (TTY) or a pipe/file redirect' },
+      { l: 'Close it?', v: 'Only if you intend to reassign it (e.g. daemon)' },
+      { l: 'Sys call', v: 'read(0, buf, n)' }
+    ]
+  },
+  stdout: {
+    icon: '&#9664;', name: 'stdout', badge: 'stdout', tagline: 'fd 1 &mdash; standard output stream',
+    color: '#22c55e',
+    code: '<span class="cmt">/* stdout is fd 1 */</span>\n<span class="fn">write</span>(<span class="num">1</span>, <span class="str">"hello\\n"</span>, 6);\n\n<span class="cmt">/* libc buffers by default: */</span>\n<span class="fn">printf</span>(<span class="str">"hello\\n"</span>);\n<span class="fn">fflush</span>(stdout); <span class="cmt">// force write</span>\n\n<span class="cmt">/* redirect: ./prog > out.txt */</span>',
+    facts: [
+      { l: 'FD number', v: '1 (always)' },
+      { l: 'Buffering', v: 'libc: line-buffered to TTY, fully buffered to file/pipe' },
+      { l: 'Redirect', v: '> file  or  | cmd  in shell' },
+      { l: 'Check TTY', v: 'isatty(1) returns 1 if writing to terminal' },
+      { l: 'Flush', v: 'fflush(stdout) or write(1,...) bypasses libc buffer' }
+    ]
+  },
+  stderr: {
+    icon: '&#9888;', name: 'stderr', badge: 'stderr', tagline: 'fd 2 &mdash; standard error stream',
+    color: '#ef4444',
+    code: '<span class="cmt">/* stderr is fd 2 */</span>\n<span class="fn">write</span>(<span class="num">2</span>, <span class="str">"error!\\n"</span>, 7);\n\n<span class="cmt">/* libc: */</span>\n<span class="fn">fprintf</span>(stderr, <span class="str">"error: %s\\n"</span>, msg);\n\n<span class="cmt">/* redirect: cmd 2>&1 > log.txt */</span>\n<span class="cmt">/* (order matters!) */</span>',
+    facts: [
+      { l: 'FD number', v: '2 (always)' },
+      { l: 'Buffering', v: 'Unbuffered by default (immediate output)' },
+      { l: 'Redirect', v: '2>/dev/null  or  2>&1' },
+      { l: 'Why separate?', v: 'Lets you filter errors from normal output independently' },
+      { l: 'Pitfall', v: 'cmd > log 2>&1 works; cmd 2>&1 > log does NOT redirect stderr to log' }
+    ]
+  },
+  file: {
+    icon: '&#128196;', name: 'Regular file', badge: 'file', tagline: 'open() on any file on disk',
+    color: '#fbbf24',
+    code: '<span class="kw">int</span> fd = <span class="fn">open</span>(<span class="str">"/tmp/data.txt"</span>,\n           O_RDWR | O_CREAT,\n           <span class="num">0644</span>);\n<span class="fn">write</span>(fd, <span class="str">"hello"</span>, 5);\n<span class="fn">lseek</span>(fd, <span class="num">0</span>, SEEK_SET);\n<span class="fn">read</span>(fd, buf, 5);\n<span class="fn">close</span>(fd);',
+    facts: [
+      { l: 'Flags', v: 'O_RDONLY, O_WRONLY, O_RDWR, O_CREAT, O_TRUNC, O_APPEND' },
+      { l: 'Offset', v: 'Maintained in OFD; lseek() moves it' },
+      { l: 'O_APPEND', v: 'Every write atomically seeks to end first (safe for logs)' },
+      { l: 'Sharing', v: 'dup(fd) shares the offset; open() twice gives independent offsets' },
+      { l: 'Limits', v: 'Max open FDs per process: ulimit -n (default 1024)' }
+    ]
+  },
+  pipe: {
+    icon: '&#128249;', name: 'Pipe', badge: 'pipe', tagline: 'pipe() &mdash; two FDs, one kernel buffer',
+    color: '#a855f7',
+    code: '<span class="kw">int</span> fds[2];\n<span class="fn">pipe</span>(fds);       <span class="cmt">// fds[0]=read, fds[1]=write</span>\n\n<span class="kw">if</span> (<span class="fn">fork</span>() == <span class="num">0</span>) {\n  <span class="fn">close</span>(fds[1]);              <span class="cmt">// child: read end</span>\n  <span class="fn">read</span>(fds[0], buf, N);\n} <span class="kw">else</span> {\n  <span class="fn">close</span>(fds[0]);              <span class="cmt">// parent: write end</span>\n  <span class="fn">write</span>(fds[1], data, N);\n}',
+    facts: [
+      { l: 'Two FDs', v: 'fds[0] = read end, fds[1] = write end' },
+      { l: 'Kernel buf', v: '65536 bytes (Linux default). write() blocks when full' },
+      { l: 'EOF signal', v: 'read() returns 0 when ALL write ends are closed' },
+      { l: 'No lseek', v: 'Pipes have no file offset. Strictly sequential.' },
+      { l: 'Named pipe', v: 'mkfifo() creates a pipe with a filesystem path' }
+    ]
+  },
+  socket: {
+    icon: '&#127760;', name: 'Socket', badge: 'socket', tagline: 'Network or IPC via socket()',
+    color: '#f97316',
+    code: '<span class="kw">int</span> fd = <span class="fn">socket</span>(AF_INET,\n                SOCK_STREAM, <span class="num">0</span>);\n<span class="fn">connect</span>(fd, &addr, <span class="kw">sizeof</span>(addr));\n<span class="fn">send</span>(fd, data, len, <span class="num">0</span>);\n<span class="fn">recv</span>(fd, buf, N, <span class="num">0</span>);\n<span class="fn">close</span>(fd);\n\n<span class="cmt">/* also: AF_UNIX for local IPC */</span>',
+    facts: [
+      { l: 'Families', v: 'AF_INET (IPv4), AF_INET6 (IPv6), AF_UNIX (local IPC)' },
+      { l: 'Types', v: 'SOCK_STREAM (TCP), SOCK_DGRAM (UDP), SOCK_RAW' },
+      { l: 'No offset', v: 'No lseek(). Data is a byte stream or datagrams.' },
+      { l: 'send/recv', v: 'Same as write/read but with MSG_* flags for OOB, peek, etc.' },
+      { l: 'Accept', v: 'accept() returns a NEW fd for each incoming connection' }
+    ]
+  },
+  tty: {
+    icon: '&#9000;', name: 'TTY / Terminal', badge: 'tty', tagline: 'Pseudoterminal or physical terminal device',
+    color: '#2dd4bf',
+    code: '<span class="cmt">/* check if fd is a terminal */</span>\n<span class="fn">isatty</span>(<span class="num">1</span>);\n\n<span class="cmt">/* get/set terminal attributes */</span>\nstruct termios t;\n<span class="fn">tcgetattr</span>(<span class="num">0</span>, &t);\nt.c_lflag &= ~ECHO; <span class="cmt">// disable echo</span>\n<span class="fn">tcsetattr</span>(<span class="num">0</span>, TCSANOW, &t);\n\n<span class="cmt">/* open a pty: */</span>\n<span class="fn">posix_openpt</span>(O_RDWR);',
+    facts: [
+      { l: 'What is it?', v: '/dev/pts/N for pseudo-terminals, /dev/ttyN for real' },
+      { l: 'Line disc.', v: 'The kernel tty line discipline handles Ctrl-C, echo, etc.' },
+      { l: 'Raw mode', v: 'tcsetattr() with ~ICANON+~ECHO for games, editors, passwords' },
+      { l: 'isatty(fd)', v: 'Returns 1 if fd is connected to a terminal' },
+      { l: 'Shells', v: 'ssh, tmux, xterm all allocate pseudo-ttys (ptmx + pts/N pair)' }
+    ]
+  },
+  'null': {
+    icon: '&#128683;', name: '/dev/null', badge: 'null', tagline: 'The bit bucket &mdash; discards all writes, returns EOF on read',
+    color: '#64748b',
+    code: '<span class="cmt">/* open the null device */</span>\n<span class="kw">int</span> null = <span class="fn">open</span>(<span class="str">"/dev/null"</span>, O_RDWR);\n\n<span class="cmt">/* silence stdout */</span>\n<span class="fn">dup2</span>(null, <span class="num">1</span>);\n<span class="fn">close</span>(null);\n\n<span class="cmt">/* shell equivalent: */</span>\n<span class="cmt">/* ./prog > /dev/null 2>&1 */</span>',
+    facts: [
+      { l: 'Reads', v: 'Always returns 0 bytes (immediate EOF)' },
+      { l: 'Writes', v: 'Silently discards everything; write() always succeeds' },
+      { l: 'Use case', v: 'Suppress output, detach daemons from terminal, benchmark I/O overhead' },
+      { l: 'Device', v: 'Major 1, minor 3. Created by udev at boot.' },
+      { l: 'Pitfall', v: 'Do not confuse /dev/null (discard) with /dev/zero (read zeros)' }
+    ]
+  },
+  epoll: {
+    icon: '&#128163;', name: 'epoll / eventfd', badge: 'epoll', tagline: 'Kernel event notification FDs',
+    color: '#ec4899',
+    code: '<span class="cmt">/* create epoll instance */</span>\n<span class="kw">int</span> ep = <span class="fn">epoll_create1</span>(<span class="num">0</span>);\nstruct epoll_event ev = { EPOLLIN, {.fd=sock} };\n<span class="fn">epoll_ctl</span>(ep, EPOLL_CTL_ADD, sock, &ev);\n\nstruct epoll_event evts[64];\n<span class="kw">int</span> n = <span class="fn">epoll_wait</span>(ep, evts, <span class="num">64</span>, -<span class="num">1</span>);\n\n<span class="cmt">/* eventfd for signalling: */</span>\n<span class="kw">int</span> efd = <span class="fn">eventfd</span>(<span class="num">0</span>, EFD_NONBLOCK);',
+    facts: [
+      { l: 'epoll', v: 'Watches many FDs at once; O(1) event delivery. Replaces select/poll.' },
+      { l: 'eventfd', v: 'A counter FD for thread/process signalling. write() += n, read() returns current value.' },
+      { l: 'timerfd', v: 'timerfd_create() gives an FD that becomes readable when a timer fires.' },
+      { l: 'signalfd', v: 'Converts signals to readable FD events, useful in event loops.' },
+      { l: 'Why FDs?', v: 'Everything-is-a-file: these can be select()ed, polled, and epoll()ed just like sockets.' }
+    ]
+  }
+};
+
+var activeType = 'stdin';
+
+function renderTypeDetail() {
+  var d = TYPE_DATA[activeType];
+  if (!d) return;
+  var c = d.color;
+  var r = TYPE_RGBA[activeType] || 'rgba(56,189,248,';
+  var el = document.getElementById('typeDetail');
+  el.style.borderColor = c;
+  var factsHtml = d.facts.map(function(f) {
+    return '<div class="type-fact"><span class="type-fact-label">' + escHtml(f.l) + '</span><span class="type-fact-val">' + escHtml(f.v) + '</span></div>';
+  }).join('');
+  el.innerHTML =
+    '<div class="type-detail-header" style="background:' + r + '0.1)">' +
+    '<div class="type-detail-icon">' + d.icon + '</div>' +
+    '<div><div class="type-detail-name" style="color:' + c + '">' + escHtml(d.name) + ' ' + badgeHtml(activeType, d.badge) + '</div>' +
+    '<div class="type-detail-tagline">' + d.tagline + '</div></div></div>' +
+    '<div class="type-detail-body">' +
+    '<div class="type-detail-code">' + d.code + '</div>' +
+    '<div class="type-detail-facts">' + factsHtml + '</div>' +
+    '</div>';
+}
+
+document.getElementById('typePicker').querySelectorAll('.type-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.type-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    activeType = btn.getAttribute('data-type');
+    renderTypeDetail();
+  });
+});
+
+renderTypeDetail();
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 3: FD Table Simulator
+══════════════════════════════════════════════════════════ */
+var FDT_DEFAULT = [
+  { fd: 0, type: 'stdin',  desc: '/dev/pts/0',   resource: 'terminal stdin' },
+  { fd: 1, type: 'stdout', desc: '/dev/pts/0',   resource: 'terminal stdout' },
+  { fd: 2, type: 'stderr', desc: '/dev/pts/0',   resource: 'terminal stderr' }
+];
+
+var fdtTable = [];
+
+function fdtReset() {
+  fdtTable = FDT_DEFAULT.map(function(r) { return Object.assign({}, r); });
+  renderFdt();
+  fdtLog('Process started. FDs 0/1/2 set up by shell.', 'lg-info');
+}
+
+function nextFd() {
+  var used = fdtTable.map(function(r) { return r.fd; });
+  for (var i = 0; i <= 1023; i++) {
+    if (used.indexOf(i) === -1) return i;
+  }
+  return -1;
+}
+
+function renderFdt() {
+  var body = document.getElementById('fdtBody');
+  if (fdtTable.length === 0) {
+    body.innerHTML = '<div class="fdt-row empty"><div style="grid-column:1/-1;font-size:0.78rem;color:var(--muted)">no open file descriptors</div></div>';
+    return;
+  }
+  var html = '';
+  fdtTable.forEach(function(r) {
+    html += '<div class="fdt-row">' +
+            '<div class="fdt-num">' + r.fd + '</div>' +
+            '<div>' + badgeHtml(r.type, r.type) + '</div>' +
+            '<div class="fdt-desc"><span class="path">' + escHtml(r.desc) + '</span></div>' +
+            '<div class="fdt-actions"><button class="btn-close-fd" onclick="fdtClose(' + r.fd + ')">close</button></div>' +
+            '</div>';
+  });
+  body.innerHTML = html;
+}
+
+function fdtLog(msg, cls) {
+  var log = document.getElementById('fdtLog');
+  var div = document.createElement('div');
+  div.className = cls || '';
+  div.textContent = msg;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+
+function fdtClose(fd) {
+  fdtTable = fdtTable.filter(function(r) { return r.fd !== fd; });
+  renderFdt();
+  fdtLog('close(' + fd + ') -> OK', 'lg-ok');
+}
+
+function fdtOp(op) {
+  var fd = nextFd();
+  if (op === 'reset') { fdtReset(); return; }
+  if (fd === -1) { fdtLog('Error: too many open files', 'lg-err'); return; }
+  if (op === 'openfile') {
+    fdtTable.push({ fd: fd, type: 'file', desc: '/tmp/data.txt' });
+    fdtLog('open("/tmp/data.txt", O_RDWR) = ' + fd, 'lg-ok');
+  } else if (op === 'openlog') {
+    fdtTable.push({ fd: fd, type: 'file', desc: '/var/log/app.log (O_APPEND)' });
+    fdtLog('open("/var/log/app.log", O_WRONLY|O_APPEND) = ' + fd, 'lg-ok');
+  } else if (op === 'pipe') {
+    var fd2 = fd + 1;
+    fdtTable.push({ fd: fd,  type: 'pipe', desc: 'pipe read  end' });
+    fdtTable.push({ fd: fd2, type: 'pipe', desc: 'pipe write end' });
+    fdtLog('pipe([' + fd + ', ' + fd2 + ']) -> read=' + fd + ', write=' + fd2, 'lg-ok');
+  } else if (op === 'socket') {
+    fdtTable.push({ fd: fd, type: 'socket', desc: 'AF_INET SOCK_STREAM' });
+    fdtLog('socket(AF_INET, SOCK_STREAM, 0) = ' + fd, 'lg-ok');
+  } else if (op === 'null') {
+    fdtTable.push({ fd: fd, type: 'null', desc: '/dev/null' });
+    fdtLog('open("/dev/null", O_RDWR) = ' + fd, 'lg-ok');
+  } else if (op === 'dup') {
+    var src = fdtTable.find(function(r) { return r.fd === 1; });
+    if (!src) { fdtLog('dup(1) failed: fd 1 not open', 'lg-err'); return; }
+    fdtTable.push({ fd: fd, type: src.type, desc: 'dup of fd 1 (' + src.desc + ')' });
+    fdtLog('dup(1) = ' + fd + '  [shares same OFD as fd 1]', 'lg-ok');
+  } else if (op === 'epoll') {
+    fdtTable.push({ fd: fd, type: 'epoll', desc: 'epoll instance' });
+    fdtLog('epoll_create1(0) = ' + fd, 'lg-ok');
+  }
+  renderFdt();
+}
+
+fdtReset();
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 4: Operations Step-Through
+══════════════════════════════════════════════════════════ */
+var OPS_STEPS = [
+  {
+    title: 'Starting state',
+    body: 'Every process starts with FDs 0, 1, 2 already open (set up by the shell via dup2 before exec). These point to the terminal unless redirected.',
+    code: '<span class="cmt">/* Kernel pre-populates FD table */</span>\n<span class="cmt">/* fd 0 = stdin  (terminal) */</span>\n<span class="cmt">/* fd 1 = stdout (terminal) */</span>\n<span class="cmt">/* fd 2 = stderr (terminal) */</span>',
+    fdt: [
+      { fd: 0, type: 'stdin',  label: '/dev/pts/0' },
+      { fd: 1, type: 'stdout', label: '/dev/pts/0' },
+      { fd: 2, type: 'stderr', label: '/dev/pts/0' }
+    ]
+  },
+  {
+    title: 'open() &mdash; allocates next free FD',
+    body: 'open() scans the FD table for the lowest unused slot and returns it. Flags control read/write/create mode. The mode bits (0644) set file permissions if creating.',
+    code: '<span class="kw">int</span> fd = <span class="fn">open</span>(<span class="str">"/tmp/data.txt"</span>,\n           O_RDWR | O_CREAT,\n           <span class="num">0644</span>);\n<span class="cmt">/* returns 3 (lowest free slot) */</span>',
+    fdt: [
+      { fd: 0, type: 'stdin',  label: '/dev/pts/0' },
+      { fd: 1, type: 'stdout', label: '/dev/pts/0' },
+      { fd: 2, type: 'stderr', label: '/dev/pts/0' },
+      { fd: 3, type: 'file',   label: '/tmp/data.txt', cls: 'new-row' }
+    ]
+  },
+  {
+    title: 'write() &mdash; send data via an FD',
+    body: 'write(fd, buf, n) writes up to n bytes. It advances the file offset in the OFD. For a regular file, it returns the number of bytes actually written (may be less than n; call in a loop).',
+    code: '<span class="kw">char</span> *msg = <span class="str">"hello world"</span>;\n<span class="kw">ssize_t</span> n = <span class="fn">write</span>(<span class="num">3</span>, msg, 11);\n<span class="cmt">/* offset in OFD now = 11 */</span>\n<span class="cmt">/* n == 11 means all written */</span>',
+    fdt: [
+      { fd: 0, type: 'stdin',  label: '/dev/pts/0' },
+      { fd: 1, type: 'stdout', label: '/dev/pts/0' },
+      { fd: 2, type: 'stderr', label: '/dev/pts/0' },
+      { fd: 3, type: 'file',   label: '/tmp/data.txt  offset=11' }
+    ]
+  },
+  {
+    title: 'close() &mdash; release the FD slot',
+    body: 'close() removes the entry from the FD table and decrements the OFD reference count. When the refcount hits zero, the kernel frees the OFD. For files, changes are flushed to the page cache (not necessarily to disk).',
+    code: '<span class="fn">close</span>(<span class="num">3</span>);\n<span class="cmt">/* fd 3 slot is now free */</span>\n<span class="cmt">/* using fd 3 after close = UB */</span>\n<span class="cmt">/* OFD freed if refcount == 0 */</span>',
+    fdt: [
+      { fd: 0, type: 'stdin',  label: '/dev/pts/0' },
+      { fd: 1, type: 'stdout', label: '/dev/pts/0' },
+      { fd: 2, type: 'stderr', label: '/dev/pts/0' },
+      { fd: 3, type: 'file',   label: '/tmp/data.txt  [closed]', cls: 'closing' }
+    ]
+  },
+  {
+    title: 'pipe() &mdash; two FDs, one buffer',
+    body: 'pipe() fills two consecutive FD slots: [0] for reading, [1] for writing. Data written to [1] is buffered in the kernel until read from [0]. When all write ends are closed, reading returns EOF.',
+    code: '<span class="kw">int</span> pfd[2];\n<span class="fn">pipe</span>(pfd);\n<span class="cmt">/* pfd[0]=4 read end  */</span>\n<span class="cmt">/* pfd[1]=5 write end */</span>\n<span class="fn">write</span>(pfd[1], <span class="str">"msg"</span>, 3);\n<span class="fn">read</span>(pfd[0], buf, 3);\n<span class="fn">close</span>(pfd[1]); <span class="cmt">// sends EOF</span>',
+    fdt: [
+      { fd: 0, type: 'stdin',  label: '/dev/pts/0' },
+      { fd: 1, type: 'stdout', label: '/dev/pts/0' },
+      { fd: 2, type: 'stderr', label: '/dev/pts/0' },
+      { fd: 4, type: 'pipe',   label: 'pipe read  end', cls: 'new-row' },
+      { fd: 5, type: 'pipe',   label: 'pipe write end', cls: 'new-row' }
+    ]
+  },
+  {
+    title: 'dup() &mdash; copy an FD',
+    body: 'dup(oldfd) allocates the next free slot and makes it point to the same OFD. Both FDs now share the same file offset and flags. Writes to either advance the shared position.',
+    code: '<span class="kw">int</span> newfd = <span class="fn">dup</span>(<span class="num">1</span>);\n<span class="cmt">/* newfd = 6 (next free) */</span>\n<span class="cmt">/* both fd 1 and fd 6 share */</span>\n<span class="cmt">/* the same OFD (offset, flags) */</span>\n<span class="fn">write</span>(<span class="num">6</span>, <span class="str">"same destination"</span>, 16);',
+    fdt: [
+      { fd: 0, type: 'stdin',  label: '/dev/pts/0' },
+      { fd: 1, type: 'stdout', label: '/dev/pts/0' },
+      { fd: 2, type: 'stderr', label: '/dev/pts/0' },
+      { fd: 4, type: 'pipe',   label: 'pipe read  end' },
+      { fd: 5, type: 'pipe',   label: 'pipe write end' },
+      { fd: 6, type: 'stdout', label: 'dup of fd 1  (shared OFD)', cls: 'dup-row' }
+    ]
+  },
+  {
+    title: 'dup2() &mdash; redirect to a specific FD number',
+    body: 'dup2(oldfd, newfd) closes newfd if open, then copies oldfd to exactly newfd. This is how the shell redirects stdout: dup2(filefd, 1) before exec().',
+    code: '<span class="kw">int</span> logfd = <span class="fn">open</span>(<span class="str">"log.txt"</span>, O_WRONLY|O_CREAT, <span class="num">0644</span>);\n<span class="fn">dup2</span>(logfd, <span class="num">1</span>);   <span class="cmt">// stdout -> log.txt</span>\n<span class="fn">close</span>(logfd);      <span class="cmt">// clean up original</span>\n<span class="cmt">/* now printf() writes to log.txt */</span>\n<span class="fn">execv</span>(<span class="str">"/bin/prog"</span>, argv);',
+    fdt: [
+      { fd: 0, type: 'stdin',  label: '/dev/pts/0' },
+      { fd: 1, type: 'file',   label: 'log.txt  (was stdout)', cls: 'dup-row' },
+      { fd: 2, type: 'stderr', label: '/dev/pts/0' }
+    ]
+  },
+  {
+    title: 'O_CLOEXEC &mdash; auto-close on exec()',
+    body: 'By default, FDs survive exec(). O_CLOEXEC (or FD_CLOEXEC with fcntl) marks an FD to be closed automatically when exec() is called. This prevents accidental FD leaks into child programs.',
+    code: '<span class="cmt">/* open with auto-close on exec */</span>\n<span class="kw">int</span> fd = <span class="fn">open</span>(<span class="str">"/tmp/secret"</span>,\n           O_RDONLY | O_CLOEXEC);\n\n<span class="cmt">/* or retroactively: */</span>\n<span class="fn">fcntl</span>(fd, F_SETFD, FD_CLOEXEC);\n\n<span class="cmt">/* fd closed automatically on: */</span>\n<span class="fn">execv</span>(<span class="str">"/bin/child"</span>, argv);',
+    fdt: [
+      { fd: 0, type: 'stdin',  label: '/dev/pts/0' },
+      { fd: 1, type: 'stdout', label: '/dev/pts/0' },
+      { fd: 2, type: 'stderr', label: '/dev/pts/0' },
+      { fd: 3, type: 'file',   label: '/tmp/secret  [O_CLOEXEC]', cls: 'closing' }
+    ]
+  }
+];
+
+var opsIdx = 0;
+
+function renderPips(containerId, total, cur, clickFn) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < total; i++) {
+    html += '<div class="step-pip ' + (i < cur ? 'done' : i === cur ? 'active' : '') + '" onclick="' + clickFn + '(' + i + ')"></div>';
+  }
+  el.innerHTML = html;
+}
+
+function opsRender() {
+  var s = OPS_STEPS[opsIdx];
+  document.getElementById('opsDescTitle').textContent = 'Step ' + (opsIdx + 1) + ': ' + s.title.replace(/&mdash;/g, '-').replace(/&[a-z]+;/g, '');
+  document.getElementById('opsDescBody').textContent  = s.body;
+  document.getElementById('opsCode').innerHTML        = s.code;
+  document.getElementById('opsCounter').textContent   = 'Step ' + (opsIdx + 1) + ' / ' + OPS_STEPS.length;
+  renderPips('opsPips', OPS_STEPS.length, opsIdx, 'opsGoto');
+  document.getElementById('opsPrev').disabled = opsIdx === 0;
+  document.getElementById('opsNext').disabled = opsIdx === OPS_STEPS.length - 1;
+
+  var fdt = document.getElementById('opsFdt');
+  var html = '';
+  s.fdt.forEach(function(r) {
+    var c = TYPE_COLOR[r.type] || '#64748b';
+    html += '<div class="mini-fdt-row' + (r.cls ? ' ' + r.cls : '') + '">' +
+            '<span class="mini-fdt-num" style="color:' + c + '">' + r.fd + '</span>' +
+            badgeHtml(r.type, r.type) +
+            '<span class="mini-fdt-desc">' + escHtml(r.label) + '</span></div>';
+  });
+  fdt.innerHTML = html;
+}
+
+function opsStep(d) { opsIdx = Math.max(0, Math.min(OPS_STEPS.length - 1, opsIdx + d)); opsRender(); }
+function opsGoto(i) { opsIdx = i; opsRender(); }
+opsRender();
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 5: Redirection
+══════════════════════════════════════════════════════════ */
+var REDIRS = [
+  {
+    syntax: '> file', color: '#22c55e', name: 'Stdout redirect',
+    desc: 'Redirects stdout (fd 1) to a file. The shell opens the file with O_WRONLY|O_CREAT|O_TRUNC, then dup2(filefd, 1) before exec(). The program never knows.',
+    before: [{ n: 0, b: 'stdin', d: 'terminal' }, { n: 1, b: 'stdout', d: 'terminal' }, { n: 2, b: 'stderr', d: 'terminal' }],
+    after:  [{ n: 0, b: 'stdin', d: 'terminal' }, { n: 1, b: 'file',   d: 'out.txt' },  { n: 2, b: 'stderr', d: 'terminal' }]
+  },
+  {
+    syntax: '>> file', color: '#fbbf24', name: 'Append redirect',
+    desc: 'Like > but opens with O_APPEND. Every write atomically seeks to the end first, so multiple processes can safely append to the same log file.',
+    before: [{ n: 0, b: 'stdin', d: 'terminal' }, { n: 1, b: 'stdout', d: 'terminal' }, { n: 2, b: 'stderr', d: 'terminal' }],
+    after:  [{ n: 0, b: 'stdin', d: 'terminal' }, { n: 1, b: 'file',   d: 'log.txt (append)' }, { n: 2, b: 'stderr', d: 'terminal' }]
+  },
+  {
+    syntax: '< file', color: '#38bdf8', name: 'Stdin redirect',
+    desc: 'Redirects stdin (fd 0) from a file. Shell opens the file O_RDONLY, dup2(filefd, 0) before exec(). The program reads from the file instead of the keyboard.',
+    before: [{ n: 0, b: 'stdin', d: 'terminal' }, { n: 1, b: 'stdout', d: 'terminal' }, { n: 2, b: 'stderr', d: 'terminal' }],
+    after:  [{ n: 0, b: 'file',  d: 'input.txt' }, { n: 1, b: 'stdout', d: 'terminal' }, { n: 2, b: 'stderr', d: 'terminal' }]
+  },
+  {
+    syntax: '2>&1', color: '#ef4444', name: 'Merge stderr into stdout',
+    desc: 'dup2(1, 2): makes fd 2 (stderr) point to the same OFD as fd 1 (stdout). Order matters: "cmd > log 2>&1" works. "cmd 2>&1 > log" does NOT send stderr to log (dup2 happens before > log).',
+    before: [{ n: 0, b: 'stdin', d: 'terminal' }, { n: 1, b: 'stdout', d: 'terminal' }, { n: 2, b: 'stderr', d: 'terminal' }],
+    after:  [{ n: 0, b: 'stdin', d: 'terminal' }, { n: 1, b: 'file',   d: 'log.txt' },  { n: 2, b: 'stderr', d: 'log.txt (same OFD as fd 1)' }]
+  },
+  {
+    syntax: 'cmd | cmd', color: '#a855f7', name: 'Pipe',
+    desc: 'The shell calls pipe() to get [readfd, writefd], then forks twice. Left child: dup2(writefd, 1), exec. Right child: dup2(readfd, 0), exec. Both pipe FDs are closed in each child after dup2.',
+    before: [{ n: 0, b: 'stdin', d: 'terminal' }, { n: 1, b: 'stdout', d: 'terminal' }, { n: 2, b: 'stderr', d: 'terminal' }],
+    after:  [{ n: 0, b: 'stdin', d: 'terminal' }, { n: 1, b: 'pipe',   d: 'pipe write end (left cmd)' }, { n: 0, b: 'pipe', d: 'pipe read end (right cmd)' }]
+  },
+  {
+    syntax: '&>/dev/null', color: '#64748b', name: 'Silence all output',
+    desc: 'Shorthand for > /dev/null 2>&1. Both stdout and stderr go to /dev/null. Useful in scripts where you want a command to run silently regardless of success or failure.',
+    before: [{ n: 0, b: 'stdin', d: 'terminal' }, { n: 1, b: 'stdout', d: 'terminal' }, { n: 2, b: 'stderr', d: 'terminal' }],
+    after:  [{ n: 0, b: 'stdin', d: 'terminal' }, { n: 1, b: 'null',   d: '/dev/null' }, { n: 2, b: 'null', d: '/dev/null' }]
+  }
+];
+
+var activeRedir = 0;
+
+function renderRedirGrid() {
+  var grid = document.getElementById('redirGrid');
+  var html = '';
+  REDIRS.forEach(function(r, i) {
+    var act = activeRedir === i ? ' active' : '';
+    html += '<div class="redir-card' + act + '" onclick="selectRedir(' + i + ')">' +
+            '<div class="redir-card-header">' +
+            '<span class="redir-syntax" style="background:' + TYPE_RGBA[r.before[0].b] + '0.1);color:' + r.color + '">' + escHtml(r.syntax) + '</span>' +
+            '<span class="redir-name">' + escHtml(r.name) + '</span>' +
+            '</div>' +
+            '<div class="redir-card-body">' +
+            '<div class="redir-card-desc">' + escHtml(r.desc) + '</div>' +
+            '<div class="redir-before-after">' +
+            '<div class="redir-ba-col"><div class="redir-ba-label">Before exec</div>' +
+            r.before.map(function(x) { return '<div class="redir-ba-row"><span class="rn">' + x.n + '</span>' + badgeHtml(x.b, x.b) + '</div>'; }).join('') +
+            '</div>' +
+            '<div class="redir-ba-col"><div class="redir-ba-label">After (in child)</div>' +
+            r.after.map(function(x) { return '<div class="redir-ba-row"><span class="rn">' + x.n + '</span>' + badgeHtml(x.b, x.b) + '</div>'; }).join('') +
+            '</div></div></div></div>';
+  });
+  grid.innerHTML = html;
+}
+
+function selectRedir(i) {
+  activeRedir = i;
+  renderRedirGrid();
+}
+
+renderRedirGrid();
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 6: Quiz
+══════════════════════════════════════════════════════════ */
+var QUIZ = [
+  { q: 'What is a file descriptor?', opts: ['A filename string','A small integer used as a handle to an open I/O resource in the kernel','A pointer to a FILE struct','A kernel memory address'], ans: 1, fb: 'An FD is just an integer index into the process\'s FD table. The kernel maps it to the actual open file description and underlying resource.' },
+  { q: 'Which FD number is always standard input (stdin)?', opts: ['1','2','0','3'], ans: 2, fb: 'FD 0 = stdin, 1 = stdout, 2 = stderr. These are pre-filled by the shell before exec().' },
+  { q: 'What does open() return when it succeeds?', opts: ['A FILE* pointer','The number of bytes in the file','The lowest available FD slot number','The inode number'], ans: 2, fb: 'open() scans the FD table for the lowest unused slot and returns that number. FD 0, 1, 2 are pre-occupied, so the first open() call usually returns 3.' },
+  { q: 'You call dup(1). What does this create?', opts: ['A new file with the same contents as stdout','A new FD pointing to the same Open File Description as fd 1, sharing its offset and flags','A copy of the stdout FILE buffer','A duplicate inode on disk'], ans: 1, fb: 'dup() allocates the next free FD slot and makes it reference the same kernel Open File Description as the source. They share file offset and flags.' },
+  { q: 'What is the difference between dup() and dup2()?', opts: ['dup2() copies the data; dup() copies the FD','dup() uses the next free FD; dup2(old, new) copies to a specific FD number, closing new first if needed','dup2() is only for sockets','dup() is for files, dup2() is for pipes'], ans: 1, fb: 'dup() picks the lowest free slot. dup2(oldfd, newfd) assigns to exactly newfd, closing it first if it is already open. The shell uses dup2 to set up stdin/stdout before exec.' },
+  { q: 'When does read() return 0 on a pipe?', opts: ['When the kernel buffer is full','When all write ends of the pipe are closed (EOF)','After exactly 65536 bytes are read','When the process is killed'], ans: 1, fb: 'read() on a pipe returns 0 (EOF) only when ALL file descriptors referring to the write end of the pipe are closed. Even one open write end keeps the pipe alive.' },
+  { q: 'What does O_CLOEXEC do?', opts: ['Closes the FD when the process exits','Prevents writing to the FD','Automatically closes the FD when exec() is called, preventing FD leaks into child processes','Enables close-on-read behaviour'], ans: 2, fb: 'By default FDs survive exec(). O_CLOEXEC (or FD_CLOEXEC via fcntl) marks the FD to be automatically closed during exec(), preventing unintentional FD leaks into spawned programs.' },
+  { q: 'In the shell command "cmd > log.txt 2>&1", what does 2>&1 do?', opts: ['Redirects stdout to stderr','Creates a new file descriptor called 2>&1','Makes fd 2 (stderr) point to the same destination as fd 1 (stdout, which is now log.txt)','Sends both streams to /dev/null'], ans: 2, fb: 'The shell processes redirections left to right: first "> log.txt" makes fd 1 point to log.txt, then "2>&1" does dup2(1, 2), so stderr now points to the same log.txt OFD.' },
+  { q: 'What happens if you write to /dev/null?', opts: ['A file is created at /dev/null','The write always fails with EPERM','The data is silently discarded and write() returns success','The system crashes'], ans: 2, fb: '/dev/null is the "bit bucket". write() always succeeds and returns the number of bytes you passed, but the data is thrown away by the kernel character device driver.' },
+  { q: 'Which system call is used for I/O multiplexing to watch many FDs efficiently in a modern Linux event loop?', opts: ['select()','poll()','epoll()','fork()'], ans: 2, fb: 'epoll() scales O(1) regardless of how many FDs you are watching, unlike select()/poll() which scan all FDs each call. epoll is the foundation of Node.js, nginx, and most modern event loops.' },
+  { q: 'What is the three-tier hierarchy a file descriptor goes through?', opts: ['FD -> inode -> disk block','FD -> open file description (OFD) -> inode/resource','FD -> vnode -> file table','FD -> FILE* -> page cache'], ans: 1, fb: 'Process FD table (integers) -> per-process open file description (stores offset, flags, refcount) -> inode or kernel object (pipe, socket, etc.). Multiple FDs can share one OFD via dup() or fork().' },
+  { q: 'How does a shell pipe (cmd1 | cmd2) work at the FD level?', opts: ['It writes cmd1 output to a temp file and cmd2 reads it','The kernel connects stdout of cmd1 directly to stdin of cmd2 without any FD manipulation','Shell calls pipe(), forks twice, uses dup2() to connect write-end to cmd1 stdout and read-end to cmd2 stdin','cmd2 polls cmd1\'s /proc/pid/fd/ directory'], ans: 2, fb: 'The shell calls pipe([readfd, writefd]), then forks. In each child, dup2 maps the appropriate pipe end to fd 0 or fd 1, then exec(). The program writes to "stdout" (fd 1) not knowing it\'s a pipe.' }
+];
+
+var qCur = 0, qScore = 0, qAnswered = false;
+
+function renderQuiz() {
+  if (qCur >= QUIZ.length) {
+    var pct = Math.round((qScore / QUIZ.length) * 100);
+    var msg = pct >= 80 ? 'Excellent! You know your FDs.' : pct >= 60 ? 'Good work! Review the sections you missed.' : 'Keep practising &mdash; revisit the type explorer and operations sections.';
+    document.getElementById('quizBody').innerHTML =
+      '<div class="quiz-score"><div class="quiz-score-num">' + qScore + '/' + QUIZ.length + '</div>' +
+      '<div class="quiz-score-pct">' + pct + '% correct</div>' +
+      '<div class="quiz-score-msg">' + msg + '</div>' +
+      '<button class="btn-retry" onclick="quizRetry()">Try again</button></div>';
+    document.getElementById('quizProg').style.width = '100%';
+    return;
+  }
+  var q = QUIZ[qCur];
+  document.getElementById('quizProg').style.width = (qCur / QUIZ.length * 100) + '%';
+  qAnswered = false;
+  var html = '<div class="quiz-q-card"><div class="quiz-q-num">Question ' + (qCur + 1) + ' of ' + QUIZ.length + '</div>';
+  html += '<div class="quiz-q-text">' + escHtml(q.q) + '</div><div class="quiz-opts">';
+  for (var i = 0; i < q.opts.length; i++) {
+    html += '<button class="quiz-opt" onclick="quizAns(' + i + ')">' + escHtml(q.opts[i]) + '</button>';
+  }
+  html += '</div><div class="quiz-fb" id="qFb"></div>';
+  html += '<div class="quiz-nav"><button class="btn-q-next" id="qNext" onclick="quizNext()" disabled>Next &#8594;</button></div></div>';
+  document.getElementById('quizBody').innerHTML = html;
+}
+
+function quizAns(i) {
+  if (qAnswered) return;
+  qAnswered = true;
+  var q    = QUIZ[qCur];
+  var opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(function(o) { o.disabled = true; });
+  var fb = document.getElementById('qFb');
+  if (i === q.ans) {
+    opts[i].classList.add('correct');
+    fb.className = 'quiz-fb show ok';
+    fb.textContent = 'Correct! ' + q.fb;
+    qScore++;
+  } else {
+    opts[i].classList.add('wrong');
+    opts[q.ans].classList.add('revealed');
+    fb.className = 'quiz-fb show bad';
+    fb.textContent = 'Not quite. ' + q.fb;
+  }
+  document.getElementById('qNext').disabled = false;
+}
+
+function quizNext()  { qCur++; renderQuiz(); }
+function quizRetry() { qCur = 0; qScore = 0; qAnswered = false; renderQuiz(); }
+renderQuiz();
+
+</script>
+</body>
+</html>
