@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="midnight">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>Memory Layout Builder | BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+body { padding-top: 1.25rem; }
+.les-container { width: 100%; max-width: 960px; margin: 0 auto; padding: 0 1rem 4rem; }
+.les-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.les-title { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.les-subtitle { color: var(--muted); font-size: 0.85rem; }
+
+.layout { display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap; }
+
+/* Palette */
+.palette { width: 200px; flex-shrink: 0; }
+.palette h2 { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .75rem; }
+.seg { padding: .5rem .75rem; border-radius: 6px; font-size: .78rem; font-weight: 700; cursor: grab; margin-bottom: .5rem; border: 2px solid transparent; transition: opacity .15s, transform .15s; user-select: none; }
+.seg:active { cursor: grabbing; transform: scale(1.04); }
+.seg.used { opacity: .35; cursor: not-allowed; pointer-events: none; }
+
+/* Address space */
+.space-wrap { flex: 1; min-width: 280px; }
+.space-wrap h2 { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .75rem; }
+#space { display: flex; gap: 0; margin-top: .25rem; }
+.addr-col { display: flex; flex-direction: column; width: 85px; flex-shrink: 0; justify-content: space-between; padding: .5rem 0; font-size: .65rem; color: var(--muted); text-align: right; padding-right: .5rem; }
+.slot-col { flex: 1; display: flex; flex-direction: column; gap: 3px; min-height: 580px; }
+.slot { flex: 1; min-height: 46px; border: 2px dashed var(--card-border); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: .72rem; color: var(--muted); transition: background .15s, border-color .15s; position: relative; }
+.slot.drag-over { border-color: var(--accent); background: rgba(129,140,248,.07); }
+.slot.filled { border-style: solid; border-color: transparent; }
+.slot .placed { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; border-radius: 4px; cursor: pointer; position: relative; padding: .3rem .5rem; text-align: center; }
+.slot .placed .rm { position: absolute; top: 2px; right: 4px; font-size: .65rem; color: rgba(0,0,0,.4); cursor: pointer; }
+.slot .placed .rm:hover { color: rgba(0,0,0,.8); }
+.arrows-col { width: 28px; display: flex; flex-direction: column; justify-content: space-between; padding: .5rem 0; align-items: center; font-size: .7rem; color: var(--muted); }
+
+/* Info panel */
+.info-panel { background: var(--card); border: 1px solid var(--card-border); border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: .8rem; color: var(--subtle); min-height: 54px; border-left: 3px solid var(--accent); line-height: 1.6; }
+.info-panel strong { color: var(--text); }
+.info-addr { color: var(--accent2); font-family: 'Consolas',monospace; }
+
+/* Feedback */
+.feedback { margin-top: 1rem; }
+.btn-check { background: var(--accent); color: #000; border: none; padding: .5rem 1.2rem; border-radius: 6px; cursor: pointer; font-size: .82rem; font-family: inherit; margin-right: .5rem; margin-bottom: .5rem; font-weight: 700; }
+.btn-check:hover { opacity: .88; }
+.btn-sec { background: var(--bg2); color: var(--subtle); border: 1px solid var(--card-border); padding: .5rem 1.2rem; border-radius: 6px; cursor: pointer; font-size: .82rem; font-family: inherit; margin-right: .5rem; margin-bottom: .5rem; }
+.btn-sec:hover { background: var(--card); color: var(--text); }
+.result { margin-top: .75rem; padding: .75rem; border-radius: 6px; font-size: .82rem; display: none; }
+.result.ok  { background: rgba(52,211,153,.1); border: 1px solid var(--success); color: #6ee7b7; }
+.result.err { background: rgba(248,113,113,.1); border: 1px solid var(--danger);  color: #fca5a5; }
+.score-bar { margin-top: .75rem; display: flex; gap: .5rem; flex-wrap: wrap; }
+.score-chip { font-size: .7rem; padding: .2rem .5rem; border-radius: 4px; background: var(--bg2); border: 1px solid var(--card-border); color: var(--muted); }
+.score-chip.ok    { border-color: var(--success); color: var(--success); background: rgba(52,211,153,.07); }
+.score-chip.err   { border-color: var(--danger);  color: var(--danger);  background: rgba(248,113,113,.07); }
+.score-chip.empty { border-color: var(--card-border); color: var(--muted); }
+
+.legend { margin-top: .5rem; display: flex; gap: 1.5rem; font-size: .72rem; color: var(--muted); flex-wrap: wrap; }
+.legend span { display: flex; align-items: center; gap: .3rem; }
+
+.back-link { display: inline-block; margin-top: .5rem; color: var(--accent); font-size: .85rem; text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="midnight" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="les-container">
+
+  <div class="les-header">
+    <a href="../index.html#learn" class="logo-wrap" style="text-decoration:none;color:inherit;flex-direction:row;gap:.5rem;">
+      <span style="font-size:1.3rem;">&#129664;</span>
+      <span style="font-size:1rem;font-weight:800;color:var(--subtle);">BrainStuffer</span>
+    </a>
+    <div>
+      <div class="les-title">Memory Layout Builder</div>
+      <div class="les-subtitle">Drag segments into the correct positions &mdash; high addresses at top, low at bottom</div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- Palette -->
+    <div class="palette">
+      <h2>Segments</h2>
+      <div id="palette"></div>
+      <hr style="border-color:var(--card-border);margin:.75rem 0">
+      <div class="legend">
+        <span>&#8593; grows up</span>
+        <span>&#8595; grows down</span>
+      </div>
+    </div>
+
+    <!-- Address space -->
+    <div class="space-wrap">
+      <h2>Virtual Address Space (x86-64, user land)</h2>
+      <div id="space">
+        <div class="addr-col" id="addr-col"></div>
+        <div class="slot-col" id="slot-col"></div>
+        <div class="arrows-col" id="arrows-col"></div>
+      </div>
+      <div class="info-panel" id="info">Hover or drop a segment to see details.</div>
+      <div class="feedback">
+        <button class="btn-check" onclick="check()">Check Layout</button>
+        <button class="btn-sec" onclick="reset()">Reset</button>
+        <button class="btn-sec" onclick="hint()">Hint</button>
+        <div class="result" id="result"></div>
+        <div class="score-bar" id="score-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <a class="back-link" href="../index.html#learn">&#8592; Back to Interactive Learning</a>
+</div>
+
+<script>
+const SLOTS=[
+  {id:'s0',label:'kernel', addr:'0xFFFFFFFF\nFFFFFFFF',arrow:'',
+   info:'<strong>Kernel Space</strong> — not accessible in user mode. Any attempt to read/write here triggers SIGSEGV. On x86-64, the upper half of virtual address space (above 0x7FFFFFFFFFFFFFFF) is reserved for the kernel.'},
+  {id:'s1',label:'vdso',   addr:'0x7FFF…',arrow:'',
+   info:'<strong>vDSO / vsyscall</strong> — a small kernel-mapped shared library (~4 KB) that lets user-space call common syscalls (clock_gettime, gettimeofday) without entering the kernel. Visible in <span class="info-addr">/proc/self/maps</span> as <span class="info-addr">[vdso]</span>.'},
+  {id:'s2',label:'stack',  addr:'',arrow:'&#8595;',
+   info:'<strong>Stack</strong> — <em>grows downward</em> toward lower addresses. Holds local variables, saved return addresses, and frame pointers. The RSP register points to the current top (lowest address). Buffer overflows here can overwrite the saved return address.'},
+  {id:'s3',label:'mmap',   addr:'',arrow:'',
+   info:'<strong>mmap / shared libraries</strong> — anonymous and file-backed mappings live here. <span class="info-addr">libc.so</span>, <span class="info-addr">ld.so</span>, and anything allocated with <span class="info-addr">mmap()</span> are placed in this region. ASLR randomizes the base.'},
+  {id:'s4',label:'heap',   addr:'',arrow:'&#8593;',
+   info:'<strong>Heap</strong> — <em>grows upward</em> toward higher addresses. Managed by <span class="info-addr">malloc()</span> / <span class="info-addr">free()</span>. The program break (<span class="info-addr">brk</span>) marks its current top. Heap overflows can corrupt allocator metadata or adjacent chunks.'},
+  {id:'s5',label:'bss',    addr:'',arrow:'',
+   info:'<strong>.bss</strong> — uninitialized global and static variables. Zero-filled at startup. Not stored in the ELF binary on disk — the OS just maps zeroed pages. Example: <span class="info-addr">int g;</span> at global scope.'},
+  {id:'s6',label:'data',   addr:'',arrow:'',
+   info:'<strong>.data</strong> — initialized global and static variables. Stored in the ELF binary on disk with their values. Example: <span class="info-addr">int g = 42;</span> at global scope. Writable at runtime.'},
+  {id:'s7',label:'rodata', addr:'',arrow:'',
+   info:'<strong>.rodata</strong> — read-only data: string literals, const globals. Marked non-writable by the OS. Attempting to write here causes SIGSEGV. Example: <span class="info-addr">"Hello, world!"</span> in printf lives here.'},
+  {id:'s8',label:'text',   addr:'',arrow:'',
+   info:'<strong>.text</strong> — the executable machine code. Marked read+execute, not writable (with NX). The program counter (RIP) points into this region during normal execution. Shellcode injection targets writable+executable regions instead.'},
+  {id:'s9',label:'null',   addr:'0x00000000',arrow:'',
+   info:'<strong>NULL / unmapped</strong> — the very bottom of virtual address space is intentionally unmapped. Dereferencing a NULL pointer (address 0) lands here and generates SIGSEGV. Some 32-bit kernels could map page 0 — CVE-2009-1185 exploited this with mmap(0,...).'},
+];
+
+const SEGMENTS=[
+  {id:'kernel',label:'Kernel Space',  color:'#7f1d1d',tc:'#fca5a5'},
+  {id:'vdso',  label:'[vdso]',         color:'#1e3a5f',tc:'#93c5fd'},
+  {id:'stack', label:'Stack &#8595;',  color:'#4c1d95',tc:'#ddd6fe'},
+  {id:'mmap',  label:'mmap / libs',    color:'#1e3a5f',tc:'#93c5fd'},
+  {id:'heap',  label:'Heap &#8593;',   color:'#064e3b',tc:'#6ee7b7'},
+  {id:'bss',   label:'.bss',           color:'#78350f',tc:'#fcd34d'},
+  {id:'data',  label:'.data',          color:'#7c2d12',tc:'#fdba74'},
+  {id:'rodata',label:'.rodata',        color:'#713f12',tc:'#fde68a'},
+  {id:'text',  label:'.text',          color:'#1e3a5f',tc:'#bfdbfe'},
+  {id:'null',  label:'NULL (unmapped)',color:'#1c1c2e',tc:'#475569'},
+];
+
+const segMap={};
+SEGMENTS.forEach(s=>segMap[s.id]=s);
+
+const state={};
+SLOTS.forEach(sl=>state[sl.id]=null);
+
+let dragSeg=null;
+
+function buildPalette(){
+  const el=document.getElementById('palette');el.innerHTML='';
+  SEGMENTS.forEach(seg=>{
+    const d=document.createElement('div');
+    d.className='seg';d.id='pal-'+seg.id;
+    d.innerHTML=seg.label;
+    d.style.background=seg.color;d.style.color=seg.tc;
+    d.style.borderColor=seg.tc+'55';
+    d.draggable=true;d.dataset.seg=seg.id;
+    d.addEventListener('dragstart',e=>{dragSeg=seg.id;e.dataTransfer.effectAllowed='move';});
+    d.addEventListener('dragend',()=>{dragSeg=null;});
+    d.addEventListener('mouseenter',()=>showInfo(seg.id));
+    el.appendChild(d);
+  });
+}
+
+function buildSpace(){
+  const addrCol=document.getElementById('addr-col');
+  const slotCol=document.getElementById('slot-col');
+  const arrowCol=document.getElementById('arrows-col');
+  addrCol.innerHTML='';slotCol.innerHTML='';arrowCol.innerHTML='';
+  SLOTS.forEach(sl=>{
+    const a=document.createElement('div');
+    a.style.cssText='display:flex;align-items:center;flex:1;justify-content:flex-end;padding-right:.5rem;font-size:.62rem;color:var(--muted);white-space:pre;text-align:right';
+    a.textContent=sl.addr||'';
+    addrCol.appendChild(a);
+
+    const d=document.createElement('div');
+    d.className='slot';d.id=sl.id;d.textContent='drop here';d.dataset.slot=sl.id;
+    d.addEventListener('dragover',e=>{e.preventDefault();d.classList.add('drag-over');});
+    d.addEventListener('dragleave',()=>d.classList.remove('drag-over'));
+    d.addEventListener('drop',e=>{e.preventDefault();d.classList.remove('drag-over');if(dragSeg)placeSeg(sl.id,dragSeg);});
+    d.addEventListener('mouseenter',()=>{if(state[sl.id])showInfo(state[sl.id]);});
+    slotCol.appendChild(d);
+
+    const ar=document.createElement('div');
+    ar.style.cssText='display:flex;align-items:center;flex:1;font-size:.9rem;color:var(--muted)';
+    ar.innerHTML=sl.arrow||'';
+    arrowCol.appendChild(ar);
+  });
+}
+
+function placeSeg(slotId,segId){
+  Object.keys(state).forEach(k=>{if(state[k]===segId)removeSeg(k,false);});
+  if(state[slotId])returnToPalette(state[slotId]);
+  state[slotId]=segId;
+  renderSlot(slotId);
+  markPaletteUsed(segId,true);
+  showInfo(segId);
+  clearResult();
+}
+
+function removeSeg(slotId,returnPal=true){
+  const segId=state[slotId];if(!segId)return;
+  state[slotId]=null;
+  const slot=document.getElementById(slotId);
+  slot.className='slot';slot.textContent='drop here';
+  if(returnPal)markPaletteUsed(segId,false);
+  clearResult();
+}
+
+function returnToPalette(segId){markPaletteUsed(segId,false);}
+
+function renderSlot(slotId){
+  const segId=state[slotId];const seg=segMap[segId];
+  const slot=document.getElementById(slotId);
+  slot.className='slot filled';
+  slot.innerHTML=`<div class="placed" style="background:${seg.color};color:${seg.tc}">${seg.label}<span class="rm" onclick="removeSeg('${slotId}')">✕</span></div>`;
+}
+
+function markPaletteUsed(segId,used){
+  const el=document.getElementById('pal-'+segId);if(!el)return;
+  if(used){el.classList.add('used');el.draggable=false;}
+  else{el.classList.remove('used');el.draggable=true;}
+}
+
+function showInfo(segId){
+  const slotDef=SLOTS.find(s=>s.label===segId);
+  document.getElementById('info').innerHTML=slotDef?slotDef.info:'Hover a segment or slot to see details.';
+}
+
+function clearResult(){
+  document.getElementById('result').style.display='none';
+  document.getElementById('score-bar').innerHTML='';
+}
+
+function check(){
+  let correct=0;const chips=[];
+  SLOTS.forEach(sl=>{
+    const placed=state[sl.id];const ok=placed===sl.label;
+    if(ok)correct++;
+    const seg=placed?segMap[placed]:null;
+    chips.push(`<span class="score-chip ${placed?(ok?'ok':'err'):'empty'}">${sl.label}: ${placed?(ok?'✓':'✗ '+segMap[placed].label):'—'}</span>`);
+  });
+  document.getElementById('score-bar').innerHTML=chips.join('');
+  const res=document.getElementById('result');
+  if(correct===SLOTS.length){res.className='result ok';res.textContent=`Perfect! ${correct}/${SLOTS.length} — you've got the Linux virtual address space nailed.`;}
+  else{res.className='result err';res.textContent=`${correct}/${SLOTS.length} correct. Check the score bar — red entries are wrong or missing.`;}
+  res.style.display='block';
+}
+
+const HINTS=[
+  'The very top (highest address) is always Kernel Space — user code cannot access it.',
+  'NULL/unmapped is at the very bottom (lowest address, near 0x0).',
+  'The Stack grows DOWN — it lives near the top of user space, below vDSO.',
+  'The Heap grows UP — it lives just above the BSS/data/text group.',
+  '.text (code) has the lowest address among the ELF sections.',
+  'ELF section order from low to high: .text → .rodata → .data → .bss → heap.',
+  'mmap/libs sit between the heap and the stack in the middle of address space.',
+  'vDSO is mapped just below the stack — check /proc/self/maps to see it.',
+];
+let hintIdx=0;
+function hint(){
+  const res=document.getElementById('result');
+  res.className='result ok';res.textContent='💡 '+HINTS[hintIdx%HINTS.length];
+  res.style.display='block';hintIdx++;
+}
+
+function reset(){
+  SLOTS.forEach(sl=>{state[sl.id]=null;});
+  SEGMENTS.forEach(seg=>markPaletteUsed(seg.id,false));
+  buildSpace();clearResult();
+  document.getElementById('info').innerHTML='Hover or drop a segment to see details.';
+  hintIdx=0;
+}
+
+buildPalette();buildSpace();
+
+/* Skin switcher */
+(function(){
+  var toggle=document.getElementById('skin-toggle'),panel=document.getElementById('skin-panel');
+  if(!toggle||!panel)return;
+  toggle.addEventListener('click',function(e){e.stopPropagation();panel.classList.toggle('open');});
+  document.addEventListener('click',function(){panel.classList.remove('open');});
+  panel.addEventListener('click',function(e){e.stopPropagation();});
+  panel.querySelectorAll('.skin-opt').forEach(function(opt){
+    opt.addEventListener('click',function(){
+      var sk=opt.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin',sk);
+      localStorage.setItem('bs-skin',sk);
+      panel.classList.remove('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>

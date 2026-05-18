@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="midnight">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>FD Table Simulator | BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+body { padding-top: 1.25rem; }
+.les-container { width: 100%; max-width: 900px; margin: 0 auto; padding: 0 1rem 4rem; }
+.les-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.les-title { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.les-subtitle { color: var(--muted); font-size: 0.85rem; }
+
+.lbl { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: .6rem; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media(max-width:720px){ .grid2 { grid-template-columns: 1fr; } }
+
+/* FD Table */
+.fdt { width: 100%; border-collapse: collapse; }
+.fdt th { text-align: left; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: .35rem .6rem; border-bottom: 1px solid var(--card-border); }
+.fdt td { padding: .45rem .6rem; border-bottom: 1px solid rgba(37,45,66,.45); font-size: .88rem; vertical-align: middle; }
+.fd-num { font-family: 'Consolas',monospace; font-weight: 700; font-size: 1rem; color: var(--text); min-width: 28px; }
+.fd-empty td { color: rgba(100,116,139,.35); font-style: italic; }
+.badge { font-size: .65rem; font-weight: 700; padding: .1rem .4rem; border-radius: 3px; margin-left: .4rem; vertical-align: middle; }
+.b-stdin  { background: rgba(34,197,94,.2);  color: #86efac; }
+.b-stdout { background: rgba(59,130,246,.2); color: #93c5fd; }
+.b-stderr { background: rgba(239,68,68,.2);  color: #fca5a5; }
+.fd-name { font-family: 'Consolas',monospace; font-size: .82rem; }
+.fd-mode { font-size: .75rem; color: var(--muted); font-family: monospace; }
+.btn-x { background: none; border: 1px solid var(--card-border); border-radius: 4px; color: var(--muted); font-size: .75rem; cursor: pointer; padding: .15rem .45rem; transition: color .15s,border-color .15s; }
+.btn-x:hover { color: var(--danger); border-color: var(--danger); }
+.fd-new { animation: fdIn .35s ease; }
+@keyframes fdIn { from { opacity:0; background:rgba(129,140,248,.15); } to { opacity:1; background:none; } }
+
+/* Op panel */
+.ops-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem; }
+.op-btn { padding: .45rem .9rem; border-radius: 7px; border: 1px solid var(--card-border); background: var(--bg2); color: var(--subtle); font-size: .82rem; font-weight: 600; cursor: pointer; transition: border-color .15s,color .15s,background .15s; font-family: inherit; }
+.op-btn.active, .op-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(129,140,248,.08); }
+.op-form { display: none; gap: .5rem; align-items: flex-end; flex-wrap: wrap; }
+.op-form.show { display: flex; }
+.op-form input, .op-form select { background: var(--bg2); border: 1px solid var(--card-border); border-radius: 6px; color: var(--text); padding: .4rem .7rem; font-size: .83rem; outline: none; font-family: inherit; }
+.op-form input:focus, .op-form select:focus { border-color: var(--accent); }
+.op-form .fl { font-size: .72rem; color: var(--muted); margin-bottom: .2rem; }
+.of-group { display: flex; flex-direction: column; }
+.run-btn { padding: .4rem 1rem; border-radius: 7px; border: none; background: var(--accent); color: #000; font-weight: 700; font-size: .83rem; cursor: pointer; transition: opacity .15s; font-family: inherit; }
+.run-btn:hover { opacity: .85; }
+
+/* Scenarios */
+.sc-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+.sc-btn { font-size: .78rem; padding: .35rem .8rem; border-radius: 6px; border: 1px solid var(--card-border); background: var(--bg2); color: var(--subtle); cursor: pointer; transition: border-color .15s,color .15s; font-family: inherit; }
+.sc-btn:hover { border-color: var(--warning); color: var(--warning); }
+
+/* Log */
+.log-area { font-family: 'Consolas',monospace; font-size: .78rem; max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: .15rem; }
+.ll { padding: .25rem .4rem; border-radius: 4px; line-height: 1.5; }
+.ll-ok   { color: #86efac; background: rgba(34,197,94,.07); }
+.ll-err  { color: #fca5a5; background: rgba(239,68,68,.08); }
+.ll-info { color: var(--accent2); background: rgba(56,189,248,.07); }
+.ll-hl   { color: var(--warning); background: rgba(245,158,11,.1); font-weight: 700; }
+
+.back-link { display: inline-block; margin-top: .5rem; color: var(--accent); font-size: .85rem; text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="midnight" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="les-container">
+
+  <div class="les-header">
+    <a href="../index.html#learn" class="logo-wrap" style="text-decoration:none;color:inherit;flex-direction:row;gap:.5rem;">
+      <span style="font-size:1.3rem;">&#128196;</span>
+      <span style="font-size:1rem;font-weight:800;color:var(--subtle);">BrainStuffer</span>
+    </a>
+    <div>
+      <div class="les-title">FD Table Simulator</div>
+      <div class="les-subtitle">Call <code>open()</code>, <code>pipe()</code>, <code>dup2()</code>, <code>close()</code> and watch the descriptor table update live</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <!-- Left: FD table -->
+    <div class="card">
+      <div class="lbl">Process File Descriptor Table</div>
+      <table class="fdt">
+        <thead><tr><th>FD</th><th>Type</th><th>Path / Device</th><th>Mode</th><th></th></tr></thead>
+        <tbody id="fdbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Right: operations + log -->
+    <div>
+      <div class="card">
+        <div class="lbl">Operation</div>
+        <div class="ops-row">
+          <button class="op-btn active" id="tab-open"  onclick="setTab('open')">open()</button>
+          <button class="op-btn"        id="tab-dup2"  onclick="setTab('dup2')">dup2()</button>
+          <button class="op-btn"        id="tab-pipe"  onclick="setTab('pipe')">pipe()</button>
+          <button class="op-btn"        id="tab-close" onclick="setTab('close')">close()</button>
+        </div>
+
+        <div class="op-form show" id="form-open">
+          <div class="of-group"><div class="fl">filename</div><input type="text" id="open-name" value="flag.txt" style="width:120px"/></div>
+          <div class="of-group"><div class="fl">mode</div>
+            <select id="open-mode"><option value="r">O_RDONLY</option><option value="w">O_WRONLY</option><option value="rw">O_RDWR</option></select>
+          </div>
+          <button class="run-btn" onclick="doOpen()">open()</button>
+        </div>
+
+        <div class="op-form" id="form-dup2">
+          <div class="of-group"><div class="fl">oldfd</div><input type="number" id="dup2-old" value="3" min="0" style="width:72px"/></div>
+          <div class="of-group"><div class="fl">newfd</div><input type="number" id="dup2-new" value="0" min="0" style="width:72px"/></div>
+          <button class="run-btn" onclick="doDup2()">dup2()</button>
+        </div>
+
+        <div class="op-form" id="form-pipe">
+          <span style="color:var(--subtle);font-size:.83rem">Creates a unidirectional pipe and assigns the next two free FDs.</span>
+          <button class="run-btn" onclick="doPipe()">pipe()</button>
+        </div>
+
+        <div class="op-form" id="form-close">
+          <div class="of-group"><div class="fl">fd</div><input type="number" id="close-fd" value="3" min="0" style="width:72px"/></div>
+          <button class="run-btn" onclick="doClose()">close()</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="lbl">Scenarios</div>
+        <div class="sc-row">
+          <button class="sc-btn" onclick="scenario('stdin')">&#9889; pwnable.kr stdin hijack</button>
+          <button class="sc-btn" onclick="scenario('stdout')">&#128196; Capture stdout to file</button>
+          <button class="sc-btn" onclick="scenario('reset')">&#8634; Reset</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="lbl">strace log</div>
+        <div class="log-area" id="logarea"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p style="font-size:.83rem;color:var(--subtle);line-height:1.75">
+      <strong style="color:var(--text)">Key insight (pwnable.kr input2):</strong><br>
+      To supply controlled data to a program's <code>read(0, buf, n)</code> (reading from stdin),
+      create a <code>pipe()</code>, then <code>dup2(pipefd[0], 0)</code> — this makes FD 0 point to the pipe's
+      read end instead of the terminal. Now anything written to <code>pipefd[1]</code> arrives as the process's stdin.
+      Afterwards <code>close()</code> both original pipe FDs to avoid leaking them.
+      The same pattern redirects stdout (<code>dup2(fd, 1)</code>) or stderr (<code>dup2(fd, 2)</code>).
+    </p>
+  </div>
+
+  <a class="back-link" href="../index.html#learn">&#8592; Back to Interactive Learning</a>
+</div>
+
+<script>
+const PIPE_COLORS=['#818cf8','#38bdf8','#f472b6','#fb923c','#34d399','#a78bfa'];
+let fds={},logs=[],pipeCount=0,lastPipe=null;
+
+function initFds(){
+  fds={
+    0:{type:'terminal',name:'stdin', dev:'/dev/pts/0',mode:'r',color:'#22c55e'},
+    1:{type:'terminal',name:'stdout',dev:'/dev/pts/0',mode:'w',color:'#3b82f6'},
+    2:{type:'terminal',name:'stderr',dev:'/dev/pts/0',mode:'w',color:'#ef4444'},
+  };
+}
+
+function nextFree(){for(let i=3;i<64;i++)if(!fds[i])return i;return -1;}
+
+function addLog(msg,t='ok'){
+  logs.unshift({msg,t});
+  if(logs.length>40)logs.pop();
+  renderLog();
+}
+
+function doOpen(){
+  const name=(document.getElementById('open-name').value||'file.txt').trim();
+  const mode=document.getElementById('open-mode').value;
+  const flags=mode==='r'?'O_RDONLY':mode==='w'?'O_WRONLY|O_CREAT|O_TRUNC':'O_RDWR';
+  const fd=nextFree();
+  if(fd<0){addLog(`open("${name}", ${flags}) = -1  EMFILE`,'err');return;}
+  fds[fd]={type:'file',name,dev:name,mode,color:'#fbbf24'};
+  addLog(`open("${name}", ${flags}) = ${fd}`,'ok');
+  renderFdt();
+}
+
+function doClose(){
+  const fd=parseInt(document.getElementById('close-fd').value);
+  if(isNaN(fd)||!fds[fd]){addLog(`close(${fd}) = -1  EBADF (bad file descriptor)`,'err');return;}
+  const n=fds[fd].name;
+  delete fds[fd];
+  addLog(`close(${fd}) = 0  /* ${n} */`,'ok');
+  renderFdt();
+}
+
+function doDup2(){
+  const o=parseInt(document.getElementById('dup2-old').value);
+  const n=parseInt(document.getElementById('dup2-new').value);
+  if(isNaN(o)||!fds[o]){addLog(`dup2(${o}, ${n}) = -1  EBADF`,'err');return;}
+  const over=fds[n]?` /* atomically closes "${fds[n].name}" */`:'';
+  fds[n]={...fds[o]};
+  addLog(`dup2(${o}, ${n}) = ${n}${over}`,'ok');
+  if(n===0)addLog(`  ↳ stdin (FD 0) now reads from "${fds[o].name}" — terminal input is bypassed`,'hl');
+  else if(n===1)addLog(`  ↳ stdout (FD 1) now writes to "${fds[o].name}"`,'info');
+  else if(n===2)addLog(`  ↳ stderr (FD 2) now writes to "${fds[o].name}"`,'info');
+  renderFdt();
+}
+
+function doPipe(){
+  const pid=++pipeCount;
+  const color=PIPE_COLORS[(pid-1)%PIPE_COLORS.length];
+  let rfd=-1,wfd=-1;
+  for(let i=3;i<64;i++){if(!fds[i]){if(rfd===-1){rfd=i;fds[i]={type:'_tmp'};}else{wfd=i;break;}}}
+  if(rfd<0||wfd<0){if(rfd>=0)delete fds[rfd];addLog('pipe() = -1  EMFILE','err');return;}
+  fds[rfd]={type:'pipe',name:`pipe[${pid}]:read`, dev:`pipe:${pid}`,mode:'r',color,pipeId:pid};
+  fds[wfd]={type:'pipe',name:`pipe[${pid}]:write`,dev:`pipe:${pid}`,mode:'w',color,pipeId:pid};
+  lastPipe=[rfd,wfd];
+  addLog(`pipe(pipefd) = 0  /* pipefd[0]=${rfd}(read)  pipefd[1]=${wfd}(write) */`,'ok');
+  addLog(`  ↳ write to fd ${wfd}  →  data flows  →  read from fd ${rfd}`,'info');
+  renderFdt();
+}
+
+function renderFdt(){
+  const tb=document.getElementById('fdbody');tb.innerHTML='';
+  const maxFd=Math.max(9,...Object.keys(fds).map(Number));
+  for(let fd=0;fd<=maxFd;fd++){
+    const e=fds[fd];
+    const tr=document.createElement('tr');
+    if(!e){
+      tr.className='fd-empty';
+      tr.innerHTML=`<td class="fd-num">${fd}</td><td colspan="4" style="color:rgba(100,116,139,.3);font-style:italic;font-size:.8rem">—</td>`;
+    } else {
+      const icon=e.type==='terminal'?'⌨️':e.type==='file'?'📄':e.type==='pipe'?'🔗':'?';
+      const badge=fd===0?'<span class="badge b-stdin">stdin</span>':
+                  fd===1?'<span class="badge b-stdout">stdout</span>':
+                  fd===2?'<span class="badge b-stderr">stderr</span>':'';
+      const modeStr=e.mode==='r'?'← read':e.mode==='w'?'write →':'↔ rdwr';
+      tr.className='fd-new';
+      tr.innerHTML=`<td class="fd-num">${fd}${badge}</td>
+        <td>${icon}</td>
+        <td class="fd-name" style="color:${e.color}">${e.dev}</td>
+        <td class="fd-mode">${modeStr}</td>
+        <td><button class="btn-x" onclick="closeById(${fd})">✕</button></td>`;
+    }
+    tb.appendChild(tr);
+  }
+}
+
+function closeById(fd){
+  if(!fds[fd])return;
+  const n=fds[fd].name;delete fds[fd];
+  addLog(`close(${fd}) = 0  /* ${n} */`,'ok');
+  renderFdt();
+}
+
+function renderLog(){
+  const el=document.getElementById('logarea');
+  el.innerHTML=logs.map(l=>{
+    const c=l.t==='err'?'ll-err':l.t==='info'?'ll-info':l.t==='hl'?'ll-hl':'ll-ok';
+    return `<div class="ll ${c}">${escHtml(l.msg)}</div>`;
+  }).join('');
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function setTab(t){
+  ['open','dup2','pipe','close'].forEach(k=>{
+    document.getElementById('tab-'+k).classList.toggle('active',k===t);
+    document.getElementById('form-'+k).classList.toggle('show',k===t);
+  });
+}
+
+function scenario(name){
+  initFds();logs=[];pipeCount=0;lastPipe=null;
+  if(name==='stdin'){
+    addLog('=== Scenario: pwnable.kr-style stdin hijack ===','info');
+    doPipe();
+    const[rfd,wfd]=lastPipe;
+    document.getElementById('dup2-old').value=rfd;
+    document.getElementById('dup2-new').value=0;
+    doDup2();
+    document.getElementById('close-fd').value=rfd;
+    doClose();
+    addLog(`  ↳ FD ${rfd} closed — FD 0 still reads from pipe`,'info');
+    addLog(`  ↳ Now: write to FD ${wfd}  →  process receives it as stdin`,'hl');
+  } else if(name==='stdout'){
+    addLog('=== Scenario: capture stdout to file ===','info');
+    document.getElementById('open-name').value='output.log';
+    document.getElementById('open-mode').value='w';
+    doOpen();
+    const fileFd=Math.max(...Object.keys(fds).map(Number));
+    document.getElementById('dup2-old').value=fileFd;
+    document.getElementById('dup2-new').value=1;
+    doDup2();
+  } else {
+    initFds();logs=[];pipeCount=0;
+    addLog('State reset to initial process state','info');
+    renderFdt();renderLog();
+  }
+}
+
+initFds();renderFdt();
+addLog('Process started — FD 0/1/2 point to terminal','info');
+
+/* Skin switcher */
+(function(){
+  var toggle=document.getElementById('skin-toggle'),panel=document.getElementById('skin-panel');
+  if(!toggle||!panel)return;
+  toggle.addEventListener('click',function(e){e.stopPropagation();panel.classList.toggle('open');});
+  document.addEventListener('click',function(){panel.classList.remove('open');});
+  panel.addEventListener('click',function(e){e.stopPropagation();});
+  panel.querySelectorAll('.skin-opt').forEach(function(opt){
+    opt.addEventListener('click',function(){
+      var sk=opt.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin',sk);
+      localStorage.setItem('bs-skin',sk);
+      panel.classList.remove('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>

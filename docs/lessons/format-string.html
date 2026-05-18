@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="midnight">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>Format String Playground | BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+/* lesson-local variables (read/write highlight colours) */
+:root {
+  --rb: rgba(56,189,248,.15); --rf: #38bdf8;
+  --wb: rgba(239,68,68,.18);  --wf: #ef4444;
+}
+body { padding-top: 1.25rem; }
+.les-container { width: 100%; max-width: 900px; margin: 0 auto; padding: 0 1rem 4rem; }
+.les-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.les-title { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.les-subtitle { color: var(--muted); font-size: 0.85rem; }
+
+.lbl { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: .5rem; }
+.row { display: flex; gap: .6rem; margin-bottom: .9rem; align-items: stretch; flex-wrap: wrap; }
+.fi-input { flex: 1; min-width: 200px; font-family: 'Consolas','Fira Code',monospace; font-size: .95rem; background: var(--bg2); border: 1px solid var(--card-border); border-radius: 8px; padding: .55rem .9rem; color: var(--text); outline: none; transition: border-color .2s; }
+.fi-input:focus { border-color: var(--accent); }
+.btn-go  { background: var(--accent); color: #000; border: none; padding: .55rem 1.1rem; border-radius: 8px; font-size: .85rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.btn-go:hover { opacity: .88; }
+.btn-rst { background: var(--card-border); color: var(--subtle); border: none; padding: .55rem 1.1rem; border-radius: 8px; font-size: .85rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.btn-rst:hover { opacity: .88; }
+.presets { display: flex; flex-wrap: wrap; gap: .4rem; }
+.ps { font-size: .76rem; font-family: monospace; background: var(--bg2); border: 1px solid var(--card-border); border-radius: 5px; padding: .2rem .55rem; cursor: pointer; color: var(--subtle); transition: border-color .15s,color .15s; }
+.ps:hover { border-color: var(--accent); color: var(--accent); }
+.panels { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media(max-width:760px){ .panels { grid-template-columns: 1fr; } }
+
+/* Stack table */
+.st { width: 100%; border-collapse: collapse; font-family: 'Consolas',monospace; font-size: .78rem; }
+.st th { text-align: left; color: var(--muted); font-weight: 600; padding: .3rem .45rem; border-bottom: 1px solid var(--card-border); }
+.st td { padding: .38rem .45rem; border-bottom: 1px solid rgba(37,45,66,.5); vertical-align: middle; }
+.sr { transition: background .25s, outline .2s; }
+.sr.rd { background: var(--rb); outline: 1px solid var(--rf); }
+.sr.wr { background: var(--wb); outline: 1px solid var(--wf); }
+.an { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: var(--card-border); font-size: .7rem; color: var(--subtle); }
+.an.rd { background: rgba(56,189,248,.28); color: var(--rf); }
+.an.wr { background: rgba(239,68,68,.28); color: var(--wf); }
+.vc { color: var(--accent2); font-family: 'Consolas',monospace; }
+.ac { color: var(--muted); font-size: .72rem; }
+.nc { color: var(--subtle); font-size: .72rem; }
+
+/* Output */
+.out { font-family: 'Consolas',monospace; font-size: .9rem; white-space: pre-wrap; word-break: break-all; min-height: 52px; line-height: 1.8; }
+.or { background: var(--rb); color: var(--rf); border-radius: 3px; padding: 0 3px; }
+.ow { background: var(--wb); color: var(--wf); border-radius: 3px; padding: 0 3px; font-weight: 700; }
+
+/* Breakdown */
+.bk { margin-top: .9rem; font-size: .8rem; }
+.bi { display: flex; align-items: baseline; gap: .5rem; padding: .25rem 0; border-bottom: 1px solid rgba(37,45,66,.4); }
+.bs { font-family: monospace; color: var(--warning); font-weight: 700; min-width: 40px; }
+.bv { font-family: monospace; }
+.bvr { color: var(--rf); }
+.bvw { color: var(--wf); font-weight: 700; }
+.bn { color: var(--muted); font-size: .72rem; }
+
+.wbanner { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); border-radius: 8px; padding: .65rem 1rem; margin-top: .8rem; font-size: .83rem; color: #fca5a5; display: none; }
+.wbanner.show { display: block; }
+
+.leg { display: flex; gap: 1rem; font-size: .76rem; margin-bottom: .7rem; flex-wrap: wrap; }
+.li2 { display: flex; align-items: center; gap: .4rem; }
+.ld { width: 9px; height: 9px; border-radius: 50%; }
+
+.back-link { display: inline-block; margin-top: .5rem; color: var(--accent); font-size: .85rem; text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="midnight" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="les-container">
+
+  <div class="les-header">
+    <a href="../index.html#learn" class="logo-wrap" style="text-decoration:none;color:inherit;flex-direction:row;gap:.5rem;">
+      <span style="font-size:1.3rem;">&#128220;</span>
+      <span style="font-size:1rem;font-weight:800;color:var(--subtle);">BrainStuffer</span>
+    </a>
+    <div>
+      <div class="les-title">Format String Playground</div>
+      <div class="les-subtitle">Simulate <code>printf(user_input)</code> — stack leaks with <code>%p/%x</code>, write primitive with <code>%n</code></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="lbl">Format String (what the attacker controls)</div>
+    <div class="row">
+      <input class="fi-input" type="text" id="fi" value="Hello %p %p %x %d" spellcheck="false" placeholder='e.g. AAAA%p%p%n' />
+      <button class="btn-go" onclick="run()">&#9654; Execute</button>
+      <button class="btn-rst" onclick="doReset()">&#8634; Reset</button>
+    </div>
+    <div class="lbl" style="margin-bottom:.35rem">Presets</div>
+    <div class="presets" id="ps"></div>
+  </div>
+
+  <div class="panels">
+    <div class="card">
+      <div class="lbl">Simulated Stack (printf argument slots)</div>
+      <div class="leg">
+        <span class="li2"><span class="ld" style="background:var(--rf)"></span>Read (%p/%x/%d/%s)</span>
+        <span class="li2"><span class="ld" style="background:var(--wf)"></span>Write (%n)</span>
+      </div>
+      <table class="st"><thead>
+        <tr><th>#</th><th>Address</th><th>Value</th><th>Notes</th></tr>
+      </thead><tbody id="sb"></tbody></table>
+    </div>
+
+    <div class="card">
+      <div class="lbl">printf() Output</div>
+      <div class="out" id="op"></div>
+      <div class="wbanner" id="wb">
+        &#9888;&#65039; <strong>WRITE PRIMITIVE</strong> &mdash; <span id="wd"></span>
+      </div>
+      <div class="bk" id="bk"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p style="font-size:.83rem;color:var(--subtle);line-height:1.75">
+      <strong style="color:var(--text)">How this becomes an exploit:</strong><br>
+      The vulnerable code is <code>printf(buf)</code> instead of <code>printf("%s", buf)</code>.
+      Each <code>%p</code> or <code>%x</code> reads the next 8/4 bytes off the stack — leaking addresses,
+      canaries, or pointers into libc.
+      <code>%N$p</code> lets you reach the <em>N</em>th argument directly (direct parameter access).
+      The killer: <code>%n</code> <strong>writes</strong> the number of characters printed so far into
+      the address held by the next argument slot — turning a read-primitive into an arbitrary write.
+      Combined with <code>%Nc</code> padding to control the written value, you can overwrite a GOT
+      entry or return address.
+    </p>
+  </div>
+
+  <a class="back-link" href="../index.html#learn">&#8592; Back to Interactive Learning</a>
+</div>
+
+<script>
+const STACK=[
+  {hex:'0x00007ffd8a3cc038',dec:'140728572899384',lbl:'saved rbp',        addr:'0x7ffd8a3cc010',str:null},
+  {hex:'0x0000000000400a3c',dec:'4196924',         lbl:'return address',   addr:'0x7ffd8a3cc008',str:null},
+  {hex:'0x0000000000000005',dec:'5',               lbl:'local: count=5',   addr:'0x7ffd8a3cc000',str:null},
+  {hex:'0x0000000000601080',dec:'6295680',          lbl:'buf ptr → "AAAA"',addr:'0x7ffd8a3cbff8',str:'AAAA'},
+  {hex:'0x0000000000000041',dec:'65',               lbl:"local: 'A'",       addr:'0x7ffd8a3cbff0',str:null},
+  {hex:'0x00007f3a2c3d1234',dec:'139893018714676',  lbl:'libc address',    addr:'0x7ffd8a3cbfe8',str:null},
+  {hex:'0x0000000000000000',dec:'0',                lbl:'null',             addr:'0x7ffd8a3cbfe0',str:'(null)'},
+  {hex:'0xdeadbeefcafebabe',dec:'(canary)',          lbl:'stack canary',    addr:'0x7ffd8a3cbfd8',str:null},
+  {hex:'0x0000000000000002',dec:'2',                lbl:'argc',             addr:'0x7ffd8a3cbfd0',str:null},
+  {hex:'0x00007ffd8a3ce000',dec:'140728572907520',  lbl:'argv ptr',        addr:'0x7ffd8a3cbc8', str:'/vuln\x00'},
+];
+const PRESETS=[
+  ['%p %p %p',        'Leak 3 pointers'],
+  ['%x.%x.%x.%x.%x', 'Classic hex walk'],
+  ['%1$p',            'Direct param #1'],
+  ['%7$x',            'Jump to canary (arg 8)'],
+  ['%8$p',            'Read canary directly'],
+  ['AAAA%p%p%p%p',    'Prefix + 4 leaks'],
+  ['%s',              'String dereference'],
+  ['%d %d %d',        'Integer read'],
+  ['AAAA%n',          '⚠️ Write primitive'],
+  ['%4$n',            '⚠️ Direct write to arg 4'],
+];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function buildPresets(){
+  const c=document.getElementById('ps');
+  PRESETS.forEach(([f,t])=>{
+    const e=document.createElement('span');
+    e.className='ps';e.textContent=f;e.title=t;
+    e.onclick=()=>{document.getElementById('fi').value=f;run();};
+    c.appendChild(e);
+  });
+}
+function buildStack(){
+  const tb=document.getElementById('sb');tb.innerHTML='';
+  STACK.forEach((s,i)=>{
+    const tr=document.createElement('tr');
+    tr.className='sr';tr.id='sr'+i;
+    tr.innerHTML=`<td><span class="an" id="an${i}">${i+1}</span></td>
+      <td class="ac">${s.addr}</td>
+      <td class="vc">${esc(s.hex)}</td>
+      <td class="nc">${esc(s.lbl)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+function parse(fmt){
+  const ops=[];let i=0,slot=0;
+  while(i<fmt.length){
+    if(fmt[i]!=='%'){let l='';while(i<fmt.length&&fmt[i]!=='%')l+=fmt[i++];ops.push({t:'lit',v:l});continue;}
+    i++;if(i>=fmt.length){ops.push({t:'lit',v:'%'});break;}
+    if(fmt[i]==='%'){ops.push({t:'lit',v:'%'});i++;continue;}
+    let ns='',j=i;
+    while(j<fmt.length&&fmt[j]>='0'&&fmt[j]<='9')ns+=fmt[j++];
+    let di=null;
+    if(ns&&j<fmt.length&&fmt[j]==='$'){di=parseInt(ns)-1;i=j+1;}
+    while(i<fmt.length&&'0123456789.-+ #'.includes(fmt[i])&&fmt[i]!=='$')i++;
+    if(i>=fmt.length)break;
+    const sp=fmt[i++];
+    const idx=(di!==null)?di:slot;
+    if(di===null)slot++;
+    const s=STACK[idx];
+    switch(sp){
+      case 'd':case 'i':ops.push({t:'r',sp:'%'+sp,idx,v:s?s.dec:'??',src:'int'});break;
+      case 'u':ops.push({t:'r',sp:'%u',idx,v:s?s.dec:'??',src:'uint'});break;
+      case 'x':ops.push({t:'r',sp:'%x',idx,v:s?s.hex.slice(-8).replace(/^0+/,'')||'0':'??',src:'hex'});break;
+      case 'X':ops.push({t:'r',sp:'%X',idx,v:s?s.hex.slice(-8).replace(/^0+/,'').toUpperCase()||'0':'??',src:'hex'});break;
+      case 'p':ops.push({t:'r',sp:'%p',idx,v:s?s.hex:'(nil)',src:'ptr'});break;
+      case 's':{const sv=s?(s.str!==null?s.str:`*(${s.hex})`):'??';ops.push({t:'r',sp:'%s',idx,v:sv,src:'str'});break;}
+      case 'n':case 'N':ops.push({t:'w',sp:'%n',idx,addr:s?s.addr:'??'});break;
+      default:ops.push({t:'lit',v:'%'+sp});
+    }
+  }
+  return ops;
+}
+function run(){
+  const fmt=document.getElementById('fi').value;
+  const ops=parse(fmt);
+  STACK.forEach((_,i)=>{
+    const r=document.getElementById('sr'+i),a=document.getElementById('an'+i);
+    if(r)r.className='sr';if(a)a.className='an';
+  });
+  let oh='',bh='',chars=0,hasW=false,wds=[];
+  ops.forEach(o=>{
+    if(o.t==='lit'){oh+=`<span>${esc(o.v)}</span>`;chars+=o.v.length;}
+    else if(o.t==='r'){
+      const r=document.getElementById('sr'+o.idx),a=document.getElementById('an'+o.idx);
+      if(r)r.classList.add('rd');if(a)a.classList.add('rd');
+      const sv=esc(o.v);
+      oh+=`<span class="or" title="arg ${o.idx+1} → ${esc(o.sp)}">${sv}</span>`;
+      chars+=String(o.v).length;
+      bh+=`<div class="bi"><span class="bs">${esc(o.sp)}</span><span style="color:var(--muted)">→</span><span class="bv bvr">${sv}</span><span class="bn">(arg ${o.idx+1}: ${esc(STACK[o.idx]?STACK[o.idx].lbl:'?')})</span></div>`;
+    } else if(o.t==='w'){
+      hasW=true;
+      const r=document.getElementById('sr'+o.idx),a=document.getElementById('an'+o.idx);
+      if(r)r.classList.add('wr');if(a)a.classList.add('wr');
+      oh+=`<span class="ow" title="%n WRITE ${chars} → ${o.addr}">[&#10002; WRITE ${chars} → ${esc(o.addr)}]</span>`;
+      wds.push(`wrote <strong>${chars}</strong> to <code>${o.addr}</code> (arg ${o.idx+1})`);
+      bh+=`<div class="bi"><span class="bs" style="color:var(--wf)">${esc(o.sp)}</span><span style="color:var(--muted)">→</span><span class="bv bvw">WRITE ${chars} → ${esc(o.addr)}</span><span class="bn">(arg ${o.idx+1}: ${esc(STACK[o.idx]?STACK[o.idx].lbl:'?')})</span></div>`;
+    }
+  });
+  document.getElementById('op').innerHTML=oh||`<span style="color:var(--muted)">(empty)</span>`;
+  document.getElementById('bk').innerHTML=bh;
+  const wb=document.getElementById('wb');
+  if(hasW){wb.classList.add('show');document.getElementById('wd').innerHTML=wds.join('; ');}
+  else wb.classList.remove('show');
+}
+function doReset(){
+  document.getElementById('fi').value='';
+  document.getElementById('op').innerHTML='';
+  document.getElementById('bk').innerHTML='';
+  document.getElementById('wb').classList.remove('show');
+  STACK.forEach((_,i)=>{
+    const r=document.getElementById('sr'+i),a=document.getElementById('an'+i);
+    if(r)r.className='sr';if(a)a.className='an';
+  });
+}
+buildPresets();buildStack();run();
+
+/* Skin switcher */
+(function(){
+  var toggle=document.getElementById('skin-toggle'),panel=document.getElementById('skin-panel');
+  if(!toggle||!panel)return;
+  toggle.addEventListener('click',function(e){e.stopPropagation();panel.classList.toggle('open');});
+  document.addEventListener('click',function(){panel.classList.remove('open');});
+  panel.addEventListener('click',function(e){e.stopPropagation();});
+  panel.querySelectorAll('.skin-opt').forEach(function(opt){
+    opt.addEventListener('click',function(){
+      var sk=opt.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin',sk);
+      localStorage.setItem('bs-skin',sk);
+      panel.classList.remove('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>
