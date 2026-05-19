@@ -478,7 +478,7 @@ body { padding-top: 1.25rem; }
 
   <!-- Chapter progress -->
   <div class="chapter-bar">
-    <div class="chapter-label" id="chapter-label">Chapter 1 of 9 — First Function Call</div>
+    <div class="chapter-label" id="chapter-label">Chapter 1 of 10 — Process Startup Stack</div>
     <div class="chapter-pip-track" id="chapter-pips"></div>
   </div>
 
@@ -647,6 +647,116 @@ function regs(overrides, base) {
   };
   return Object.assign({}, defaults, overrides);
 }
+
+// ── Chapter 0 — Process Startup Stack ───────────────────────
+const CH0_ARGV0 = '0x00007fffffffe100'; // ptr to argv[0] string
+const CH0_ARGV1 = '0x00007fffffffe114'; // ptr to argv[1] string
+
+const CH0_CODE = [
+  '_start:',                                               //  1
+  '    ; kernel lays out the startup stack:',              //  2
+  '    ;  [RSP+0]  = argc        (integer count)',         //  3
+  '    ;  [RSP+8]  = argv[0]     (char* pointer)',         //  4
+  '    ;  [RSP+16] = argv[1]     (char* pointer)',         //  5
+  '    ;  [RSP+24] = NULL        (end-of-argv sentinel)',  //  6
+  '    mov  rdi, [rsp]      ; RDI = argc',                 //  7
+  '    lea  rsi, [rsp+8]    ; RSI = &argv[0]',             //  8
+  '    mov  rax, [rsi]      ; RAX = argv[0] ptr',          //  9
+  '    mov  rdx, [rsi+8]    ; RDX = argv[1] ptr',          // 10
+];
+
+const CH0 = [
+  {
+    registers: regs({RIP:'0x0000000000401000', RSP:'0x00007fffffffe000', RBP:'0x0000000000000000'}),
+    memory: [
+      {addr:'0x00007fffffffe114', value:'"Hi\\0"',                   label:'argv[1] string', frame:1, isNew:false},
+      {addr:'0x00007fffffffe100', value:'"/challenge/debug-me\\0"',  label:'argv[0] string', frame:1, isNew:false},
+      {addr:'0x00007fffffffe018', value:'0x0000000000000000',        label:'NULL (argv end)', frame:0, isNew:false},
+      {addr:'0x00007fffffffe010', value:CH0_ARGV1,                   label:'argv[1] pointer', frame:0, isNew:false},
+      {addr:'0x00007fffffffe008', value:CH0_ARGV0,                   label:'argv[0] pointer', frame:0, isNew:false},
+      {addr:'0x00007fffffffe000', value:'0x0000000000000002',        label:'argc = 2  ← RSP', frame:0, isNew:false},
+    ],
+    codeLine: 1,
+    narrative: '<strong>Program entry — _start.</strong> The kernel has already built the startup stack. RSP points directly at <code>argc</code>. No function has been called yet — there is no saved RBP, no return address. The program name is <code>/challenge/debug-me</code>; it was launched with one argument <code>Hi</code>, so argc = 2.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x0000000000401006', RSP:'0x00007fffffffe000', RBP:'0x0000000000000000', RDI:'0x0000000000000002'}),
+    memory: [
+      {addr:'0x00007fffffffe114', value:'"Hi\\0"',                   label:'argv[1] string', frame:1, isNew:false},
+      {addr:'0x00007fffffffe100', value:'"/challenge/debug-me\\0"',  label:'argv[0] string', frame:1, isNew:false},
+      {addr:'0x00007fffffffe018', value:'0x0000000000000000',        label:'NULL (argv end)', frame:0, isNew:false},
+      {addr:'0x00007fffffffe010', value:CH0_ARGV1,                   label:'argv[1] pointer', frame:0, isNew:false},
+      {addr:'0x00007fffffffe008', value:CH0_ARGV0,                   label:'argv[0] pointer', frame:0, isNew:false},
+      {addr:'0x00007fffffffe000', value:'0x0000000000000002',        label:'argc = 2  ← RSP', frame:0, isNew:false},
+    ],
+    codeLine: 7,
+    narrative: '<strong>mov rdi, [rsp]</strong> — <code>[RSP]</code> holds the raw integer argc = 2. It is a plain 64-bit integer, not a pointer. RDI now holds argc, matching the System V ABI first-argument convention so the value is ready if we call a C function.',
+    quiz: {
+      question: 'What does [RSP] contain at process entry (before any function call)?',
+      options: ['argc — the count of command-line arguments (a plain integer)', 'argv[0] — a pointer to the program name string', 'A return address back to the kernel', 'RBP — the saved frame pointer'],
+      correctIdx: 0,
+      explanation: '[RSP] at _start is argc: a plain 64-bit integer. There is no return address because the kernel jumps to _start rather than calling it via CALL. argv[0] (a pointer) lives at [RSP+8].'
+    }
+  },
+  {
+    registers: regs({RIP:'0x000000000040100a', RSP:'0x00007fffffffe000', RBP:'0x0000000000000000', RDI:'0x0000000000000002', RSI:'0x00007fffffffe008'}),
+    memory: [
+      {addr:'0x00007fffffffe114', value:'"Hi\\0"',                    label:'argv[1] string', frame:1, isNew:false},
+      {addr:'0x00007fffffffe100', value:'"/challenge/debug-me\\0"',   label:'argv[0] string', frame:1, isNew:false},
+      {addr:'0x00007fffffffe018', value:'0x0000000000000000',         label:'NULL (argv end)', frame:0, isNew:false},
+      {addr:'0x00007fffffffe010', value:CH0_ARGV1,                    label:'argv[1] pointer', frame:0, isNew:false},
+      {addr:'0x00007fffffffe008', value:CH0_ARGV0,                    label:'argv[0] ptr  ← RSI', frame:0, isNew:false},
+      {addr:'0x00007fffffffe000', value:'0x0000000000000002',         label:'argc = 2  ← RSP', frame:0, isNew:false},
+    ],
+    codeLine: 8,
+    narrative: '<strong>lea rsi, [rsp+8]</strong> — RSI = RSP + 8. This is <em>not</em> a memory read — LEA just computes the address. RSI now holds the <em>address of the argv pointer array</em>: the slot where argv[0]\'s pointer lives. This is a pointer-to-pointer situation: RSI → argv[0] ptr → program name string.',
+    quiz: null
+  },
+  {
+    registers: regs({RIP:'0x000000000040100e', RSP:'0x00007fffffffe000', RBP:'0x0000000000000000', RDI:'0x0000000000000002', RSI:'0x00007fffffffe008', RAX:CH0_ARGV0}),
+    memory: [
+      {addr:'0x00007fffffffe114', value:'"Hi\\0"',                    label:'argv[1] string', frame:1, isNew:false},
+      {addr:'0x00007fffffffe100', value:'"/challenge/debug-me\\0"',   label:'argv[0] string  ← RAX', frame:1, isNew:false},
+      {addr:'0x00007fffffffe018', value:'0x0000000000000000',         label:'NULL (argv end)', frame:0, isNew:false},
+      {addr:'0x00007fffffffe010', value:CH0_ARGV1,                    label:'argv[1] pointer', frame:0, isNew:false},
+      {addr:'0x00007fffffffe008', value:CH0_ARGV0,                    label:'argv[0] ptr  ← RSI', frame:0, isNew:false},
+      {addr:'0x00007fffffffe000', value:'0x0000000000000002',         label:'argc = 2  ← RSP', frame:0, isNew:false},
+    ],
+    codeLine: 9,
+    narrative: '<strong>mov rax, [rsi]</strong> — dereferences RSI to load argv[0]\'s pointer. RAX = 0x7fffffffe100, the address of the "/challenge/debug-me\\0" string. One more dereference (<code>[RAX]</code>) would read the first byte of that string. This double-indirection is what argv always means.',
+    quiz: {
+      question: 'What does [RSP+8] hold at process entry?',
+      options: ['A pointer to the argv[0] string — not the string itself', 'The first character of the program name', 'argc + 1', 'A pointer to the envp array'],
+      correctIdx: 0,
+      explanation: '[RSP+8] is argv[0]: a 64-bit address pointing to the program name string in memory. To read characters you need to dereference it: MOV RAX, [RSP+8] loads the pointer, then MOVZX EDI, BYTE [RAX] reads the first character. Two hops.'
+    }
+  },
+  {
+    registers: regs({RIP:'0x0000000000401012', RSP:'0x00007fffffffe000', RBP:'0x0000000000000000', RDI:'0x0000000000000002', RSI:'0x00007fffffffe008', RAX:CH0_ARGV0, RDX:CH0_ARGV1}),
+    memory: [
+      {addr:'0x00007fffffffe114', value:'"Hi\\0"',                    label:'argv[1] string  ← RDX', frame:1, isNew:false},
+      {addr:'0x00007fffffffe100', value:'"/challenge/debug-me\\0"',   label:'argv[0] string  ← RAX', frame:1, isNew:false},
+      {addr:'0x00007fffffffe018', value:'0x0000000000000000',         label:'NULL sentinel (loop exit)', frame:0, isNew:false},
+      {addr:'0x00007fffffffe010', value:CH0_ARGV1,                    label:'argv[1] ptr  ← RSI+8', frame:0, isNew:false},
+      {addr:'0x00007fffffffe008', value:CH0_ARGV0,                    label:'argv[0] ptr  ← RSI', frame:0, isNew:false},
+      {addr:'0x00007fffffffe000', value:'0x0000000000000002',         label:'argc = 2  ← RSP', frame:0, isNew:false},
+    ],
+    codeLine: 10,
+    narrative: '<strong>mov rdx, [rsi+8]</strong> — loads argv[1]\'s pointer into RDX. RDX = 0x7fffffffe114, the address of "Hi\\0". The <strong>null pointer at [RSP+24]</strong> marks the end of the argv array — any loop processing arguments checks for this null to stop. envp begins at the slot right after that null.',
+    quiz: {
+      question: 'How do you read argv[1] in x86-64 assembly at _start?',
+      options: [
+        'mov rax, [rsp+16]  then dereference [rax] for the string bytes',
+        'mov rdi, [rsp+16] — [rsp+16] IS the string value directly',
+        'lea rax, [rsp+16]  then dereference [rax] for the string bytes',
+        'mov rdi, rsp / add rdi, 16 — RDI is now the string address'
+      ],
+      correctIdx: 0,
+      explanation: '[RSP+16] holds a POINTER to argv[1]. MOV RAX, [RSP+16] loads that pointer. Then [RAX] reads the first string byte. LEA [RSP+16] would give the address of the pointer slot itself — one level too early.'
+    }
+  },
+];
 
 // ── Chapter 1 ────────────────────────────────────────────────
 const CH1_CODE = [
@@ -1577,6 +1687,7 @@ const CH9 = [
    CHAPTERS REGISTRY
 ─────────────────────────────────────────────────────────────── */
 const CHAPTERS = [
+  { title: 'Process Startup Stack', steps: CH0, code: CH0_CODE },
   { title: 'First Function Call',   steps: CH1, code: CH1_CODE },
   { title: 'Nested Calls',          steps: CH2, code: CH2_CODE },
   { title: 'Recursion (Factorial)', steps: CH3, code: CH3_CODE },
@@ -1730,7 +1841,7 @@ function handleQuizAnswer(idx, quiz, btn) {
 }
 
 function renderChapterBar() {
-  chLabel.textContent = `Chapter ${curChapter + 1} of 9 — ${CHAPTERS[curChapter].title}`;
+  chLabel.textContent = `Chapter ${curChapter + 1} of 10 — ${CHAPTERS[curChapter].title}`;
   pipTrack.innerHTML = '';
   CHAPTERS.forEach((ch, i) => {
     const pip = document.createElement('div');

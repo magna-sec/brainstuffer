@@ -694,5 +694,69 @@
     "correct": "0x00000010 (increments by 1)",
     "explanation": "INC adds 1 to the operand. 0x0F + 1 = 0x10. Notice the carry from the low nibble to the high nibble. INC sets ZF, SF, OF, PF, AF — but importantly does NOT set CF. This makes it useful in loops where you don't want INC to affect multi-precision arithmetic using CF.",
     "diagram": "MOV ECX, 0x0F   then   INC ECX\n\n  ECX = 0x0F = 0000 1111 = 15\n\n  INC adds 1 (carry propagates from low nibble):\n  +-------------------------------+\n  |  0000 1111  (0x0F = 15)       |\n  |      + 1                      |\n  |  0001 0000  (0x10 = 16)       |\n  +-------------------------------+\n  ECX = 0x00000010 = 16\n\n  INC sets:   ZF, SF, OF, PF, AF\n  INC does NOT touch: CF\n\n  Preserving CF matters in multi-precision\n  arithmetic (ADD/ADC chains) where the carry\n  bit feeds the next ADC instruction."
+  },
+  {
+    "question": "In an x86-64 Linux process, what does [RSP] contain immediately at _start before any instruction executes?",
+    "answers": [
+      "argc — the count of command-line arguments, as a plain 64-bit integer",
+      "argv[0] — a pointer to the program name string",
+      "A return address back to the kernel",
+      "RBP — the saved frame pointer from the kernel"
+    ],
+    "correct": "argc — the count of command-line arguments, as a plain 64-bit integer",
+    "explanation": "At process entry the kernel builds the startup stack and sets RSP to point directly at argc. [RSP] is argc: a plain integer (e.g., 2 for a two-argument invocation). There is no return address — the kernel does not CALL _start, it jumps to it. argv[0] pointer is at [RSP+8], argv[1] at [RSP+16], and so on.",
+    "diagram": "x86-64 startup stack layout (before any instruction):\n\n  High addresses\n  +------------------------------------------+\n  |  string bytes: 'Hi\\0', '/prog\\0', ...     |\n  |  (actual argv/envp string data)           |\n  +------------------------------------------+\n  |  NULL  (0x0)       <- envp sentinel       |\n  |  envp[0] ptr       <- envp starts here    |\n  |  NULL  (0x0)       <- argv sentinel       |\n  |  argv[1] ptr       [RSP+16]               |\n  |  argv[0] ptr       [RSP+8]                |\n  |  argc = 2          [RSP+0]  <- RSP        |\n  Low addresses\n\n  mov rdi, [rsp]    ; RDI = argc (an integer)\n  [rsp+8] is a POINTER, not a string."
+  },
+  {
+    "question": "At Linux process entry with argv = {\"/prog\", \"Hi\"}, what does `mov rax, [rsp+8]` load into RAX?",
+    "code": "mov rax, [rsp+8]    ; executed at _start",
+    "code_lang": "asm",
+    "answers": [
+      "A 64-bit pointer to the program name string — you still need [rax] to read characters",
+      "The first character of '/prog' (the program name)",
+      "The number of arguments (same as argc)",
+      "A pointer to the envp array"
+    ],
+    "correct": "A 64-bit pointer to the program name string — you still need [rax] to read characters",
+    "explanation": "[RSP+8] holds argv[0]: a 64-bit pointer (address) that points to the program name string in memory. After this MOV, RAX is the address of '/prog\\0'. To read the first byte: movzx edi, byte [rax]. This double-indirection (RSP+8 -> pointer -> string bytes) is how all argv elements work.",
+    "diagram": "mov rax, [rsp+8]  at _start\n\n  Stack (at RSP):               String area:\n  +--------------------+        +---------------------+\n  |  argc = 2    RSP+0 |        |  0x7ffe0100:        |\n  +--------------------+        |  '/','p','r','o','g'|\n  |  0x7ffe0100  RSP+8 |------->|  '\\0'               |\n  +--------------------+        +---------------------+\n  |  0x7ffe0106  RSP+16|        |  0x7ffe0106: 'H','i'|\n  +--------------------+        +---------------------+\n  |  NULL        RSP+24|\n  +--------------------+\n\n  After MOV: RAX = 0x7ffe0100  (an ADDRESS, not a char)\n  To read '/': movzx edi, byte [rax]  -> EDI = 0x2F"
+  },
+  {
+    "question": "Which assembly sequence correctly reads the first byte of argv[1] at process entry (argc = 2)?",
+    "code": "; at _start, RSP points to argc\n; which reads the first byte of argv[1]?",
+    "code_lang": "asm",
+    "answers": [
+      "mov rax, [rsp+16]  then  movzx edi, byte [rax]  — load argv[1] ptr, then dereference",
+      "mov rdi, [rsp+16]  — [rsp+16] IS the first character directly",
+      "lea rax, [rsp+16]  then  movzx edi, byte [rax]  — LEA gives the string address",
+      "mov rdi, rsp  then  add rdi, 16  — RDI now points at the first character"
+    ],
+    "correct": "mov rax, [rsp+16]  then  movzx edi, byte [rax]  — load argv[1] ptr, then dereference",
+    "explanation": "[RSP+16] holds a 64-bit POINTER to argv[1]. MOV RAX, [RSP+16] loads that pointer. Then MOVZX EDI, BYTE [RAX] reads the first byte of the argv[1] string. LEA RSP+16 would give the address of the pointer slot, not the string. You always need two dereferences: first load the pointer, then load through it.",
+    "diagram": "Reading argv[1][0] (first byte of 2nd argument):\n\n  RSP+16: [ 0x7ffe0106 ]  <- pointer to 'Hi\\0' string\n                |\n                v\n          0x7ffe0106: 'H', 'i', '\\0'\n\n  Correct:\n    mov rax, [rsp+16]        ; RAX = 0x7ffe0106 (pointer)\n    movzx edi, byte [rax]    ; EDI = 'H' (0x48)\n\n  Wrong (LEA mistake):\n    lea rax, [rsp+16]        ; RAX = RSP+16 (slot address)\n    movzx edi, byte [rax]    ; reads low byte of the\n                             ; pointer, not 'H'\n\n  [RSP+16] -> pointer -> string bytes  (two hops)"
+  },
+  {
+    "question": "What value in the startup stack signals the end of the argv pointer array?",
+    "answers": [
+      "A null pointer (0x0000000000000000) immediately after the last argv entry",
+      "argc — the kernel also stores the count at the end of argv",
+      "A special sentinel byte 0xFF in the string data region",
+      "The envp pointer — it directly overwrites the last argv slot"
+    ],
+    "correct": "A null pointer (0x0000000000000000) immediately after the last argv entry",
+    "explanation": "After argv[argc-1] there is always a null pointer at argv[argc] = [RSP + 8*(argc+1)]. This is guaranteed by the ABI and by execve(). The C standard requires it. Code walking argv in a loop checks for this null to know when all arguments are consumed: `while (*argv) { use(*argv++); }`",
+    "diagram": "argv null sentinel  (argc = 2):\n\n  RSP+0   = 2                       (argc)\n  RSP+8   = 0x7ffe0100              (argv[0] ptr)\n  RSP+16  = 0x7ffe0106              (argv[1] ptr)\n  RSP+24  = 0x0000000000000000      <- NULL sentinel\n  RSP+32  = 0x7ffe0110              (envp[0] ptr)\n\n  C loop that uses the sentinel:\n    for (char **ap = argv; *ap != NULL; ap++)\n      process(*ap);\n\n  [RSP + 8*(argc+1)] is always NULL.\n  envp begins at [RSP + 8*(argc+2)]."
+  },
+  {
+    "question": "In a process launched with argc = 3, at what byte offset from RSP does envp[0] live?",
+    "answers": [
+      "RSP+40 — formula: RSP + 8*(argc+2) = RSP + 8*5 = RSP+40",
+      "RSP+24 — immediately after the last argv pointer",
+      "RSP+32 — always fixed at this offset regardless of argc",
+      "envp is not on the stack — use getenv() instead"
+    ],
+    "correct": "RSP+40 — formula: RSP + 8*(argc+2) = RSP + 8*5 = RSP+40",
+    "explanation": "The startup stack layout is: [RSP] = argc, then argc 8-byte argv pointers, then one null word (argv sentinel), then envp pointers. So envp[0] is at RSP + 8 + 8*argc + 8 = RSP + 8*(argc+2). With argc=3: RSP + 8*(3+2) = RSP+40. The third parameter of main(int argc, char **argv, char **envp) points to this address.",
+    "diagram": "Startup stack with argc = 3:\n\n  RSP+0   = 3                   (argc)\n  RSP+8   = argv[0] ptr\n  RSP+16  = argv[1] ptr\n  RSP+24  = argv[2] ptr\n  RSP+32  = 0x0 (NULL)          (argv sentinel)\n  RSP+40  = envp[0] ptr         <- envp starts here\n  RSP+48  = envp[1] ptr\n  ...\n  RSP+??  = 0x0 (NULL)          (envp sentinel)\n\n  Formula:  envp[0] @ RSP + 8 * (argc + 2)\n                     RSP + 8 * (3 + 2)\n                     RSP + 40\n\n  int main(int argc, char **argv, char **envp)\n  envp == (char**)(rsp_at_start + 8*(argc+2))"
   }
 ]
