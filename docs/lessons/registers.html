@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>x86-64 Register Aliases | BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+body { padding-top: 1.25rem; }
+.les-container { width: 100%; max-width: 860px; margin: 0 auto; padding: 0 1rem 4rem; }
+.les-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.les-title { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.les-subtitle { color: var(--muted); font-size: 0.85rem; }
+
+/* ── Family tabs ─────────────────────────────────────────────────── */
+.family-group { margin-bottom: 1rem; }
+.family-group-label { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: .4rem; }
+.family-tabs { display: flex; gap: .35rem; flex-wrap: wrap; }
+.family-tab {
+  padding: .28rem .72rem; border-radius: 5px; border: 1.5px solid var(--card-border);
+  background: var(--card); color: var(--subtle);
+  font-family: 'Courier New', monospace; font-size: .82rem; font-weight: 700;
+  cursor: pointer; transition: border-color .15s, color .15s, background .15s;
+}
+.family-tab:hover { border-color: var(--accent); color: var(--accent); }
+.family-tab.active { border-color: var(--accent); color: var(--accent); background: var(--bg2); box-shadow: 0 0 8px var(--glow); }
+
+/* ── Value input row ─────────────────────────────────────────────── */
+.input-row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.hex-input {
+  font-family: 'Courier New', monospace; font-size: .95rem;
+  background: var(--bg2); border: 1.5px solid var(--card-border);
+  border-radius: 7px; padding: .45rem .8rem; color: var(--text);
+  width: 230px; outline: none; transition: border-color .2s;
+}
+.hex-input:focus { border-color: var(--accent); }
+.btn-set { background: var(--accent); color: #000; border: none; padding: .45rem 1rem; border-radius: 7px; font-size: .82rem; font-weight: 700; cursor: pointer; font-family: inherit; }
+.btn-set:hover { opacity: .88; }
+.btn-rnd { background: var(--card); color: var(--subtle); border: 1.5px solid var(--card-border); padding: .45rem 1rem; border-radius: 7px; font-size: .82rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: border-color .15s, color .15s; }
+.btn-rnd:hover { border-color: var(--accent); color: var(--accent); }
+.preset-row { display: flex; gap: .35rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.preset-btn {
+  font-family: 'Courier New', monospace; font-size: .72rem;
+  background: var(--bg2); border: 1px solid var(--card-border);
+  border-radius: 5px; padding: .18rem .55rem; cursor: pointer; color: var(--subtle);
+  transition: border-color .15s, color .15s;
+}
+.preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── Register display ────────────────────────────────────────────── */
+.reg-display-wrap {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 12px; padding: 1.25rem 1rem; margin-bottom: 1rem; overflow-x: auto;
+}
+.reg-display-inner { min-width: 520px; }
+.byte-row { display: flex; gap: 6px; justify-content: center; margin-bottom: .4rem; }
+
+.byte-cell {
+  width: 60px; height: 58px; border-radius: 7px;
+  border: 2px solid var(--card-border); background: var(--bg2);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: background .2s, border-color .2s, transform .15s, box-shadow .2s;
+  position: relative;
+}
+.byte-hex {
+  font-family: 'Courier New', monospace; font-size: 1.15rem; font-weight: 700;
+  color: var(--subtle); transition: color .2s;
+}
+.byte-bits-lbl {
+  font-size: .56rem; color: var(--muted); margin-top: .1rem; font-family: 'Courier New', monospace;
+}
+
+.byte-cell.state-sel {
+  border-color: var(--accent); background: rgba(129,140,248,.14);
+  transform: translateY(-3px); box-shadow: 0 4px 16px var(--glow);
+}
+.byte-cell.state-sel .byte-hex { color: var(--accent); }
+.byte-cell.state-sel .byte-bits-lbl { color: var(--accent); opacity: .7; }
+
+.byte-cell.state-zext {
+  border-color: var(--warning); border-style: dashed;
+  background: rgba(245,158,11,.06);
+}
+.byte-cell.state-zext .byte-hex { color: var(--warning); opacity: .55; }
+.byte-cell.state-zext .byte-bits-lbl { color: var(--warning); opacity: .5; }
+
+.byte-cell.state-dim { opacity: .28; }
+
+/* Binary row */
+.bin-row { display: flex; gap: 6px; justify-content: center; margin-bottom: .25rem; }
+.bin-group {
+  width: 60px; font-family: 'Courier New', monospace; font-size: .62rem;
+  text-align: center; color: var(--muted); letter-spacing: .04em;
+  transition: color .2s;
+}
+.bin-group.state-sel { color: var(--accent); }
+.bin-group.state-zext { color: var(--warning); opacity: .55; }
+.bin-group.state-dim { opacity: .28; }
+
+/* Bracket row showing range span */
+.bracket-row { display: flex; gap: 6px; justify-content: center; margin-top: .35rem; }
+.bracket-cell { width: 60px; height: 12px; position: relative; }
+.bracket-span {
+  position: absolute; top: 0; height: 100%;
+  border-bottom: 2px solid var(--accent); border-radius: 0;
+  transition: all .2s;
+}
+.bracket-span.start { border-left: 2px solid var(--accent); border-bottom-left-radius: 4px; }
+.bracket-span.end   { border-right: 2px solid var(--accent); border-bottom-right-radius: 4px; }
+.bracket-span.zext { border-color: var(--warning); }
+.bracket-label {
+  position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+  font-size: .6rem; white-space: nowrap; color: var(--accent); font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+/* ── Sub-register buttons ────────────────────────────────────────── */
+.sub-row { display: flex; gap: .6rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1.1rem; align-items: flex-end; }
+.sub-btn-wrap { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+.sub-btn {
+  padding: .5rem 1.1rem; border-radius: 8px; border: 2px solid var(--card-border);
+  background: var(--card); color: var(--subtle);
+  font-family: 'Courier New', monospace; font-size: 1rem; font-weight: 700;
+  cursor: pointer; transition: all .15s; min-width: 72px; text-align: center;
+}
+.sub-btn:hover { border-color: var(--accent); color: var(--accent); }
+.sub-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(129,140,248,.12); box-shadow: 0 0 14px var(--glow); }
+.sub-btn.active.has-zext { border-color: var(--warning); color: var(--warning); background: rgba(245,158,11,.09); box-shadow: 0 0 14px rgba(245,158,11,.2); }
+.sub-size-lbl { font-size: .64rem; color: var(--muted); font-family: 'Courier New', monospace; }
+.sub-bits-lbl { font-size: .6rem; color: var(--muted); }
+
+/* ── Info panel ──────────────────────────────────────────────────── */
+.info-card {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-left: 3px solid var(--accent); border-radius: 10px;
+  padding: 1rem 1.15rem; margin-bottom: .85rem; transition: border-color .2s;
+}
+.info-card.has-zext { border-left-color: var(--warning); }
+.info-name { font-family: 'Courier New', monospace; font-size: 1.25rem; font-weight: 900; color: var(--accent); margin-bottom: .2rem; }
+.info-card.has-zext .info-name { color: var(--warning); }
+.info-range { font-size: .8rem; color: var(--subtle); margin-bottom: .6rem; }
+.info-value-row { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: .65rem; }
+.info-val-block { }
+.info-val-lbl { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: .1rem; }
+.info-val { font-family: 'Courier New', monospace; font-size: .9rem; color: var(--text); font-weight: 700; }
+.info-val.hex { color: var(--accent2); }
+.info-card.has-zext .info-val.hex { color: var(--warning); }
+.info-write { font-size: .82rem; color: var(--subtle); line-height: 1.6; }
+.info-write strong { color: var(--text); }
+.warn-banner {
+  background: rgba(245,158,11,.09); border: 1px solid rgba(245,158,11,.35);
+  border-radius: 7px; padding: .6rem .9rem; margin-top: .65rem;
+  font-size: .82rem; color: #fde68a; line-height: 1.55; display: none;
+}
+.warn-banner.show { display: block; }
+
+.family-note { font-size: .8rem; color: var(--muted); margin-bottom: 1rem; font-style: italic; border-left: 2px solid var(--card-border); padding-left: .75rem; }
+
+.back-link { display: inline-block; margin-top: .5rem; color: var(--accent); font-size: .85rem; text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="les-container">
+
+  <div class="les-header">
+    <a href="../index.html#learn" class="logo-wrap" style="text-decoration:none;color:inherit;flex-direction:row;gap:.5rem;">
+      <span style="font-size:1.3rem;">&#9881;</span>
+      <span style="font-size:1rem;font-weight:800;color:var(--subtle);">BrainStuffer</span>
+    </a>
+    <div>
+      <div class="les-title">x86-64 Register Aliases</div>
+      <div class="les-subtitle">Enter any value &mdash; click a sub-register name to see exactly which bits it covers</div>
+    </div>
+  </div>
+
+  <!-- Family selector -->
+  <div id="family-groups"></div>
+
+  <!-- Value input -->
+  <div class="input-row">
+    <input class="hex-input" id="hex-input" type="text" value="DEADBEEFCAFEBABE" spellcheck="false" autocomplete="off">
+    <button class="btn-set" onclick="applyInput()">Set</button>
+    <button class="btn-rnd" onclick="randomise()">Random</button>
+  </div>
+  <div class="preset-row" id="preset-row"></div>
+
+  <!-- Register display -->
+  <div class="reg-display-wrap">
+    <div class="reg-display-inner">
+      <div class="byte-row" id="byte-row"></div>
+      <div class="bin-row"  id="bin-row"></div>
+      <div class="bracket-row" id="bracket-row"></div>
+    </div>
+  </div>
+
+  <!-- Family note -->
+  <div class="family-note" id="family-note"></div>
+
+  <!-- Sub-register buttons -->
+  <div class="sub-row" id="sub-row"></div>
+
+  <!-- Info panel -->
+  <div class="info-card" id="info-card">
+    <div class="info-name" id="info-name">&mdash;</div>
+    <div class="info-range" id="info-range">Click a sub-register above to inspect it.</div>
+    <div class="info-value-row" id="info-value-row"></div>
+    <div class="info-write" id="info-write"></div>
+    <div class="warn-banner" id="warn-banner"></div>
+  </div>
+
+  <a class="back-link" href="x86-asm.html">&#8592; Back to x86-64 Instructions</a>
+</div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+// sel / zext are display positions: 0 = leftmost = MSB (byte 7), 7 = rightmost = LSB (byte 0)
+
+function makeSubs(r64, r32, r16, r8h, r8l) {
+  const subs = [
+    { name:r64, size:'64-bit', bits:'63–0',  sel:[0,1,2,3,4,5,6,7], zext:[],
+      writeBeh:'Sets all 64 bits. No zero-extension or partial-write quirks.' },
+    { name:r32, size:'32-bit', bits:'31–0',  sel:[4,5,6,7], zext:[0,1,2,3],
+      writeBeh:'Writes bits 31–0. The upper 32 bits (63–32) are <strong>zero-extended automatically</strong> &mdash; this is different from 8/16-bit writes which leave upper bits untouched.' },
+    { name:r16, size:'16-bit', bits:'15–0',  sel:[6,7], zext:[],
+      writeBeh:'Writes only bits 15–0. Bits 63–16 are <strong>preserved unchanged</strong>. Legacy 16-bit compatibility, rarely used in new code.' },
+  ];
+  if(r8h) subs.push(
+    { name:r8h, size:'8-bit', bits:'15–8', sel:[6], zext:[],
+      writeBeh:'Writes only bits 15–8 (the "high byte"). All other bits are <strong>preserved</strong>. Note: using high-byte registers (AH/BH/CH/DH) prevents certain micro-architectural optimisations &mdash; the CPU may need an extra merge uop.' }
+  );
+  subs.push(
+    { name:r8l, size:'8-bit', bits:'7–0',  sel:[7], zext:[],
+      writeBeh:'Writes only bits 7–0 (the "low byte"). Bits 63–8 are <strong>preserved unchanged</strong>.' }
+  );
+  return subs;
+}
+
+const FAMILY_GROUPS = [
+  {
+    label: 'Classic GP — have AH/BH/CH/DH high-byte access',
+    families: [
+      { id:'rax', name:'RAX', note:'Accumulator: holds return values, implicit operand for MUL/DIV/IDIV.',
+        subs: makeSubs('RAX','EAX','AX','AH','AL') },
+      { id:'rbx', name:'RBX', note:'Base: general purpose, callee-saved (you must preserve it across function calls).',
+        subs: makeSubs('RBX','EBX','BX','BH','BL') },
+      { id:'rcx', name:'RCX', note:'Counter: 4th argument (System V AMD64), implicit counter for REP/LOOP instructions.',
+        subs: makeSubs('RCX','ECX','CX','CH','CL') },
+      { id:'rdx', name:'RDX', note:'Data: 3rd argument (System V AMD64), high half of 128-bit MUL/DIV result.',
+        subs: makeSubs('RDX','EDX','DX','DH','DL') },
+    ]
+  },
+  {
+    label: 'Pointer & index — low-byte access only (no XH variant)',
+    families: [
+      { id:'rsi', name:'RSI', note:'Source Index: 2nd argument (System V AMD64), source pointer for REP MOVS.',
+        subs: makeSubs('RSI','ESI','SI',null,'SIL') },
+      { id:'rdi', name:'RDI', note:'Destination Index: 1st argument (System V AMD64), destination pointer for REP MOVS.',
+        subs: makeSubs('RDI','EDI','DI',null,'DIL') },
+      { id:'rsp', name:'RSP', note:'Stack Pointer: always points to the current top of the stack. Modify with care.',
+        subs: makeSubs('RSP','ESP','SP',null,'SPL') },
+      { id:'rbp', name:'RBP', note:'Base Pointer: typically anchors the stack frame. Callee-saved; omitted with -fomit-frame-pointer.',
+        subs: makeSubs('RBP','EBP','BP',null,'BPL') },
+    ]
+  },
+  {
+    label: 'Extended (R8–R15) — D / W / B suffixes, no high-byte',
+    families: (function(){
+      const out = [];
+      for(let n=8;n<=15;n++) out.push({
+        id:`r${n}`, name:`R${n}`,
+        note:`Extended 64-bit register added in x86-64. Requires a REX prefix byte in the encoding; no high-byte alias exists. Caller-saved (R8–R11), callee-saved (R12–R15 in System V ABI).`,
+        subs: makeSubs(`R${n}`,`R${n}D`,`R${n}W`,null,`R${n}B`)
+      });
+      return out;
+    })()
+  }
+];
+
+// Flat family lookup
+const FAMILIES = [];
+FAMILY_GROUPS.forEach(g => g.families.forEach(f => FAMILIES.push(f)));
+
+const PRESETS = [
+  { label:'0xDEADBEEFCAFEBABE', val:'DEADBEEFCAFEBABE' },
+  { label:'0xFFFFFFFFFFFFFFFF', val:'FFFFFFFFFFFFFFFF' },
+  { label:'0x00000000FFFFFFFF', val:'00000000FFFFFFFF' },
+  { label:'0x0000000000000001', val:'0000000000000001' },
+  { label:'0x0123456789ABCDEF', val:'0123456789ABCDEF' },
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let curFamilyId = 'rax';
+let curSubIdx   = 0;   // index into current family's subs
+let bytes = Array(8).fill(0); // bytes[0]=LSB(AL), bytes[7]=MSB
+
+function curFamily() { return FAMILIES.find(f => f.id === curFamilyId); }
+function curSub()    { return curFamily().subs[curSubIdx]; }
+
+// ─── VALUE PARSING ────────────────────────────────────────────────────────────
+function parseHex(str) {
+  str = str.replace(/^0x/i,'').replace(/\s+/g,'') || '0';
+  str = str.slice(-16).padStart(16,'0'); // clamp to 64 bits
+  const out = [];
+  for(let i=0;i<8;i++) out[i] = parseInt(str.slice(14-i*2, 16-i*2), 16) || 0;
+  return out; // out[0]=LSB
+}
+
+function getSubValue(b, sub) {
+  // b[0]=LSB, b[7]=MSB; sub.sel contains display positions
+  // display pos 7 = byte 0 (LSB), display pos 6 = byte 1, etc.
+  const selBytes = sub.sel.map(dp => b[7-dp]);
+  let v = 0n;
+  selBytes.forEach((bv,i) => v |= BigInt(bv) << BigInt(i*8));
+  return v;
+}
+
+function fmtHex(v, nibbles) { return '0x' + v.toString(16).toUpperCase().padStart(nibbles,'0'); }
+function fmtDec(v)           { return v.toString(10); }
+function fmtBin8(byte)       { return byte.toString(2).padStart(8,'0'); }
+
+function randomise() {
+  const h = Array.from({length:16}, () => '0123456789ABCDEF'[Math.random()*16|0]).join('');
+  document.getElementById('hex-input').value = h;
+  applyInput();
+}
+
+function applyInput() {
+  const raw = document.getElementById('hex-input').value;
+  bytes = parseHex(raw);
+  render();
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function renderFamilyGroups() {
+  const el = document.getElementById('family-groups');
+  el.innerHTML = '';
+  FAMILY_GROUPS.forEach(grp => {
+    const wrap = document.createElement('div');
+    wrap.className = 'family-group';
+    wrap.innerHTML = `<div class="family-group-label">${grp.label}</div>`;
+    const tabs = document.createElement('div');
+    tabs.className = 'family-tabs';
+    grp.families.forEach(fam => {
+      const b = document.createElement('button');
+      b.className = 'family-tab' + (fam.id === curFamilyId ? ' active' : '');
+      b.textContent = fam.name;
+      b.onclick = () => { curFamilyId = fam.id; curSubIdx = 0; render(); };
+      tabs.appendChild(b);
+    });
+    wrap.appendChild(tabs);
+    el.appendChild(wrap);
+  });
+}
+
+function renderPresets() {
+  const el = document.getElementById('preset-row');
+  el.innerHTML = '';
+  PRESETS.forEach(p => {
+    const b = document.createElement('button');
+    b.className = 'preset-btn';
+    b.textContent = p.label;
+    b.onclick = () => { document.getElementById('hex-input').value = p.val; applyInput(); };
+    el.appendChild(b);
+  });
+}
+
+function renderDisplay() {
+  const sub = curSub();
+  const byteRow   = document.getElementById('byte-row');
+  const binRow    = document.getElementById('bin-row');
+  const brackRow  = document.getElementById('bracket-row');
+
+  byteRow.innerHTML = '';
+  binRow.innerHTML  = '';
+  brackRow.innerHTML = '';
+
+  for(let dp=0; dp<8; dp++) {
+    const byteVal = bytes[7-dp]; // display pos 0 = byte 7 (MSB)
+    const bitHi   = 63 - dp*8;
+    const bitLo   = bitHi - 7;
+
+    let state = 'dim';
+    if(sub.sel.includes(dp))  state = 'sel';
+    else if(sub.zext.includes(dp)) state = 'zext';
+
+    // byte cell
+    const cell = document.createElement('div');
+    cell.className = `byte-cell state-${state}`;
+    cell.innerHTML = `<span class="byte-hex">${byteVal.toString(16).toUpperCase().padStart(2,'0')}</span><span class="byte-bits-lbl">${bitHi}–${bitLo}</span>`;
+    byteRow.appendChild(cell);
+
+    // binary group
+    const bg = document.createElement('div');
+    bg.className = `bin-group state-${state}`;
+    const bits = fmtBin8(byteVal);
+    bg.textContent = bits.slice(0,4) + ' ' + bits.slice(4);
+    binRow.appendChild(bg);
+
+    // bracket cell
+    const bc = document.createElement('div');
+    bc.className = 'bracket-cell';
+    if(state === 'sel' || state === 'zext') {
+      const allSel   = state === 'sel'  ? sub.sel  : sub.zext;
+      const allZext  = state === 'zext' ? sub.zext : [];
+      const isFirst  = dp === Math.min(...allSel);
+      const isLast   = dp === Math.max(...allSel);
+      const isZFirst = allZext.length && dp === Math.min(...allZext);
+      const isZLast  = allZext.length && dp === Math.max(...allZext);
+
+      if(state === 'sel') {
+        const sp = document.createElement('div');
+        sp.className = 'bracket-span' + (isFirst?' start':'') + (isLast?' end':'');
+        sp.style.left = '0'; sp.style.right = '0';
+        if(isFirst && dp === Math.min(...sub.sel)) {
+          // add label on the middle sel cell
+          const mid = sub.sel[Math.floor(sub.sel.length/2)];
+          if(dp === mid) {
+            const lbl = document.createElement('div');
+            lbl.className = 'bracket-label';
+            lbl.textContent = sub.name;
+            sp.appendChild(lbl);
+          }
+        }
+        bc.appendChild(sp);
+      } else {
+        const sp = document.createElement('div');
+        sp.className = 'bracket-span zext' + (isZFirst?' start':'') + (isZLast?' end':'');
+        sp.style.left = '0'; sp.style.right = '0';
+        bc.appendChild(sp);
+      }
+    }
+    brackRow.appendChild(bc);
+  }
+}
+
+function renderSubButtons() {
+  const fam = curFamily();
+  const el  = document.getElementById('sub-row');
+  el.innerHTML = '';
+  fam.subs.forEach((sub, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'sub-btn-wrap';
+    const active = i === curSubIdx;
+    const hasZext = sub.zext.length > 0;
+    const b = document.createElement('button');
+    b.className = 'sub-btn' + (active?' active':'') + (active&&hasZext?' has-zext':'');
+    b.textContent = sub.name;
+    b.onclick = () => { curSubIdx = i; render(); };
+    const sizeLbl = document.createElement('div');
+    sizeLbl.className = 'sub-size-lbl';
+    sizeLbl.textContent = sub.size;
+    const bitsLbl = document.createElement('div');
+    bitsLbl.className = 'sub-bits-lbl';
+    bitsLbl.textContent = 'bits ' + sub.bits;
+    wrap.appendChild(b);
+    wrap.appendChild(sizeLbl);
+    wrap.appendChild(bitsLbl);
+    el.appendChild(wrap);
+  });
+}
+
+function renderInfoPanel() {
+  const sub = curSub();
+  const hasZext = sub.zext.length > 0;
+  const card = document.getElementById('info-card');
+  card.className = 'info-card' + (hasZext ? ' has-zext' : '');
+
+  document.getElementById('info-name').textContent  = sub.name;
+  document.getElementById('info-range').textContent =
+    sub.size + ' — bits ' + sub.bits;
+
+  // compute value of selected sub-register
+  const subVal   = getSubValue(bytes, sub);
+  const nibbles  = sub.sel.length * 2;      // hex chars
+  const binStr   = subVal.toString(2).padStart(sub.sel.length*8,'0');
+  // format binary with spaces every 4 bits
+  const binFmt   = binStr.match(/.{1,4}/g).join(' ');
+
+  document.getElementById('info-value-row').innerHTML = `
+    <div class="info-val-block">
+      <div class="info-val-lbl">Hex</div>
+      <div class="info-val hex">${fmtHex(subVal, nibbles)}</div>
+    </div>
+    <div class="info-val-block">
+      <div class="info-val-lbl">Decimal</div>
+      <div class="info-val">${fmtDec(subVal)}</div>
+    </div>
+    <div class="info-val-block">
+      <div class="info-val-lbl">Binary</div>
+      <div class="info-val" style="font-size:.78rem;letter-spacing:.05em">${binFmt}</div>
+    </div>`;
+
+  document.getElementById('info-write').innerHTML = sub.writeBeh;
+
+  const warn = document.getElementById('warn-banner');
+  if(hasZext) {
+    warn.className = 'warn-banner show';
+    warn.innerHTML = '&#9888; <strong>Zero-extension:</strong> Writing to ' + sub.name +
+      ' clears bits 63–32 of ' + curFamily().name +
+      ' to zero. The dashed orange cells above show which bits are wiped. This is intentional x86-64 behaviour &mdash; 32-bit writes always zero the upper half, unlike 8/16-bit writes which preserve all other bits.';
+  } else {
+    warn.className = 'warn-banner';
+  }
+}
+
+function renderFamilyNote() {
+  document.getElementById('family-note').textContent = curFamily().note;
+}
+
+function render() {
+  renderFamilyGroups();
+  renderDisplay();
+  renderSubButtons();
+  renderInfoPanel();
+  renderFamilyNote();
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+bytes = parseHex('DEADBEEFCAFEBABE');
+renderPresets();
+render();
+
+document.getElementById('hex-input').addEventListener('keydown', e => {
+  if(e.key === 'Enter') applyInput();
+});
+
+/* Skin switcher */
+(function(){
+  var t=document.getElementById('skin-toggle'), p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click', function(e){ e.stopPropagation(); p.classList.toggle('open'); });
+  document.addEventListener('click', function(){ p.classList.remove('open'); });
+  p.addEventListener('click', function(e){ e.stopPropagation(); });
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click', function(){
+      var sk = o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>

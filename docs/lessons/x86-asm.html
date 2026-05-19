@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>x86-64 Instructions | BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<style>
+body { padding-top: 1.25rem; }
+.les-container { width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 1rem 4rem; }
+.les-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.les-title { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.les-subtitle { color: var(--muted); font-size: 0.85rem; }
+
+/* ── Instruction tabs ─────────────────────────────────────────────────────── */
+.inst-tabs { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.inst-tab {
+  padding: .3rem .9rem; border-radius: 6px; border: 1.5px solid var(--card-border);
+  background: var(--card); color: var(--subtle); font-size: .8rem; font-weight: 700;
+  cursor: pointer; font-family: 'Courier New', monospace;
+  transition: border-color .2s, color .2s, background .2s;
+}
+.inst-tab:hover { border-color: var(--accent); color: var(--accent); }
+.inst-tab.active { border-color: var(--accent); color: var(--accent); background: var(--bg2); box-shadow: 0 0 10px var(--glow); }
+
+/* ── Section header card ──────────────────────────────────────────────────── */
+.sect-head {
+  background: var(--card); border: 1px solid var(--card-border); border-radius: 12px;
+  padding: 1rem 1.25rem; margin-bottom: 1rem;
+  display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start;
+}
+.sect-mnemonic {
+  font-size: 2rem; font-weight: 900; font-family: 'Courier New', monospace;
+  color: var(--accent); line-height: 1.1; min-width: 100px; white-space: nowrap;
+}
+.sect-info { flex: 1; min-width: 200px; }
+.sect-name { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: .3rem; }
+.sect-desc { font-size: .85rem; color: var(--subtle); line-height: 1.6; margin-bottom: .5rem; }
+.sect-syntax {
+  font-family: 'Courier New', monospace; font-size: .86rem;
+  background: var(--bg2); border: 1px solid var(--card-border);
+  border-radius: 6px; padding: .3rem .75rem; display: inline-block;
+  color: var(--text); margin-bottom: .35rem;
+}
+.sect-flags { font-size: .75rem; font-style: italic; }
+
+/* ── Three-panel grid ─────────────────────────────────────────────────────── */
+.sim-panels { display: grid; grid-template-columns: 1fr 210px 210px; gap: .75rem; margin-bottom: .75rem; }
+@media (max-width: 820px) { .sim-panels { grid-template-columns: 1fr; } }
+
+.sim-panel {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;
+  min-height: 260px; max-height: 360px;
+}
+.sim-panel-hdr {
+  padding: .45rem .9rem; background: var(--bg2); border-bottom: 1px solid var(--card-border);
+  font-size: .65rem; font-weight: 800; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--accent); flex-shrink: 0;
+}
+.sim-panel-body { flex: 1; overflow-y: auto; }
+.sim-panel-body::-webkit-scrollbar { width: 4px; }
+.sim-panel-body::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+
+/* ── Code panel ───────────────────────────────────────────────────────────── */
+.code-line {
+  display: flex; align-items: center; padding: .22rem .6rem; gap: .45rem;
+  font-family: 'Courier New', monospace; font-size: .78rem; white-space: pre;
+  border-bottom: 1px solid rgba(255,255,255,.025); transition: background .2s;
+}
+.code-line.active { background: rgba(129,140,248,.18); border-left: 3px solid var(--accent); }
+.code-ln { width: 18px; color: var(--muted); text-align: right; flex-shrink: 0; font-size: .68rem; }
+.code-arrow { width: 12px; flex-shrink: 0; color: var(--accent); font-size: .8rem; }
+.code-text { flex: 1; }
+.cm { color: var(--muted); font-style: italic; }
+
+/* ── Register panel ───────────────────────────────────────────────────────── */
+.reg-row {
+  display: flex; align-items: center; padding: .28rem .7rem; gap: .4rem;
+  font-size: .76rem; border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.reg-name {
+  font-family: 'Courier New', monospace; font-weight: 700;
+  width: 36px; color: var(--muted); flex-shrink: 0; font-size: .7rem;
+}
+.reg-val { font-family: 'Courier New', monospace; color: var(--text); font-size: .72rem; flex: 1; }
+.reg-row.changed .reg-val { color: var(--accent); animation: reg-flash 1.4s ease-out forwards; }
+@keyframes reg-flash {
+  0%   { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+  100% { color: var(--text);   text-shadow: none; }
+}
+
+/* ── Memory panel ─────────────────────────────────────────────────────────── */
+.mem-cell {
+  padding: .4rem .75rem; border-bottom: 1px solid rgba(255,255,255,.04);
+  transition: background .3s; border-left: 3px solid transparent;
+}
+.mem-addr { font-family: 'Courier New', monospace; font-size: .64rem; color: var(--muted); }
+.mem-val  { font-family: 'Courier New', monospace; font-size: .76rem; color: var(--text); font-weight: 700; margin: .1rem 0; }
+.mem-lbl  { font-size: .64rem; color: var(--subtle); }
+.mem-cell.written { background: rgba(251,191,36,.07); border-left-color: var(--warning); }
+.mem-cell.written .mem-val { color: var(--warning); animation: mem-flash 1.4s ease-out forwards; }
+@keyframes mem-flash {
+  0%   { color: var(--warning); text-shadow: 0 0 10px var(--warning); }
+  100% { color: var(--text);    text-shadow: none; }
+}
+.mem-cell.read { background: rgba(56,189,248,.07); border-left-color: var(--accent2); }
+.mem-cell.read .mem-val { color: var(--accent2); }
+.mem-none { padding: .6rem .9rem; font-size: .76rem; color: var(--muted); font-style: italic; }
+
+/* ── Flags panel ──────────────────────────────────────────────────────────── */
+.flags-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; padding: .65rem; }
+.flag-box {
+  background: var(--bg2); border: 1.5px solid var(--card-border);
+  border-radius: 7px; padding: .45rem .5rem; text-align: center;
+  transition: border-color .3s, background .3s;
+}
+.flag-box.set { border-color: var(--accent); background: rgba(129,140,248,.1); box-shadow: 0 0 8px var(--glow); }
+.flag-name { font-family: 'Courier New', monospace; font-size: .72rem; font-weight: 700; color: var(--muted); }
+.flag-val  { font-size: 1.2rem; font-weight: 900; color: var(--text); line-height: 1.1; }
+.flag-box.set .flag-name { color: var(--accent); }
+.flag-box.set .flag-val  { color: var(--accent); }
+.flag-meaning { font-size: .6rem; color: var(--muted); margin-top: .1rem; }
+
+/* ── Narrative ────────────────────────────────────────────────────────────── */
+.sim-narrative {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-left: 3px solid var(--accent); border-radius: 10px;
+  padding: .85rem 1.1rem; margin-bottom: .75rem;
+  font-size: .88rem; color: var(--subtle); line-height: 1.65; min-height: 58px;
+}
+.sim-narrative strong { color: var(--accent); }
+.sim-narrative code {
+  font-family: 'Courier New', monospace; color: var(--text);
+  background: var(--bg2); padding: 0 .3rem; border-radius: 3px;
+}
+
+/* ── Controls ─────────────────────────────────────────────────────────────── */
+.sim-controls { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+.btn-prev, .btn-next {
+  padding: .45rem 1.05rem; border-radius: 7px; font-size: .86rem; font-weight: 700;
+  cursor: pointer; border: 1.5px solid; font-family: inherit; transition: opacity .15s;
+}
+.btn-prev { background: var(--bg2); color: var(--subtle); border-color: var(--card-border); }
+.btn-prev:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.btn-next { background: var(--accent); color: #000; border-color: var(--accent); }
+.btn-next:hover:not(:disabled) { opacity: .88; }
+.btn-prev:disabled, .btn-next:disabled { opacity: .3; cursor: not-allowed; }
+.step-counter { font-size: .78rem; color: var(--muted); }
+.step-pips { display: flex; gap: 5px; align-items: center; margin-left: auto; }
+.step-pip {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--card-border); transition: background .3s; cursor: pointer;
+}
+.step-pip.done   { background: var(--success); }
+.step-pip.active { background: var(--accent); box-shadow: 0 0 6px var(--glow); }
+
+.back-link { display: inline-block; margin-top: .5rem; color: var(--accent); font-size: .85rem; text-decoration: none; }
+.back-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="les-container">
+
+  <div class="les-header">
+    <a href="../index.html#learn" class="logo-wrap" style="text-decoration:none;color:inherit;flex-direction:row;gap:.5rem;">
+      <span style="font-size:1.3rem;">&#9881;</span>
+      <span style="font-size:1rem;font-weight:800;color:var(--subtle);">BrainStuffer</span>
+    </a>
+    <div>
+      <div class="les-title">x86-64 Instruction Visualiser</div>
+      <div class="les-subtitle">Step through core instructions &mdash; watch registers, memory, and flags change in real time</div>
+    </div>
+  </div>
+
+  <div class="inst-tabs" id="inst-tabs"></div>
+  <div id="section-area"></div>
+
+  <a class="back-link" href="../index.html#learn">&#8592; Back to Interactive Learning</a>
+</div>
+
+<script>
+const REGS = ['rax','rbx','rcx','rdx','rsi','rdi','rsp','rbp'];
+const B = { rax:'0x0000000000000000', rbx:'0x0000000000000000', rcx:'0x0000000000000000',
+            rdx:'0x0000000000000000', rsi:'0x0000000000000000', rdi:'0x0000000000000000',
+            rsp:'0x00007fffffffe020', rbp:'0x00007fffffffe020' };
+const BF = { ZF:0, CF:0, SF:0, OF:0 };
+function r(o){ return Object.assign({}, B, o); }
+function f(o){ return Object.assign({}, BF, o); }
+
+const SECTIONS = [
+
+// ── MOV ──────────────────────────────────────────────────────────────────────
+{ id:'mov', name:'MOV', mnemonic:'MOV', fullname:'Move',
+  syntax:'mov &lt;dst&gt;, &lt;src&gt;',
+  desc:'Copies a value into the destination register or memory location. The source is never modified. Either operand can be a register, a memory address in [brackets], or an immediate constant. MOV is the single most common instruction in any binary.',
+  flags_note:'Never modifies flags.',
+  panel3:'mem',
+  code:[
+    {t:'; --- register &lt;- immediate ---',c:'cm'},
+    {t:'mov rax, 42',c:''},
+    {t:'; --- register &lt;- register ---',c:'cm'},
+    {t:'mov rbx, rax',c:''},
+    {t:'; --- memory  &lt;- register  ---',c:'cm'},
+    {t:'mov [rsp-8], rbx',c:''},
+    {t:'; --- register &lt;- memory   ---',c:'cm'},
+    {t:'mov rcx, [rsp-8]',c:''},
+  ],
+  steps:[
+    { active:-1, regs:r({}), changed:[],
+      mem:[{addr:'0x7fffffffe018', val:'??????????????????', lbl:'(uninitialised)', cls:''}],
+      flags:f({}),
+      narrative:'<strong>Start.</strong> RAX, RBX, RCX are zero. RSP = 0x7fffffffe020. We will walk through every addressing mode: immediate, register-to-register, register-to-memory, and memory-to-register.' },
+    { active:1, regs:r({rax:'0x000000000000002A'}), changed:['rax'],
+      mem:[{addr:'0x7fffffffe018', val:'??????????????????', lbl:'(uninitialised)', cls:''}],
+      flags:f({}),
+      narrative:'<strong>mov rax, 42</strong> &mdash; the value 42 (= 0x2A) is embedded in the instruction bytes itself. The CPU decodes it and writes it straight into RAX. No memory bus cycle occurs. Flags are unchanged.' },
+    { active:3, regs:r({rax:'0x000000000000002A', rbx:'0x000000000000002A'}), changed:['rbx'],
+      mem:[{addr:'0x7fffffffe018', val:'??????????????????', lbl:'(uninitialised)', cls:''}],
+      flags:f({}),
+      narrative:'<strong>mov rbx, rax</strong> &mdash; the <em>contents</em> of RAX are copied into RBX. RAX is untouched. Both registers now hold 0x2A. Register-to-register MOV is effectively zero latency on modern out-of-order CPUs (handled by renaming).' },
+    { active:5, regs:r({rax:'0x000000000000002A', rbx:'0x000000000000002A'}), changed:[],
+      mem:[{addr:'0x7fffffffe018', val:'0x000000000000002A', lbl:'&larr; RBX written here', cls:'written'}],
+      flags:f({}),
+      narrative:'<strong>mov [rsp-8], rbx</strong> &mdash; square brackets mean <em>dereference</em>. The CPU computes RSP&minus;8 = 0x7fffffffe018 and writes 8 bytes of RBX to that address. RSP itself is unchanged &mdash; this is a direct store, not a push.' },
+    { active:7, regs:r({rax:'0x000000000000002A', rbx:'0x000000000000002A', rcx:'0x000000000000002A'}), changed:['rcx'],
+      mem:[{addr:'0x7fffffffe018', val:'0x000000000000002A', lbl:'&larr; read into RCX', cls:'read'}],
+      flags:f({}),
+      narrative:'<strong>mov rcx, [rsp-8]</strong> &mdash; dereferences address RSP&minus;8, reads 8 bytes, and places them in RCX. RCX = 0x2A. Notice the symmetry: <code>mov [addr], reg</code> stores to memory; <code>mov reg, [addr]</code> loads from memory.' },
+  ]
+},
+
+// ── LEA ──────────────────────────────────────────────────────────────────────
+{ id:'lea', name:'LEA', mnemonic:'LEA', fullname:'Load Effective Address',
+  syntax:'lea &lt;dst&gt;, [&lt;addr-expr&gt;]',
+  desc:'Computes the address inside the brackets and stores that address in the destination &mdash; without ever reading memory. The full x86 addressing mode (base + index&times;scale + displacement) acts as a free arithmetic unit. Compilers use it for fast multiply-by-small-constant and RIP-relative data references.',
+  flags_note:'Never modifies flags.',
+  panel3:'mem',
+  code:[
+    {t:'mov rbx, 0x100     ; base pointer',c:''},
+    {t:'mov rcx, 4         ; index',c:''},
+    {t:'; compute addr: no memory read',c:'cm'},
+    {t:'lea rax, [rbx + rcx*2]',c:''},
+    {t:'; contrast: MOV would dereference!',c:'cm'},
+    {t:'; mov rax, [rbx+rcx*2]  <- reads mem',c:'cm'},
+    {t:'; RIP-relative (PIE / ASLR)',c:'cm'},
+    {t:'lea rdi, [rip + 0x200]',c:''},
+  ],
+  steps:[
+    { active:-1, regs:r({}), changed:[],
+      mem:[{addr:'0x0000000000000100', val:'0xDEADBEEFCAFEBABE', lbl:'some data', cls:''}],
+      flags:f({}),
+      narrative:'<strong>Start.</strong> There is data sitting at address 0x100. We will show how LEA computes an address <em>without touching memory</em>, then contrast it with what MOV would do.' },
+    { active:0, regs:r({rbx:'0x0000000000000100'}), changed:['rbx'],
+      mem:[{addr:'0x0000000000000100', val:'0xDEADBEEFCAFEBABE', lbl:'data at 0x100', cls:''}],
+      flags:f({}),
+      narrative:'<strong>mov rbx, 0x100</strong> &mdash; RBX = 0x100. This is our base pointer. We will use it as the base of an address calculation.' },
+    { active:1, regs:r({rbx:'0x0000000000000100', rcx:'0x0000000000000004'}), changed:['rcx'],
+      mem:[{addr:'0x0000000000000100', val:'0xDEADBEEFCAFEBABE', lbl:'data at 0x100', cls:''}],
+      flags:f({}),
+      narrative:'<strong>mov rcx, 4</strong> &mdash; RCX = 4. This is our index. The addressing mode will compute RBX + RCX&times;2 = 0x100 + 8 = 0x108.' },
+    { active:3, regs:r({rbx:'0x0000000000000100', rcx:'0x0000000000000004', rax:'0x0000000000000108'}), changed:['rax'],
+      mem:[{addr:'0x0000000000000100', val:'0xDEADBEEFCAFEBABE', lbl:'NOT accessed', cls:''}],
+      flags:f({}),
+      narrative:'<strong>lea rax, [rbx + rcx*2]</strong> &mdash; the CPU evaluates RBX + RCX&times;2 = 0x100 + 8 = <strong>0x108</strong> and writes that result into RAX. <em>No memory is read.</em> The brackets look like a dereference but are just syntax for the address expression. Compare: <code>mov rax, [rbx+rcx*2]</code> would read 8 bytes <em>from</em> address 0x108.' },
+    { active:7, regs:r({rbx:'0x0000000000000100', rcx:'0x0000000000000004', rax:'0x0000000000000108', rdi:'0x0000000000401208'}), changed:['rdi'],
+      mem:[{addr:'0x0000000000000100', val:'0xDEADBEEFCAFEBABE', lbl:'NOT accessed', cls:''}],
+      flags:f({}),
+      narrative:'<strong>lea rdi, [rip + 0x200]</strong> &mdash; in Position Independent Executables (PIE), the compiler accesses globals via RIP-relative addressing. RIP holds the address of the <em>next</em> instruction; LEA adds the displacement to get a pointer to data in .data/.rodata. No hardcoded absolute addresses &mdash; the binary works anywhere in memory.' },
+  ]
+},
+
+// ── PUSH / POP ────────────────────────────────────────────────────────────────
+{ id:'push', name:'PUSH/POP', mnemonic:'PUSH / POP', fullname:'Stack Push & Pop',
+  syntax:'push &lt;src&gt; &nbsp;/&nbsp; pop &lt;dst&gt;',
+  desc:'PUSH atomically decrements RSP by 8 then writes to [RSP]. POP reads from [RSP] then increments RSP by 8. The x86 stack grows toward lower addresses &mdash; so push moves RSP down, pop moves it up. These are the primitives underlying every function call.',
+  flags_note:'Neither modifies flags.',
+  panel3:'mem',
+  code:[
+    {t:'; rax=0xAAAA, rbx=0xBBBB, rsp=0x7ffe020',c:'cm'},
+    {t:'push rax    ; rsp-=8, [rsp]=rax',c:''},
+    {t:'push rbx    ; rsp-=8, [rsp]=rbx',c:''},
+    {t:'pop  rcx    ; rcx=[rsp], rsp+=8',c:''},
+  ],
+  steps:[
+    { active:-1,
+      regs:r({rax:'0x000000000000AAAA', rbx:'0x000000000000BBBB', rsp:'0x00007fffffffe020', rbp:'0x00007fffffffe020'}), changed:[],
+      mem:[
+        {addr:'0x7fffffffe018', val:'??????????????????', lbl:'(free)', cls:''},
+        {addr:'0x7fffffffe010', val:'??????????????????', lbl:'(free)', cls:''},
+      ],
+      flags:f({}),
+      narrative:'<strong>Start.</strong> RAX = 0xAAAA, RBX = 0xBBBB. RSP = 0x7ffe020 &mdash; the current stack top. Two slots below are uninitialised. The stack grows <em>downward</em>: lower addresses are "higher" on the stack.' },
+    { active:1,
+      regs:r({rax:'0x000000000000AAAA', rbx:'0x000000000000BBBB', rsp:'0x00007fffffffe018', rbp:'0x00007fffffffe020'}), changed:['rsp'],
+      mem:[
+        {addr:'0x7fffffffe018', val:'0x000000000000AAAA', lbl:'&larr; RSP  (push rax)', cls:'written'},
+        {addr:'0x7fffffffe010', val:'??????????????????', lbl:'(free)', cls:''},
+      ],
+      flags:f({}),
+      narrative:'<strong>push rax</strong> &mdash; two steps, one instruction: 1) RSP &minus;= 8 (0x7ffe020 &rarr; 0x7ffe018), 2) [RSP] &larr; RAX. RAX itself is unchanged. RSP now points to the topmost <em>occupied</em> slot. The stack has grown by one 8-byte slot.' },
+    { active:2,
+      regs:r({rax:'0x000000000000AAAA', rbx:'0x000000000000BBBB', rsp:'0x00007fffffffe010', rbp:'0x00007fffffffe020'}), changed:['rsp'],
+      mem:[
+        {addr:'0x7fffffffe018', val:'0x000000000000AAAA', lbl:'(pushed rax)', cls:''},
+        {addr:'0x7fffffffe010', val:'0x000000000000BBBB', lbl:'&larr; RSP  (push rbx)', cls:'written'},
+      ],
+      flags:f({}),
+      narrative:'<strong>push rbx</strong> &mdash; RSP drops another 8 bytes to 0x7ffe010, and RBX (0xBBBB) is written there. Older pushes sit at <em>higher</em> addresses; newer ones at <em>lower</em>. This LIFO ordering means the last value pushed is the first to be popped.' },
+    { active:3,
+      regs:r({rax:'0x000000000000AAAA', rbx:'0x000000000000BBBB', rcx:'0x000000000000BBBB', rsp:'0x00007fffffffe018', rbp:'0x00007fffffffe020'}), changed:['rcx','rsp'],
+      mem:[
+        {addr:'0x7fffffffe018', val:'0x000000000000AAAA', lbl:'&larr; RSP  (next pop gets this)', cls:''},
+        {addr:'0x7fffffffe010', val:'0x000000000000BBBB', lbl:'(popped into RCX)', cls:'read'},
+      ],
+      flags:f({}),
+      narrative:'<strong>pop rcx</strong> &mdash; the reverse: 1) RCX &larr; [RSP] (reads 0xBBBB from 0x7ffe010), 2) RSP += 8. RSP returns to 0x7ffe018. The old value at 0x7ffe010 is still in memory but is now considered "dead" &mdash; any future push will overwrite it.' },
+  ]
+},
+
+// ── ADD / SUB ─────────────────────────────────────────────────────────────────
+{ id:'add', name:'ADD/SUB', mnemonic:'ADD / SUB', fullname:'Add & Subtract',
+  syntax:'add &lt;dst&gt;, &lt;src&gt; &nbsp;/&nbsp; sub &lt;dst&gt;, &lt;src&gt;',
+  desc:'ADD computes dst &larr; dst + src and SUB computes dst &larr; dst &minus; src, both updating the CPU flags. The Zero Flag (ZF) signals a zero result; Sign Flag (SF) signals a negative result; Carry Flag (CF) signals unsigned overflow; Overflow Flag (OF) signals signed overflow.',
+  flags_note:'Modifies ZF, SF, CF, OF.',
+  panel3:'flags',
+  code:[
+    {t:'mov rax, 10',c:''},
+    {t:'mov rbx, 3',c:''},
+    {t:'add rax, rbx    ; rax = 13',c:''},
+    {t:'sub rax, 7     ; rax = 6',c:''},
+    {t:'sub rax, rax   ; rax = 0, ZF=1',c:''},
+  ],
+  steps:[
+    { active:-1, regs:r({}), changed:[], mem:[], flags:f({}),
+      narrative:'<strong>Start.</strong> We load two values, then add and subtract them while watching the result and the CPU flags. Pay attention to when ZF fires &mdash; it drives nearly every conditional branch in compiled code.' },
+    { active:0, regs:r({rax:'0x000000000000000A'}), changed:['rax'], mem:[], flags:f({}),
+      narrative:'<strong>mov rax, 10</strong> &mdash; RAX = 10 (0xA). MOV never touches flags, so all remain 0.' },
+    { active:1, regs:r({rax:'0x000000000000000A', rbx:'0x0000000000000003'}), changed:['rbx'], mem:[], flags:f({}),
+      narrative:'<strong>mov rbx, 3</strong> &mdash; RBX = 3. Operands loaded. Still no flag changes.' },
+    { active:2, regs:r({rax:'0x000000000000000D', rbx:'0x0000000000000003'}), changed:['rax'], mem:[], flags:f({ZF:0,SF:0,CF:0,OF:0}),
+      narrative:'<strong>add rax, rbx</strong> &mdash; RAX = 10 + 3 = <strong>13</strong> (0xD). Result is positive and non-zero: ZF=0, SF=0. No unsigned wrap or signed overflow: CF=0, OF=0.' },
+    { active:3, regs:r({rax:'0x0000000000000006', rbx:'0x0000000000000003'}), changed:['rax'], mem:[], flags:f({ZF:0,SF:0,CF:0,OF:0}),
+      narrative:'<strong>sub rax, 7</strong> &mdash; RAX = 13 &minus; 7 = <strong>6</strong>. Still positive and non-zero, no flags set. Under the hood, the CPU computes this as rax + (~7 + 1), routing both add and subtract through the same adder circuit.' },
+    { active:4, regs:r({rax:'0x0000000000000000', rbx:'0x0000000000000003'}), changed:['rax'], mem:[], flags:f({ZF:1,SF:0,CF:0,OF:0}),
+      narrative:'<strong>sub rax, rax</strong> &mdash; any value minus itself is zero. RAX = 0, <strong>ZF = 1</strong>. This idiom appears constantly in disassembly; compilers also use <code>xor rax, rax</code> for the same effect. ZF=1 tells conditional jumps like <code>jz</code>/<code>je</code> to fire.' },
+  ]
+},
+
+// ── CMP / Jcc ─────────────────────────────────────────────────────────────────
+{ id:'cmp', name:'CMP/JMP', mnemonic:'CMP / Jcc', fullname:'Compare & Conditional Jump',
+  syntax:'cmp &lt;a&gt;, &lt;b&gt; &nbsp;/&nbsp; je / jne / jg / jl / jge / jle &lt;label&gt;',
+  desc:'CMP subtracts b from a and discards the result, keeping only the flags. Conditional jump instructions (Jcc) then read those flags to decide whether to redirect execution. Together they compile every if/else, for loop, and while loop in high-level code.',
+  flags_note:'CMP modifies ZF, SF, CF, OF. Jcc only reads them.',
+  panel3:'flags',
+  code:[
+    {t:'mov rax, 5',c:''},
+    {t:'mov rbx, 3',c:''},
+    {t:'cmp rax, rbx    ; 5-3=2, sets flags',c:''},
+    {t:'je  .equal      ; ZF=0 -> NOT taken',c:''},
+    {t:'jg  .greater    ; SF==OF, ZF=0 -> taken',c:''},
+    {t:'.greater: ; ... branch taken ...',c:'cm'},
+    {t:'; Now test equal case',c:'cm'},
+    {t:'mov rax, rbx    ; rax = 3',c:''},
+    {t:'cmp rax, rbx    ; 3-3=0',c:''},
+    {t:'je  .equal      ; ZF=1 -> taken!',c:''},
+  ],
+  steps:[
+    { active:-1, regs:r({}), changed:[], mem:[], flags:f({}),
+      narrative:'<strong>Start.</strong> CMP + Jcc is the backbone of all branching. We will compare two values, trace each flag, and observe which jumps fire and which fall through.' },
+    { active:0, regs:r({rax:'0x0000000000000005'}), changed:['rax'], mem:[], flags:f({}),
+      narrative:'<strong>mov rax, 5</strong> &mdash; RAX = 5. No flags changed by MOV.' },
+    { active:1, regs:r({rax:'0x0000000000000005', rbx:'0x0000000000000003'}), changed:['rbx'], mem:[], flags:f({}),
+      narrative:'<strong>mov rbx, 3</strong> &mdash; RBX = 3. We are about to compare 5 and 3.' },
+    { active:2, regs:r({rax:'0x0000000000000005', rbx:'0x0000000000000003'}), changed:[], mem:[],
+      flags:f({ZF:0,SF:0,CF:0,OF:0}),
+      narrative:'<strong>cmp rax, rbx</strong> &mdash; computes 5&minus;3 = 2 and discards the result. Registers unchanged. Flags: ZF=0 (result &ne; 0), SF=0 (result positive), CF=0 (no borrow), OF=0 (no overflow). The flags now encode the relationship between rax and rbx.' },
+    { active:3, regs:r({rax:'0x0000000000000005', rbx:'0x0000000000000003'}), changed:[], mem:[],
+      flags:f({ZF:0,SF:0,CF:0,OF:0}),
+      narrative:'<strong>je .equal</strong> &mdash; <em>Jump if Equal</em> checks ZF. ZF = 0, meaning the comparison was not equal (5 &ne; 3). The branch is <strong>NOT taken</strong>. Execution falls through to jg.' },
+    { active:4, regs:r({rax:'0x0000000000000005', rbx:'0x0000000000000003'}), changed:[], mem:[],
+      flags:f({ZF:0,SF:0,CF:0,OF:0}),
+      narrative:'<strong>jg .greater</strong> &mdash; <em>Jump if Greater (signed)</em> fires when ZF=0 <em>and</em> SF==OF. Both are 0 here, so the condition holds. The branch <strong>IS taken</strong>. This is how <code>if (a > b)</code> compiles.' },
+    { active:7, regs:r({rax:'0x0000000000000003', rbx:'0x0000000000000003'}), changed:['rax'], mem:[],
+      flags:f({ZF:0,SF:0,CF:0,OF:0}),
+      narrative:'<strong>mov rax, rbx</strong> &mdash; now RAX = RBX = 3. Let\'s re-run the comparison with equal values to see ZF flip to 1.' },
+    { active:8, regs:r({rax:'0x0000000000000003', rbx:'0x0000000000000003'}), changed:[], mem:[],
+      flags:f({ZF:1,SF:0,CF:0,OF:0}),
+      narrative:'<strong>cmp rax, rbx</strong> &mdash; 3&minus;3 = 0, so <strong>ZF = 1</strong>. The Zero Flag fires whenever the subtraction result is exactly zero &mdash; i.e., the operands are equal.' },
+    { active:9, regs:r({rax:'0x0000000000000003', rbx:'0x0000000000000003'}), changed:[], mem:[],
+      flags:f({ZF:1,SF:0,CF:0,OF:0}),
+      narrative:'<strong>je .equal</strong> &mdash; ZF = 1, so the jump <strong>IS taken</strong>. Every Jcc reads a specific flag combination: <code>je</code> checks ZF; <code>jne</code> checks !ZF; <code>jl</code> checks SF&ne;OF; <code>jge</code> checks SF==OF. They all share the same CMP result.' },
+  ]
+},
+
+// ── CALL / RET ────────────────────────────────────────────────────────────────
+{ id:'call', name:'CALL/RET', mnemonic:'CALL / RET', fullname:'Call & Return',
+  syntax:'call &lt;target&gt; &nbsp;/&nbsp; ret',
+  desc:'CALL pushes the address of the next instruction onto the stack (the return address) and then jumps to the target. RET pops that address into RIP. This is the entire hardware mechanism for function calls &mdash; the compiler convention (ABI) builds the rest on top.',
+  flags_note:'Neither modifies arithmetic flags.',
+  panel3:'mem',
+  code:[
+    {t:'; --- caller at 0x401000 ---',c:'cm'},
+    {t:'call add_one      ; push rip+5, jmp',c:''},
+    {t:'; resumes here after ret',c:'cm'},
+    {t:'mov rbx, rax      ; use return value',c:''},
+    {t:'',c:'cm'},
+    {t:'add_one:   ; 0x401050',c:'cm'},
+    {t:'  push rbp',c:''},
+    {t:'  mov  rbp, rsp',c:''},
+    {t:'  add  rax, 1',c:''},
+    {t:'  pop  rbp',c:''},
+    {t:'  ret',c:''},
+  ],
+  steps:[
+    { active:-1,
+      regs:r({rax:'0x0000000000000005', rsp:'0x00007fffffffe020', rbp:'0x00007fffffffe020'}), changed:[],
+      mem:[{addr:'0x7fffffffe018', val:'??????????????????', lbl:'(free)', cls:''}],
+      flags:f({}),
+      narrative:'<strong>Start.</strong> RAX = 5. We are about to call <code>add_one</code>, which increments RAX and returns. Watch how CALL and RET use the stack to preserve the return address across the function boundary.' },
+    { active:1,
+      regs:r({rax:'0x0000000000000005', rsp:'0x00007fffffffe018', rbp:'0x00007fffffffe020'}), changed:['rsp'],
+      mem:[{addr:'0x7fffffffe018', val:'0x0000000000401005', lbl:'&larr; return address (RIP+5)', cls:'written'}],
+      flags:f({}),
+      narrative:'<strong>call add_one</strong> &mdash; two micro-ops: 1) RSP &minus;= 8, then [RSP] &larr; address of <em>next</em> instruction (0x401005); 2) RIP &larr; 0x401050. The return address is now on the stack. This is why stack smashing that overwrites [RSP] can hijack control flow.' },
+    { active:6,
+      regs:r({rax:'0x0000000000000005', rsp:'0x00007fffffffe010', rbp:'0x00007fffffffe018'}), changed:['rsp','rbp'],
+      mem:[
+        {addr:'0x7fffffffe018', val:'0x0000000000401005', lbl:'return address', cls:''},
+        {addr:'0x7fffffffe010', val:'0x00007fffffffe020', lbl:'&larr; saved caller RBP', cls:'written'},
+      ],
+      flags:f({}),
+      narrative:'<strong>push rbp / mov rbp, rsp</strong> &mdash; the standard function prologue. The callee saves the caller\'s RBP on the stack, then sets RBP = RSP to anchor its own stack frame. Local variables live at negative offsets from RBP.' },
+    { active:8,
+      regs:r({rax:'0x0000000000000006', rsp:'0x00007fffffffe010', rbp:'0x00007fffffffe018'}), changed:['rax'],
+      mem:[
+        {addr:'0x7fffffffe018', val:'0x0000000000401005', lbl:'return address', cls:''},
+        {addr:'0x7fffffffe010', val:'0x00007fffffffe020', lbl:'saved caller RBP', cls:''},
+      ],
+      flags:f({}),
+      narrative:'<strong>add rax, 1</strong> &mdash; function body. RAX = 5 + 1 = 6. By the System V AMD64 ABI, integer return values go in RAX. The function is done computing.' },
+    { active:9,
+      regs:r({rax:'0x0000000000000006', rsp:'0x00007fffffffe018', rbp:'0x00007fffffffe020'}), changed:['rsp','rbp'],
+      mem:[
+        {addr:'0x7fffffffe018', val:'0x0000000000401005', lbl:'&larr; RSP (about to ret)', cls:'read'},
+        {addr:'0x7fffffffe010', val:'0x00007fffffffe020', lbl:'(popped, frame gone)', cls:''},
+      ],
+      flags:f({}),
+      narrative:'<strong>pop rbp</strong> &mdash; restores the caller\'s RBP. RSP now points at the saved return address. RBP is back to the caller\'s frame base. The callee\'s frame has been dismantled.' },
+    { active:10,
+      regs:r({rax:'0x0000000000000006', rsp:'0x00007fffffffe020', rbp:'0x00007fffffffe020'}), changed:['rsp'],
+      mem:[
+        {addr:'0x7fffffffe018', val:'0x0000000000401005', lbl:'(freed by ret)', cls:''},
+        {addr:'0x7fffffffe010', val:'0x00007fffffffe020', lbl:'(freed)', cls:''},
+      ],
+      flags:f({}),
+      narrative:'<strong>ret</strong> &mdash; pops [RSP] = 0x401005 into RIP, then RSP += 8. Execution resumes in the caller at 0x401005. RSP is back to its pre-call value. The stack is balanced. RAX = 6 carries the return value.' },
+  ]
+},
+
+// ── XOR ───────────────────────────────────────────────────────────────────────
+{ id:'xor', name:'XOR', mnemonic:'XOR', fullname:'Bitwise Exclusive OR',
+  syntax:'xor &lt;dst&gt;, &lt;src&gt;',
+  desc:'Flips each bit in dst where the corresponding bit in src is 1. Three canonical uses: <em>zeroing</em> (<code>xor rax, rax</code> is 2 bytes vs 7 for <code>mov rax, 0</code>); <em>bit-toggling</em> with a mask; <em>XOR swap</em> of two registers without a temporary.',
+  flags_note:'Sets ZF and SF from result; always clears CF and OF.',
+  panel3:'flags',
+  code:[
+    {t:'; --- zero a register ---',c:'cm'},
+    {t:'mov rax, 0xDEADBEEF',c:''},
+    {t:'xor rax, rax        ; rax=0, ZF=1',c:''},
+    {t:'; --- toggle bits ---',c:'cm'},
+    {t:'mov rax, 0xF0',c:''},
+    {t:'xor rax, 0xFF       ; flip low byte -> 0x0F',c:''},
+    {t:'; --- XOR swap (no temp) ---',c:'cm'},
+    {t:'mov rax, 0xAAAA',c:''},
+    {t:'mov rbx, 0xBBBB',c:''},
+    {t:'xor rax, rbx',c:''},
+    {t:'xor rbx, rax',c:''},
+    {t:'xor rax, rbx',c:''},
+  ],
+  steps:[
+    { active:-1, regs:r({}), changed:[], mem:[], flags:f({}),
+      narrative:'<strong>Start.</strong> XOR is versatile beyond its logical role. We will see zeroing, bit-toggling, and a three-instruction register swap &mdash; all pure bit algebra, no memory access.' },
+    { active:1, regs:r({rax:'0x00000000DEADBEEF'}), changed:['rax'], mem:[], flags:f({}),
+      narrative:'<strong>mov rax, 0xDEADBEEF</strong> &mdash; load a non-zero value to demonstrate the zero trick.' },
+    { active:2, regs:r({rax:'0x0000000000000000'}), changed:['rax'], mem:[], flags:f({ZF:1,CF:0,OF:0,SF:0}),
+      narrative:'<strong>xor rax, rax</strong> &mdash; any value XOR itself = 0 (every bit cancels its pair). RAX = 0, <strong>ZF = 1</strong>. Compilers prefer this over <code>mov rax, 0</code>: the encoding is 2 bytes vs. 7, and it breaks false register dependencies on out-of-order CPUs.' },
+    { active:4, regs:r({rax:'0x00000000000000F0'}), changed:['rax'], mem:[], flags:f({ZF:0,CF:0,OF:0,SF:0}),
+      narrative:'<strong>mov rax, 0xF0</strong> &mdash; binary: <code>1111&thinsp;0000</code>. We will flip all 8 low bits using a mask.' },
+    { active:5, regs:r({rax:'0x000000000000000F'}), changed:['rax'], mem:[], flags:f({ZF:0,CF:0,OF:0,SF:0}),
+      narrative:'<strong>xor rax, 0xFF</strong> &mdash; 0xF0 XOR 0xFF = 0x0F (binary: <code>0000&thinsp;1111</code>). Every bit where the mask is 1 gets flipped. Where the mask is 0, the bit is preserved. XOR with a mask is the standard toggle primitive.' },
+    { active:7,
+      regs:r({rax:'0x000000000000AAAA', rbx:'0x000000000000BBBB'}), changed:['rax','rbx'], mem:[], flags:f({ZF:0,CF:0,OF:0,SF:0}),
+      narrative:'<strong>Setup:</strong> RAX = 0xAAAA, RBX = 0xBBBB. We will swap them using three XOR operations with no extra register &mdash; useful when registers are scarce.' },
+    { active:9, regs:r({rax:'0x0000000000001111', rbx:'0x000000000000BBBB'}), changed:['rax'], mem:[], flags:f({ZF:0,CF:0,OF:0,SF:0}),
+      narrative:'<strong>xor rax, rbx</strong> &mdash; RAX = 0xAAAA ^ 0xBBBB = 0x1111. RAX now carries the XOR of both original values.' },
+    { active:10, regs:r({rax:'0x0000000000001111', rbx:'0x000000000000AAAA'}), changed:['rbx'], mem:[], flags:f({ZF:0,CF:0,OF:0,SF:0}),
+      narrative:'<strong>xor rbx, rax</strong> &mdash; RBX = 0xBBBB ^ 0x1111 = 0xAAAA. RBX now holds the original RAX value. One step left.' },
+    { active:11, regs:r({rax:'0x000000000000BBBB', rbx:'0x000000000000AAAA'}), changed:['rax'], mem:[], flags:f({ZF:0,CF:0,OF:0,SF:0}),
+      narrative:'<strong>xor rax, rbx</strong> &mdash; RAX = 0x1111 ^ 0xAAAA = 0xBBBB. Swap complete. RAX = 0xBBBB, RBX = 0xAAAA. No memory access, no temporary register &mdash; just three XORs.' },
+  ]
+},
+
+// ── INC / DEC ─────────────────────────────────────────────────────────────────
+{ id:'incdec', name:'INC/DEC', mnemonic:'INC / DEC', fullname:'Increment & Decrement',
+  syntax:'inc &lt;dst&gt; &nbsp;/&nbsp; dec &lt;dst&gt;',
+  desc:'INC adds 1; DEC subtracts 1. Compact encoding makes them the natural choice for loop counters. Crucially, INC and DEC do <em>not</em> modify the Carry Flag &mdash; a deliberate design so they can be embedded inside multi-precision arithmetic without disturbing CF.',
+  flags_note:'Sets ZF, SF, OF &mdash; does NOT modify CF.',
+  panel3:'flags',
+  code:[
+    {t:'mov rax, 0',c:''},
+    {t:'inc rax         ; rax = 1',c:''},
+    {t:'inc rax         ; rax = 2',c:''},
+    {t:'; --- dec/jnz loop ---',c:'cm'},
+    {t:'mov rcx, 3',c:''},
+    {t:'.loop:',c:'cm'},
+    {t:'  dec rcx',c:''},
+    {t:'  jnz .loop     ; repeat if rcx != 0',c:''},
+    {t:'; rcx = 0 here',c:'cm'},
+  ],
+  steps:[
+    { active:-1, regs:r({}), changed:[], mem:[], flags:f({}),
+      narrative:'<strong>Start.</strong> We will increment a counter, then show the <em>dec / jnz</em> loop pattern &mdash; a tight two-instruction loop that compilers emit for counted loops.' },
+    { active:0, regs:r({rax:'0x0000000000000000'}), changed:['rax'], mem:[], flags:f({}),
+      narrative:'<strong>mov rax, 0</strong> &mdash; initialise counter. MOV leaves all flags unchanged.' },
+    { active:1, regs:r({rax:'0x0000000000000001'}), changed:['rax'], mem:[], flags:f({ZF:0,SF:0,OF:0}),
+      narrative:'<strong>inc rax</strong> &mdash; RAX = 0 + 1 = 1. ZF=0 (not zero), SF=0 (positive). Note: CF is <em>not</em> shown as modified &mdash; INC intentionally skips CF so you can safely increment an index register inside a <code>adc</code>-based multi-precision loop.' },
+    { active:2, regs:r({rax:'0x0000000000000002'}), changed:['rax'], mem:[], flags:f({ZF:0,SF:0,OF:0}),
+      narrative:'<strong>inc rax</strong> &mdash; RAX = 2. Now we set up the counted loop.' },
+    { active:4, regs:r({rax:'0x0000000000000002', rcx:'0x0000000000000003'}), changed:['rcx'], mem:[], flags:f({ZF:0,SF:0,OF:0}),
+      narrative:'<strong>mov rcx, 3</strong> &mdash; RCX = 3, the loop iteration count. The dec/jnz pattern avoids a separate CMP instruction.' },
+    { active:6, regs:r({rax:'0x0000000000000002', rcx:'0x0000000000000002'}), changed:['rcx'], mem:[], flags:f({ZF:0,SF:0,OF:0}),
+      narrative:'<strong>dec rcx</strong> (iteration 1) &mdash; RCX = 2. ZF=0, so jnz branches back. Loop continues.' },
+    { active:6, regs:r({rax:'0x0000000000000002', rcx:'0x0000000000000001'}), changed:['rcx'], mem:[], flags:f({ZF:0,SF:0,OF:0}),
+      narrative:'<strong>dec rcx</strong> (iteration 2) &mdash; RCX = 1. Still non-zero, jnz fires again.' },
+    { active:6, regs:r({rax:'0x0000000000000002', rcx:'0x0000000000000000'}), changed:['rcx'], mem:[], flags:f({ZF:1,SF:0,OF:0}),
+      narrative:'<strong>dec rcx</strong> (iteration 3) &mdash; RCX = 0, <strong>ZF = 1</strong>. jnz falls through because ZF=1 (zero result means "not non-zero"). The loop exits. This compiles from <code>for(int i=n; i&gt;0; i--)</code> &mdash; three iterations, exactly three decrements.' },
+  ]
+},
+
+]; // end SECTIONS
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let curSect = 0, curStep = 0;
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function renderTabs(){
+  const el = document.getElementById('inst-tabs');
+  el.innerHTML = '';
+  SECTIONS.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.className = 'inst-tab' + (i === curSect ? ' active' : '');
+    b.textContent = s.name;
+    b.onclick = () => { curSect = i; curStep = 0; render(); };
+    el.appendChild(b);
+  });
+}
+
+function renderSection(){
+  const s = SECTIONS[curSect];
+  const step = s.steps[curStep];
+
+  // code lines
+  let codeHTML = '';
+  s.code.forEach((line, i) => {
+    const active = i === step.active;
+    codeHTML += `<div class="code-line${active ? ' active' : ''}">
+      <span class="code-ln">${i+1}</span>
+      <span class="code-arrow">${active ? '&#9658;' : '&nbsp;'}</span>
+      <span class="code-text ${line.c || ''}">${line.t || '&nbsp;'}</span>
+    </div>`;
+  });
+
+  // registers
+  let regHTML = '';
+  REGS.forEach(rn => {
+    const val = step.regs[rn] || '0x0000000000000000';
+    const ch = step.changed.includes(rn);
+    regHTML += `<div class="reg-row${ch ? ' changed' : ''}">
+      <span class="reg-name">${rn}</span>
+      <span class="reg-val">${val}</span>
+    </div>`;
+  });
+
+  // right panel
+  let rHdr = '', rBody = '';
+  if(s.panel3 === 'mem'){
+    rHdr = 'Memory';
+    if(!step.mem || step.mem.length === 0){
+      rBody = '<div class="mem-none">No memory accessed.</div>';
+    } else {
+      step.mem.forEach(cell => {
+        rBody += `<div class="mem-cell ${cell.cls || ''}">
+          <div class="mem-addr">${cell.addr}</div>
+          <div class="mem-val">${cell.val}</div>
+          <div class="mem-lbl">${cell.lbl || ''}</div>
+        </div>`;
+      });
+    }
+  } else {
+    rHdr = 'Flags (RFLAGS)';
+    const fl = step.flags;
+    const FMAP = { ZF:'Zero', CF:'Carry', SF:'Sign', OF:'Oflow' };
+    let fgrid = '';
+    Object.keys(FMAP).forEach(fn => {
+      const set = fl[fn] === 1;
+      fgrid += `<div class="flag-box${set ? ' set' : ''}">
+        <div class="flag-name">${fn}</div>
+        <div class="flag-val">${fl[fn] !== undefined ? fl[fn] : '&mdash;'}</div>
+        <div class="flag-meaning">${FMAP[fn]}</div>
+      </div>`;
+    });
+    rBody = `<div class="flags-grid">${fgrid}</div>`;
+  }
+
+  // step pips
+  let pips = '';
+  s.steps.forEach((_, i) => {
+    const cls = i < curStep ? 'done' : i === curStep ? 'active' : '';
+    pips += `<div class="step-pip ${cls}" onclick="goStep(${i})" title="Step ${i+1}"></div>`;
+  });
+
+  const flagsColor = s.flags_note.startsWith('Never') ? 'color:var(--success)' : 'color:var(--warning)';
+
+  document.getElementById('section-area').innerHTML = `
+    <div class="sect-head">
+      <div class="sect-mnemonic">${s.mnemonic}</div>
+      <div class="sect-info">
+        <div class="sect-name">${s.fullname}</div>
+        <div class="sect-desc">${s.desc}</div>
+        <div class="sect-syntax">${s.syntax}</div><br>
+        <div class="sect-flags" style="${flagsColor}">${s.flags_note}</div>
+      </div>
+    </div>
+    <div class="sim-panels">
+      <div class="sim-panel">
+        <div class="sim-panel-hdr">Assembly</div>
+        <div class="sim-panel-body">${codeHTML}</div>
+      </div>
+      <div class="sim-panel">
+        <div class="sim-panel-hdr">Registers</div>
+        <div class="sim-panel-body">${regHTML}</div>
+      </div>
+      <div class="sim-panel">
+        <div class="sim-panel-hdr">${rHdr}</div>
+        <div class="sim-panel-body">${rBody}</div>
+      </div>
+    </div>
+    <div class="sim-narrative">${step.narrative}</div>
+    <div class="sim-controls">
+      <button class="btn-prev" onclick="prevStep()" ${curStep === 0 ? 'disabled' : ''}>&#8592; Prev</button>
+      <button class="btn-next" onclick="nextStep()" ${curStep === s.steps.length - 1 ? 'disabled' : ''}>Next &#8594;</button>
+      <span class="step-counter">Step ${curStep + 1} / ${s.steps.length}</span>
+      <div class="step-pips">${pips}</div>
+    </div>`;
+}
+
+function render(){ renderTabs(); renderSection(); }
+function goStep(i){ const s=SECTIONS[curSect]; if(i>=0&&i<s.steps.length){curStep=i;render();} }
+function nextStep(){ if(curStep<SECTIONS[curSect].steps.length-1){curStep++;render();} }
+function prevStep(){ if(curStep>0){curStep--;render();} }
+
+render();
+
+/* Skin switcher */
+(function(){
+  var t=document.getElementById('skin-toggle'), p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click', function(e){ e.stopPropagation(); p.classList.toggle('open'); });
+  document.addEventListener('click', function(){ p.classList.remove('open'); });
+  p.addEventListener('click', function(e){ e.stopPropagation(); });
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click', function(){
+      var sk = o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>
