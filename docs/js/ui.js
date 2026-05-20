@@ -927,7 +927,17 @@ window.goldenRing = goldenRing;
         }
 
         // Navigate home after squish settles
-        setTimeout(function() { goHome(); }, 220);
+        setTimeout(function() {
+            var quizPage     = document.getElementById('page-quiz');
+            var feedbackPage = document.getElementById('page-feedback');
+            var fcPage       = document.getElementById('page-flashcard');
+            var midSession   = (quizPage     && quizPage.classList.contains('active'))     ||
+                               (feedbackPage && feedbackPage.classList.contains('active'))  ||
+                               (fcPage       && fcPage.classList.contains('active'));
+            if (midSession && !confirm('Leave this quiz? Your progress on the current question will be lost.')) return;
+            showPage('picker');
+            if (window.renderQuip) window.renderQuip();
+        }, 220);
     });
 })();
 
