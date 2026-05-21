@@ -554,6 +554,57 @@ const SECTIONS = [
   ]
 },
 
+// ── SHL / SHR ────────────────────────────────────────────────────────────────
+{ id:'shl', name:'SHL/SHR', mnemonic:'SHL / SHR', fullname:'Shift Left & Right',
+  syntax:'shl &lt;dst&gt;, &lt;n&gt; &nbsp;/&nbsp; shr &lt;dst&gt;, &lt;n&gt;',
+  desc:'SHL (Shift Left) multiplies by powers of 2; SHR (Shift Right Logical) divides. Each counts as one efficient instruction. Crucially: <code>shr</code> zero-fills from the left (unsigned), while <code>sar</code> sign-fills (signed). The bit shifted <em>out</em> goes to CF. A classic ctf/pwn trick uses the pair <code>shl 56 / shr 56</code> as a no-AND way to isolate a single byte.',
+  flags_note:'CF ← last bit shifted out; OF defined only for 1-bit shift; ZF/SF from result.',
+  panel3:'flags',
+  code:[
+    {t:'; --- left shift: multiply by power of 2 ---',c:'cm'},
+    {t:'mov rax, 1',c:''},
+    {t:'shl rax, 3         ; rax = 8  (1 << 3)',c:''},
+    {t:'; --- right shift: unsigned divide ---',c:'cm'},
+    {t:'mov rbx, 0x80',c:''},
+    {t:'shr rbx, 3         ; rbx = 0x10  (0x80 >> 3)',c:''},
+    {t:'; --- CF = last bit shifted out ---',c:'cm'},
+    {t:'mov rcx, 0xAB',c:''},
+    {t:'shr rcx, 4         ; rcx = 0x0A,  CF=1',c:''},
+    {t:'; --- byte extraction trick (B4 of RDI) ---',c:'cm'},
+    {t:'mov rdi, 0x979c15a3788e2f05',c:''},
+    {t:'mov rax, rdi',c:''},
+    {t:'shr rax, 0x20      ; slide B4 → B0',c:''},
+    {t:'shl rax, 0x38      ; push B0 → B7 (56 = 64-8)',c:''},
+    {t:'shr rax, 0x38      ; slide B7 → B0  →  rax = 0xa3',c:''},
+  ],
+  steps:[
+    { active:-1, regs:r({}), changed:[], mem:[], flags:f({}),
+      narrative:'<strong>Start.</strong> We cover: left-shift as fast multiply, right-shift as unsigned divide, the CF trick for checking bits, and a 4-instruction byte-extraction sequence used in CTF shellcode when AND is unavailable.' },
+    { active:1, regs:r({rax:'0x0000000000000001'}), changed:['rax'], mem:[], flags:f({}),
+      narrative:'<strong>mov rax, 1</strong> &mdash; load 1. One lone bit in position 0.' },
+    { active:2, regs:r({rax:'0x0000000000000008'}), changed:['rax'], mem:[], flags:f({CF:0,ZF:0,SF:0,OF:0}),
+      narrative:'<strong>shl rax, 3</strong> &mdash; shift left 3 positions = multiply by 2&sup3; = 8. Each left shift doubles; <em>n</em> shifts multiply by 2<sup>n</sup>. This is often faster than IMUL for small powers. CF = 0 (no bit fell off the top).' },
+    { active:4, regs:r({rax:'0x0000000000000008', rbx:'0x0000000000000080'}), changed:['rbx'], mem:[], flags:f({CF:0,ZF:0,SF:0,OF:0}),
+      narrative:'<strong>mov rbx, 0x80</strong> &mdash; 0x80 = 128. We will divide by 8 using SHR.' },
+    { active:5, regs:r({rax:'0x0000000000000008', rbx:'0x0000000000000010'}), changed:['rbx'], mem:[], flags:f({CF:0,ZF:0,SF:0,OF:0}),
+      narrative:'<strong>shr rbx, 3</strong> &mdash; logical right-shift by 3 = divide by 8. 0x80 &divide; 8 = 0x10 = 16. Zeros fill from the left. CF = 0 (the last bit shifted out from 0x80 was bit 2 = 0). For <em>signed</em> division preserving the sign bit, use <code>SAR</code> instead.' },
+    { active:7, regs:r({rax:'0x0000000000000008', rbx:'0x0000000000000010', rcx:'0x00000000000000AB'}), changed:['rcx'], mem:[], flags:f({CF:0,ZF:0,SF:0,OF:0}),
+      narrative:'<strong>mov rcx, 0xAB</strong> &mdash; 0xAB = 0b10101011. The low nibble is 0xB = 0b1011.' },
+    { active:8, regs:r({rax:'0x0000000000000008', rbx:'0x0000000000000010', rcx:'0x000000000000000A'}), changed:['rcx'], mem:[], flags:f({CF:1,ZF:0,SF:0,OF:0}),
+      narrative:'<strong>shr rcx, 4</strong> &mdash; shift right 4. 0xAB &divide; 16 = 0x0A. The last bit shifted out was bit 3 of the original = 1 (low nibble 0xB = 1011, bit 3 = 1), so <strong>CF = 1</strong>. Testers use <code>shr reg, 1 / jc odd_branch</code> to branch on even/odd.' },
+    { active:10, regs:r({rax:'0x0000000000000008', rbx:'0x0000000000000010', rcx:'0x000000000000000A', rdi:'0x979c15a3788e2f05'}), changed:['rdi'], mem:[], flags:f({CF:0,ZF:0,SF:0,OF:0}),
+      narrative:'<strong>mov rdi, 0x979c15a3788e2f05</strong> &mdash; packed 64-bit value. Target: byte B4 = <strong>0xa3</strong>. We will extract it using only shifts (no AND) &mdash; a technique that avoids bad bytes like <code>0x26</code> in shellcode.' },
+    { active:11, regs:r({rax:'0x979c15a3788e2f05', rbx:'0x0000000000000010', rcx:'0x000000000000000A', rdi:'0x979c15a3788e2f05'}), changed:['rax'], mem:[], flags:f({CF:0,ZF:0,SF:0,OF:0}),
+      narrative:'<strong>mov rax, rdi</strong> &mdash; work on a copy; RDI stays intact.' },
+    { active:12, regs:r({rax:'0x00000000979c15a3', rbx:'0x0000000000000010', rcx:'0x000000000000000A', rdi:'0x979c15a3788e2f05'}), changed:['rax'], mem:[], flags:f({CF:0,ZF:0,SF:0,OF:0}),
+      narrative:'<strong>shr rax, 0x20</strong> &mdash; right-shift 32 bits = 4 bytes. B4 (<strong>0xa3</strong>) slides to B0. Zeros fill the top 4 bytes; original B0&ndash;B3 fall off the right. Formula: shift right by <em>byte_index</em> &times; 8.' },
+    { active:13, regs:r({rax:'0xa300000000000000', rbx:'0x0000000000000010', rcx:'0x000000000000000A', rdi:'0x979c15a3788e2f05'}), changed:['rax'], mem:[], flags:f({CF:0,ZF:0,SF:0,OF:0}),
+      narrative:'<strong>shl rax, 0x38</strong> &mdash; left-shift 56 bits = 7 bytes. B0 (<strong>0xa3</strong>) rockets to B7. Everything above it flies off the left edge. The junk bytes B1&ndash;B7 were already zero, so only 0xa3 survives at the very top. 56 = 64 &minus; 8.' },
+    { active:14, regs:r({rax:'0x00000000000000a3', rbx:'0x0000000000000010', rcx:'0x000000000000000A', rdi:'0x979c15a3788e2f05'}), changed:['rax'], mem:[], flags:f({CF:0,ZF:0,SF:0,OF:0}),
+      narrative:'<strong>shr rax, 0x38</strong> &mdash; right-shift 56 bits. <strong>0xa3</strong> slides from B7 back to B0. Zeros fill above. <strong>RAX = 0xa3 ✓</strong>. The <em>shl 56 / shr 56</em> pair is equivalent to AND 0xFF &mdash; it strips everything except the low byte. See the dedicated <a href="bitshift.html" style="color:var(--accent)">Bit-Shift Byte Extraction</a> lesson to try this with any value and any byte.' },
+  ]
+},
+
 ]; // end SECTIONS
 
 // ─── STATE ───────────────────────────────────────────────────────────────────

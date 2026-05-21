@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bit-Shift Byte Extraction — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../css/style.css?v=2.0.2">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);
+     min-height:100vh;padding:1.5rem 1rem 3rem;}
+
+.back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--subtle);
+           font-size:.8rem;text-decoration:none;margin-bottom:1.5rem;}
+.back-link:hover{color:var(--accent);}
+
+h1{color:var(--accent);font-size:1.4rem;margin-bottom:.2rem;}
+.sub{color:var(--subtle);font-size:.82rem;margin-bottom:1.5rem;line-height:1.5;}
+
+/* ── Input row ──────────────────────────────────────── */
+.input-bar{
+  display:flex;flex-wrap:wrap;gap:.75rem;align-items:flex-end;
+  background:var(--card);border:1px solid var(--card-border);
+  border-radius:10px;padding:.9rem 1.1rem;margin-bottom:1.25rem;max-width:860px;
+}
+.input-group{display:flex;flex-direction:column;gap:.25rem;}
+.input-label{font-size:.7rem;color:var(--subtle);text-transform:uppercase;letter-spacing:.06em;}
+.hex-row{display:flex;align-items:center;gap:.3rem;}
+.hex-prefix{color:var(--subtle);font-size:.9rem;}
+.hex-in{
+  background:var(--bg2);border:1px solid var(--card-border);color:var(--text);
+  font-family:'Courier New',monospace;font-size:.9rem;padding:.3rem .5rem;
+  border-radius:6px;width:160px;letter-spacing:.06em;
+}
+.hex-in:focus{outline:none;border-color:var(--accent);}
+.hex-in.err{border-color:var(--danger);}
+
+.byte-btns{display:flex;gap:.3rem;flex-wrap:wrap;}
+.bbtn{
+  background:var(--bg2);border:1px solid var(--card-border);color:var(--subtle);
+  font-family:'Courier New',monospace;font-size:.68rem;padding:.25rem .35rem;
+  border-radius:5px;cursor:pointer;text-align:center;min-width:42px;
+  transition:border-color .12s,color .12s;
+}
+.bbtn:hover{border-color:var(--accent);color:var(--accent);}
+.bbtn.sel{border-color:var(--accent);color:var(--accent);font-weight:700;
+          box-shadow:0 0 6px var(--glow);}
+
+/* ── Main viz card ──────────────────────────────────── */
+.viz{background:var(--card);border:1px solid var(--card-border);
+     border-radius:10px;padding:1.25rem;max-width:860px;}
+
+.step-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;}
+.step-pill{font-size:.72rem;color:var(--subtle);}
+.step-num{color:var(--accent);font-weight:700;}
+
+/* Assembly block */
+.asm-block{background:var(--bg2);border-radius:8px;padding:.6rem .9rem;
+           margin-bottom:.9rem;font-size:.82rem;line-height:2;}
+.aline{color:var(--subtle);padding-left:4px;}
+.aline.on{
+  color:var(--text);border-left:2px solid var(--accent);
+  padding-left:6px;margin-left:-2px;
+  background:linear-gradient(90deg,rgba(129,140,248,.15) 0%,transparent 70%);
+  border-radius:0 4px 4px 0;
+}
+
+/* Shift arrow row */
+.sarrow{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:.72rem;height:1.4rem;margin:.1rem 0 .6rem;
+  padding:0 .2rem;
+}
+.sarrow-in{color:var(--accent2);font-weight:700;}
+.sarrow-bits{color:var(--subtle);}
+.sarrow-out{color:var(--muted);font-style:italic;}
+
+/* Register rows */
+.reg-row{margin-bottom:1rem;}
+.reg-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.35rem;}
+.reg-name{color:var(--accent);font-weight:700;font-size:.82rem;}
+.reg-hex{font-size:.7rem;color:var(--subtle);font-family:'Courier New',monospace;}
+
+.bcells{display:flex;gap:4px;}
+.bc{
+  flex:1;min-width:0;height:3rem;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;background:var(--bg2);border:1px solid var(--card-border);
+  border-radius:6px;cursor:default;color:var(--text);
+  transition:border-color .2s,box-shadow .2s,color .2s,background .2s,opacity .2s;
+}
+.bc .bv{font-size:.8rem;font-weight:700;}
+.bc .bi{font-size:.58rem;color:var(--subtle);margin-top:2px;}
+.bc.tgt{
+  border-color:var(--accent);color:var(--accent);
+  box-shadow:0 0 0 1px var(--accent),0 0 10px var(--glow);
+}
+.bc.dim{opacity:.38;}
+.bc.flash{animation:bflash .35s ease-out;}
+@keyframes bflash{
+  0%{background:rgba(129,140,248,.25);}
+  100%{background:var(--bg2);}
+}
+
+/* Narrative */
+.narr{
+  background:linear-gradient(90deg,rgba(129,140,248,.1) 0%,transparent 60%);
+  border-left:2px solid var(--accent);border-radius:0 6px 6px 0;
+  padding:.65rem .9rem;font-size:.85rem;color:var(--text);line-height:1.65;
+  margin-top:.6rem;
+}
+.narr strong{color:var(--accent);}
+.narr code{background:var(--bg2);padding:.1em .3em;border-radius:3px;font-size:.88em;color:var(--accent2);}
+
+/* Quiz */
+.quiz{margin-top:.9rem;background:var(--bg2);border:1.5px solid var(--accent);
+      border-radius:8px;padding:.75rem 1rem;box-shadow:0 0 16px var(--glow);}
+.quiz-q{font-size:.82rem;color:var(--text);margin-bottom:.5rem;font-weight:700;}
+.quiz-opts{display:flex;flex-direction:column;gap:.3rem;}
+.qopt{
+  background:var(--card);border:1px solid var(--card-border);border-radius:5px;
+  padding:.4rem .7rem;font-size:.78rem;cursor:pointer;color:var(--text);
+  font-family:'Courier New',monospace;text-align:left;
+  transition:border-color .1s,background .1s;
+}
+.qopt:hover:not(:disabled){border-color:var(--accent);background:var(--bg2);}
+.qopt.ok{border-color:var(--success);background:rgba(34,197,94,.1);color:var(--success);}
+.qopt.bad{border-color:var(--danger);background:rgba(239,68,68,.08);color:var(--danger);}
+.quiz-exp{margin-top:.5rem;font-size:.78rem;color:var(--subtle);line-height:1.5;display:none;}
+
+/* Nav */
+.nav-row{display:flex;gap:.5rem;align-items:center;justify-content:center;margin-top:1rem;}
+.nbtn{
+  background:var(--bg2);border:1px solid var(--card-border);color:var(--text);
+  font-family:'Courier New',monospace;font-size:.8rem;padding:.38rem .9rem;
+  border-radius:6px;cursor:pointer;transition:border-color .13s,color .13s;
+}
+.nbtn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.nbtn:disabled{opacity:.3;cursor:default;}
+.nbtn.pri{border-color:var(--accent);color:var(--accent);}
+
+/* Formula card */
+.formula{
+  background:var(--card);border:1px solid var(--card-border);
+  border-left:3px solid var(--accent);
+  border-radius:0 8px 8px 0;padding:.75rem 1.1rem;margin-top:1.25rem;
+  max-width:860px;
+}
+.formula h4{font-size:.72rem;color:var(--accent);text-transform:uppercase;
+            letter-spacing:.07em;margin-bottom:.5rem;}
+.formula pre{font-size:.78rem;line-height:1.75;color:var(--text);}
+.formula .cm{color:var(--subtle);}
+</style>
+</head>
+<body>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<a class="back-link" href="../index.html#learn">&#8592; Back to Interactive Learning</a>
+
+<h1>Bit-Shift Byte Extraction</h1>
+<p class="sub">Enter any 64-bit value, pick a target byte, and step through the
+<code>shr</code>&thinsp;/&thinsp;<code>shl</code>&thinsp;/&thinsp;<code>shr</code>
+sequence that extracts it — no AND allowed.</p>
+
+<!-- ── Input bar ─────────────────────────────────────────── -->
+<div class="input-bar">
+  <div class="input-group">
+    <div class="input-label">64-bit value</div>
+    <div class="hex-row">
+      <span class="hex-prefix">0x</span>
+      <input id="hexin" class="hex-in" type="text"
+             value="979c15a3788e2f05" maxlength="16" spellcheck="false">
+    </div>
+  </div>
+  <div class="input-group">
+    <div class="input-label">Target byte (click to select)</div>
+    <div class="byte-btns" id="bbtns"></div>
+  </div>
+</div>
+
+<!-- ── Visualization ─────────────────────────────────────── -->
+<div class="viz">
+
+  <div class="step-row">
+    <span class="step-pill">Step <span class="step-num" id="stepnum">1</span> of <span class="step-num" id="steptot">4</span></span>
+    <span style="font-size:.75rem;color:var(--muted)" id="step-label-right"></span>
+  </div>
+
+  <!-- Assembly code -->
+  <div class="asm-block" id="asm-block"></div>
+
+  <!-- Shift arrow -->
+  <div class="sarrow" id="sarrow"></div>
+
+  <!-- RDI row (static source) -->
+  <div class="reg-row">
+    <div class="reg-hdr">
+      <span class="reg-name">RDI &nbsp;<span style="font-size:.7rem;color:var(--muted);font-weight:400">(source — never changes)</span></span>
+      <span class="reg-hex" id="rdi-hex"></span>
+    </div>
+    <div class="bcells" id="rdi-cells"></div>
+  </div>
+
+  <!-- RAX row (changes each step) -->
+  <div class="reg-row">
+    <div class="reg-hdr">
+      <span class="reg-name">RAX &nbsp;<span style="font-size:.7rem;color:var(--muted);font-weight:400">(working register)</span></span>
+      <span class="reg-hex" id="rax-hex"></span>
+    </div>
+    <div class="bcells" id="rax-cells"></div>
+  </div>
+
+  <!-- Narrative -->
+  <div class="narr" id="narr"></div>
+
+  <!-- Quiz -->
+  <div id="quiz-area"></div>
+
+  <!-- Navigation -->
+  <div class="nav-row">
+    <button class="nbtn" id="btn-prev">&#8592; Prev</button>
+    <button class="nbtn pri" id="btn-next">Next &#8594;</button>
+    <button class="nbtn" id="btn-play">&#9654; Play</button>
+  </div>
+</div>
+
+<!-- ── Formula reference ─────────────────────────────────── -->
+<div class="formula">
+  <h4>The Formula — extracting byte B<sub>N</sub> from a 64-bit register</h4>
+  <pre id="formula-pre">mov rax, rdi<br><span class="cm">; bring target to B0:</span><br>shr rax, N×8       <span class="cm">; N = byte index (0 = LSB)</span><br><span class="cm">; wipe everything above B0:</span><br>shl rax, 56        <span class="cm">; 56 = 64 − 8  →  push B0 to B7</span><br>shr rax, 56        <span class="cm">; slide B7 back to B0</span><br><span class="cm">; result: rax = 0x00…00  [target byte]</span></pre>
+</div>
+
+<script>
+/* ═════════════════════════════════════════════════════════
+   SKIN SWITCHER
+═════════════════════════════════════════════════════════ */
+(function(){
+  var t=document.getElementById('skin-toggle'), p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click', function(e){ e.stopPropagation(); p.classList.toggle('open'); });
+  document.addEventListener('click', function(){ p.classList.remove('open'); });
+  p.addEventListener('click', function(e){ e.stopPropagation(); });
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click', function(){
+      var sk = o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+
+/* ═════════════════════════════════════════════════════════
+   STATE
+═════════════════════════════════════════════════════════ */
+var hexStr    = '979c15a3788e2f05';
+var targetN   = 4;
+var curStep   = 0;
+var playTimer = null;
+
+/* ═════════════════════════════════════════════════════════
+   MATH
+═════════════════════════════════════════════════════════ */
+function parseHex(s) {
+  try {
+    var v = BigInt('0x' + s.replace(/\s+/g,''));
+    return BigInt.asUintN(64, v);
+  } catch(e) { return null; }
+}
+
+function steps64(val, N) {
+  var n  = BigInt(N);
+  var s0 = BigInt.asUintN(64, val);
+  var s1 = BigInt.asUintN(64, s0 >> (n * 8n));
+  var s2 = BigInt.asUintN(64, s1 << 56n);
+  var s3 = BigInt.asUintN(64, s2 >> 56n);
+  return [s0, s1, s2, s3];
+}
+
+// Returns 8 bytes: index 0 = B7 (MSB), index 7 = B0 (LSB)
+function getBytes(val) {
+  var out = [];
+  for (var i = 7; i >= 0; i--) out.push(Number((val >> BigInt(i*8)) & 0xFFn));
+  return out;
+}
+
+function hex64(v) {
+  return '0x' + v.toString(16).padStart(16,'0');
+}
+
+function h2(b) { return b.toString(16).padStart(2,'0'); }
+
+// Visual cell index of the target byte at each step (0 = leftmost = B7)
+function targetCell(step, N) {
+  if (step === 0) return 7 - N;   // original position
+  if (step === 1) return 7;        // B0 after SHR N×8
+  if (step === 2) return 0;        // B7 after SHL 56
+  return 7;                        // B0 after SHR 56
+}
+
+/* ═════════════════════════════════════════════════════════
+   STEP DATA
+═════════════════════════════════════════════════════════ */
+function buildSteps(val, N) {
+  var sv     = steps64(val, N);
+  var tb     = Number((val >> BigInt(N*8)) & 0xFFn);  // the target byte value
+  var shiftN = N * 8;
+
+  return [
+    // ── Step 0: mov rax, rdi ───────────────────────────
+    {
+      asm: [
+        { t: 'mov rax, rdi          <span class="cm">; copy source</span>', on: true  },
+        { t: 'shr rax, ' + shiftN.toString().padEnd(13) + '<span class="cm">; bring B' + N + ' to B0</span>', on: false },
+        { t: 'shl rax, 56           <span class="cm">; isolate — push B0 to B7</span>', on: false },
+        { t: 'shr rax, 56           <span class="cm">; slide B7 back to B0</span>', on: false },
+      ],
+      raxVal: sv[0],
+      arrow: null,
+      label: 'copy',
+      narr: '<strong>mov rax, rdi</strong> — copy the source value into RAX. The target byte is <code>B' + N + '</code> = <code>0x' + h2(tb) + '</code>. We need to slide it to the bottom of the register, strip the bytes above it, and read the result.',
+      quiz: null,
+    },
+    // ── Step 1: shr rax, N×8 ──────────────────────────
+    {
+      asm: [
+        { t: 'mov rax, rdi          <span class="cm">; copy source</span>', on: false },
+        { t: 'shr rax, ' + shiftN.toString().padEnd(13) + '<span class="cm">; bring B' + N + ' to B0</span>', on: true  },
+        { t: 'shl rax, 56           <span class="cm">; isolate — push B0 to B7</span>', on: false },
+        { t: 'shr rax, 56           <span class="cm">; slide B7 back to B0</span>', on: false },
+      ],
+      raxVal: sv[1],
+      arrow: N === 0 ? null : { dir:'shr', bits: shiftN },
+      label: N === 0 ? 'shr 0 (no-op)' : 'shr rax, ' + shiftN,
+      narr: N === 0
+        ? '<strong>shr rax, 0</strong> — shifting by zero is a no-op. <code>B0</code> is already at the bottom, nothing to do here.'
+        : '<strong>shr rax, ' + shiftN + '</strong> — right-shift by ' + shiftN + ' bits = ' + N + ' byte' + (N>1?'s':'') + ' × 8. <code>0x' + h2(tb) + '</code> moves from <code>B' + N + '</code> down to <code>B0</code>. Zeros pour in from the left. Bytes <code>B0..B' + (N-1) + '</code> fall off the right edge.',
+      quiz: N > 0 ? {
+        q: 'Why shift right by ' + shiftN + ' specifically?',
+        opts: [
+          N + ' × 8 = ' + shiftN + ' — byte B' + N + ' starts ' + N + ' byte' + (N>1?'s':'') + ' from the right',
+          N + ' × 4 = ' + (N*4) + ' — wrong unit (nibbles not bytes)',
+          '64 − ' + N + ' = ' + (64-N) + ' — wrong direction',
+          'The next power of 2 above ' + N,
+        ],
+        correct: 0,
+        explain: 'B' + N + ' occupies bit positions ' + (N*8) + '–' + (N*8+7) + '. Shifting right by N×8 = ' + shiftN + ' moves those bits to positions 0–7. Rule: <em>shr by byte_index × 8</em>.',
+      } : null,
+    },
+    // ── Step 2: shl rax, 56 ───────────────────────────
+    {
+      asm: [
+        { t: 'mov rax, rdi          <span class="cm">; copy source</span>', on: false },
+        { t: 'shr rax, ' + shiftN.toString().padEnd(13) + '<span class="cm">; bring B' + N + ' to B0</span>', on: false },
+        { t: 'shl rax, 56           <span class="cm">; isolate — push B0 to B7</span>', on: true  },
+        { t: 'shr rax, 56           <span class="cm">; slide B7 back to B0</span>', on: false },
+      ],
+      raxVal: sv[2],
+      arrow: { dir:'shl', bits:56 },
+      label: 'shl rax, 56',
+      narr: '<strong>shl rax, 56</strong> — left-shift by 56 bits = 7 bytes. The low byte <code>B0</code> (= <code>0x' + h2(tb) + '</code>) rockets all the way to <code>B7</code>. Any non-zero bytes that were above <code>B0</code> fly off the left edge. 56 = 64 − 8: exactly enough to promote one byte from the bottom to the top.',
+      quiz: {
+        q: 'Why 56 bits for the SHL?',
+        opts: [
+          '64 − 8 = 56 — promotes the lone low byte from B0 all the way to B7',
+          '32 + 24 = 56 — picks a middle register width',
+          '56 = 7 × 8 — shifts 7 full bytes',
+          'Both the first and third are valid ways to derive it',
+        ],
+        correct: 3,
+        explain: '56 = 64 − 8 (one byte from the top) and also 56 = 7 × 8 (a 7-byte shift). Both describe the same number. Either derivation correctly tells you: shift left 56 so that B0 alone lands at B7, discarding everything above.',
+      },
+    },
+    // ── Step 3: shr rax, 56 ───────────────────────────
+    {
+      asm: [
+        { t: 'mov rax, rdi          <span class="cm">; copy source</span>', on: false },
+        { t: 'shr rax, ' + shiftN.toString().padEnd(13) + '<span class="cm">; bring B' + N + ' to B0</span>', on: false },
+        { t: 'shl rax, 56           <span class="cm">; isolate — push B0 to B7</span>', on: false },
+        { t: 'shr rax, 56           <span class="cm">; slide B7 back to B0</span>', on: true  },
+      ],
+      raxVal: sv[3],
+      arrow: { dir:'shr', bits:56 },
+      label: 'shr rax, 56',
+      narr: '<strong>shr rax, 56</strong> — right-shift 56 bits: <code>B7</code> (= <code>0x' + h2(tb) + '</code>) slides back down to <code>B0</code>. Zeros fill above it. <strong>RAX = 0x' + h2(tb) + ' ✓</strong><br><br>The <em>shl 56 / shr 56</em> pair is a no-AND way to perform <code>AND 0xFF</code> — it strips every byte above B0. Useful in shellcode or CTF constraints where byte values like <code>0x25</code> (<code>%</code>) or <code>0x26</code> (<code>&</code>) must be avoided.',
+      quiz: {
+        q: 'What does the shl 56 / shr 56 pair achieve together?',
+        opts: [
+          'AND 0xFF — zeroes all bytes except B0',
+          'AND 0xFF00 — keeps only byte B1',
+          'Multiplies by 256 then divides back',
+          'Tests whether the low byte is negative',
+        ],
+        correct: 0,
+        explain: 'SHL 56 promotes B0 to B7 and discards everything else. SHR 56 pulls it back to B0 with all-zero bytes above. The combined effect is identical to AND 0xFF: only the low byte survives. When AND is banned (bad-byte shellcode, shift-only constraints), this is the workaround.',
+      },
+    },
+  ];
+}
+
+/* ═════════════════════════════════════════════════════════
+   RENDER
+═════════════════════════════════════════════════════════ */
+function renderCells(id, val, tgtCellIdx, prevVal) {
+  var el     = document.getElementById(id);
+  var bytes  = getBytes(val);
+  var prev   = prevVal !== null ? getBytes(prevVal) : null;
+  var html   = '';
+  for (var i = 0; i < 8; i++) {
+    var b       = bytes[i];
+    var changed = prev && prev[i] !== b;
+    var isTgt   = i === tgtCellIdx;
+    var isDim   = !isTgt && b === 0;
+    var cls     = 'bc' + (isTgt ? ' tgt' : '') + (isDim ? ' dim' : '') + (changed ? ' flash' : '');
+    html += '<div class="' + cls + '"><span class="bv">' + h2(b) + '</span>'
+          + '<span class="bi">B' + (7-i) + '</span></div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderArrow(info) {
+  var el = document.getElementById('sarrow');
+  if (!info) { el.innerHTML = ''; return; }
+  if (info.dir === 'shr') {
+    el.innerHTML = '<span class="sarrow-in">&#8592; 00 00 00 (zeros in)</span>'
+                 + '<span class="sarrow-bits">' + info.bits + ' bits</span>'
+                 + '<span class="sarrow-out">bytes fall off &#8594;</span>';
+  } else {
+    el.innerHTML = '<span class="sarrow-out">&#8592; bytes fall off</span>'
+                 + '<span class="sarrow-bits">' + info.bits + ' bits</span>'
+                 + '<span class="sarrow-in">(zeros in) 00 00 00 &#8594;</span>';
+  }
+}
+
+function renderQuiz(q) {
+  var el = document.getElementById('quiz-area');
+  if (!q) { el.innerHTML = ''; return; }
+  var html = '<div class="quiz"><div class="quiz-q">Quick check: ' + q.q + '</div>'
+           + '<div class="quiz-opts">';
+  q.opts.forEach(function(o, i) {
+    html += '<button class="qopt" data-i="' + i + '">' + o + '</button>';
+  });
+  html += '</div><div class="quiz-exp" id="qexp"></div></div>';
+  el.innerHTML = html;
+
+  el.querySelectorAll('.qopt').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var chosen = parseInt(this.dataset.i);
+      el.querySelectorAll('.qopt').forEach(function(b) {
+        b.classList.remove('ok','bad');
+        b.disabled = true;
+      });
+      this.classList.add(chosen === q.correct ? 'ok' : 'bad');
+      if (chosen !== q.correct)
+        el.querySelectorAll('.qopt')[q.correct].classList.add('ok');
+      var exp = document.getElementById('qexp');
+      exp.innerHTML = q.explain;
+      exp.style.display = '';
+    });
+  });
+}
+
+function render() {
+  var val = parseHex(hexStr);
+  if (!val) return;
+  var ss   = buildSteps(val, targetN);
+  var s    = ss[curStep];
+  var prev = curStep > 0 ? ss[curStep-1].raxVal : null;
+
+  document.getElementById('stepnum').textContent = curStep + 1;
+  document.getElementById('steptot').textContent = ss.length;
+  document.getElementById('step-label-right').textContent = s.label;
+
+  document.getElementById('asm-block').innerHTML =
+    s.asm.map(function(l) {
+      return '<div class="aline' + (l.on ? ' on' : '') + '">' + l.t + '</div>';
+    }).join('');
+
+  renderArrow(s.arrow);
+
+  var rdiTgtCell = 7 - targetN;  // RDI never changes
+  var raxTgtCell = targetCell(curStep, targetN);
+
+  renderCells('rdi-cells', val, rdiTgtCell, null);
+  renderCells('rax-cells', s.raxVal, raxTgtCell, prev);
+
+  document.getElementById('rdi-hex').textContent = hex64(val);
+  document.getElementById('rax-hex').textContent = hex64(s.raxVal);
+  document.getElementById('narr').innerHTML = s.narr;
+  renderQuiz(s.quiz);
+
+  document.getElementById('btn-prev').disabled = curStep === 0;
+  document.getElementById('btn-next').disabled = curStep === ss.length - 1;
+
+  // Formula
+  var shiftN = targetN * 8;
+  document.getElementById('formula-pre').innerHTML =
+    'mov rax, rdi\n'
+    + '<span class="cm">; bring target to B0:</span>\n'
+    + 'shr rax, ' + shiftN + '       <span class="cm">; N=' + targetN + ', so ' + targetN + '×8=' + shiftN + '</span>\n'
+    + '<span class="cm">; wipe bytes above B0:</span>\n'
+    + 'shl rax, 56        <span class="cm">; 56 = 64−8  →  push B0 to B7</span>\n'
+    + 'shr rax, 56        <span class="cm">; slide B7 back to B0</span>\n'
+    + '<span class="cm">; rax = 0x' + h2(Number((val >> BigInt(targetN*8)) & 0xFFn)) + ' ✓</span>';
+}
+
+/* ═════════════════════════════════════════════════════════
+   BYTE SELECTOR
+═════════════════════════════════════════════════════════ */
+function buildByteSelector() {
+  var val = parseHex(hexStr);
+  var el  = document.getElementById('bbtns');
+  el.innerHTML = '';
+  for (var i = 7; i >= 0; i--) {
+    var b   = val ? Number((val >> BigInt(i*8)) & 0xFFn) : 0;
+    var btn = document.createElement('button');
+    btn.className = 'bbtn' + (i === targetN ? ' sel' : '');
+    btn.dataset.n = i;
+    btn.innerHTML = '<div>B' + i + '</div><div style="color:var(--accent);font-size:.7rem">'
+                  + h2(b) + '</div>';
+    btn.addEventListener('click', function() {
+      targetN = parseInt(this.dataset.n);
+      curStep = 0;
+      document.querySelectorAll('.bbtn').forEach(function(b) { b.classList.remove('sel'); });
+      this.classList.add('sel');
+      render();
+    });
+    el.appendChild(btn);
+  }
+}
+
+/* ═════════════════════════════════════════════════════════
+   EVENTS
+═════════════════════════════════════════════════════════ */
+document.getElementById('hexin').addEventListener('input', function() {
+  var raw = this.value.replace(/[^0-9a-fA-F]/g,'');
+  this.value = raw;
+  if (raw.length === 0) { this.classList.add('err'); return; }
+  this.classList.remove('err');
+  hexStr  = raw.padStart(16,'0').slice(-16);
+  curStep = 0;
+  buildByteSelector();
+  render();
+});
+
+document.getElementById('btn-prev').addEventListener('click', function() {
+  if (curStep > 0) { curStep--; render(); }
+});
+document.getElementById('btn-next').addEventListener('click', function() {
+  var val = parseHex(hexStr);
+  if (!val) return;
+  if (curStep < buildSteps(val, targetN).length - 1) { curStep++; render(); }
+});
+document.getElementById('btn-play').addEventListener('click', function() {
+  if (playTimer) {
+    clearInterval(playTimer);
+    playTimer = null;
+    this.textContent = '▶ Play';
+    return;
+  }
+  var self = this;
+  self.textContent = '⏹ Stop';
+  playTimer = setInterval(function() {
+    var val = parseHex(hexStr);
+    if (!val) return;
+    var len = buildSteps(val, targetN).length;
+    if (curStep < len - 1) {
+      curStep++;
+      render();
+    } else {
+      clearInterval(playTimer);
+      playTimer = null;
+      self.textContent = '▶ Play';
+    }
+  }, 1600);
+});
+
+/* ═════════════════════════════════════════════════════════
+   INIT
+═════════════════════════════════════════════════════════ */
+buildByteSelector();
+render();
+</script>
+
+</body>
+</html>
