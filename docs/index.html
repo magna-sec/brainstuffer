@@ -218,11 +218,23 @@
                         <p>Enter any 64-bit value, pick a target byte (B0–B7), and step through the <code>shr / shl / shr</code> sequence that isolates it &mdash; no AND required. Each shift animated with zeros flowing in and the target byte tracked.</p>
                         <span class="learn-card-tag">pwn trick</span>
                     </a>
+                    <a class="learn-card" href="lessons/data-sizes.html">
+                        <div class="learn-card-icon">&#128202;</div>
+                        <h3>Data Sizes: BYTE &middot; WORD &middot; DWORD &middot; QWORD</h3>
+                        <p>Click any size to see which bytes it covers in a 64-bit register, the little-endian memory layout address-by-address, and why 32-bit writes uniquely zero the upper half of RAX.</p>
+                        <span class="learn-card-tag">x86-64</span><span class="learn-card-tag">little-endian</span>
+                    </a>
                     <a class="learn-card" href="lessons/registers.html">
                         <div class="learn-card-icon">&#128268;</div>
                         <h3>x86-64 Register Aliases</h3>
                         <p>Enter any 64-bit value and click RAX, EAX, AX, AH, AL to see exactly which bits each alias covers &mdash; live hex, decimal, and binary readout across all 24 registers.</p>
                         <span class="learn-card-tag">24 registers</span>
+                    </a>
+                    <a class="learn-card" href="lessons/asm-syscalls.html">
+                        <div class="learn-card-icon">&#9000;</div>
+                        <h3>Assembly Syscall Drill</h3>
+                        <p>Drag-and-drop tokens into blank slots to complete real assembly code. 11 challenges building muscle memory for Linux syscalls: exit, read, write, open, socket, bind, fork, accept and more. Shuffle mode + reference card built in.</p>
+                        <span class="learn-card-tag">11 challenges</span><span class="learn-card-tag">syscalls</span><span class="learn-card-tag">drill</span>
                     </a>
                     <div class="learn-cat-header">Windows Internals</div>
                     <a class="learn-card" href="complexity.html">

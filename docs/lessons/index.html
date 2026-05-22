@@ -50,6 +50,11 @@ a.home:hover{color:#a78bfa}
     <div class="card-desc">Step through MOV, LEA, PUSH/POP, ADD/SUB, CMP/Jcc, CALL/RET, XOR, INC/DEC, and SHL/SHR. Watch registers, memory, and CPU flags change in real time with animated step-by-step explanations.</div>
     <span class="tag">x86-64</span><span class="tag">assembly</span><span class="tag">registers</span><span class="tag">flags</span>
   </a>
+  <a class="card" href="data-sizes.html">
+    <div class="card-title">Data Sizes: BYTE &middot; WORD &middot; DWORD &middot; QWORD</div>
+    <div class="card-desc">Click any size to see which bytes it covers inside a 64-bit register, how it lays out in memory (little-endian, address-by-address), and why DWORD writes silently zero the upper 32 bits of RAX.</div>
+    <span class="tag">x86-64</span><span class="tag">memory</span><span class="tag">little-endian</span>
+  </a>
   <a class="card" href="bitshift.html">
     <div class="card-title">Bit-Shift Byte Extraction</div>
     <div class="card-desc">Enter any 64-bit value, pick a target byte (B0–B7), and step through the <code>shr N×8 / shl 56 / shr 56</code> sequence that isolates it — no AND needed. Animated cell-by-cell visualization of zeros flooding in and the target byte tracked through each shift.</div>
@@ -59,6 +64,11 @@ a.home:hover{color:#a78bfa}
     <div class="card-title">Memory Layout Builder</div>
     <div class="card-desc">Drag segments — <code>.text</code>, <code>.bss</code>, heap, stack, vDSO, mmap, kernel — into the correct positions on a virtual address space diagram. Reinforces stack-grows-down / heap-grows-up direction and ASLR region boundaries.</div>
     <span class="tag">memory</span><span class="tag">ELF</span><span class="tag">ASLR</span>
+  </a>
+  <a class="card" href="asm-syscalls.html">
+    <div class="card-title">Assembly Syscall Drill</div>
+    <div class="card-desc">Drag-and-drop (or tap) tokens into blank slots to complete real assembly code. 11 challenges covering <code>exit</code>, <code>read</code>, <code>write</code>, <code>open</code>, <code>close</code>, <code>socket</code>, <code>bind</code>, <code>listen</code>, <code>fork</code>, and <code>accept</code>. Shuffle mode for spaced repetition. Built-in syscall reference.</div>
+    <span class="tag">x86-64</span><span class="tag">syscalls</span><span class="tag">drill</span><span class="tag">pwn.college</span>
   </a>
 </div>
 </body>
