@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stack Sprint — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+button{color:var(--text);font-family:'Courier New',monospace;-webkit-appearance:none;appearance:none;}
+body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);min-height:100vh;padding:0;margin:0;display:flex;flex-direction:column;align-items:center;}
+#screen-title,#screen-game,#screen-over{width:100%;max-width:700px;padding:2rem 1rem 3rem;box-sizing:border-box;}
+#screen-game,#screen-over{display:none;}
+
+/* ── title screen ── */
+.title-hero{text-align:center;padding:3rem 1rem 2rem;}
+.title-hero h1{font-size:2.4rem;color:var(--accent);margin:0 0 .4rem;letter-spacing:.04em;}
+.title-hero .sub{color:var(--muted);font-size:.9rem;margin-bottom:2rem;}
+.hi-badge{display:inline-block;background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.6rem 1.4rem;font-size:.85rem;color:var(--muted);margin-bottom:2rem;}
+.hi-badge span{color:var(--accent);font-weight:700;font-size:1rem;}
+.start-btn{background:var(--accent);color:var(--bg);border:none;border-radius:10px;padding:.85rem 2.8rem;font-size:1.1rem;font-family:'Courier New',monospace;font-weight:700;cursor:pointer;letter-spacing:.06em;transition:opacity .15s;}
+.start-btn:hover{opacity:.85;}
+.how-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1.2rem 1.4rem;margin-top:2rem;text-align:left;}
+.how-card h3{margin:0 0 .7rem;color:var(--accent);font-size:.9rem;text-transform:uppercase;letter-spacing:.06em;}
+.how-card li{color:var(--muted);font-size:.82rem;margin:.35rem 0;line-height:1.5;}
+
+/* ── HUD ── */
+.hud{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;flex-wrap:wrap;}
+.hud-lives{font-size:1.2rem;letter-spacing:.1rem;}
+.hud-score{font-size:.9rem;color:var(--accent);font-weight:700;margin-left:auto;}
+.hud-combo{font-size:.8rem;color:var(--muted);}
+.timer-bar-wrap{width:100%;height:6px;background:var(--card-border);border-radius:3px;overflow:hidden;margin-bottom:1.2rem;}
+.timer-bar{height:100%;width:100%;border-radius:3px;background:var(--accent);transition:background .4s;}
+
+/* ── round label ── */
+.round-label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;}
+
+/* ── instruction ── */
+.instr-card{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:1rem 1.4rem;margin-bottom:1.2rem;}
+.instr-card .instr-line{font-size:1.35rem;color:var(--text);letter-spacing:.04em;}
+.instr-card .instr-context{font-size:.78rem;color:var(--muted);margin-top:.4rem;}
+
+/* ── stack visual ── */
+.stack-section{display:flex;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap;}
+.stack-panel{flex:1;min-width:200px;background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.8rem 1rem;overflow:hidden;}
+.stack-panel h4{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 .6rem;}
+.stack-row{display:flex;justify-content:space-between;align-items:center;font-size:.8rem;padding:.22rem .3rem;border-radius:5px;transition:background .25s;}
+.stack-row.rsp-row{background:rgba(var(--accent-rgb,99,102,241),.15);border:1px solid var(--accent);color:var(--accent);font-weight:700;}
+.stack-row.dim{opacity:.3;}
+.stack-row .addr{color:var(--muted);font-size:.75rem;}
+.stack-row .val{font-size:.8rem;}
+.reg-panel{flex:0 0 180px;background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.8rem 1rem;}
+.reg-panel h4{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 .6rem;}
+.reg-row{display:flex;flex-direction:column;font-size:.8rem;padding:.35rem 0;border-bottom:1px solid var(--card-border);}
+.reg-row:last-child{border-bottom:none;}
+.reg-row .rn{color:var(--muted);font-size:.7rem;margin-bottom:.15rem;}
+.reg-row.highlight .rv{color:var(--accent);font-weight:700;}
+
+/* ── question ── */
+.question-label{font-size:.8rem;color:var(--muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em;}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:1rem;}
+.opt-btn{background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.7rem .6rem;font-family:'Courier New',monospace;font-size:.88rem;color:var(--text);cursor:pointer;text-align:left;transition:border-color .15s,background .15s;}
+.opt-btn:hover:not([disabled]){border-color:var(--accent);background:rgba(99,102,241,.07);}
+.opt-btn.correct{border-color:#4ade80;background:rgba(74,222,128,.12);}
+.opt-btn.wrong{border-color:#f87171;background:rgba(248,113,113,.1);}
+.opt-btn[disabled]{cursor:default;color:var(--text);opacity:1;}
+
+/* ── feedback ── */
+.feedback{background:var(--card);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:.7rem 1rem;font-size:.82rem;color:var(--muted);margin-bottom:1rem;min-height:2.2rem;line-height:1.5;}
+.feedback.show-correct{border-color:#4ade80;}
+.feedback.show-wrong{border-color:#f87171;}
+
+/* ── float pts ── */
+@keyframes floatUp{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-48px);}}
+.float-pts{position:fixed;font-size:1rem;font-weight:700;color:#4ade80;pointer-events:none;animation:floatUp .9s ease-out forwards;font-family:'Courier New',monospace;}
+
+/* ── next btn ── */
+.next-btn{background:var(--accent);color:var(--bg);border:none;border-radius:8px;padding:.65rem 1.8rem;font-family:'Courier New',monospace;font-size:.95rem;font-weight:700;cursor:pointer;display:none;margin-bottom:1.4rem;}
+.next-btn:hover{opacity:.85;}
+
+/* ── game over ── */
+.over-box{text-align:center;padding:2rem 1rem;}
+.over-box h2{font-size:1.8rem;color:var(--accent);margin-bottom:.3rem;}
+.over-box .final-score{font-size:3rem;color:var(--text);font-weight:700;margin:.5rem 0;}
+.over-box .hi-note{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;}
+.over-box .stars{font-size:2rem;letter-spacing:.2rem;margin-bottom:1.5rem;}
+.over-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;}
+.over-btn{background:var(--accent);color:var(--bg);border:none;border-radius:8px;padding:.7rem 1.8rem;font-family:'Courier New',monospace;font-size:.9rem;font-weight:700;cursor:pointer;}
+.over-btn.sec{background:var(--card);color:var(--text);border:1px solid var(--card-border);}
+.over-btn:hover{opacity:.85;}
+
+/* ── skin toggle ── */
+#skin-toggle{position:fixed;top:.8rem;right:.8rem;background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.35rem .55rem;font-size:1.1rem;cursor:pointer;color:var(--text);z-index:200;}
+#skin-panel{display:none;position:fixed;top:2.8rem;right:.8rem;background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.6rem .5rem;z-index:201;min-width:140px;}
+#skin-panel.open{display:block;}
+
+/* ── back link ── */
+.back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);font-size:.8rem;text-decoration:none;margin-bottom:1.2rem;}
+</style>
+</head>
+<body>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<!-- TITLE SCREEN -->
+<div id="screen-title">
+  <a href="index.html#learn" class="back-link">&#8592; Back to Interactive Learning</a>
+  <div class="title-hero">
+    <h1>Stack Sprint</h1>
+    <p class="sub">Predict RSP and stack values — beat the clock</p>
+    <div class="hi-badge">High Score: <span id="hi-display">0</span></div><br>
+    <button class="start-btn" id="btn-start">START</button>
+    <div class="how-card">
+      <h3>How to play</h3>
+      <ul>
+        <li>Each round shows an instruction and the current stack state.</li>
+        <li>Pick the correct answer — what does RSP become, or what sits at [RSP]?</li>
+        <li>Combo multiplier grows with consecutive correct answers.</li>
+        <li>You have 3 lives. Timer shrinks each round. Go fast, stay precise.</li>
+        <li>Instructions covered: <strong>push, pop, call, ret, sub rsp, add rsp, leave</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="screen-game">
+  <a href="index.html#learn" class="back-link">&#8592; Back</a>
+  <div class="hud">
+    <span class="hud-lives" id="hud-lives">&#9829;&#9829;&#9829;</span>
+    <span class="hud-combo" id="hud-combo">x1</span>
+    <span class="hud-score" id="hud-score">0</span>
+  </div>
+  <div class="timer-bar-wrap"><div class="timer-bar" id="timer-bar"></div></div>
+  <div class="round-label" id="round-label">Round 1 / 30</div>
+
+  <div class="instr-card">
+    <div class="instr-line" id="instr-display">push rbx</div>
+    <div class="instr-context" id="instr-context"></div>
+  </div>
+
+  <div class="stack-section">
+    <div class="stack-panel" id="stack-panel">
+      <h4>Stack (top of stack &#8595;)</h4>
+      <div id="stack-rows"></div>
+    </div>
+    <div class="reg-panel">
+      <h4>Registers</h4>
+      <div id="reg-rows"></div>
+    </div>
+  </div>
+
+  <div class="question-label" id="q-label">What is RSP after this instruction?</div>
+  <div class="opts" id="opts"></div>
+  <div class="feedback" id="feedback"></div>
+  <button class="next-btn" id="btn-next">Next &#8594;</button>
+</div>
+
+<!-- GAME OVER SCREEN -->
+<div id="screen-over">
+  <div class="over-box">
+    <h2 id="over-title">Game Over</h2>
+    <div class="final-score" id="final-score">0</div>
+    <div class="hi-note" id="hi-note"></div>
+    <div class="stars" id="over-stars"></div>
+    <div class="over-btns">
+      <button class="over-btn" id="btn-retry">Play Again</button>
+      <button class="over-btn sec" id="btn-menu">Menu</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Skin switcher ── */
+(function(){
+  var t=document.getElementById('skin-toggle'),p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click',function(e){e.stopPropagation();p.classList.toggle('open');});
+  document.addEventListener('click',function(){p.classList.remove('open');});
+  p.addEventListener('click',function(e){e.stopPropagation();});
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      var sk=o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin',sk);
+      localStorage.setItem('bs-skin',sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+
+/* ── Question bank ── */
+/* Each scenario: rsp (hex string), regs {name:hexval}, stack (array top→bottom {addr,val,label}),
+   instr (display string), question, correctIdx, opts[4], explanation */
+
+function h(n){ return '0x' + n.toString(16).padStart(16,'0').toUpperCase(); }
+function hs(n){ return '0x' + n.toString(16).toUpperCase(); }
+
+/* Base stack address for scenarios */
+var BASE = 0x7fffffffe000;
+
+function makeScenario(rsp, regs, stackSlots, instr, context, question, opts, correctIdx, explanation){
+  return {rsp:rsp, regs:regs, stackSlots:stackSlots, instr:instr, context:context,
+          question:question, opts:opts, correctIdx:correctIdx, explanation:explanation};
+}
+
+/* Helper: build a simple stack display of 5 cells around rsp */
+function simpleStack(rsp, values){
+  /* values: array of {offset, val, label} where offset 0 = rsp, positive = higher addr */
+  var rows = [];
+  for(var i=0;i<values.length;i++){
+    var addr = rsp + values[i].offset;
+    rows.push({addr: hs(addr), val: values[i].val, label: values[i].label||'', isRsp: values[i].offset===0});
+  }
+  return rows;
+}
+
+var POOL = [
+  /* push reg — RSP decreases by 8 */
+  makeScenario(
+    BASE+0x40,
+    [{name:'RSP',val:hs(BASE+0x40),hi:true},{name:'RBX',val:'0x0000000000000042',hi:false}],
+    simpleStack(BASE+0x40,[{offset:0,val:'[prev frame]',label:'<-- RSP'},{offset:8,val:'0x...'}]),
+    'push rbx','rbx = 0x42',
+    'What is RSP after push rbx?',
+    [hs(BASE+0x38), hs(BASE+0x48), hs(BASE+0x40), hs(BASE+0x30)],
+    0, 'push decrements RSP by 8, then writes the value. RSP was 0x...40, now 0x...38.'
+  ),
+  makeScenario(
+    BASE+0x50,
+    [{name:'RSP',val:hs(BASE+0x50),hi:true},{name:'RAX',val:'0x00000000DEADBEEF',hi:false}],
+    simpleStack(BASE+0x50,[{offset:0,val:'0xCAFE...',label:'<-- RSP'},{offset:8,val:'0x...'}]),
+    'push rax','rax = 0xDEADBEEF',
+    'What value is at [RSP] after push rax?',
+    ['0xDEADBEEF','0xCAFEBABE','0x00000000','0xDEADBEEF+8'],
+    0, 'push writes the register value to [RSP-8], then RSP = RSP-8. The new top of stack holds rax.'
+  ),
+  /* pop reg — RSP increases by 8 */
+  makeScenario(
+    BASE+0x30,
+    [{name:'RSP',val:hs(BASE+0x30),hi:true},{name:'RCX',val:'0x0000000000000000',hi:false}],
+    simpleStack(BASE+0x30,[{offset:0,val:'0x00000000BABE1234',label:'<-- RSP'},{offset:8,val:'0x0000000000000001'}]),
+    'pop rcx','[RSP] = 0xBABE1234',
+    'What is RSP after pop rcx?',
+    [hs(BASE+0x38), hs(BASE+0x28), hs(BASE+0x30), hs(BASE+0x40)],
+    0, 'pop reads [RSP] into the register, then RSP += 8. Stack shrinks.'
+  ),
+  makeScenario(
+    BASE+0x20,
+    [{name:'RSP',val:hs(BASE+0x20),hi:true}],
+    simpleStack(BASE+0x20,[{offset:0,val:'0x0000000000001337',label:'<-- RSP'},{offset:8,val:'0x...'}]),
+    'pop rdi','[RSP] = 0x1337',
+    'After pop rdi, what is rdi?',
+    ['0x1337','0x0',hs(BASE+0x20),'0x0000000000001337+8'],
+    0, 'pop loads [RSP] into the destination register. rdi gets 0x1337.'
+  ),
+  /* sub rsp — allocates stack space */
+  makeScenario(
+    BASE+0x80,
+    [{name:'RSP',val:hs(BASE+0x80),hi:true}],
+    simpleStack(BASE+0x80,[{offset:0,val:'[local frame]',label:'<-- RSP'},{offset:8,val:'...'},{offset:16,val:'...'}]),
+    'sub rsp, 0x20','allocating local space',
+    'What is RSP after sub rsp, 0x20?',
+    [hs(BASE+0x60), hs(BASE+0xa0), hs(BASE+0x80), hs(BASE+0x70)],
+    0, 'sub rsp, N moves RSP down by N bytes — allocating N bytes of local stack space. 0x80-0x20=0x60.'
+  ),
+  makeScenario(
+    BASE+0x100,
+    [{name:'RSP',val:hs(BASE+0x100),hi:true}],
+    simpleStack(BASE+0x100,[{offset:0,val:'[frame]',label:'<-- RSP'}]),
+    'sub rsp, 8','align stack before call',
+    'What is RSP after sub rsp, 8?',
+    [hs(BASE+0xf8), hs(BASE+0x108), hs(BASE+0x100), hs(BASE+0xf0)],
+    0, 'sub rsp, 8 decrements RSP by 8. 0x100 - 0x8 = 0xF8.'
+  ),
+  /* add rsp — deallocates stack space */
+  makeScenario(
+    BASE+0x58,
+    [{name:'RSP',val:hs(BASE+0x58),hi:true}],
+    simpleStack(BASE+0x58,[{offset:0,val:'[local var]',label:'<-- RSP'},{offset:8,val:'[local var]'},{offset:16,val:'[saved rbx]'},{offset:24,val:'ret addr'}]),
+    'add rsp, 0x10','deallocating locals',
+    'What is RSP after add rsp, 0x10?',
+    [hs(BASE+0x68), hs(BASE+0x48), hs(BASE+0x58), hs(BASE+0x70)],
+    0, 'add rsp, N moves RSP up — releasing N bytes. 0x58+0x10=0x68.'
+  ),
+  /* call — pushes RIP+len, jumps */
+  makeScenario(
+    BASE+0xa0,
+    [{name:'RSP',val:hs(BASE+0xa0),hi:true},{name:'RIP',val:'0x401234',hi:false}],
+    simpleStack(BASE+0xa0,[{offset:0,val:'[prev]',label:'<-- RSP'},{offset:8,val:'...'}]),
+    'call foo','foo at 0x401300; instruction is 5 bytes',
+    'What is RSP immediately after call foo?',
+    [hs(BASE+0x98), hs(BASE+0xa8), hs(BASE+0xa0), hs(BASE+0x90)],
+    0, 'call pushes the return address (RIP+5=0x401239) onto the stack, then RSP-=8. RSP drops by 8.'
+  ),
+  makeScenario(
+    BASE+0xb0,
+    [{name:'RSP',val:hs(BASE+0xb0),hi:true},{name:'RIP',val:'0x402000',hi:false}],
+    simpleStack(BASE+0xb0,[{offset:0,val:'[prev]',label:'<-- RSP'}]),
+    'call puts','puts at 0x401080; 5-byte instruction',
+    'After call puts executes, what is at [RSP]?',
+    ['return address (0x402005)','address of puts','0x0','old RSP value'],
+    0, 'call pushes RIP+5 as the return address onto the stack. [RSP] = 0x402005.'
+  ),
+  /* ret — pops return address */
+  makeScenario(
+    BASE+0x70,
+    [{name:'RSP',val:hs(BASE+0x70),hi:true}],
+    simpleStack(BASE+0x70,[{offset:0,val:'0x0000000000401080',label:'<-- RSP (ret addr)'},{offset:8,val:'[caller frame]'}]),
+    'ret','[RSP] = 0x401080',
+    'What is RSP after ret?',
+    [hs(BASE+0x78), hs(BASE+0x68), hs(BASE+0x70), hs(BASE+0x80)],
+    0, 'ret pops [RSP] into RIP and then RSP+=8. Stack shrinks by 8.'
+  ),
+  makeScenario(
+    BASE+0x60,
+    [{name:'RSP',val:hs(BASE+0x60),hi:true}],
+    simpleStack(BASE+0x60,[{offset:0,val:'0x000000000040117e',label:'<-- RSP (ret addr)'},{offset:8,val:'...'}]),
+    'ret','[RSP] = 0x40117e',
+    'What address does execution jump to after ret?',
+    ['0x40117e','0x40117e+8','[RSP+8]','0x0'],
+    0, 'ret pops [RSP] into RIP and jumps there. Execution resumes at 0x40117e.'
+  ),
+  /* leave — mov rsp,rbp; pop rbp */
+  makeScenario(
+    BASE+0x40,
+    [{name:'RSP',val:hs(BASE+0x40),hi:true},{name:'RBP',val:hs(BASE+0x60),hi:false}],
+    simpleStack(BASE+0x40,[{offset:0,val:'[local]',label:'<-- RSP'},{offset:8,val:'...'},{offset:0x20,val:'[saved rbp]'},{offset:0x28,val:'ret addr'}]),
+    'leave','rbp = ' + hs(BASE+0x60),
+    'What is RSP after leave?',
+    [hs(BASE+0x68), hs(BASE+0x58), hs(BASE+0x60), hs(BASE+0x40)],
+    0, 'leave = mov rsp, rbp ; pop rbp. RSP first becomes RBP (0x...60), then pops rbp so RSP+=8 = 0x...68.'
+  ),
+  makeScenario(
+    BASE+0x50,
+    [{name:'RSP',val:hs(BASE+0x50),hi:true},{name:'RBP',val:hs(BASE+0x70),hi:false}],
+    simpleStack(BASE+0x70,[{offset:0,val:'0x00007fffffffe000',label:'<-- will be new RSP after leave+pop'},{offset:8,val:'ret addr'}]),
+    'leave','rbp = ' + hs(BASE+0x70) + '; [rbp] = saved rbp',
+    'After leave, what does RBP hold?',
+    ['the old saved rbp from [rbp]','0 — rbp is cleared','the old rsp value','the return address'],
+    0, 'leave pops [rbp] into rbp. rbp is restored to the caller\'s frame pointer.'
+  ),
+  /* push imm */
+  makeScenario(
+    BASE+0xc0,
+    [{name:'RSP',val:hs(BASE+0xc0),hi:true}],
+    simpleStack(BASE+0xc0,[{offset:0,val:'[prev]',label:'<-- RSP'},{offset:8,val:'...'}]),
+    'push 0','pushes immediate 0',
+    'After push 0, what is at [RSP]?',
+    ['0x0','0x1','undefined','the old RSP'],
+    0, 'push 0 pushes the immediate value 0 onto the stack. [RSP] = 0x0.'
+  ),
+  /* conceptual: which direction does stack grow? */
+  makeScenario(
+    BASE+0x80,
+    [{name:'RSP',val:hs(BASE+0x80),hi:true}],
+    simpleStack(BASE+0x80,[{offset:0,val:'[top]',label:'<-- RSP'},{offset:8,val:'[below]'},{offset:16,val:'[below]'}]),
+    'push rcx','any push instruction',
+    'On x86-64 Linux, the stack grows toward...',
+    ['lower addresses','higher addresses','random direction','depends on OS'],
+    0, 'The stack grows downward (toward lower addresses). push decrements RSP; pop increments it.'
+  ),
+  /* two pushes — track running RSP */
+  makeScenario(
+    BASE+0x90,
+    [{name:'RSP',val:hs(BASE+0x90),hi:true},{name:'RBX',val:'0xAAAA',hi:false},{name:'R12',val:'0xBBBB',hi:false}],
+    simpleStack(BASE+0x90,[{offset:0,val:'[frame]',label:'<-- RSP'},{offset:8,val:'...'}]),
+    'push rbx  ;  push r12','two consecutive pushes',
+    'After both pushes, what is RSP?',
+    [hs(BASE+0x80), hs(BASE+0xa0), hs(BASE+0x88), hs(BASE+0x78)],
+    0, 'Each push decrements RSP by 8. Two pushes: RSP = 0x...90 - 16 = 0x...80.'
+  ),
+  /* alignment: after function entry, rsp is 8 off */
+  makeScenario(
+    BASE+0x18,
+    [{name:'RSP',val:hs(BASE+0x18),hi:true}],
+    simpleStack(BASE+0x18,[{offset:0,val:'[ret addr]',label:'<-- RSP (just entered fn)'},{offset:8,val:'[caller frame]'}]),
+    'push rbp  (function prologue)','standard prologue start',
+    'After push rbp in the prologue, RSP mod 16 is...',
+    ['0 (aligned)','8 (misaligned)','4','16'],
+    0, 'call pushes 8 bytes (ret addr) so RSP is 8-misaligned on entry. push rbp adds 8 more -> 16-byte aligned (mod 16 = 0).'
+  ),
+  /* sub rsp large */
+  makeScenario(
+    BASE+0x200,
+    [{name:'RSP',val:hs(BASE+0x200),hi:true}],
+    simpleStack(BASE+0x200,[{offset:0,val:'[frame]',label:'<-- RSP'}]),
+    'sub rsp, 0x40','allocating 64 bytes of locals',
+    'What is RSP after sub rsp, 0x40?',
+    [hs(BASE+0x1c0), hs(BASE+0x240), hs(BASE+0x200), hs(BASE+0x1e0)],
+    0, '0x200 - 0x40 = 0x1C0.'
+  ),
+  /* where is local var */
+  makeScenario(
+    BASE+0x100,
+    [{name:'RSP',val:hs(BASE+0x100),hi:true},{name:'RBP',val:hs(BASE+0x120),hi:false}],
+    simpleStack(BASE+0x100,[{offset:0,val:'[local a]',label:'<-- RSP'},{offset:8,val:'[local b]'},{offset:16,val:'[local c]'},{offset:24,val:'[saved rbp]'}]),
+    'mov rax, [rbp-0x10]','reading a local variable',
+    'Which stack address is [rbp-0x10]?',
+    [hs(BASE+0x110), hs(BASE+0x100), hs(BASE+0x130), hs(BASE+0x108)],
+    0, 'rbp = 0x...120. rbp-0x10 = 0x...110.'
+  ),
+  /* pop into rsp itself */
+  makeScenario(
+    BASE+0x38,
+    [{name:'RSP',val:hs(BASE+0x38),hi:true}],
+    simpleStack(BASE+0x38,[{offset:0,val:hs(BASE+0x80),label:'<-- RSP; [RSP] = pivot'},{offset:8,val:'...'}]),
+    'pop rsp','[RSP] = 0x...80  (stack pivot)',
+    'What is RSP after pop rsp?',
+    [hs(BASE+0x80), hs(BASE+0x40), hs(BASE+0x38), hs(BASE+0x78)],
+    0, 'pop rsp loads [RSP] into RSP itself. RSP becomes the value that was on top of the stack — a classic stack pivot.'
+  ),
+  /* ret with add before it */
+  makeScenario(
+    BASE+0x48,
+    [{name:'RSP',val:hs(BASE+0x48),hi:true}],
+    simpleStack(BASE+0x48,[{offset:0,val:'[local]',label:'<-- RSP'},{offset:8,val:'[saved rbp]'},{offset:16,val:'0x0000000000401234',label:'ret addr'}]),
+    'add rsp, 0x10  ;  ret','cleanup then return',
+    'What address does execution jump to?',
+    ['0x401234','[RSP+0x18]','0x0','[RSP]'],
+    0, 'add rsp, 0x10 moves RSP to 0x...58 (pointing at ret addr 0x401234). ret pops that and jumps to it.'
+  ),
+  /* RSP alignment quiz */
+  makeScenario(
+    BASE+0x07,
+    [{name:'RSP',val:hs(BASE+0x07),hi:true}],
+    simpleStack(BASE+0x07,[{offset:0,val:'...',label:'<-- RSP (misaligned!)'}]),
+    'and rsp, -16','force 16-byte alignment',
+    'What does "and rsp, -16" do?',
+    ['rounds RSP down to nearest 16-byte boundary','rounds RSP up','subtracts 16','clears all bits'],
+    0, '-16 in two\'s complement is 0xFF...F0. AND-ing clears the low 4 bits, rounding RSP down to a 16-byte boundary.'
+  ),
+  /* multiple pops */
+  makeScenario(
+    BASE+0x20,
+    [{name:'RSP',val:hs(BASE+0x20),hi:true}],
+    simpleStack(BASE+0x20,[{offset:0,val:'0xAA',label:'<-- RSP'},{offset:8,val:'0xBB'},{offset:16,val:'0xCC'}]),
+    'pop rax  ;  pop rbx  ;  pop rcx','three consecutive pops',
+    'After all three pops, what is RSP?',
+    [hs(BASE+0x38), hs(BASE+0x28), hs(BASE+0x18), hs(BASE+0x40)],
+    0, 'Each pop increments RSP by 8. Three pops: 0x20 + 24 = 0x38.'
+  ),
+  /* call then what */
+  makeScenario(
+    BASE+0xd0,
+    [{name:'RSP',val:hs(BASE+0xd0),hi:true},{name:'RIP',val:'0x401500',hi:false}],
+    simpleStack(BASE+0xd0,[{offset:0,val:'[frame]',label:'<-- RSP'},{offset:8,val:'...'}]),
+    'call 0x401600','5-byte call instruction',
+    'After call 0x401600, what is in [RSP]?',
+    ['0x401505 (return addr)','0x401600 (target)','0x401500 (current RIP)','0x0'],
+    0, 'call pushes RIP+5 (the instruction after the call) as the return address. [RSP] = 0x401505.'
+  ),
+  /* conceptual: callee-saved means... */
+  makeScenario(
+    BASE+0x90,
+    [{name:'RSP',val:hs(BASE+0x90),hi:true},{name:'RBX',val:'0x1234',hi:false}],
+    simpleStack(BASE+0x90,[{offset:0,val:'[frame]',label:'<-- RSP'}]),
+    'call some_function','rbx is callee-saved',
+    'After some_function returns, what can you assume about rbx?',
+    ['rbx is unchanged (callee preserved it)','rbx may be trashed','rbx = 0','rbx holds the return value'],
+    0, 'rbx is callee-saved (non-volatile). The callee must save and restore it, so it retains its value across calls.'
+  ),
+  /* function epilogue sequence */
+  makeScenario(
+    BASE+0x50,
+    [{name:'RSP',val:hs(BASE+0x50),hi:true},{name:'RBP',val:hs(BASE+0x70),hi:false}],
+    simpleStack(BASE+0x70,[{offset:0,val:'0x00007fffffffe001',label:'<-- rbp points here (saved rbp)'},{offset:8,val:'0x0000000000401080',label:'ret addr'}]),
+    'leave  ;  ret','full epilogue',
+    'After leave+ret, where does execution continue?',
+    ['0x401080','0x00007fffffffe001','[rbp+8]','the next instruction'],
+    0, 'leave: rsp=rbp then pop rbp (rsp=0x...78, rbp=0x...e001). ret: pops [rsp]=0x401080 and jumps there.'
+  ),
+  /* rbp setup */
+  makeScenario(
+    BASE+0x100,
+    [{name:'RSP',val:hs(BASE+0xf8),hi:true},{name:'RBP',val:hs(BASE+0x100),hi:false}],
+    simpleStack(BASE+0xf8,[{offset:0,val:hs(BASE+0x100),label:'<-- RSP (saved rbp)'},{offset:8,val:'0x0000000000401234',label:'ret addr'}]),
+    'push rbp  ;  mov rbp, rsp','standard prologue',
+    'After the prologue, what does RBP point to?',
+    ['the saved old rbp','the return address','[RSP-8]','rsp before the call'],
+    0, 'push rbp saves the caller\'s rbp; mov rbp,rsp makes rbp point to that saved value on the stack — establishing the new frame pointer.'
+  ),
+  /* where locals live */
+  makeScenario(
+    BASE+0x120,
+    [{name:'RSP',val:hs(BASE+0x100),hi:true},{name:'RBP',val:hs(BASE+0x120),hi:false}],
+    simpleStack(BASE+0x100,[{offset:0,val:'[local int a]',label:'<-- RSP'},{offset:8,val:'[local int b]'},{offset:16,val:'[local int c]'},{offset:24,val:'[local int d]'},{offset:0x20,val:'[saved rbp]'},{offset:0x28,val:'ret addr'}]),
+    'mov eax, [rbp-8]','reading first local',
+    'Which address holds [rbp-8]?',
+    [hs(BASE+0x118), hs(BASE+0x110), hs(BASE+0x128), hs(BASE+0x100)],
+    0, 'rbp=0x...120; rbp-8=0x...118. That\'s the first local variable slot.'
+  ),
+  /* neg rsp (tricky) */
+  makeScenario(
+    BASE+0x30,
+    [{name:'RSP',val:hs(BASE+0x30),hi:true}],
+    simpleStack(BASE+0x30,[{offset:0,val:'[top]',label:'<-- RSP'},{offset:8,val:'...'},{offset:16,val:'...'}]),
+    'sub rsp, 0x18','room for 3 qwords',
+    'How many 8-byte slots does sub rsp, 0x18 allocate?',
+    ['3','2','4','6'],
+    0, '0x18 = 24 bytes = 3 x 8-byte slots.'
+  )
+];
+
+/* ── Game state ── */
+var score=0, lives=3, combo=1, roundNum=0, totalRounds=30;
+var answered=false, timerRaf=null, timerStart=0, timerDur=3000;
+var shuffled=[];
+var curScenario=null;
+
+function showScreen(id){
+  document.getElementById('screen-title').style.display='none';
+  document.getElementById('screen-game').style.display='none';
+  document.getElementById('screen-over').style.display='none';
+  document.getElementById(id).style.display='block';
+}
+
+function getHi(){ return parseInt(localStorage.getItem('ss-hi')||'0',10); }
+function setHi(n){ localStorage.setItem('ss-hi',String(n)); }
+
+function shuffle(arr){
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
+  return a;
+}
+
+function startGame(){
+  score=0; lives=3; combo=1; roundNum=0; timerDur=3000;
+  shuffled=shuffle(POOL);
+  showScreen('screen-game');
+  updateHud();
+  nextRound();
+}
+
+function updateHud(){
+  var hearts='';
+  for(var i=0;i<3;i++) hearts+=(i<lives)?'&#9829;':'&#9825;';
+  document.getElementById('hud-lives').innerHTML=hearts;
+  document.getElementById('hud-score').textContent=score;
+  document.getElementById('hud-combo').textContent=(combo>1?'x'+combo+' combo':'x1');
+}
+
+function renderStack(stackSlots){
+  var el=document.getElementById('stack-rows');
+  el.innerHTML='';
+  stackSlots.forEach(function(row){
+    var div=document.createElement('div');
+    div.className='stack-row'+(row.isRsp?' rsp-row':'');
+    var addrSpan='<span class="addr">'+row.addr+'</span>';
+    var valSpan='<span class="val">'+row.val+'</span>';
+    var labelSpan=row.label?'<span style="font-size:.68rem;color:var(--muted);margin-left:.4rem;">'+row.label+'</span>':'';
+    div.innerHTML=addrSpan+valSpan+labelSpan;
+    el.appendChild(div);
+  });
+}
+
+function renderRegs(regs){
+  var el=document.getElementById('reg-rows');
+  el.innerHTML='';
+  regs.forEach(function(r){
+    var div=document.createElement('div');
+    div.className='reg-row'+(r.hi?' highlight':'');
+    div.innerHTML='<span class="rn">'+r.name+'</span><span class="rv">'+r.val+'</span>';
+    el.appendChild(div);
+  });
+}
+
+function nextRound(){
+  if(roundNum>=totalRounds){ endGame(true); return; }
+  answered=false;
+  document.getElementById('btn-next').style.display='none';
+  document.getElementById('feedback').textContent='';
+  document.getElementById('feedback').className='feedback';
+
+  var idx=roundNum % shuffled.length;
+  curScenario=shuffled[idx];
+  roundNum++;
+
+  document.getElementById('round-label').textContent='Round '+roundNum+' / '+totalRounds;
+  document.getElementById('instr-display').textContent=curScenario.instr;
+  document.getElementById('instr-context').textContent=curScenario.context||'';
+  document.getElementById('q-label').textContent=curScenario.question;
+
+  renderStack(curScenario.stackSlots);
+  renderRegs(curScenario.regs);
+
+  var optsDiv=document.getElementById('opts');
+  optsDiv.innerHTML='';
+  curScenario.opts.forEach(function(opt,i){
+    var btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.textContent=opt;
+    btn.addEventListener('click',function(){ answer(i,btn); });
+    optsDiv.appendChild(btn);
+  });
+
+  startTimer();
+}
+
+function startTimer(){
+  if(timerRaf) cancelAnimationFrame(timerRaf);
+  timerStart=performance.now();
+  var bar=document.getElementById('timer-bar');
+  bar.style.width='100%';
+  bar.style.background='var(--accent)';
+  function tick(now){
+    var pct=1-(now-timerStart)/timerDur;
+    if(pct<=0){ pct=0; bar.style.width='0%'; if(!answered) timeOut(); return; }
+    bar.style.width=(pct*100)+'%';
+    if(pct<0.25) bar.style.background='#f87171';
+    else if(pct<0.5) bar.style.background='#fbbf24';
+    else bar.style.background='var(--accent)';
+    timerRaf=requestAnimationFrame(tick);
+  }
+  timerRaf=requestAnimationFrame(tick);
+}
+
+function timeOut(){
+  if(answered) return;
+  answered=true;
+  combo=1;
+  lives--;
+  updateHud();
+  var fb=document.getElementById('feedback');
+  fb.className='feedback show-wrong';
+  fb.innerHTML='<strong>Time\'s up!</strong> '+curScenario.explanation;
+  document.getElementById('opts').querySelectorAll('.opt-btn').forEach(function(b,i){
+    b.disabled=true;
+    if(i===curScenario.correctIdx) b.classList.add('correct');
+  });
+  document.getElementById('btn-next').style.display='inline-block';
+  if(lives<=0){ setTimeout(function(){ endGame(false); },1200); }
+}
+
+function answer(idx,btn){
+  if(answered) return;
+  answered=true;
+  if(timerRaf) cancelAnimationFrame(timerRaf);
+  var correct=(idx===curScenario.correctIdx);
+  var allBtns=document.getElementById('opts').querySelectorAll('.opt-btn');
+  allBtns.forEach(function(b){ b.disabled=true; });
+  btn.classList.add(correct?'correct':'wrong');
+  if(!correct) allBtns[curScenario.correctIdx].classList.add('correct');
+  var fb=document.getElementById('feedback');
+  if(correct){
+    fb.className='feedback show-correct';
+    var pts=10*combo;
+    score+=pts;
+    floatPts(btn,'+'+pts);
+    combo++;
+    /* speed up after every 5 correct — tracked by combo */
+    if(combo%5===1 && combo>1) timerDur=Math.max(1200,timerDur-300);
+  } else {
+    fb.className='feedback show-wrong';
+    combo=1;
+    lives--;
+  }
+  fb.innerHTML='<strong>'+(correct?'Correct!':'Wrong.')+'</strong> '+curScenario.explanation;
+  updateHud();
+  document.getElementById('btn-next').style.display='inline-block';
+  if(!correct && lives<=0){ setTimeout(function(){ endGame(false); },1400); return; }
+}
+
+function floatPts(anchorEl,text){
+  var r=anchorEl.getBoundingClientRect();
+  var el=document.createElement('div');
+  el.className='float-pts';
+  el.textContent=text;
+  el.style.left=(r.left+r.width/2-20)+'px';
+  el.style.top=(r.top+window.scrollY-10)+'px';
+  document.body.appendChild(el);
+  el.addEventListener('animationend',function(){ el.remove(); });
+}
+
+function endGame(completed){
+  if(timerRaf) cancelAnimationFrame(timerRaf);
+  var hi=getHi();
+  var newHi=score>hi;
+  if(newHi) setHi(score);
+  document.getElementById('hi-display').textContent=getHi();
+  showScreen('screen-over');
+  document.getElementById('over-title').textContent=completed?'Sprint Complete!':'Game Over';
+  document.getElementById('final-score').textContent=score;
+  document.getElementById('hi-note').textContent=newHi?'New high score!':'High score: '+getHi();
+  var stars=score>=500?'&#9733;&#9733;&#9733;':score>=250?'&#9733;&#9733;&#9734;':score>=100?'&#9733;&#9734;&#9734;':'&#9734;&#9734;&#9734;';
+  document.getElementById('over-stars').innerHTML=stars;
+}
+
+document.getElementById('hi-display').textContent=getHi();
+document.getElementById('btn-start').addEventListener('click',startGame);
+document.getElementById('btn-retry').addEventListener('click',startGame);
+document.getElementById('btn-menu').addEventListener('click',function(){ showScreen('screen-title'); });
+document.getElementById('btn-next').addEventListener('click',function(){
+  document.getElementById('btn-next').style.display='none';
+  nextRound();
+});
+</script>
+</body>
+</html>

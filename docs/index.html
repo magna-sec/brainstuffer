@@ -187,42 +187,12 @@
             <div class="card">
                 <h2>&#127891; Interactive Learning</h2>
                 <div class="learn-hub">
-                    <div class="learn-cat-header">Systems &amp; Low-Level</div>
-                    <a class="learn-card" href="fakestack.html">
-                        <div class="learn-card-icon">&#128421;</div>
-                        <h3>FakeStack</h3>
-                        <p>Step through a live x86-64 stack. Registers, frames, recursion, and overflow &mdash; chapter by chapter.</p>
-                        <span class="learn-card-tag">9 chapters</span>
-                    </a>
-                    <a class="learn-card" href="binary-workbench.html">
-                        <div class="learn-card-icon">&#128290;</div>
-                        <h3>Binary Workbench</h3>
-                        <p>Live converter for binary, hex, decimal, and two&rsquo;s complement with bit-level visualisation.</p>
-                        <span class="learn-card-tag">Number Systems</span>
-                    </a>
-                    <a class="learn-card" href="stack.html">
-                        <div class="learn-card-icon">&#9650;</div>
-                        <h3>The Stack</h3>
-                        <p>Push, pop, call frames, recursion, and stack overflows &mdash; visualised step by step with animated memory cells and interactive demos.</p>
-                        <span class="learn-card-tag">6 sections</span>
-                    </a>
+                    <div class="learn-cat-header">x86-64 Assembly</div>
                     <a class="learn-card" href="lessons/x86-asm.html">
                         <div class="learn-card-icon">&#9881;</div>
                         <h3>x86-64 Instruction Visualiser</h3>
                         <p>Step through MOV, LEA, PUSH/POP, ADD/SUB, CMP/Jcc, CALL/RET, XOR, INC/DEC, and SHL/SHR &mdash; watch registers, memory, and flags animate in real time.</p>
                         <span class="learn-card-tag">9 instructions</span>
-                    </a>
-                    <a class="learn-card" href="lessons/bitshift.html">
-                        <div class="learn-card-icon">&#8644;</div>
-                        <h3>Bit-Shift Byte Extraction</h3>
-                        <p>Enter any 64-bit value, pick a target byte (B0–B7), and step through the <code>shr / shl / shr</code> sequence that isolates it &mdash; no AND required. Each shift animated with zeros flowing in and the target byte tracked.</p>
-                        <span class="learn-card-tag">pwn trick</span>
-                    </a>
-                    <a class="learn-card" href="lessons/data-sizes.html">
-                        <div class="learn-card-icon">&#128202;</div>
-                        <h3>Data Sizes: BYTE &middot; WORD &middot; DWORD &middot; QWORD</h3>
-                        <p>Click any size to see which bytes it covers in a 64-bit register, the little-endian memory layout address-by-address, and why 32-bit writes uniquely zero the upper half of RAX.</p>
-                        <span class="learn-card-tag">x86-64</span><span class="learn-card-tag">little-endian</span>
                     </a>
                     <a class="learn-card" href="lessons/registers.html">
                         <div class="learn-card-icon">&#128268;</div>
@@ -230,38 +200,49 @@
                         <p>Enter any 64-bit value and click RAX, EAX, AX, AH, AL to see exactly which bits each alias covers &mdash; live hex, decimal, and binary readout across all 24 registers.</p>
                         <span class="learn-card-tag">24 registers</span>
                     </a>
-                    <a class="learn-card" href="lessons/asm-syscalls.html">
-                        <div class="learn-card-icon">&#9000;</div>
-                        <h3>Assembly Syscall Drill</h3>
-                        <p>Drag-and-drop tokens into blank slots to complete real assembly code. 11 challenges building muscle memory for Linux syscalls: exit, read, write, open, socket, bind, fork, accept and more. Shuffle mode + reference card built in.</p>
-                        <span class="learn-card-tag">11 challenges</span><span class="learn-card-tag">syscalls</span><span class="learn-card-tag">drill</span>
+                    <a class="learn-card" href="lessons/data-sizes.html">
+                        <div class="learn-card-icon">&#128203;</div>
+                        <h3>Data Sizes: BYTE &middot; WORD &middot; DWORD &middot; QWORD</h3>
+                        <p>Click any size to see which bytes it covers in a 64-bit register, the little-endian memory layout address-by-address, and why 32-bit writes uniquely zero the upper half of RAX.</p>
+                        <span class="learn-card-tag">x86-64</span><span class="learn-card-tag">little-endian</span>
                     </a>
-                    <div class="learn-cat-header">Windows Internals</div>
-                    <a class="learn-card" href="complexity.html">
-                        <div class="learn-card-icon">&#128279;</div>
-                        <h3>COMplexity</h3>
-                        <p>Explore Windows COM from vtables and reference counting to apartments and HRESULT decoding. Step through the full object lifecycle.</p>
+                    <a class="learn-card" href="lessons/bitshift.html">
+                        <div class="learn-card-icon">&#8644;</div>
+                        <h3>Bit-Shift Byte Extraction</h3>
+                        <p>Enter any 64-bit value, pick a target byte (B0&ndash;B7), and step through the <code>shr / shl / shr</code> sequence that isolates it. Each shift animated with zeros flowing in.</p>
+                        <span class="learn-card-tag">pwn trick</span>
+                    </a>
+                    <div class="learn-cat-header">Stack &amp; Memory</div>
+                    <a class="learn-card" href="fakestack.html">
+                        <div class="learn-card-icon">&#128421;</div>
+                        <h3>FakeStack</h3>
+                        <p>Step through a live x86-64 stack. Registers, frames, recursion, and overflow &mdash; chapter by chapter.</p>
+                        <span class="learn-card-tag">9 chapters</span>
+                    </a>
+                    <a class="learn-card" href="stack.html">
+                        <div class="learn-card-icon">&#9650;</div>
+                        <h3>The Stack</h3>
+                        <p>Push, pop, call frames, recursion, and stack overflows &mdash; visualised step by step with animated memory cells and interactive demos.</p>
                         <span class="learn-card-tag">6 sections</span>
                     </a>
-                    <div class="learn-cat-header">Security &amp; Networking</div>
-                    <a class="learn-card" href="kerberos.html">
-                        <div class="learn-card-icon">&#127981;</div>
-                        <h3>Kerberos</h3>
-                        <p>Animated AS, TGS, and AP exchanges. Inspect packet fields, dissect ticket anatomy, explore delegation flows, and learn five key attack techniques.</p>
-                        <span class="learn-card-tag">6 sections</span>
+                    <a class="learn-card" href="stack-sprint.html">
+                        <div class="learn-card-icon">&#127939;</div>
+                        <h3>Stack Sprint</h3>
+                        <p>Predict RSP and stack values after each instruction. push, pop, call, ret, sub rsp &mdash; watch the stack animate and test your mental model under the clock.</p>
+                        <span class="learn-card-tag">Game &bull; 30 rounds</span>
                     </a>
-                    <a class="learn-card" href="memory-attacks.html">
-                        <div class="learn-card-icon">&#9888;</div>
-                        <h3>Memory Attacks</h3>
-                        <p>Step through buffer overflows, heap corruptions, use-after-free, TOCTOU races, and data races &mdash; each with animated memory visualisations.</p>
-                        <span class="learn-card-tag">6 sections</span>
+                    <a class="learn-card" href="binary-workbench.html">
+                        <div class="learn-card-icon">&#128290;</div>
+                        <h3>Binary Workbench</h3>
+                        <p>Live converter for binary, hex, decimal, and two&rsquo;s complement with bit-level visualisation.</p>
+                        <span class="learn-card-tag">Number Systems</span>
                     </a>
-                    <div class="learn-cat-header">Linux Internals &amp; Exploitation</div>
-                    <a class="learn-card" href="lessons/format-string.html">
-                        <div class="learn-card-icon">&#128220;</div>
-                        <h3>Format String Playground</h3>
-                        <p>Simulate <code>printf(user_input)</code> against a live stack. Watch <code>%p</code>/<code>%x</code> leak values and see <code>%n</code> become a write primitive.</p>
-                        <span class="learn-card-tag">pwn / printf</span>
+                    <div class="learn-cat-header">Linux Internals</div>
+                    <a class="learn-card" href="fd-explorer.html">
+                        <div class="learn-card-icon">&#128281;</div>
+                        <h3>Linux File Descriptors</h3>
+                        <p>Every I/O resource as a number. Explore stdin, stdout, stderr, pipes, sockets, TTYs and more &mdash; each colour-coded with interactive operations and redirection visualisations.</p>
+                        <span class="learn-card-tag">6 sections</span>
                     </a>
                     <a class="learn-card" href="lessons/fd-table.html">
                         <div class="learn-card-icon">&#128196;</div>
@@ -275,11 +256,57 @@
                         <p>Drag segments &mdash; <code>.text</code>, <code>.bss</code>, heap, stack, vDSO &mdash; into correct positions on a virtual address space diagram.</p>
                         <span class="learn-card-tag">memory / ELF</span>
                     </a>
-                    <a class="learn-card" href="fd-explorer.html">
-                        <div class="learn-card-icon">&#128281;</div>
-                        <h3>Linux File Descriptors</h3>
-                        <p>Every I/O resource as a number. Explore stdin, stdout, stderr, pipes, sockets, TTYs and more &mdash; each colour-coded with interactive operations and redirection visualisations.</p>
+                    <div class="learn-cat-header">Exploitation</div>
+                    <a class="learn-card" href="memory-attacks.html">
+                        <div class="learn-card-icon">&#9888;</div>
+                        <h3>Memory Attacks</h3>
+                        <p>Step through buffer overflows, heap corruptions, use-after-free, TOCTOU races, and data races &mdash; each with animated memory visualisations.</p>
                         <span class="learn-card-tag">6 sections</span>
+                    </a>
+                    <a class="learn-card" href="lessons/format-string.html">
+                        <div class="learn-card-icon">&#128220;</div>
+                        <h3>Format String Playground</h3>
+                        <p>Simulate <code>printf(user_input)</code> against a live stack. Watch <code>%p</code>/<code>%x</code> leak values and see <code>%n</code> become a write primitive.</p>
+                        <span class="learn-card-tag">pwn / printf</span>
+                    </a>
+                    <div class="learn-cat-header">Security &amp; Networking</div>
+                    <a class="learn-card" href="kerberos.html">
+                        <div class="learn-card-icon">&#127981;</div>
+                        <h3>Kerberos</h3>
+                        <p>Animated AS, TGS, and AP exchanges. Inspect packet fields, dissect ticket anatomy, explore delegation flows, and learn five key attack techniques.</p>
+                        <span class="learn-card-tag">6 sections</span>
+                    </a>
+                    <div class="learn-cat-header">Windows Internals</div>
+                    <a class="learn-card" href="complexity.html">
+                        <div class="learn-card-icon">&#128279;</div>
+                        <h3>COMplexity</h3>
+                        <p>Explore Windows COM from vtables and reference counting to apartments and HRESULT decoding. Step through the full object lifecycle.</p>
+                        <span class="learn-card-tag">6 sections</span>
+                    </a>
+                    <div class="learn-cat-header">Games</div>
+                    <a class="learn-card" href="register-race.html">
+                        <div class="learn-card-icon">&#9889;</div>
+                        <h3>Register Race</h3>
+                        <p>Rapid-fire syscall and register trivia. Answer before the timer drains &mdash; build combos, survive 3 lives, beat your high score.</p>
+                        <span class="learn-card-tag">Speed &bull; High Score</span>
+                    </a>
+                    <a class="learn-card" href="bit-flip.html">
+                        <div class="learn-card-icon">&#128257;</div>
+                        <h3>Bit Flip</h3>
+                        <p>Transform a byte from start to target using bitwise ops &mdash; NOT, SHL, SHR, XOR, AND, OR. Solve each puzzle in par moves for 3 stars.</p>
+                        <span class="learn-card-tag">Puzzles &bull; 10 levels</span>
+                    </a>
+                    <a class="learn-card" href="asm-unscramble.html">
+                        <div class="learn-card-icon">&#127922;</div>
+                        <h3>Assembly Unscramble</h3>
+                        <p>Shuffled assembly lines &mdash; race against the clock to restore the correct order. 12 puzzles from basic syscalls to shellcode.</p>
+                        <span class="learn-card-tag">Speed &bull; 12 puzzles</span>
+                    </a>
+                    <a class="learn-card" href="lessons/asm-syscalls.html">
+                        <div class="learn-card-icon">&#9000;</div>
+                        <h3>Assembly Syscall Drill</h3>
+                        <p>Drag tokens into blank slots to complete real assembly. 19 challenges covering syscalls, mmap, execve, bit tricks, calling convention, and more. Shuffle mode included.</p>
+                        <span class="learn-card-tag">19 challenges</span><span class="learn-card-tag">drill</span>
                     </a>
                     <div class="learn-cat-header">Music Theory</div>
                     <a class="learn-card" href="circle-of-fifths.html">

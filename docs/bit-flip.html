@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bit Flip — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+body {
+  font-family: 'Courier New', monospace;
+  background: var(--bg);
+  color: var(--fg, var(--text, #e2e8f0));
+  min-height: 100vh;
+  padding: 1.5rem 1rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bf-wrap {
+  width: 100%;
+  max-width: 560px;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.bf-header {
+  margin-bottom: 1.25rem;
+}
+
+.bf-title {
+  color: var(--accent);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 .15rem;
+}
+
+.bf-subtitle {
+  color: var(--muted);
+  font-size: .8rem;
+  margin: 0 0 .75rem;
+}
+
+.bf-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: .45rem .75rem;
+  font-size: .8rem;
+  color: var(--muted);
+}
+
+.bf-progress-puzzle {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.bf-stars-display {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+  font-size: .9rem;
+}
+
+/* ── Puzzle title ──────────────────────────────────────── */
+.bf-puzzle-header {
+  margin-bottom: .75rem;
+}
+
+.bf-puzzle-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent2);
+  margin: 0 0 .1rem;
+}
+
+.bf-puzzle-desc {
+  color: var(--muted);
+  font-size: .78rem;
+  margin: 0;
+}
+
+/* ── Panels row ──────────────────────────────────────────── */
+.bf-panels {
+  display: flex;
+  gap: .75rem;
+  margin-bottom: .75rem;
+}
+
+.bf-panel {
+  flex: 1;
+  background: var(--card);
+  border: 2px solid var(--card-border);
+  border-radius: 10px;
+  padding: .75rem .75rem .65rem;
+  transition: border-color .25s, box-shadow .25s;
+}
+
+.bf-panel.solved {
+  border-color: #4ade80;
+  box-shadow: 0 0 14px rgba(74,222,128,.35);
+}
+
+.bf-panel-label {
+  font-size: .65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+  margin-bottom: .35rem;
+}
+
+.bf-hex {
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  margin-bottom: .5rem;
+  line-height: 1;
+}
+
+.bf-hex-current { color: var(--accent); }
+.bf-hex-target  { color: var(--accent2); }
+
+/* ── Bit cells ───────────────────────────────────────────── */
+.bf-bits {
+  display: flex;
+  gap: 3px;
+  margin-bottom: .45rem;
+}
+
+.bf-bit {
+  width: 36px;
+  height: 36px;
+  border-radius: 5px;
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: background .2s, border-color .2s, color .2s;
+  user-select: none;
+}
+
+/* current panel bits */
+.bf-bit.bit-match {
+  border-color: #4ade80;
+  background: rgba(74,222,128,.13);
+  color: #4ade80;
+}
+
+.bf-bit.bit-mismatch {
+  border-color: #f87171;
+  background: rgba(248,113,113,.09);
+  color: #f87171;
+  animation: pulse-red 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .55; }
+}
+
+/* target panel bits */
+.bf-bit.tgt-one {
+  border-color: var(--accent2);
+  background: rgba(56,189,248,.1);
+  color: var(--accent2);
+}
+
+.bf-bit.tgt-zero {
+  border-color: var(--card-border);
+  background: transparent;
+  color: var(--muted);
+  opacity: .35;
+}
+
+/* ── Move counter ────────────────────────────────────────── */
+.bf-moves {
+  font-size: .75rem;
+  color: var(--muted);
+  display: flex;
+  gap: .9rem;
+}
+
+.bf-moves span { color: var(--accent); font-weight: 700; }
+
+/* ── Operations grid ─────────────────────────────────────── */
+.bf-ops {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .4rem;
+  margin-bottom: .6rem;
+}
+
+.bf-op {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 7px;
+  color: var(--fg, var(--text, #e2e8f0));
+  font-family: 'Courier New', monospace;
+  font-size: .72rem;
+  font-weight: 700;
+  padding: .45rem .25rem;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+  line-height: 1.2;
+}
+
+.bf-op:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 6px var(--glow);
+  background: var(--bg2);
+}
+
+.bf-op:active {
+  transform: scale(.96);
+}
+
+.bf-op:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+}
+
+/* ── Control buttons ─────────────────────────────────────── */
+.bf-controls {
+  display: flex;
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+
+.bf-btn {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-family: 'Courier New', monospace;
+  font-size: .8rem;
+  font-weight: 700;
+  padding: .5rem;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, box-shadow .15s;
+}
+
+.bf-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 5px var(--glow);
+}
+
+.bf-btn:disabled {
+  opacity: .3;
+  cursor: not-allowed;
+}
+
+/* ── Success banner ──────────────────────────────────────── */
+.bf-success {
+  display: none;
+  background: var(--card);
+  border: 2px solid #4ade80;
+  border-radius: 10px;
+  box-shadow: 0 0 18px rgba(74,222,128,.25);
+  padding: 1rem .75rem;
+  text-align: center;
+  margin-bottom: .75rem;
+}
+
+.bf-success.show { display: block; }
+
+.bf-success-stars {
+  font-size: 1.6rem;
+  margin-bottom: .35rem;
+  letter-spacing: .1em;
+}
+
+.bf-success-msg {
+  color: #4ade80;
+  font-size: .9rem;
+  font-weight: 700;
+  margin-bottom: .2rem;
+}
+
+.bf-success-detail {
+  color: var(--muted);
+  font-size: .75rem;
+  margin-bottom: .75rem;
+}
+
+.bf-next-btn {
+  background: #4ade80;
+  border: none;
+  border-radius: 8px;
+  color: #050e05;
+  font-family: 'Courier New', monospace;
+  font-size: .85rem;
+  font-weight: 700;
+  padding: .5rem 1.5rem;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+
+.bf-next-btn:hover { opacity: .85; }
+
+/* ── Hint line ───────────────────────────────────────────── */
+.bf-hint {
+  font-size: .72rem;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: .5rem;
+  min-height: 1rem;
+  opacity: .7;
+}
+
+/* ── Final screen ────────────────────────────────────────── */
+.bf-final {
+  display: none;
+  background: var(--card);
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  box-shadow: 0 0 24px var(--glow);
+  padding: 1.75rem 1.25rem;
+  text-align: center;
+}
+
+.bf-final.show { display: block; }
+
+.bf-final-stars {
+  font-size: 2rem;
+  letter-spacing: .12em;
+  margin-bottom: .5rem;
+}
+
+.bf-final-score {
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: .25rem;
+}
+
+.bf-final-label {
+  color: var(--muted);
+  font-size: .8rem;
+  margin-bottom: .5rem;
+}
+
+.bf-final-msg {
+  color: var(--fg, var(--text, #e2e8f0));
+  font-size: .9rem;
+  margin-bottom: 1.25rem;
+}
+
+.bf-replay-btn {
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  color: var(--bg);
+  font-family: 'Courier New', monospace;
+  font-size: .9rem;
+  font-weight: 700;
+  padding: .6rem 2rem;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+
+.bf-replay-btn:hover { opacity: .82; }
+
+/* ── Bit index labels (optional) ─────────────────────────── */
+.bf-bit-indices {
+  display: flex;
+  gap: 3px;
+  margin-bottom: .1rem;
+}
+
+.bf-bit-idx {
+  width: 36px;
+  text-align: center;
+  font-size: .55rem;
+  color: var(--muted);
+  opacity: .5;
+  flex-shrink: 0;
+}
+
+/* ── Mobile ──────────────────────────────────────────────── */
+@media (max-width: 500px) {
+  .bf-panels { flex-direction: column; }
+
+  .bf-bit, .bf-bit-idx { width: 28px; }
+  .bf-bit { height: 28px; font-size: .75rem; }
+
+  .bf-hex { font-size: 1.3rem; }
+
+  .bf-ops { grid-template-columns: repeat(3, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- SKIN TOGGLE -->
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="bf-wrap">
+
+  <!-- BACK LINK -->
+  <a href="index.html#learn" style="display:inline-flex;align-items:center;gap:.4rem;
+     color:var(--muted);font-size:.8rem;text-decoration:none;margin-bottom:1.25rem;">
+    &#8592; Back to Interactive Learning
+  </a>
+
+  <!-- HEADER -->
+  <div class="bf-header">
+    <h1 class="bf-title">Bit Flip</h1>
+    <p class="bf-subtitle">Transform the byte — one bitwise operation at a time.</p>
+    <div class="bf-progress">
+      <span>Puzzle <span class="bf-progress-puzzle" id="prog-label">1 / 10</span></span>
+      <span class="bf-stars-display" id="total-stars-display">
+        <span style="color:var(--muted);font-size:.75rem;">Total&nbsp;</span>
+        <span id="total-stars-count">0</span><span style="color:var(--muted);font-size:.75rem;">&nbsp;/ 30 &#9733;</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- GAME AREA -->
+  <div id="game-area">
+
+    <!-- Puzzle title/desc -->
+    <div class="bf-puzzle-header">
+      <div class="bf-puzzle-title" id="puz-title">Flip All</div>
+      <div class="bf-puzzle-desc"  id="puz-desc">All zeros to all ones.</div>
+    </div>
+
+    <!-- Panels -->
+    <div class="bf-panels">
+
+      <!-- Current panel -->
+      <div class="bf-panel" id="current-panel">
+        <div class="bf-panel-label">Current</div>
+        <div class="bf-hex bf-hex-current" id="cur-hex">0x00</div>
+        <div class="bf-bit-indices" id="cur-indices"></div>
+        <div class="bf-bits" id="cur-bits"></div>
+        <div class="bf-moves">
+          Moves:&nbsp;<span id="move-count">0</span>&nbsp;&nbsp;Par:&nbsp;<span id="par-display">1</span>
+        </div>
+      </div>
+
+      <!-- Target panel -->
+      <div class="bf-panel" id="target-panel">
+        <div class="bf-panel-label">Target</div>
+        <div class="bf-hex bf-hex-target" id="tgt-hex">0xFF</div>
+        <div class="bf-bit-indices" id="tgt-indices"></div>
+        <div class="bf-bits" id="tgt-bits"></div>
+        <div class="bf-moves" style="opacity:.45;">Fixed target</div>
+      </div>
+
+    </div><!-- /panels -->
+
+    <!-- Hint -->
+    <div class="bf-hint" id="hint-line"></div>
+
+    <!-- Operations grid -->
+    <div class="bf-ops" id="ops-grid"></div>
+
+    <!-- Undo / Reset -->
+    <div class="bf-controls">
+      <button class="bf-btn" id="undo-btn">&#8630; Undo</button>
+      <button class="bf-btn" id="reset-btn">&#8635; Reset</button>
+    </div>
+
+    <!-- Success banner -->
+    <div class="bf-success" id="success-banner">
+      <div class="bf-success-stars" id="success-stars"></div>
+      <div class="bf-success-msg"   id="success-msg"></div>
+      <div class="bf-success-detail" id="success-detail"></div>
+      <button class="bf-next-btn" id="next-btn">Next Puzzle &#8594;</button>
+    </div>
+
+  </div><!-- /game-area -->
+
+  <!-- Final screen -->
+  <div class="bf-final" id="final-screen">
+    <div class="bf-final-stars" id="final-stars-row"></div>
+    <div class="bf-final-score" id="final-score"></div>
+    <div class="bf-final-label">out of 30 stars</div>
+    <div class="bf-final-msg"   id="final-msg"></div>
+    <button class="bf-replay-btn" id="replay-btn">Play Again</button>
+  </div>
+
+</div><!-- /bf-wrap -->
+
+<script>
+/* ================================================================
+   BIT FLIP — puzzle game
+   ================================================================ */
+
+var PUZZLES = [
+  { title: 'Flip All',       desc: 'All zeros to all ones.',          start: 0x00, target: 0xFF, par: 1 },
+  { title: 'XOR Trick',      desc: 'Invert alternating bits.',        start: 0xAA, target: 0x55, par: 1 },
+  { title: 'Low Mask',       desc: 'Clear the high nibble.',          start: 0xFF, target: 0x0F, par: 1 },
+  { title: 'Set High',       desc: 'Light up the top four bits.',     start: 0x00, target: 0xF0, par: 1 },
+  { title: 'Mirror Nibbles', desc: '0x0F flipped to 0xF0.',           start: 0x0F, target: 0xF0, par: 1 },
+  { title: 'Alternate Mask', desc: 'Keep only alternating bits.',     start: 0xFF, target: 0x55, par: 1 },
+  { title: 'All Ones II',    desc: '0x55 to 0xFF. Two steps.',        start: 0x55, target: 0xFF, par: 2 },
+  { title: 'Checkerboard',   desc: '0xF0 to 0x55. Two steps.',        start: 0xF0, target: 0x55, par: 2 },
+  { title: 'Pattern Build',  desc: '0x0F to 0xAA. Three steps.',      start: 0x0F, target: 0xAA, par: 3 },
+  { title: 'Zero Then Set',  desc: '0xAA to 0x0F. Three steps.',      start: 0xAA, target: 0x0F, par: 3 }
+];
+
+var OPS = [
+  { label: 'NOT',      fn: function(v){ return (~v) & 0xFF; } },
+  { label: 'SHL 1',    fn: function(v){ return (v << 1) & 0xFF; } },
+  { label: 'SHR 1',    fn: function(v){ return (v >> 1) & 0xFF; } },
+  { label: 'XOR 0xFF', fn: function(v){ return v ^ 0xFF; } },
+  { label: 'XOR 0xF0', fn: function(v){ return v ^ 0xF0; } },
+  { label: 'XOR 0x0F', fn: function(v){ return v ^ 0x0F; } },
+  { label: 'AND 0xF0', fn: function(v){ return v & 0xF0; } },
+  { label: 'AND 0x0F', fn: function(v){ return v & 0x0F; } },
+  { label: 'OR  0xF0', fn: function(v){ return v | 0xF0; } },
+  { label: 'OR  0x0F', fn: function(v){ return v | 0x0F; } },
+  { label: 'AND 0x55', fn: function(v){ return v & 0x55; } },
+  { label: 'OR  0x55', fn: function(v){ return v | 0x55; } }
+];
+
+/* ── State ───────────────────────────────────────────────── */
+var puzzleIdx   = 0;
+var currentVal  = 0;
+var undoStack     = [];
+var moves       = 0;
+var totalStars  = 0;
+var solved      = false;
+
+/* ── DOM refs ────────────────────────────────────────────── */
+var progLabel     = document.getElementById('prog-label');
+var totalStarsEl  = document.getElementById('total-stars-count');
+var puzTitle      = document.getElementById('puz-title');
+var puzDesc       = document.getElementById('puz-desc');
+var curHex        = document.getElementById('cur-hex');
+var curBits       = document.getElementById('cur-bits');
+var curIndices    = document.getElementById('cur-indices');
+var tgtHex        = document.getElementById('tgt-hex');
+var tgtBits       = document.getElementById('tgt-bits');
+var tgtIndices    = document.getElementById('tgt-indices');
+var moveCount     = document.getElementById('move-count');
+var parDisplay    = document.getElementById('par-display');
+var hintLine      = document.getElementById('hint-line');
+var opsGrid       = document.getElementById('ops-grid');
+var undoBtn       = document.getElementById('undo-btn');
+var resetBtn      = document.getElementById('reset-btn');
+var successBanner = document.getElementById('success-banner');
+var successStars  = document.getElementById('success-stars');
+var successMsg    = document.getElementById('success-msg');
+var successDetail = document.getElementById('success-detail');
+var nextBtn       = document.getElementById('next-btn');
+var currentPanel  = document.getElementById('current-panel');
+var gameArea      = document.getElementById('game-area');
+var finalScreen   = document.getElementById('final-screen');
+var finalStarsRow = document.getElementById('final-stars-row');
+var finalScore    = document.getElementById('final-score');
+var finalMsg      = document.getElementById('final-msg');
+var replayBtn     = document.getElementById('replay-btn');
+
+/* ── Helpers ─────────────────────────────────────────────── */
+function toHex(v) {
+  var h = v.toString(16).toUpperCase();
+  return '0x' + (h.length < 2 ? '0' + h : h);
+}
+
+function renderBitIndices(container) {
+  container.innerHTML = '';
+  for (var i = 7; i >= 0; i--) {
+    var d = document.createElement('div');
+    d.className = 'bf-bit-idx';
+    d.textContent = i;
+    container.appendChild(d);
+  }
+}
+
+function renderCurrentBits(val, target) {
+  curBits.innerHTML = '';
+  for (var i = 7; i >= 0; i--) {
+    var vb  = (val    >> i) & 1;
+    var tb  = (target >> i) & 1;
+    var el  = document.createElement('div');
+    el.className = 'bf-bit ' + (vb === tb ? 'bit-match' : 'bit-mismatch');
+    el.textContent = vb;
+    curBits.appendChild(el);
+  }
+}
+
+function renderTargetBits(target) {
+  tgtBits.innerHTML = '';
+  for (var i = 7; i >= 0; i--) {
+    var b  = (target >> i) & 1;
+    var el = document.createElement('div');
+    el.className = 'bf-bit ' + (b ? 'tgt-one' : 'tgt-zero');
+    el.textContent = b;
+    tgtBits.appendChild(el);
+  }
+}
+
+function updateDisplay() {
+  var puz = PUZZLES[puzzleIdx];
+  curHex.textContent = toHex(currentVal);
+  tgtHex.textContent = toHex(puz.target);
+  renderCurrentBits(currentVal, puz.target);
+  moveCount.textContent = moves;
+  parDisplay.textContent = puz.par;
+  undoBtn.disabled = (undoStack.length === 0);
+
+  /* hint: count matching bits */
+  var matching = 0;
+  for (var i = 0; i < 8; i++) {
+    if (((currentVal >> i) & 1) === ((puz.target >> i) & 1)) matching++;
+  }
+  if (!solved) {
+    hintLine.textContent = matching + ' / 8 bits matching';
+  }
+}
+
+function buildOpsGrid() {
+  opsGrid.innerHTML = '';
+  for (var i = 0; i < OPS.length; i++) {
+    (function(op) {
+      var btn = document.createElement('button');
+      btn.className = 'bf-op';
+      btn.textContent = op.label;
+      btn.addEventListener('click', function() {
+        if (solved) return;
+        applyOp(op.fn);
+      });
+      opsGrid.appendChild(btn);
+    })(OPS[i]);
+  }
+}
+
+function applyOp(fn) {
+  undoStack.push(currentVal);
+  currentVal = fn(currentVal);
+  moves++;
+  updateDisplay();
+  checkSolved();
+}
+
+function checkSolved() {
+  var puz = PUZZLES[puzzleIdx];
+  if (currentVal !== puz.target) return;
+
+  solved = true;
+  hintLine.textContent = '';
+
+  /* disable ops */
+  var opBtns = opsGrid.querySelectorAll('.bf-op');
+  for (var i = 0; i < opBtns.length; i++) opBtns[i].disabled = true;
+  undoBtn.disabled  = true;
+  resetBtn.disabled = true;
+
+  /* calc stars */
+  var stars = 0;
+  if      (moves <= puz.par)     stars = 3;
+  else if (moves <= puz.par + 1) stars = 2;
+  else if (moves <= puz.par + 2) stars = 1;
+
+  totalStars += stars;
+  totalStarsEl.textContent = totalStars;
+
+  /* glow current panel */
+  currentPanel.classList.add('solved');
+
+  /* star display */
+  var starStr = '';
+  for (var s = 0; s < 3; s++) starStr += (s < stars ? '⭐' : '☆');
+  successStars.textContent = starStr;
+
+  if (stars === 3) {
+    successMsg.textContent = 'Perfect! Solved in par.';
+  } else if (stars === 2) {
+    successMsg.textContent = 'Nice — one over par.';
+  } else if (stars === 1) {
+    successMsg.textContent = 'Solved! Room to optimise.';
+  } else {
+    successMsg.textContent = 'Solved! Try for fewer moves.';
+  }
+  successDetail.textContent = moves + ' move' + (moves === 1 ? '' : 's') + '  |  par: ' + puz.par;
+
+  /* show/hide next vs finish */
+  if (puzzleIdx >= PUZZLES.length - 1) {
+    nextBtn.textContent = 'See Results →';
+  } else {
+    nextBtn.textContent = 'Next Puzzle →';
+  }
+
+  successBanner.classList.add('show');
+}
+
+function loadPuzzle(idx) {
+  var puz = PUZZLES[idx];
+  puzzleIdx  = idx;
+  currentVal = puz.start;
+  undoStack    = [];
+  moves      = 0;
+  solved     = false;
+
+  progLabel.textContent = (idx + 1) + ' / ' + PUZZLES.length;
+  puzTitle.textContent  = puz.title;
+  puzDesc.textContent   = puz.desc;
+
+  currentPanel.classList.remove('solved');
+  successBanner.classList.remove('show');
+  hintLine.textContent = '';
+
+  renderBitIndices(curIndices);
+  renderBitIndices(tgtIndices);
+  renderTargetBits(puz.target);
+
+  var opBtns = opsGrid.querySelectorAll('.bf-op');
+  for (var i = 0; i < opBtns.length; i++) opBtns[i].disabled = false;
+  undoBtn.disabled  = true;
+  resetBtn.disabled = false;
+
+  updateDisplay();
+}
+
+function showFinalScreen() {
+  gameArea.style.display = 'none';
+  finalScreen.classList.add('show');
+
+  /* build star row */
+  var fs = '';
+  var full  = Math.floor(totalStars / 5);
+  for (var i = 0; i < 6; i++) fs += (i < full ? '⭐' : '☆');
+  finalStarsRow.textContent = fs;
+
+  finalScore.textContent = totalStars;
+
+  var msg = '';
+  if      (totalStars >= 28) msg = 'Flawless. You speak in bits.';
+  else if (totalStars >= 22) msg = 'Strong work — you know your masks.';
+  else if (totalStars >= 15) msg = 'Good effort. Keep practising.';
+  else if (totalStars >= 8)  msg = 'Getting there. Review AND/OR/XOR.';
+  else                       msg = 'Every expert was once a beginner.';
+  finalMsg.textContent = msg;
+}
+
+/* ── Event handlers ──────────────────────────────────────── */
+undoBtn.addEventListener('click', function() {
+  if (undoStack.length === 0 || solved) return;
+  currentVal = undoStack.pop();
+  moves = Math.max(0, moves - 1);
+  updateDisplay();
+});
+
+resetBtn.addEventListener('click', function() {
+  if (solved) return;
+  currentVal = PUZZLES[puzzleIdx].start;
+  undoStack    = [];
+  moves      = 0;
+  updateDisplay();
+});
+
+nextBtn.addEventListener('click', function() {
+  if (puzzleIdx >= PUZZLES.length - 1) {
+    showFinalScreen();
+  } else {
+    loadPuzzle(puzzleIdx + 1);
+  }
+});
+
+replayBtn.addEventListener('click', function() {
+  totalStars = 0;
+  totalStarsEl.textContent = 0;
+  finalScreen.classList.remove('show');
+  gameArea.style.display = '';
+  buildOpsGrid();
+  loadPuzzle(0);
+});
+
+/* ── Init ────────────────────────────────────────────────── */
+buildOpsGrid();
+loadPuzzle(0);
+
+/* ── Skin switcher ───────────────────────────────────────── */
+(function(){
+  var t=document.getElementById('skin-toggle'), p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click', function(e){ e.stopPropagation(); p.classList.toggle('open'); });
+  document.addEventListener('click', function(){ p.classList.remove('open'); });
+  p.addEventListener('click', function(e){ e.stopPropagation(); });
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click', function(){
+      var sk = o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>
