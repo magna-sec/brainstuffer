@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<title>Bitwise Flag Operations — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);
+     min-height:100vh;padding:1.5rem 1rem 4rem;}
+.wrap{max-width:860px;margin:0 auto;}
+.back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--subtle);
+           font-size:.8rem;text-decoration:none;margin-bottom:1.5rem;}
+.back-link:hover{color:var(--accent);}
+h1{color:var(--accent);font-size:1.35rem;margin-bottom:.2rem;}
+.sub{color:var(--subtle);font-size:.82rem;margin-bottom:1.4rem;line-height:1.55;}
+
+/* ── Section tabs ────────────────────────────────────────── */
+.sect-tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.9rem;}
+.sect-tab{
+  padding:.28rem .8rem;border-radius:6px;border:1.5px solid var(--card-border);
+  background:var(--card);color:var(--subtle);font-size:.75rem;font-weight:700;
+  cursor:pointer;font-family:'Courier New',monospace;
+  transition:border-color .15s,color .15s,background .15s;
+}
+.sect-tab:hover{border-color:var(--accent);color:var(--accent);}
+.sect-tab.active{border-color:var(--accent);color:var(--accent);background:var(--bg2);
+                 box-shadow:0 0 8px var(--glow);}
+
+/* ── Step meta ───────────────────────────────────────────── */
+.step-meta{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;flex-wrap:wrap;}
+.step-counter{font-size:.7rem;color:var(--muted);}
+.step-title-lbl{font-size:.87rem;font-weight:700;color:var(--accent);flex:1;}
+.pips{display:flex;gap:4px;}
+.pip{width:8px;height:8px;border-radius:50%;background:var(--card-border);
+     cursor:pointer;transition:background .2s,transform .2s;flex-shrink:0;}
+.pip.done{background:var(--accent2);}
+.pip.active{background:var(--accent);transform:scale(1.4);}
+
+/* ── Bit operation display ───────────────────────────────── */
+.op-wrap{
+  background:var(--card);border:1px solid var(--card-border);border-radius:12px;
+  padding:.85rem 1rem;margin-bottom:.8rem;overflow-x:auto;
+}
+.bit-idx-row{display:flex;align-items:center;gap:3px;margin-bottom:4px;
+             padding-left:52px;}
+.bit-idx{width:40px;text-align:center;font-size:.58rem;color:var(--muted);flex-shrink:0;}
+
+.bd-row{display:flex;align-items:center;gap:3px;margin-bottom:4px;}
+.bd-label{width:48px;font-size:.72rem;font-weight:700;text-align:right;
+          padding-right:6px;flex-shrink:0;}
+.bd-hex{margin-left:8px;font-size:.75rem;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+.bd-bits{display:flex;gap:3px;}
+
+.bit-cell{
+  width:40px;height:44px;border-radius:6px;border:1.5px solid;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background .25s,border-color .25s,box-shadow .25s;
+  gap:1px;
+}
+.bit-val{font-size:.95rem;font-weight:900;line-height:1;}
+
+/* row-specific 1-bit colours */
+.row-a .bit-cell-1   {border-color:var(--accent);background:rgba(129,140,248,.15);color:var(--accent);}
+.row-b .bit-cell-1   {border-color:var(--accent2);background:rgba(52,211,153,.12);color:var(--accent2);}
+.row-r .bit-cell-1   {border-color:#4ade80;background:rgba(74,222,128,.15);color:#4ade80;}
+/* 0-bits always dim */
+.bit-cell-0{border-color:var(--card-border);background:var(--bg2);color:var(--muted);opacity:.3;}
+
+/* column highlight (spans all rows) */
+.bit-cell.col-hl{box-shadow:0 0 10px var(--glow);opacity:1 !important;}
+.row-r .bit-cell.col-hl.bit-cell-1{box-shadow:0 0 10px rgba(74,222,128,.5);}
+
+/* op symbol row */
+.bd-op-row{display:flex;align-items:center;gap:3px;margin-bottom:4px;}
+.op-sym-cell{width:40px;text-align:center;font-size:.78rem;font-weight:900;
+             color:var(--muted);flex-shrink:0;}
+.bd-sep{border:none;border-top:1.5px solid var(--card-border);margin:6px 0 6px 52px;}
+
+/* ── Truth table ─────────────────────────────────────────── */
+.truth-wrap{
+  background:var(--card);border:1px solid var(--card-border);border-radius:12px;
+  padding:.85rem 1rem;margin-bottom:.8rem;display:inline-block;
+}
+.truth-table{border-collapse:collapse;font-size:.82rem;}
+.truth-table th{padding:.3rem .9rem;color:var(--muted);font-weight:700;
+                border-bottom:1px solid var(--card-border);text-align:center;}
+.truth-table td{padding:.3rem .9rem;text-align:center;}
+.truth-table tr.result-1 td{color:#4ade80;font-weight:700;}
+.truth-table tr.result-0 td{color:var(--muted);opacity:.5;}
+
+/* ── Flag byte visual ────────────────────────────────────── */
+.flag-wrap{
+  background:var(--card);border:1px solid var(--card-border);border-radius:12px;
+  padding:.85rem 1rem;margin-bottom:.8rem;overflow-x:auto;
+}
+.flag-bits{display:flex;gap:3px;margin-bottom:.5rem;}
+.flag-cell{
+  width:40px;min-height:44px;border-radius:6px;border:1.5px solid;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex-shrink:0;gap:2px;padding:.15rem .1rem;
+}
+.flag-cell.flag-set  {border-color:var(--accent);background:rgba(129,140,248,.15);}
+.flag-cell.flag-clear{border-color:var(--card-border);background:var(--bg2);opacity:.3;}
+.flag-bval{font-size:.95rem;font-weight:900;}
+.flag-set .flag-bval{color:var(--accent);}
+.flag-clear .flag-bval{color:var(--muted);}
+.flag-name{font-size:.5rem;color:var(--muted);text-align:center;line-height:1.2;
+           word-break:break-all;max-width:38px;}
+.flag-set .flag-name{color:var(--accent2);}
+.flag-labels{display:flex;gap:3px;margin-top:.4rem;}
+.flag-lbl{width:40px;font-size:.55rem;text-align:center;color:var(--muted);flex-shrink:0;}
+
+/* ── Narrative ───────────────────────────────────────────── */
+.narr{
+  border-left:2px solid var(--accent);
+  background:linear-gradient(90deg,rgba(129,140,248,.08) 0%,transparent 65%);
+  border-radius:0 8px 8px 0;padding:.7rem .95rem;
+  font-size:.85rem;line-height:1.65;margin-bottom:.75rem;
+}
+.narr strong{color:var(--accent);}
+.narr code{color:var(--accent2);font-size:.82rem;}
+.narr .g{color:#4ade80;font-weight:700;}
+.narr .y{color:#fbbf24;font-weight:700;}
+.narr .r{color:#f87171;font-weight:700;}
+
+/* ── Quiz ────────────────────────────────────────────────── */
+.quiz-card{background:var(--card);border:1.5px solid var(--accent);border-radius:10px;
+           padding:.85rem 1rem;margin-bottom:.75rem;box-shadow:0 0 12px var(--glow);}
+.quiz-q{font-size:.85rem;font-weight:700;color:var(--accent);margin-bottom:.65rem;}
+.quiz-opts{display:flex;flex-direction:column;gap:.4rem;}
+.q-opt{background:var(--bg2);border:1.5px solid var(--card-border);border-radius:7px;
+       padding:.5rem .8rem;font-family:'Courier New',monospace;font-size:.8rem;
+       color:var(--text);cursor:pointer;text-align:left;
+       transition:border-color .12s,background .12s;}
+.q-opt:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.q-opt.q-correct{border-color:#4ade80;background:rgba(74,222,128,.1);color:#4ade80;cursor:default;}
+.q-opt.q-wrong  {border-color:#f87171;background:rgba(248,113,113,.08);color:#f87171;cursor:default;}
+.q-opt.q-dim    {opacity:.35;cursor:default;}
+.q-explain{margin-top:.6rem;font-size:.78rem;color:var(--subtle);line-height:1.55;
+           border-left:2px solid #4ade80;padding-left:.65rem;display:none;}
+.q-explain.show{display:block;}
+
+/* ── Playground ──────────────────────────────────────────── */
+.pg-wrap{background:var(--card);border:1px solid var(--card-border);border-radius:12px;
+         padding:1rem;margin-bottom:.8rem;}
+.pg-inputs{display:flex;gap:.6rem;margin-bottom:.75rem;flex-wrap:wrap;}
+.pg-field{display:flex;flex-direction:column;gap:.25rem;}
+.pg-field label{font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;}
+.pg-field input{
+  width:7rem;background:var(--bg2);border:1.5px solid var(--card-border);
+  border-radius:6px;padding:.4rem .6rem;font-family:'Courier New',monospace;
+  font-size:.85rem;color:var(--text);
+}
+.pg-field input:focus{outline:none;border-color:var(--accent);}
+.pg-ops{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:.75rem;}
+.pg-op-btn{
+  padding:.4rem .9rem;border-radius:7px;font-family:'Courier New',monospace;
+  font-size:.82rem;font-weight:700;cursor:pointer;
+  border:1.5px solid var(--card-border);background:var(--bg2);color:var(--subtle);
+  transition:border-color .12s,background .12s,color .12s;
+}
+.pg-op-btn:hover,.pg-op-btn.active{
+  border-color:var(--accent);color:var(--accent);background:rgba(129,140,248,.1);
+}
+.pg-error{font-size:.75rem;color:#f87171;min-height:1.1rem;}
+
+/* ── Nav ─────────────────────────────────────────────────── */
+.nav-row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
+.btn-nav{padding:.5rem 1.1rem;border-radius:7px;font-family:'Courier New',monospace;
+         font-size:.82rem;font-weight:700;cursor:pointer;
+         border:1.5px solid var(--card-border);background:var(--card);color:var(--subtle);
+         transition:border-color .15s,color .15s;}
+.btn-nav:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.btn-nav.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-nav.primary:hover:not(:disabled){opacity:.85;}
+.btn-nav:disabled{opacity:.28;cursor:default;}
+</style>
+</head>
+<body>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="wrap">
+  <a class="back-link" href="../index.html#learn">&#8592; Back to Interactive Learning</a>
+  <h1>&#127381; Bitwise Flag Operations</h1>
+  <p class="sub">AND to test a bit &nbsp;&middot;&nbsp; OR to set it &nbsp;&middot;&nbsp; XOR to flip it &nbsp;&middot;&nbsp; NOT to invert &nbsp;&middot;&nbsp; packing 8 booleans into one byte.<br>All concepts grounded in real reverse engineering — specifically the Minesweeper cell byte.</p>
+
+  <div class="sect-tabs" id="sect-tabs"></div>
+
+  <div class="step-meta">
+    <span class="step-counter" id="step-counter">Step 1 / 1</span>
+    <span class="step-title-lbl" id="step-title"></span>
+    <div class="pips" id="pips"></div>
+  </div>
+
+  <div id="main-display"></div>
+  <div class="narr" id="narr"></div>
+  <div id="quiz-area"></div>
+
+  <div class="nav-row">
+    <button class="btn-nav" id="btn-prev">&#8592; Prev</button>
+    <button class="btn-nav primary" id="btn-next">Next &#8594;</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════ */
+function toBin8(n){ return ((n & 0xFF) >>> 0).toString(2).padStart(8,'0'); }
+function toHex2(n){ return '0x' + ((n & 0xFF) >>> 0).toString(16).toUpperCase().padStart(2,'0'); }
+function computeOp(a, b, op){
+  switch(op){
+    case 'AND': return (a & b) & 0xFF;
+    case 'OR':  return (a | b) & 0xFF;
+    case 'XOR': return (a ^ b) & 0xFF;
+    case 'NOT': return (~a)    & 0xFF;
+  }
+  return 0;
+}
+
+/* which bits are 1 in n */
+function bitsSet(n){
+  var out = [];
+  for(var i=0;i<8;i++) if((n>>i)&1) out.push(i);
+  return out;
+}
+
+/* render a single row of 8 bit cells */
+function renderBitRow(value, rowClass, label, hexLabel, hlBits){
+  var bin = toBin8(value);
+  var html = '<div class="bd-row ' + rowClass + '">';
+  html += '<div class="bd-label" style="color:' + labelColor(rowClass) + ';">' + label + '</div>';
+  html += '<div class="bd-bits">';
+  for(var b=7; b>=0; b--){
+    var bit = (value >> b) & 1;
+    var isHl = hlBits && hlBits.indexOf(b) !== -1;
+    html += '<div class="bit-cell bit-cell-' + bit + (isHl ? ' col-hl' : '') + '">';
+    html += '<span class="bit-val">' + bit + '</span>';
+    html += '</div>';
+  }
+  html += '</div>';
+  if(hexLabel !== undefined) html += '<div class="bd-hex">' + hexLabel + '</div>';
+  html += '</div>';
+  return html;
+}
+
+function labelColor(rowClass){
+  if(rowClass.indexOf('row-a') !== -1) return 'var(--accent)';
+  if(rowClass.indexOf('row-b') !== -1) return 'var(--accent2)';
+  if(rowClass.indexOf('row-r') !== -1) return '#4ade80';
+  return 'var(--muted)';
+}
+
+function renderOpDisplay(a, b, opName, hlA, hlB, hlR){
+  var result = computeOp(a, b, opName);
+  if(hlR === undefined) hlR = bitsSet(result);
+  if(hlA === undefined) hlA = hlR;
+  if(hlB === undefined) hlB = hlR;
+
+  var html = '<div class="op-wrap">';
+  /* index header */
+  html += '<div class="bit-idx-row">';
+  for(var b2=7;b2>=0;b2--) html += '<div class="bit-idx">' + b2 + '</div>';
+  html += '</div>';
+
+  html += renderBitRow(a, 'row-a', 'A', toHex2(a), hlA);
+
+  if(opName !== 'NOT'){
+    /* operator row */
+    html += '<div class="bd-op-row"><div style="width:48px"></div><div class="bd-bits">';
+    var sym = opName === 'AND' ? '&amp;' : opName === 'OR' ? '|' : '^';
+    for(var i=0;i<8;i++) html += '<div class="op-sym-cell">' + sym + '</div>';
+    html += '</div><div class="bd-hex" style="color:var(--accent);font-weight:700;">' + opName + '</div></div>';
+
+    html += renderBitRow(b, 'row-b', 'B', toHex2(b), hlB);
+  } else {
+    html += '<div class="bd-op-row"><div style="width:48px"></div><div class="bd-bits">';
+    for(var i=0;i<8;i++) html += '<div class="op-sym-cell">~</div>';
+    html += '</div><div class="bd-hex" style="color:var(--accent);font-weight:700;">NOT</div></div>';
+  }
+
+  html += '<hr class="bd-sep">';
+  html += renderBitRow(result, 'row-r', '=', toHex2(result) + ' (' + result + ')', hlR);
+  html += '</div>';
+  return html;
+}
+
+function renderTruth(opName){
+  var rows = [[0,0],[0,1],[1,0],[1,1]];
+  var html = '<div class="truth-wrap"><table class="truth-table"><thead><tr>';
+  html += '<th>A</th><th>B</th><th>A ' + (opName==='AND'?'&amp;':opName==='OR'?'|':'^') + ' B</th></tr></thead><tbody>';
+  rows.forEach(function(r){
+    var a=r[0], b=r[1], res;
+    if(opName==='AND') res = a&b;
+    else if(opName==='OR') res = a|b;
+    else res = a^b;
+    var cls = res ? 'result-1' : 'result-0';
+    html += '<tr class="'+cls+'"><td>'+a+'</td><td>'+b+'</td><td><strong>'+res+'</strong></td></tr>';
+  });
+  html += '</tbody></table></div>';
+  return html;
+}
+
+function renderFlagByte(value, flags){
+  var html = '<div class="flag-wrap">';
+  /* bit header */
+  html += '<div class="bit-idx-row" style="padding-left:0;margin-bottom:.4rem;">';
+  for(var b=7;b>=0;b--) html += '<div class="bit-idx">'+b+'</div>';
+  html += '</div>';
+  /* cells */
+  html += '<div class="flag-bits">';
+  for(var b=7;b>=0;b--){
+    var bit = (value >> b) & 1;
+    var flag = null;
+    for(var f=0;f<flags.length;f++) if(flags[f].bit===b) flag=flags[f];
+    var cls = 'flag-cell ' + (bit ? 'flag-set' : 'flag-clear');
+    html += '<div class="'+cls+'">';
+    html += '<span class="flag-bval">'+bit+'</span>';
+    if(flag) html += '<span class="flag-name">'+flag.name+'</span>';
+    html += '</div>';
+  }
+  html += '</div>';
+  /* hex / binary legend */
+  html += '<div style="margin-top:.5rem;font-size:.72rem;color:var(--muted);">';
+  html += toHex2(value) + ' &nbsp;=&nbsp; <span style="color:var(--accent);font-weight:700;">' + toBin8(value) + '</span>';
+  html += '</div></div>';
+  return html;
+}
+
+function renderPlayground(){
+  return '<div class="pg-wrap">' +
+    '<div class="panel-lbl" style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:.65rem;">Interactive Playground</div>' +
+    '<div class="pg-inputs">' +
+      '<div class="pg-field"><label>Value A (hex)</label><input id="pg-a" value="8E" maxlength="4" placeholder="8E"></div>' +
+      '<div class="pg-field"><label>Mask B (hex)</label><input id="pg-b" value="80" maxlength="4" placeholder="80"></div>' +
+    '</div>' +
+    '<div class="pg-ops">' +
+      '<button class="pg-op-btn active" data-op="AND">AND  &amp;</button>' +
+      '<button class="pg-op-btn" data-op="OR">OR  |</button>' +
+      '<button class="pg-op-btn" data-op="XOR">XOR  ^</button>' +
+      '<button class="pg-op-btn" data-op="NOT">NOT  ~</button>' +
+    '</div>' +
+    '<div class="pg-error" id="pg-error"></div>' +
+    '<div id="pg-display"></div>' +
+  '</div>';
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION DATA
+   ═══════════════════════════════════════════════════════ */
+var SECTIONS = [
+  /* ── 0: The Byte ──────────────────────────────────── */
+  {
+    title: '0. The Byte',
+    steps: [
+      {
+        title: 'A byte is 8 individual bits',
+        display: function(){ return renderFlagByte(0x8E, []); },
+        narr: 'A <strong>byte</strong> is 8 binary digits (bits), each either 0 or 1. Bit 7 is the <strong>Most Significant Bit (MSB)</strong> — the leftmost, highest-value bit. Bit 0 is the <strong>Least Significant Bit (LSB)</strong> — the rightmost.<br><br>' +
+              '<code>0x8E</code> in binary is <code>10001110</code>. The hex and binary always represent the same thing — just different notations for the same 8 switches.'
+      },
+      {
+        title: 'Packing 8 booleans into one byte',
+        display: function(){
+          return renderFlagByte(0x8E, [
+            {bit:7, name:'mine'},
+            {bit:3, name:'reveal'},
+            {bit:2, name:'flag'},
+            {bit:1, name:'adj'},
+            {bit:0, name:'marker'}
+          ]);
+        },
+        narr: 'A byte can store <strong>8 independent boolean flags</strong> — one per bit. Instead of 8 separate variables, one byte holds them all.<br><br>' +
+              'In Minesweeper\'s source code, each grid cell is a single byte. Bit 7 means "mine present". Bit 2 means "flagged by player". Bit 3 means "revealed". Each bit is one yes/no fact about the cell.<br><br>' +
+              'This saves memory and means one memory read tells you everything about a cell. The tradeoff: you need bitwise operators to read or write individual flags — which is what this lesson covers.'
+      }
+    ]
+  },
+  /* ── 1: AND & ─────────────────────────────────────── */
+  {
+    title: '1. AND  &',
+    steps: [
+      {
+        title: 'Rule: both inputs must be 1',
+        display: function(){ return renderTruth('AND'); },
+        narr: '<strong>AND</strong> outputs 1 only when <em>both</em> A <em>and</em> B are 1. In all other cases the result is 0.<br><br>' +
+              'Think of it as a gate with two locks — both keys must turn simultaneously.<br><br>' +
+              '<span class="g">1 &amp; 1 = 1</span> &nbsp;|&nbsp; <span class="r">1 &amp; 0 = 0</span> &nbsp;|&nbsp; <span class="r">0 &amp; 1 = 0</span> &nbsp;|&nbsp; <span class="r">0 &amp; 0 = 0</span>'
+      },
+      {
+        title: 'Testing if bit 7 is SET — 0x8E & 0x80',
+        display: function(){ return renderOpDisplay(0x8E, 0x80, 'AND', [7], [7], [7]); },
+        narr: '<code>0x8E & 0x80</code> — the mask <code>0x80</code> is <code>10000000</code>: only bit 7 is 1, everything else is 0.<br><br>' +
+              'AND bit-by-bit: only bit 7 survives (both inputs had 1). All other bits are wiped to 0 by the mask\'s zeros.<br><br>' +
+              'Result is <span class="g">0x80 — non-zero</span>, so the test is <strong>true: bit 7 IS set</strong>. The mine flag is present.<br>' +
+              'In C: <code>if (cell &amp; 0x80) { /* mine is here */ }</code>'
+      },
+      {
+        title: 'Testing if bit 7 is CLEAR — 0x0E & 0x80',
+        display: function(){ return renderOpDisplay(0x0E, 0x80, 'AND', [], [7], []); },
+        narr: '<code>0x0E & 0x80</code> — same mask, different value. <code>0x0E = 00001110</code> has bit 7 clear.<br><br>' +
+              'AND at bit 7: A has 0, B has 1 → result is <span class="r">0</span>. All other bits also masked to 0.<br><br>' +
+              'Result is <span class="r">0x00 — zero</span>, so the test is <strong>false: bit 7 is NOT set</strong>. No mine flag.<br>' +
+              'The same <code>if (cell &amp; 0x80)</code> check does <em>not</em> fire — correct behaviour.'
+      },
+      {
+        title: 'AND also extracts a group of bits',
+        display: function(){ return renderOpDisplay(0x8E, 0x0F, 'AND', [3,2,1], [3,2,1,0], [3,2,1]); },
+        narr: '<code>0x8E & 0x0F</code> — mask <code>0x0F = 00001111</code> keeps only the lower 4 bits (the nibble), discarding the upper 4.<br><br>' +
+              'Result <code>0x0E</code> is the lower nibble of <code>0x8E</code>. The upper bits are gone.<br><br>' +
+              'This is called <strong>masking</strong> — using AND to isolate a group of bits. The mask\'s 1s are the "windows" that let bits through; the 0s are walls that block.',
+        quiz: {
+          question: 'What does (0x35 & 0x01) tell you about the number 0x35?',
+          options: [
+            'Whether bit 0 is set — i.e. whether 0x35 is odd or even',
+            'Whether 0x35 is greater than 1',
+            'The upper nibble of 0x35',
+            'Whether 0x35 is zero'
+          ],
+          correct: 0,
+          explanation: '0x01 = 00000001 — only bit 0 is set in the mask. ANDing isolates bit 0. Bit 0 is the "ones place" — it is 1 for all odd numbers and 0 for all even numbers. 0x35 = 53, which is odd, so 0x35 & 0x01 = 1.'
+        }
+      }
+    ]
+  },
+  /* ── 2: OR | ──────────────────────────────────────── */
+  {
+    title: '2. OR  |',
+    steps: [
+      {
+        title: 'Rule: either input can be 1',
+        display: function(){ return renderTruth('OR'); },
+        narr: '<strong>OR</strong> outputs 1 when <em>either</em> A <em>or</em> B (or both) are 1. Only outputs 0 when <em>both</em> inputs are 0.<br><br>' +
+              'Think of it as a gate with two switches — either switch opens the gate.<br><br>' +
+              '<span class="g">1 | 1 = 1</span> &nbsp;|&nbsp; <span class="g">1 | 0 = 1</span> &nbsp;|&nbsp; <span class="g">0 | 1 = 1</span> &nbsp;|&nbsp; <span class="r">0 | 0 = 0</span>'
+      },
+      {
+        title: 'Setting bit 7 — 0x0E | 0x80',
+        display: function(){ return renderOpDisplay(0x0E, 0x80, 'OR', [3,2,1], [7], [7,3,2,1]); },
+        narr: '<code>0x0E | 0x80</code> — OR with <code>0x80 = 10000000</code> forces bit 7 to 1.<br><br>' +
+              'Bit 7: A has 0, B has 1 → result is <span class="g">1</span>. Bit 7 is now set.<br>' +
+              'Bits 3,2,1: A has 1, B has 0 → result is <span class="g">1</span>. They are <strong>preserved unchanged</strong>.<br>' +
+              'Bits 6,5,4,0: both are 0 → result is 0. Also unchanged.<br><br>' +
+              'OR with a mask <em>only raises bits to 1</em> — it cannot clear them. It\'s the safe "claim this cell" operation used in Minesweeper: <code>cell |= 0x80</code>.'
+      },
+      {
+        title: 'Why not just = 0x80 instead of |= 0x80?',
+        display: function(){
+          var html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.8rem;">';
+          /* Destructive = */
+          html += '<div style="background:var(--card);border:1.5px solid #f87171;border-radius:10px;padding:.75rem;">';
+          html += '<div style="font-size:.68rem;font-weight:700;text-transform:uppercase;color:#f87171;margin-bottom:.5rem;">WRONG — destroys other flags</div>';
+          html += '<div style="font-size:.8rem;line-height:1.8;">';
+          html += 'Before: <code style="color:var(--accent);">0x0E</code> = <code>00001110</code><br>';
+          html += '<code style="color:#f87171;">cell = 0x80</code><br>';
+          html += 'After:&nbsp; <code style="color:#f87171;">0x80</code> = <code>10000000</code><br>';
+          html += '<span style="font-size:.72rem;color:var(--muted);">bits 3,2,1 wiped ✗</span>';
+          html += '</div></div>';
+          /* Safe |= */
+          html += '<div style="background:var(--card);border:1.5px solid #4ade80;border-radius:10px;padding:.75rem;">';
+          html += '<div style="font-size:.68rem;font-weight:700;text-transform:uppercase;color:#4ade80;margin-bottom:.5rem;">CORRECT — preserves other flags</div>';
+          html += '<div style="font-size:.8rem;line-height:1.8;">';
+          html += 'Before: <code style="color:var(--accent);">0x0E</code> = <code>00001110</code><br>';
+          html += '<code style="color:#4ade80;">cell |= 0x80</code><br>';
+          html += 'After:&nbsp; <code style="color:#4ade80;">0x8E</code> = <code>10001110</code><br>';
+          html += '<span style="font-size:.72rem;color:var(--muted);">bits 3,2,1 intact ✓</span>';
+          html += '</div></div>';
+          html += '</div>';
+          return html;
+        },
+        narr: '<code>cell = 0x80</code> overwrites the <em>entire</em> byte with 10000000. All the other flag bits — revealed, flagged, adjacent — are <span class="r">destroyed</span>.<br><br>' +
+              '<code>cell |= 0x80</code> is shorthand for <code>cell = cell | 0x80</code>: read the current byte, OR it with the mask, write back. Only bit 7 changes; everything else survives.',
+        quiz: {
+          question: 'You have a cell byte 0x35 and want to set bit 6 without changing anything else. Which operation?',
+          options: [
+            'cell |= 0x40',
+            'cell = 0x40',
+            'cell &= 0x40',
+            'cell ^= 0x35'
+          ],
+          correct: 0,
+          explanation: '0x40 = 01000000 — bit 6 is set, all others are 0. OR-ing preserves existing bits and forces bit 6 to 1. `cell = 0x40` would destroy everything else. `&= 0x40` would clear everything except bit 6.'
+        }
+      }
+    ]
+  },
+  /* ── 3: XOR ^ ─────────────────────────────────────── */
+  {
+    title: '3. XOR  ^',
+    steps: [
+      {
+        title: 'Rule: inputs must be DIFFERENT',
+        display: function(){ return renderTruth('XOR'); },
+        narr: '<strong>XOR</strong> (exclusive OR) outputs 1 only when the two inputs are <em>different</em>. Same inputs → 0. Different inputs → 1.<br><br>' +
+              'The key property: <strong>XOR toggles a bit</strong>. XOR with 1 flips the bit. XOR with 0 leaves it unchanged.<br><br>' +
+              '<span class="r">1 ^ 1 = 0</span> &nbsp;|&nbsp; <span class="g">1 ^ 0 = 1</span> &nbsp;|&nbsp; <span class="g">0 ^ 1 = 1</span> &nbsp;|&nbsp; <span class="r">0 ^ 0 = 0</span>'
+      },
+      {
+        title: 'Toggling bit 0 back and forth',
+        display: function(){
+          var html = renderOpDisplay(0x8E, 0x01, 'XOR', [0], [0], [0]);
+          html += renderOpDisplay(0x8F, 0x01, 'XOR', [0], [0], [0]);
+          return html;
+        },
+        narr: '<code>0x8E ^ 0x01</code> — XOR with <code>0x01 = 00000001</code> flips only bit 0.<br>' +
+              '<code>0x8E</code> had bit 0 = 0 → becomes 1: result <span class="g">0x8F</span>.<br><br>' +
+              '<code>0x8F ^ 0x01</code> — XOR again with the same mask.<br>' +
+              '<code>0x8F</code> had bit 0 = 1 → becomes 0: result <span class="g">0x8E</span> — back where we started.<br><br>' +
+              '<strong>XOR is its own inverse.</strong> Apply the same mask twice and you get back the original value. This makes it perfect for toggle switches.'
+      },
+      {
+        title: 'The minesweeper XOR trick — 0x0F ^ 0x81',
+        display: function(){ return renderOpDisplay(0x0F, 0x81, 'XOR', [7,0], [7,0], [7,0]); },
+        narr: 'From the Minesweeper hack: we need to turn <code>0x0F</code> (mine hidden) into <code>0x8E</code> (mine+flagged). Two things must happen simultaneously:<br>' +
+              '&nbsp;&nbsp;<span class="g">Set bit 7</span> (add the mine flag)<br>' +
+              '&nbsp;&nbsp;<span class="r">Clear bit 0</span> (change the marker)<br><br>' +
+              'The mask <code>0x81 = 10000001</code> has 1s in exactly bits 7 and 0. XOR flips both those bits in one instruction.<br><br>' +
+              'Bit 7: 0 ^ 1 = <span class="g">1</span> (set) &nbsp;&nbsp; Bit 0: 1 ^ 1 = <span class="r">0</span> (cleared) &nbsp;&nbsp; All other bits: unchanged.<br>' +
+              'Result: <code>0x8E</code> ✓ — <em>two operations, one XOR.</em>',
+        quiz: {
+          question: 'What does (val ^ val) always equal, for any value of val?',
+          options: [
+            '0 — every bit XOR'd with itself gives 0',
+            'val — XOR with itself is identity',
+            '0xFF — all bits flip',
+            'Undefined — depends on val'
+          ],
+          correct: 0,
+          explanation: 'XOR rule: same inputs → 0. Every bit XOR'd with itself (same value) gives 0. So val ^ val = 0 regardless of val. This is actually used in x86 to zero a register: `xor eax, eax` — faster than `mov eax, 0` by 3 bytes.'
+        }
+      }
+    ]
+  },
+  /* ── 4: NOT ~ ─────────────────────────────────────── */
+  {
+    title: '4. NOT  ~',
+    steps: [
+      {
+        title: 'Flip every bit — ~0x0F',
+        display: function(){ return renderOpDisplay(0x0F, 0, 'NOT', [4,5,6,7], null, [4,5,6,7]); },
+        narr: '<strong>NOT</strong> inverts every bit in the byte. Every 0 becomes 1, every 1 becomes 0.<br><br>' +
+              '<code>~0x0F</code>: <code>00001111</code> → <code>11110000</code> = <code>0xF0</code>.<br><br>' +
+              'NOT is a unary operator — it only takes one operand. In C/assembly: <code>~value</code> or the <code>NOT</code> instruction in x86.<br><br>' +
+              '<strong>Note:</strong> In C, <code>~x</code> on a signed int gives a 32-bit result. For 8-bit work, always mask: <code>(~x) & 0xFF</code>.'
+      },
+      {
+        title: 'Clearing a bit with NOT — val & ~0x80',
+        display: function(){
+          var html = renderOpDisplay(0x80, 0, 'NOT', null, null, bitsSet(0x7F));
+          html += renderOpDisplay(0x8E, 0x7F, 'AND', bitsSet(0x8E & 0x7F), bitsSet(0x7F), bitsSet(0x8E & 0x7F));
+          return html;
+        },
+        narr: 'To <strong>clear a specific bit</strong>, combine NOT and AND: <code>cell &amp; ~mask</code>.<br><br>' +
+              'Step 1: <code>~0x80 = 0x7F = 01111111</code> — a mask with bit 7 as the only 0.<br>' +
+              'Step 2: <code>0x8E &amp; 0x7F</code> — AND forces bit 7 to 0 (because the mask has 0 there), and preserves all other bits.<br><br>' +
+              'Result: <code>0x0E</code> — bit 7 is gone, everything else unchanged.<br>' +
+              'In C: <code>cell &amp;= ~0x80;</code> is the idiomatic way to clear bit 7.',
+        quiz: {
+          question: 'Which sequence clears bit 3 of a byte without touching any other bits?',
+          options: [
+            'val &= ~0x08   (AND with NOT of the bit-3 mask)',
+            'val ^= 0x08    (XOR with the bit-3 mask)',
+            'val |= ~0x08   (OR with inverted mask)',
+            'val = val - 8  (subtract the bit value)'
+          ],
+          correct: 0,
+          explanation: '~0x08 = 0xF7 = 11110111 — bit 3 is the only 0. ANDing forces bit 3 to 0 while preserving everything else. XOR (option B) would toggle the bit — clear it if set, but set it if already clear, which is not guaranteed to clear. OR with inverted mask would set all other bits.'
+        }
+      }
+    ]
+  },
+  /* ── 5: Playground ────────────────────────────────── */
+  {
+    title: '5. Playground',
+    steps: [
+      {
+        title: 'Enter any values and try the operations',
+        display: function(){ return renderPlayground(); },
+        narr: 'Enter any hex values and pick an operation. The bit display updates live as you type.',
+        isPlayground: true
+      }
+    ]
+  }
+];
+
+/* ═══════════════════════════════════════════════════════
+   STATE + RENDER
+   ═══════════════════════════════════════════════════════ */
+var curSect = 0;
+var curStep = 0;
+var quizAnswered = false;
+
+function render(){
+  var sect = SECTIONS[curSect];
+  var step = sect.steps[curStep];
+  quizAnswered = false;
+
+  /* tabs */
+  var tabsEl = document.getElementById('sect-tabs');
+  tabsEl.innerHTML = '';
+  SECTIONS.forEach(function(s, i){
+    var btn = document.createElement('button');
+    btn.className = 'sect-tab' + (i === curSect ? ' active' : '');
+    btn.textContent = s.title;
+    (function(idx){ btn.addEventListener('click', function(){ curSect=idx; curStep=0; render(); }); })(i);
+    tabsEl.appendChild(btn);
+  });
+
+  /* pips */
+  document.getElementById('step-counter').textContent = 'Step '+(curStep+1)+' / '+sect.steps.length;
+  document.getElementById('step-title').textContent = step.title;
+  var pipsEl = document.getElementById('pips');
+  pipsEl.innerHTML = '';
+  sect.steps.forEach(function(_, i){
+    var d = document.createElement('div');
+    d.className = 'pip'+(i<curStep?' done':'')+(i===curStep?' active':'');
+    (function(idx){ d.addEventListener('click', function(){ curStep=idx; render(); }); })(i);
+    pipsEl.appendChild(d);
+  });
+
+  /* main display */
+  document.getElementById('main-display').innerHTML = step.display();
+
+  /* narrative */
+  document.getElementById('narr').innerHTML = step.narr;
+
+  /* quiz */
+  var qa = document.getElementById('quiz-area');
+  if(step.quiz){
+    var q = step.quiz;
+    qa.innerHTML = '<div class="quiz-card"><div class="quiz-q">&#10067; ' + q.question + '</div>' +
+      '<div class="quiz-opts">' +
+      q.options.map(function(opt, i){
+        return '<button class="q-opt" data-qi="'+i+'">'+opt+'</button>';
+      }).join('') +
+      '</div><div class="q-explain" id="q-explain">'+q.explanation+'</div></div>';
+    qa.querySelectorAll('.q-opt').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if(quizAnswered) return;
+        quizAnswered = true;
+        var picked = parseInt(btn.getAttribute('data-qi'));
+        qa.querySelectorAll('.q-opt').forEach(function(b, i){
+          b.disabled = true;
+          if(i===q.correct) b.classList.add('q-correct');
+          else if(i===picked) b.classList.add('q-wrong');
+          else b.classList.add('q-dim');
+        });
+        document.getElementById('q-explain').classList.add('show');
+      });
+    });
+  } else {
+    qa.innerHTML = '';
+  }
+
+  /* playground wiring */
+  if(step.isPlayground) wirePlayground();
+
+  /* buttons */
+  document.getElementById('btn-prev').disabled = (curSect===0 && curStep===0);
+  var isLast = (curSect===SECTIONS.length-1) && (curStep===sect.steps.length-1);
+  var btn = document.getElementById('btn-next');
+  btn.innerHTML = isLast ? '&#10003; Done' : 'Next &#8594;';
+  btn.disabled = false;
+}
+
+function wirePlayground(){
+  var pgOp = 'AND';
+  function updatePg(){
+    var aStr = (document.getElementById('pg-a')||{}).value || '';
+    var bStr = (document.getElementById('pg-b')||{}).value || '';
+    var a = parseInt(aStr, 16);
+    var b = parseInt(bStr, 16);
+    var errEl = document.getElementById('pg-error');
+    var dispEl = document.getElementById('pg-display');
+    if(isNaN(a) || a < 0 || a > 0xFF){ errEl.textContent='A: enter a valid hex byte (00–FF)'; dispEl.innerHTML=''; return; }
+    if(pgOp !== 'NOT' && (isNaN(b) || b < 0 || b > 0xFF)){ errEl.textContent='B: enter a valid hex byte (00–FF)'; dispEl.innerHTML=''; return; }
+    errEl.textContent = '';
+    dispEl.innerHTML = renderOpDisplay(a, b, pgOp);
+  }
+  var pgBInput = document.getElementById('pg-b');
+  function setOp(op){
+    pgOp = op;
+    document.querySelectorAll('.pg-op-btn').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-op')===op); });
+    if(pgBInput) pgBInput.style.opacity = op === 'NOT' ? '.35' : '1';
+    updatePg();
+  }
+  document.querySelectorAll('.pg-op-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ setOp(btn.getAttribute('data-op')); });
+  });
+  document.getElementById('pg-a').addEventListener('input', updatePg);
+  if(pgBInput) pgBInput.addEventListener('input', updatePg);
+  updatePg();
+}
+
+document.getElementById('btn-next').addEventListener('click', function(){
+  var sect = SECTIONS[curSect];
+  if(curStep < sect.steps.length - 1){ curStep++; }
+  else if(curSect < SECTIONS.length - 1){ curSect++; curStep = 0; }
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+document.getElementById('btn-prev').addEventListener('click', function(){
+  if(curStep > 0){ curStep--; }
+  else if(curSect > 0){ curSect--; curStep = SECTIONS[curSect].steps.length - 1; }
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/* ── Skin switcher ─────────────────────────────────── */
+(function(){
+  var t=document.getElementById('skin-toggle'), p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click', function(e){ e.stopPropagation(); p.classList.toggle('open'); });
+  document.addEventListener('click', function(){ p.classList.remove('open'); });
+  p.addEventListener('click', function(e){ e.stopPropagation(); });
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click', function(){
+      var sk = o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+
+render();
+</script>
+</body>
+</html>
