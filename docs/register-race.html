@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Register Race — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  font-family: 'Courier New', monospace;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 1.5rem 1rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-wrap {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ── screens ── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ── title screen ── */
+#screen-title {
+  text-align: center;
+  padding-top: 2rem;
+}
+.title-icon {
+  font-size: 3.5rem;
+  line-height: 1;
+  margin-bottom: .5rem;
+}
+.title-heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: .04em;
+  margin: 0 0 .5rem;
+}
+.title-sub {
+  color: var(--muted);
+  font-size: .82rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+.rules-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  text-align: left;
+  font-size: .82rem;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+  line-height: 1.7;
+}
+.rules-card span {
+  color: var(--accent);
+  font-weight: 700;
+}
+.hi-display {
+  color: var(--muted);
+  font-size: .8rem;
+  margin-bottom: 1.5rem;
+}
+.hi-display strong {
+  color: var(--accent2);
+}
+.btn-start {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  padding: .75rem 2.5rem;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: .06em;
+  transition: opacity .15s;
+}
+.btn-start:hover { opacity: .85; }
+
+/* ── game screen ── */
+#screen-game { padding-top: .5rem; }
+
+/* timer bar */
+.timer-track {
+  width: 100%;
+  height: 6px;
+  background: var(--bg2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: .9rem;
+}
+.timer-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: #4ade80;
+  transition: background .2s;
+  transform-origin: left;
+}
+.timer-fill.warn  { background: var(--warning); }
+.timer-fill.danger{ background: #f87171; }
+
+/* HUD */
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .7rem;
+  font-size: .85rem;
+}
+.hud-score {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1rem;
+}
+.hud-combo {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: .15rem .6rem;
+  font-size: .8rem;
+  color: var(--muted);
+  transition: border-color .2s, box-shadow .2s, color .2s;
+}
+.hud-combo.hot {
+  border-color: var(--accent);
+  box-shadow: 0 0 8px var(--glow);
+  color: var(--accent);
+}
+.hud-lives {
+  display: flex;
+  gap: .25rem;
+  font-size: 1.1rem;
+}
+.life {
+  transition: opacity .3s;
+}
+.life.lost {
+  opacity: .22;
+}
+
+/* speed pips */
+.speed-row {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  margin-bottom: .9rem;
+  font-size: .72rem;
+  color: var(--muted);
+}
+.pip-wrap { display: flex; gap: 3px; }
+.pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--bg2);
+  transition: background .3s;
+}
+.pip.lit { background: var(--accent); }
+
+/* question card */
+.q-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 1.2rem 1.2rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+/* answer grid */
+.answer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .6rem;
+  margin-bottom: .8rem;
+}
+.ans-btn {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  min-height: 60px;
+  font-family: 'Courier New', monospace;
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  padding: .5rem .6rem;
+  transition: border-color .12s, background .12s, box-shadow .12s;
+}
+.ans-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  box-shadow: 0 0 6px var(--glow);
+}
+.ans-btn:disabled { cursor: default; }
+.ans-btn.correct {
+  border-color: #4ade80;
+  background: rgba(74,222,128,.13);
+  box-shadow: 0 0 10px rgba(74,222,128,.3);
+}
+.ans-btn.wrong {
+  border-color: #f87171;
+  background: rgba(248,113,113,.1);
+}
+
+/* floating score pop */
+@keyframes float-up {
+  0%   { opacity: 1;   transform: translateY(0);   }
+  100% { opacity: 0;   transform: translateY(-60px); }
+}
+.score-pop {
+  position: fixed;
+  pointer-events: none;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #4ade80;
+  animation: float-up .8s ease-out forwards;
+  z-index: 9999;
+}
+
+/* ── game over screen ── */
+#screen-over {
+  text-align: center;
+  padding-top: 2.5rem;
+}
+.over-icon {
+  font-size: 3rem;
+  margin-bottom: .5rem;
+}
+.over-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 1.2rem;
+}
+.over-stats {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 1rem 1.4rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
+  font-size: .88rem;
+  line-height: 2;
+}
+.over-stats .lbl { color: var(--muted); }
+.over-stats .val { color: var(--accent); font-weight: 700; float: right; }
+.over-btns {
+  display: flex;
+  gap: .8rem;
+  justify-content: center;
+}
+.btn-play-again {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  padding: .65rem 1.8rem;
+  font-family: 'Courier New', monospace;
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.btn-play-again:hover { opacity: .85; }
+.btn-hub {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: .65rem 1.4rem;
+  font-family: 'Courier New', monospace;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+.btn-hub:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<a href="index.html#learn" style="display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);font-size:.8rem;text-decoration:none;margin-bottom:1.5rem;align-self:flex-start;">
+  &#8592; Back to Interactive Learning
+</a>
+
+<div class="page-wrap">
+
+  <!-- TITLE SCREEN -->
+  <div id="screen-title" class="screen active">
+    <div class="title-icon">&#9889;</div>
+    <h1 class="title-heading">Register Race</h1>
+    <p class="title-sub">How fast do you know your registers?<br>Answer before the timer drains.</p>
+    <div class="rules-card">
+      <span>3 lives</span> — wrong answer or timeout costs one life.<br>
+      <span>Combo</span> — chain correct answers to multiply points.<br>
+      <span>Speed</span> — timer shrinks every 5 correct answers.<br>
+      <span>10 pts</span> base per correct answer &times; combo multiplier.
+    </div>
+    <div class="hi-display" id="title-hi">High Score: <strong>0</strong></div>
+    <button class="btn-start" id="btn-start">Start</button>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="screen-game" class="screen">
+    <div class="timer-track">
+      <div class="timer-fill" id="timer-fill"></div>
+    </div>
+    <div class="hud">
+      <div class="hud-score" id="hud-score">0</div>
+      <div class="hud-combo" id="hud-combo">x1 combo</div>
+      <div class="hud-lives" id="hud-lives">
+        <span class="life" id="life0">&#10084;</span>
+        <span class="life" id="life1">&#10084;</span>
+        <span class="life" id="life2">&#10084;</span>
+      </div>
+    </div>
+    <div class="speed-row">
+      <span>Speed:</span>
+      <div class="pip-wrap" id="pip-wrap">
+        <div class="pip" id="pip0"></div>
+        <div class="pip" id="pip1"></div>
+        <div class="pip" id="pip2"></div>
+        <div class="pip" id="pip3"></div>
+        <div class="pip" id="pip4"></div>
+      </div>
+    </div>
+    <div class="q-card" id="q-text">...</div>
+    <div class="answer-grid" id="answer-grid">
+      <button class="ans-btn" id="ans0"></button>
+      <button class="ans-btn" id="ans1"></button>
+      <button class="ans-btn" id="ans2"></button>
+      <button class="ans-btn" id="ans3"></button>
+    </div>
+  </div>
+
+  <!-- GAME OVER SCREEN -->
+  <div id="screen-over" class="screen">
+    <div class="over-icon" id="over-icon">&#128128;</div>
+    <div class="over-title" id="over-title">Game Over</div>
+    <div class="over-stats">
+      <div><span class="lbl">Score</span><span class="val" id="over-score">0</span></div>
+      <div><span class="lbl">High Score</span><span class="val" id="over-hi">0</span></div>
+      <div><span class="lbl">Max Combo</span><span class="val" id="over-combo">x1</span></div>
+    </div>
+    <div class="over-btns">
+      <button class="btn-play-again" id="btn-again">Play Again</button>
+      <a class="btn-hub" href="index.html#learn">&#8592; Hub</a>
+    </div>
+  </div>
+
+</div><!-- /.page-wrap -->
+
+<script>
+/* ── Question bank ───────────────────────────────────────────────── */
+var QUESTIONS = [
+  /* calling convention */
+  { q: 'Which register holds syscall arg 1?',        a: ['rdi','rsi','rdx','rax'],      c: 'rdi' },
+  { q: 'Which register holds syscall arg 2?',        a: ['rdi','rsi','rdx','rcx'],      c: 'rsi' },
+  { q: 'Which register holds syscall arg 3?',        a: ['rcx','r8','r10','rdx'],       c: 'rdx' },
+  { q: 'Which register holds the syscall number?',   a: ['rdi','rsi','rcx','rax'],      c: 'rax' },
+  { q: 'Which register holds the syscall return value?', a: ['rdi','rbx','rsp','rax'],  c: 'rax' },
+  { q: 'Syscall ABI arg 4 register?',                a: ['rcx','r8','r9','r10'],        c: 'r10' },
+  { q: 'Syscall ABI arg 5 register?',                a: ['r9','r10','r11','r8'],        c: 'r8'  },
+  { q: 'Syscall ABI arg 6 register?',                a: ['r8','r10','r11','r9'],        c: 'r9'  },
+  /* syscall numbers */
+  { q: 'Syscall number for read?',                   a: ['0','1','2','3'],              c: '0'   },
+  { q: 'Syscall number for write?',                  a: ['0','1','2','3'],              c: '1'   },
+  { q: 'Syscall number for open?',                   a: ['1','2','3','4'],              c: '2'   },
+  { q: 'Syscall number for close?',                  a: ['2','3','4','5'],              c: '3'   },
+  { q: 'Syscall number for mmap?',                   a: ['7','8','9','10'],             c: '9'   },
+  { q: 'Syscall number for mprotect?',               a: ['9','10','11','12'],           c: '10'  },
+  { q: 'Syscall number for dup2?',                   a: ['31','32','33','34'],          c: '33'  },
+  { q: 'Syscall number for execve?',                 a: ['57','58','59','60'],          c: '59'  },
+  { q: 'Syscall number for fork?',                   a: ['56','57','58','59'],          c: '57'  },
+  { q: 'Syscall number for exit?',                   a: ['58','59','60','61'],          c: '60'  },
+  /* flag values */
+  { q: 'O_RDONLY value?',                            a: ['0','1','2','0x40'],           c: '0'   },
+  { q: 'O_WRONLY value?',                            a: ['0','1','2','0x40'],           c: '1'   },
+  { q: 'O_CREAT value?',                             a: ['0x20','0x40','0x80','0x100'], c: '0x40'},
+  { q: 'PROT_READ | PROT_WRITE | PROT_EXEC = ?',    a: ['3','5','6','7'],              c: '7'   },
+  { q: 'PROT_EXEC value?',                           a: ['1','2','4','8'],              c: '4'   },
+  { q: 'MAP_PRIVATE | MAP_ANONYMOUS = ?',            a: ['0x12','0x22','0x32','0x42'], c: '0x22'},
+  /* file descriptors */
+  { q: 'stdin file descriptor?',                     a: ['0','1','2','3'],              c: '0'   },
+  { q: 'stdout file descriptor?',                    a: ['0','1','2','3'],              c: '1'   },
+  { q: 'stderr file descriptor?',                    a: ['0','1','2','3'],              c: '2'   },
+  /* callee/caller saved */
+  { q: 'Which is callee-saved?',                     a: ['rdi','rsi','rcx','rbx'],      c: 'rbx' },
+  { q: 'Which is caller-saved?',                     a: ['rbx','rbp','r12','rcx'],      c: 'rcx' },
+  { q: 'Which is callee-saved?',                     a: ['rax','rcx','r12','r8'],       c: 'r12' },
+  /* bit operations */
+  { q: 'xor rax, rax  sets rax to?',                a: ['-1','0','1','rax'],           c: '0'   },
+  { q: 'not 0 = ?',                                  a: ['0','1','-1','-2'],            c: '-1'  },
+  { q: '0xFF AND 0x0F = ?',                          a: ['0x00','0x0F','0xF0','0xFF'],  c: '0x0F'},
+  { q: '0xAA XOR 0xFF = ?',                          a: ['0x00','0x55','0xAA','0xFF'],  c: '0x55'},
+  /* stack / misc */
+  { q: 'Stack alignment before call?',               a: ['4 bytes','8 bytes','16 bytes','32 bytes'], c: '16 bytes' },
+  { q: 'After fork(), child gets in rax?',           a: ['-1','0','1','parent PID'],    c: '0'   },
+  { q: 'test rax, rax sets ZF when rax = ?',         a: ['-1','0','1','any value'],     c: '0'   },
+  { q: 'sizeof(sockaddr_in) = ?',                    a: ['8','12','16','32'],           c: '16'  },
+  { q: 'AF_INET = ?',                                a: ['1','2','3','4'],              c: '2'   },
+  { q: 'SOCK_STREAM = ?',                            a: ['1','2','3','4'],              c: '1'   },
+  { q: 'Writing to eax zero-extends into?',          a: ['nothing','al','ax','rax'],    c: 'rax' }
+];
+
+/* ── Game state ─────────────────────────────────────────────────── */
+var score     = 0;
+var lives     = 3;
+var combo     = 1;
+var maxCombo  = 1;
+var correct   = 0;   /* total correct this game */
+var timerMs   = 3000;
+var pool      = [];
+var current   = null;
+var locked    = false;
+
+var rafId     = null;
+var startTime = 0;
+var timerDur  = 3000;
+
+var hiScore   = parseInt(localStorage.getItem('rr-hi') || '0', 10);
+
+/* ── DOM refs ────────────────────────────────────────────────────── */
+var screenTitle = document.getElementById('screen-title');
+var screenGame  = document.getElementById('screen-game');
+var screenOver  = document.getElementById('screen-over');
+
+var timerFill   = document.getElementById('timer-fill');
+var hudScore    = document.getElementById('hud-score');
+var hudCombo    = document.getElementById('hud-combo');
+var qText       = document.getElementById('q-text');
+var answerGrid  = document.getElementById('answer-grid');
+var ansBtns     = [
+  document.getElementById('ans0'),
+  document.getElementById('ans1'),
+  document.getElementById('ans2'),
+  document.getElementById('ans3')
+];
+var lifeEls     = [
+  document.getElementById('life0'),
+  document.getElementById('life1'),
+  document.getElementById('life2')
+];
+var pips        = [
+  document.getElementById('pip0'),
+  document.getElementById('pip1'),
+  document.getElementById('pip2'),
+  document.getElementById('pip3'),
+  document.getElementById('pip4')
+];
+var titleHi     = document.getElementById('title-hi');
+
+/* ── Helpers ─────────────────────────────────────────────────────── */
+function showScreen(id) {
+  screenTitle.classList.remove('active');
+  screenGame.classList.remove('active');
+  screenOver.classList.remove('active');
+  document.getElementById(id).classList.add('active');
+}
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function refillPool() {
+  pool = shuffle(QUESTIONS);
+}
+
+function calcTimerMs() {
+  /* decrease 300ms every 5 correct, min 1200 */
+  var tier = Math.floor(correct / 5);
+  var t = 3000 - tier * 300;
+  if (t < 1200) t = 1200;
+  return t;
+}
+
+function speedLevel() {
+  /* 0-4, one pip per 5 correct, max 5 */
+  var level = Math.floor(correct / 5);
+  if (level > 5) level = 5;
+  return level;
+}
+
+function updatePips() {
+  var lvl = speedLevel();
+  for (var i = 0; i < 5; i++) {
+    if (i < lvl) {
+      pips[i].classList.add('lit');
+    } else {
+      pips[i].classList.remove('lit');
+    }
+  }
+}
+
+function updateLives() {
+  for (var i = 0; i < 3; i++) {
+    if (i >= lives) {
+      lifeEls[i].classList.add('lost');
+    } else {
+      lifeEls[i].classList.remove('lost');
+    }
+  }
+}
+
+function updateComboHud() {
+  hudCombo.textContent = 'x' + combo + ' combo';
+  if (combo > 1) {
+    hudCombo.classList.add('hot');
+  } else {
+    hudCombo.classList.remove('hot');
+  }
+}
+
+function spawnScorePop(pts, btn) {
+  var el = document.createElement('div');
+  el.className = 'score-pop';
+  el.textContent = '+' + pts + ' pts';
+  var rect = btn.getBoundingClientRect();
+  el.style.left = (rect.left + rect.width / 2 - 30) + 'px';
+  el.style.top  = (rect.top - 10) + 'px';
+  document.body.appendChild(el);
+  setTimeout(function() {
+    if (el.parentNode) el.parentNode.removeChild(el);
+  }, 850);
+}
+
+/* ── Timer animation ────────────────────────────────────────────── */
+function stopTimer() {
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+}
+
+function startTimer(duration) {
+  timerDur  = duration;
+  startTime = performance.now();
+  timerFill.style.transition = 'none';
+  timerFill.style.width = '100%';
+  timerFill.classList.remove('warn', 'danger');
+
+  function tick(now) {
+    var elapsed = now - startTime;
+    var pct = 1 - elapsed / timerDur;
+    if (pct < 0) pct = 0;
+    timerFill.style.width = (pct * 100) + '%';
+
+    if (pct <= 0.25) {
+      timerFill.classList.add('danger');
+      timerFill.classList.remove('warn');
+    } else if (pct <= 0.5) {
+      timerFill.classList.add('warn');
+      timerFill.classList.remove('danger');
+    } else {
+      timerFill.classList.remove('warn', 'danger');
+    }
+
+    if (pct <= 0) {
+      onTimeout();
+      return;
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
+}
+
+/* ── Question flow ──────────────────────────────────────────────── */
+function loadQuestion() {
+  if (pool.length === 0) refillPool();
+  current = pool.pop();
+  locked  = false;
+
+  qText.textContent = current.q;
+
+  /* shuffle answer order */
+  var shuffled = shuffle(current.a);
+  for (var i = 0; i < 4; i++) {
+    ansBtns[i].textContent = shuffled[i];
+    ansBtns[i].disabled    = false;
+    ansBtns[i].classList.remove('correct', 'wrong');
+    ansBtns[i].dataset.ans = shuffled[i];
+  }
+
+  timerMs = calcTimerMs();
+  updatePips();
+  startTimer(timerMs);
+}
+
+function onTimeout() {
+  if (locked) return;
+  locked = true;
+  stopTimer();
+
+  /* highlight correct answer */
+  for (var i = 0; i < 4; i++) {
+    ansBtns[i].disabled = true;
+    if (ansBtns[i].dataset.ans === current.c) {
+      ansBtns[i].classList.add('correct');
+    }
+  }
+
+  loseLife();
+
+  setTimeout(function() {
+    if (lives <= 0) {
+      endGame();
+    } else {
+      loadQuestion();
+    }
+  }, 900);
+}
+
+function onAnswer(idx) {
+  if (locked) return;
+  locked = true;
+  stopTimer();
+
+  var chosen = ansBtns[idx].dataset.ans;
+  var isRight = (chosen === current.c);
+
+  /* disable all */
+  for (var i = 0; i < 4; i++) {
+    ansBtns[i].disabled = true;
+  }
+
+  if (isRight) {
+    ansBtns[idx].classList.add('correct');
+    var pts = 10 * combo;
+    score += pts;
+    correct++;
+    if (combo < 5) combo++;
+    if (combo > maxCombo) maxCombo = combo;
+    hudScore.textContent = score;
+    updateComboHud();
+    spawnScorePop(pts, ansBtns[idx]);
+
+    setTimeout(function() {
+      loadQuestion();
+    }, 600);
+  } else {
+    ansBtns[idx].classList.add('wrong');
+    /* highlight correct */
+    for (var j = 0; j < 4; j++) {
+      if (ansBtns[j].dataset.ans === current.c) {
+        ansBtns[j].classList.add('correct');
+      }
+    }
+    loseLife();
+    combo = 1;
+    updateComboHud();
+
+    setTimeout(function() {
+      if (lives <= 0) {
+        endGame();
+      } else {
+        loadQuestion();
+      }
+    }, 900);
+  }
+}
+
+function loseLife() {
+  lives--;
+  updateLives();
+}
+
+/* ── Start / end ─────────────────────────────────────────────────── */
+function startGame() {
+  score   = 0;
+  lives   = 3;
+  combo   = 1;
+  maxCombo = 1;
+  correct = 0;
+
+  hudScore.textContent = '0';
+  updateComboHud();
+  updateLives();
+
+  refillPool();
+  showScreen('screen-game');
+  loadQuestion();
+}
+
+function endGame() {
+  stopTimer();
+
+  var isHi = score > hiScore;
+  if (isHi) {
+    hiScore = score;
+    localStorage.setItem('rr-hi', hiScore);
+  }
+
+  document.getElementById('over-icon').textContent  = isHi ? '🏆' : '💀';
+  document.getElementById('over-title').textContent = isHi ? 'New High Score!' : 'Game Over';
+  document.getElementById('over-score').textContent = score;
+  document.getElementById('over-hi').textContent    = hiScore;
+  document.getElementById('over-combo').textContent = 'x' + maxCombo;
+
+  titleHi.innerHTML = 'High Score: <strong>' + hiScore + '</strong>';
+
+  showScreen('screen-over');
+}
+
+/* ── Button wiring ───────────────────────────────────────────────── */
+document.getElementById('btn-start').addEventListener('click', function() {
+  startGame();
+});
+document.getElementById('btn-again').addEventListener('click', function() {
+  startGame();
+});
+
+for (var bi = 0; bi < 4; bi++) {
+  (function(idx) {
+    ansBtns[idx].addEventListener('click', function() {
+      onAnswer(idx);
+    });
+  })(bi);
+}
+
+/* ── Init hi score display ───────────────────────────────────────── */
+titleHi.innerHTML = 'High Score: <strong>' + hiScore + '</strong>';
+
+/* ── Skin switcher (copy verbatim) ───────────────────────────────── */
+(function(){
+  var t=document.getElementById('skin-toggle'), p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click', function(e){ e.stopPropagation(); p.classList.toggle('open'); });
+  document.addEventListener('click', function(){ p.classList.remove('open'); });
+  p.addEventListener('click', function(e){ e.stopPropagation(); });
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click', function(){
+      var sk = o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Assembly Unscramble — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+body {
+  font-family: 'Courier New', monospace;
+  background: var(--bg);
+  color: var(--fg, var(--text, #e2e8f0));
+  min-height: 100vh;
+  padding: 1.5rem 1rem 3rem;
+  margin: 0;
+}
+
+.page-wrap {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── HUD ─────────────────────────────────────────────────── */
+.hud {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  font-size: .78rem;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.hud-item {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: .3rem .65rem;
+  font-size: .8rem;
+}
+.hud-item .label {
+  color: var(--muted);
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.hud-item .value {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── Puzzle card ─────────────────────────────────────────── */
+.puzzle-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+.puzzle-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .6rem;
+  margin-bottom: .5rem;
+  flex-wrap: wrap;
+}
+.puzzle-title {
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+.cat-badge {
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--muted);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: .15rem .55rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.puzzle-context {
+  font-size: .78rem;
+  color: var(--muted);
+  margin-bottom: .9rem;
+  border-left: 2px solid var(--accent);
+  padding-left: .6rem;
+}
+
+/* ── Line rows ───────────────────────────────────────────── */
+.line-list {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin-bottom: 1rem;
+}
+.line-row {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--bg, #0f1117);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: .45rem .6rem;
+  cursor: pointer;
+  transition: border-color .15s, box-shadow .15s, transform .12s, background .15s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.line-row:hover:not(.correct) {
+  border-color: var(--accent);
+  box-shadow: 0 0 6px var(--glow);
+}
+.line-row.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 10px var(--glow);
+  transform: translateY(-2px);
+  background: var(--card);
+}
+.line-row.correct {
+  border-color: #4ade80;
+  background: rgba(74,222,128,.07);
+  cursor: default;
+  opacity: .95;
+}
+.line-row.wrong {
+  border-color: #f87171;
+  background: rgba(248,113,113,.08);
+  animation: flash-wrong .4s ease;
+}
+@keyframes flash-wrong {
+  0%   { border-color: #f87171; }
+  50%  { border-color: #f87171; }
+  100% { border-color: var(--card-border); }
+}
+.line-num {
+  font-size: .68rem;
+  color: var(--muted);
+  width: 1.1rem;
+  text-align: right;
+  flex-shrink: 0;
+}
+.line-code {
+  flex: 1;
+  font-size: .83rem;
+  color: var(--fg, var(--text, #e2e8f0));
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.line-row.correct .line-code { color: #4ade80; }
+.move-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex-shrink: 0;
+}
+.move-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: .7rem;
+  cursor: pointer;
+  padding: 1px 4px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: color .12s, background .12s;
+}
+.move-btn:hover { color: var(--accent); background: var(--card-border); }
+.move-btn:disabled { opacity: .2; cursor: default; }
+.lock-icon {
+  font-size: .7rem;
+  color: #4ade80;
+  flex-shrink: 0;
+  width: 1rem;
+  text-align: center;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn-check {
+  width: 100%;
+  padding: .65rem;
+  background: var(--accent);
+  color: var(--bg, #0f1117);
+  border: none;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: .05em;
+  transition: opacity .15s, transform .1s;
+}
+.btn-check:hover { opacity: .88; }
+.btn-check:active { transform: scale(.98); }
+.btn-check:disabled { opacity: .35; cursor: default; }
+
+/* ── Completion banner ───────────────────────────────────── */
+.completion-banner {
+  display: none;
+  text-align: center;
+  padding: 1.1rem .8rem .9rem;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: var(--card);
+  margin-top: .75rem;
+}
+.completion-banner.show { display: block; }
+.stars-row {
+  font-size: 1.6rem;
+  letter-spacing: .15rem;
+  margin-bottom: .5rem;
+}
+.star-earned { color: #fbbf24; }
+.star-empty  { color: var(--card-border); }
+.completion-msg {
+  font-size: .8rem;
+  color: var(--muted);
+  margin-bottom: .85rem;
+}
+.btn-next {
+  padding: .5rem 1.4rem;
+  background: none;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: .85rem;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.btn-next:hover { background: var(--accent); color: var(--bg, #0f1117); }
+
+/* ── Final screen ────────────────────────────────────────── */
+#final-screen {
+  display: none;
+  text-align: center;
+  padding: 2.5rem 1rem;
+}
+#final-screen.show { display: block; }
+.final-title {
+  color: var(--accent);
+  font-size: 1.3rem;
+  margin-bottom: .4rem;
+}
+.final-score-label {
+  color: var(--muted);
+  font-size: .78rem;
+  margin-bottom: .2rem;
+}
+.final-score-val {
+  font-size: 2.5rem;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: .4rem;
+}
+.final-stars-row {
+  font-size: 2rem;
+  letter-spacing: .2rem;
+  margin-bottom: 1.4rem;
+}
+.btn-play-again {
+  padding: .6rem 1.8rem;
+  background: var(--accent);
+  color: var(--bg, #0f1117);
+  border: none;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.btn-play-again:hover { opacity: .85; }
+
+/* ── Back link ───────────────────────────────────────────── */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  color: var(--muted);
+  font-size: .8rem;
+  text-decoration: none;
+  margin-bottom: 1.1rem;
+}
+.back-link:hover { color: var(--accent); }
+
+/* ── Page title row ──────────────────────────────────────── */
+.page-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  margin-bottom: 1.1rem;
+  flex-wrap: wrap;
+}
+.page-title {
+  color: var(--accent);
+  font-size: 1.25rem;
+  margin: 0;
+  font-weight: 700;
+}
+.page-subtitle {
+  color: var(--muted);
+  font-size: .78rem;
+}
+</style>
+</head>
+<body>
+
+<!-- SKIN TOGGLE -->
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="page-wrap">
+  <a class="back-link" href="index.html#learn">&#8592; Back to Interactive Learning</a>
+
+  <div class="page-title-row">
+    <h1 class="page-title">Assembly Unscramble</h1>
+    <span class="page-subtitle">Reorder x86-64 lines into the correct sequence</span>
+  </div>
+
+  <div class="hud">
+    <div class="hud-item">
+      <span class="label">Time</span>
+      <span class="value" id="hud-timer">00:00</span>
+    </div>
+    <div class="hud-item">
+      <span class="label">Score</span>
+      <span class="value" id="hud-score">0</span>
+    </div>
+    <div class="hud-item">
+      <span class="label">Puzzle</span>
+      <span class="value" id="hud-puzzle">1 / 12</span>
+    </div>
+  </div>
+
+  <!-- Active puzzle -->
+  <div id="puzzle-area">
+    <div class="puzzle-card">
+      <div class="puzzle-header">
+        <h2 class="puzzle-title" id="puzzle-title"></h2>
+        <span class="cat-badge" id="puzzle-cat"></span>
+      </div>
+      <p class="puzzle-context" id="puzzle-context"></p>
+      <div class="line-list" id="line-list"></div>
+      <button class="btn-check" id="btn-check" onclick="checkOrder()">Check Order</button>
+    </div>
+    <div class="completion-banner" id="completion-banner">
+      <div class="stars-row" id="stars-row"></div>
+      <div class="completion-msg" id="completion-msg"></div>
+      <button class="btn-next" id="btn-next" onclick="nextPuzzle()">Next &#8594;</button>
+    </div>
+  </div>
+
+  <!-- Final screen -->
+  <div id="final-screen">
+    <div class="final-title">All Puzzles Complete!</div>
+    <div class="final-score-label">Total Score</div>
+    <div class="final-score-val" id="final-score-val">0</div>
+    <div class="final-stars-row" id="final-stars-row"></div>
+    <div style="color:var(--muted);font-size:.78rem;margin-bottom:1.2rem;" id="final-breakdown"></div>
+    <button class="btn-play-again" onclick="restartGame()">Play Again</button>
+  </div>
+</div>
+
+<script>
+/* ── Puzzle data ─────────────────────────────────────────── */
+var PUZZLES = [
+  {
+    title: 'exit(42)',
+    category: 'Basic',
+    context: 'Call exit with status 42',
+    correct: ['mov rdi, 42', 'mov rax, 60', 'syscall']
+  },
+  {
+    title: 'write to stdout',
+    category: 'Basic',
+    context: 'Write 5 bytes from a buffer to stdout',
+    correct: ['mov rdi, 1', 'lea rsi, [rip + msg]', 'mov rdx, 5', 'mov rax, 1', 'syscall']
+  },
+  {
+    title: 'read from stdin',
+    category: 'Basic',
+    context: 'Read up to 64 bytes from stdin into rsp',
+    correct: ['xor rdi, rdi', 'mov rsi, rsp', 'mov rdx, 0x40', 'mov rax, 0', 'syscall']
+  },
+  {
+    title: 'open a file',
+    category: 'Files',
+    context: 'Open file at r9 for reading',
+    correct: ['mov rdi, r9', 'xor rsi, rsi', 'xor rdx, rdx', 'mov rax, 2', 'syscall']
+  },
+  {
+    title: 'execve shellcode',
+    category: 'Exploitation',
+    context: 'Classic execve("/bin/sh") shellcode',
+    correct: ['lea rdi, [rip + binsh]', 'xor rsi, rsi', 'xor rdx, rdx', 'mov rax, 59', 'syscall']
+  },
+  {
+    title: 'dup2 stdin redirect',
+    category: 'Exploitation',
+    context: 'Redirect client socket fd 4 to stdin',
+    correct: ['mov rdi, 4', 'xor rsi, rsi', 'mov rax, 33', 'syscall']
+  },
+  {
+    title: 'mmap RWX page',
+    category: 'Memory',
+    context: 'Map an anonymous RWX page',
+    correct: ['xor rdi, rdi', 'mov rsi, 0x1000', 'mov rdx, 7', 'mov r10, 0x22', 'xor r8, r8', 'not r8', 'xor r9, r9', 'mov rax, 9', 'syscall']
+  },
+  {
+    title: 'fork dispatch',
+    category: 'Concurrency',
+    context: 'Fork and branch child vs parent',
+    correct: ['mov rax, 57', 'syscall', 'test rax, rax', 'jz child']
+  },
+  {
+    title: 'preserve rbx',
+    category: 'Calling Convention',
+    context: 'Save rdi across a call using callee-saved register',
+    correct: ['push rbx', 'mov rbx, rdi', 'call compute', 'mov rsi, rbx', 'pop rbx', 'ret']
+  },
+  {
+    title: 'byte extraction',
+    category: 'Bit Tricks',
+    context: 'Extract byte 4 from rdi into rax',
+    correct: ['mov rax, rdi', 'shr rax, 32', 'and rax, 0xff']
+  },
+  {
+    title: 'error check',
+    category: 'Control Flow',
+    context: 'Open file and branch on error',
+    correct: ['mov rax, 2', 'syscall', 'cmp rax, 0', 'jl error', 'mov rdi, rax']
+  },
+  {
+    title: 'socket server setup',
+    category: 'Networking',
+    context: 'Create TCP socket then bind',
+    correct: ['mov rdi, 2', 'mov rsi, 1', 'xor rdx, rdx', 'mov rax, 41', 'syscall', 'mov rdi, rax', 'lea rsi, [rip + addr]', 'mov rdx, 16', 'mov rax, 49', 'syscall']
+  }
+];
+
+/* ── Game state ──────────────────────────────────────────── */
+var puzzleIdx    = 0;
+var currentOrder = [];
+var lockedMask   = [];
+var selectedIdx  = -1;
+var timerSec     = 0;
+var timerHandle  = null;
+var timerStarted = false;
+var wrongChecks  = 0;
+var totalScore   = 0;
+var starsEarned  = [];
+
+/* ── Fisher-Yates shuffle ────────────────────────────────── */
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function isInOrder(arr, correct) {
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] !== correct[i]) return false;
+  }
+  return true;
+}
+
+function scramble(correct) {
+  var result = shuffle(correct);
+  var attempts = 0;
+  while (isInOrder(result, correct) && attempts < 20) {
+    result = shuffle(correct);
+    attempts++;
+  }
+  return result;
+}
+
+/* ── Timer ───────────────────────────────────────────────── */
+function startTimer() {
+  if (timerStarted) return;
+  timerStarted = true;
+  timerHandle = setInterval(function() {
+    timerSec++;
+    updateTimerDisplay();
+  }, 1000);
+}
+
+function stopTimer() {
+  if (timerHandle) {
+    clearInterval(timerHandle);
+    timerHandle = null;
+  }
+}
+
+function resetTimer() {
+  stopTimer();
+  timerSec = 0;
+  timerStarted = false;
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+  var m = Math.floor(timerSec / 60);
+  var s = timerSec % 60;
+  var ms = m < 10 ? '0' + m : '' + m;
+  var ss = s < 10 ? '0' + s : '' + s;
+  document.getElementById('hud-timer').textContent = ms + ':' + ss;
+}
+
+/* ── Score calc ──────────────────────────────────────────── */
+function calcScore() {
+  return Math.max(0, 300 - timerSec - wrongChecks * 20);
+}
+
+function calcStars() {
+  if (timerSec < 30 && wrongChecks === 0) return 3;
+  if (timerSec < 60 && wrongChecks <= 1)  return 2;
+  return 1;
+}
+
+/* ── Render ──────────────────────────────────────────────── */
+function renderPuzzle() {
+  var p = PUZZLES[puzzleIdx];
+  document.getElementById('puzzle-title').textContent = p.title;
+  document.getElementById('puzzle-cat').textContent   = p.category;
+  document.getElementById('puzzle-context').textContent = p.context;
+  document.getElementById('hud-puzzle').textContent   = (puzzleIdx + 1) + ' / 12';
+  document.getElementById('btn-check').disabled       = false;
+  document.getElementById('completion-banner').classList.remove('show');
+  renderLines();
+}
+
+function renderLines() {
+  var list = document.getElementById('line-list');
+  list.innerHTML = '';
+  for (var i = 0; i < currentOrder.length; i++) {
+    (function(idx) {
+      var row = document.createElement('div');
+      row.className = 'line-row';
+      if (lockedMask[idx]) row.classList.add('correct');
+      if (idx === selectedIdx) row.classList.add('selected');
+
+      /* line number */
+      var numSpan = document.createElement('span');
+      numSpan.className = 'line-num';
+      numSpan.textContent = (idx + 1) + '.';
+      row.appendChild(numSpan);
+
+      /* move buttons */
+      var moveBtns = document.createElement('div');
+      moveBtns.className = 'move-btns';
+      if (!lockedMask[idx]) {
+        var upBtn = document.createElement('button');
+        upBtn.className = 'move-btn';
+        upBtn.innerHTML = '&#9650;';
+        upBtn.title = 'Move up';
+        upBtn.disabled = (idx === 0);
+        upBtn.onclick = function(e) {
+          e.stopPropagation();
+          startTimer();
+          moveLine(idx, -1);
+        };
+        var downBtn = document.createElement('button');
+        downBtn.className = 'move-btn';
+        downBtn.innerHTML = '&#9660;';
+        downBtn.title = 'Move down';
+        downBtn.disabled = (idx === currentOrder.length - 1);
+        downBtn.onclick = function(e) {
+          e.stopPropagation();
+          startTimer();
+          moveLine(idx, 1);
+        };
+        moveBtns.appendChild(upBtn);
+        moveBtns.appendChild(downBtn);
+      }
+      row.appendChild(moveBtns);
+
+      /* code text */
+      var code = document.createElement('span');
+      code.className = 'line-code';
+      code.textContent = currentOrder[idx];
+      row.appendChild(code);
+
+      /* lock icon or spacer */
+      var lockSpan = document.createElement('span');
+      lockSpan.className = 'lock-icon';
+      lockSpan.textContent = lockedMask[idx] ? '✓' : '';
+      row.appendChild(lockSpan);
+
+      /* tap/click to select and swap */
+      row.addEventListener('click', function() {
+        if (lockedMask[idx]) return;
+        startTimer();
+        handleLineClick(idx);
+      });
+
+      list.appendChild(row);
+    })(i);
+  }
+}
+
+function moveLine(idx, dir) {
+  var newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= currentOrder.length) return;
+  if (lockedMask[newIdx]) return;
+  var tmp = currentOrder[idx];
+  currentOrder[idx] = currentOrder[newIdx];
+  currentOrder[newIdx] = tmp;
+  selectedIdx = -1;
+  renderLines();
+}
+
+function handleLineClick(idx) {
+  if (selectedIdx === -1) {
+    /* first tap — select */
+    selectedIdx = idx;
+    renderLines();
+  } else if (selectedIdx === idx) {
+    /* deselect */
+    selectedIdx = -1;
+    renderLines();
+  } else {
+    /* swap selected with tapped */
+    if (!lockedMask[selectedIdx] && !lockedMask[idx]) {
+      var tmp = currentOrder[selectedIdx];
+      currentOrder[selectedIdx] = currentOrder[idx];
+      currentOrder[idx] = tmp;
+    }
+    selectedIdx = -1;
+    renderLines();
+  }
+}
+
+/* ── Check order ─────────────────────────────────────────── */
+function checkOrder() {
+  var p = PUZZLES[puzzleIdx];
+  startTimer();
+  selectedIdx = -1;
+
+  var allCorrect = true;
+  var anyNewWrong = false;
+
+  for (var i = 0; i < currentOrder.length; i++) {
+    if (lockedMask[i]) continue;
+    if (currentOrder[i] === p.correct[i]) {
+      lockedMask[i] = true;
+    } else {
+      allCorrect = false;
+      anyNewWrong = true;
+    }
+  }
+
+  if (anyNewWrong) wrongChecks++;
+
+  renderLines();
+
+  if (anyNewWrong) {
+    /* flash wrong rows */
+    var rows = document.getElementById('line-list').querySelectorAll('.line-row');
+    for (var j = 0; j < rows.length; j++) {
+      if (!rows[j].classList.contains('correct')) {
+        rows[j].classList.add('wrong');
+        (function(el) {
+          setTimeout(function() { el.classList.remove('wrong'); }, 420);
+        })(rows[j]);
+      }
+    }
+  }
+
+  /* check again after lock — are all now locked? */
+  var totalLocked = 0;
+  for (var k = 0; k < lockedMask.length; k++) {
+    if (lockedMask[k]) totalLocked++;
+  }
+
+  if (totalLocked === currentOrder.length) {
+    puzzleComplete();
+  }
+}
+
+function puzzleComplete() {
+  stopTimer();
+  document.getElementById('btn-check').disabled = true;
+
+  var sc = calcScore();
+  var st = calcStars();
+  starsEarned.push(st);
+  totalScore += sc;
+
+  document.getElementById('hud-score').textContent = totalScore;
+
+  var starsHtml = '';
+  for (var i = 0; i < 3; i++) {
+    starsHtml += i < st
+      ? '<span class="star-earned">&#9733;</span>'
+      : '<span class="star-empty">&#9734;</span>';
+  }
+  document.getElementById('stars-row').innerHTML = starsHtml;
+
+  var msgs = ['', 'Keep practising!', 'Good work!', 'Perfect execution!'];
+  var timeStr = document.getElementById('hud-timer').textContent;
+  document.getElementById('completion-msg').textContent =
+    msgs[st] + '  ' + timeStr + ' — +' + sc + ' pts';
+
+  var banner = document.getElementById('completion-banner');
+  banner.classList.add('show');
+
+  var nextBtn = document.getElementById('btn-next');
+  if (puzzleIdx >= PUZZLES.length - 1) {
+    nextBtn.textContent = 'View Results';
+  } else {
+    nextBtn.innerHTML = 'Next &#8594;';
+  }
+}
+
+function nextPuzzle() {
+  puzzleIdx++;
+  if (puzzleIdx >= PUZZLES.length) {
+    showFinalScreen();
+    return;
+  }
+  loadPuzzle(puzzleIdx);
+}
+
+/* ── Load a puzzle ───────────────────────────────────────── */
+function loadPuzzle(idx) {
+  puzzleIdx    = idx;
+  wrongChecks  = 0;
+  selectedIdx  = -1;
+  var p = PUZZLES[idx];
+  currentOrder = scramble(p.correct);
+  lockedMask   = [];
+  for (var i = 0; i < currentOrder.length; i++) lockedMask.push(false);
+  resetTimer();
+  renderPuzzle();
+}
+
+/* ── Final screen ────────────────────────────────────────── */
+function showFinalScreen() {
+  document.getElementById('puzzle-area').style.display = 'none';
+  var fs = document.getElementById('final-screen');
+  fs.classList.add('show');
+
+  document.getElementById('final-score-val').textContent = totalScore;
+
+  var totalStars = 0;
+  for (var i = 0; i < starsEarned.length; i++) totalStars += starsEarned[i];
+  var maxStars = PUZZLES.length * 3;
+  var pct = Math.round((totalStars / maxStars) * 100);
+
+  var starsHtml = '';
+  for (var j = 0; j < totalStars && j < 12; j++) {
+    starsHtml += '<span class="star-earned">&#9733;</span>';
+  }
+  document.getElementById('final-stars-row').innerHTML = starsHtml;
+  document.getElementById('final-breakdown').textContent =
+    totalStars + ' / ' + maxStars + ' stars  (' + pct + '%)';
+}
+
+function restartGame() {
+  puzzleIdx  = 0;
+  totalScore = 0;
+  starsEarned = [];
+  document.getElementById('hud-score').textContent = '0';
+  document.getElementById('puzzle-area').style.display = '';
+  var fs = document.getElementById('final-screen');
+  fs.classList.remove('show');
+  loadPuzzle(0);
+}
+
+/* ── Boot ────────────────────────────────────────────────── */
+loadPuzzle(0);
+
+/* ── Skin switcher ───────────────────────────────────────── */
+(function(){
+  var t=document.getElementById('skin-toggle'), p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click', function(e){ e.stopPropagation(); p.classList.toggle('open'); });
+  document.addEventListener('click', function(){ p.classList.remove('open'); });
+  p.addEventListener('click', function(e){ e.stopPropagation(); });
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click', function(){
+      var sk = o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -34,7 +34,9 @@ docs/
 
 All pages use `data-skin` on `<html>`. Available skins: `aero`, `neon`, `crimson`, `ocean`, `amber`, `caveman`, `win95`.
 
-CSS custom properties defined in `style.css`: `--bg`, `--bg2`, `--card`, `--card-border`, `--fg`, `--muted`, `--accent`, `--accent2`, `--glow`, `--warning`.
+CSS custom properties defined in `style.css`: `--bg`, `--bg2`, `--card`, `--card-border`, `--text`, `--muted`, `--accent`, `--accent2`, `--glow`, `--warning`.
+
+**IMPORTANT**: The foreground/body text variable is `--text`, NOT `--fg`. Using `var(--fg)` will silently produce black text because `--fg` is undefined.
 
 The default skin is **aero**. Every page must:
 1. Set `<html lang="en" data-skin="aero">` (fallback)
@@ -92,7 +94,7 @@ MANDATORY TEMPLATE — the file must follow this skeleton exactly:
 <style>
 /* lesson-local styles only — use var(--bg), var(--card), var(--accent), etc. */
 /* never hardcode colours — always use CSS custom properties from the skin */
-body { font-family: 'Courier New', monospace; background: var(--bg); color: var(--fg);
+body { font-family: 'Courier New', monospace; background: var(--bg); color: var(--text);
        min-height: 100vh; padding: 1.5rem 1rem 3rem; }
 </style>
 </head>

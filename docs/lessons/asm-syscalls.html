@@ -295,32 +295,37 @@ h1{color:var(--accent);font-size:1.35rem;margin-bottom:.2rem;}
       <div class="conv-cell"><span class="conv-arg">arg 1</span><span class="conv-reg">rdi</span><span class="conv-note">first argument</span></div>
       <div class="conv-cell"><span class="conv-arg">arg 2</span><span class="conv-reg">rsi</span><span class="conv-note">second argument</span></div>
       <div class="conv-cell"><span class="conv-arg">arg 3</span><span class="conv-reg">rdx</span><span class="conv-note">third argument</span></div>
-      <div class="conv-cell"><span class="conv-arg">arg 4</span><span class="conv-reg">rcx</span><span class="conv-note">fourth argument</span></div>
+      <div class="conv-cell" style="border-color:var(--warning);box-shadow:0 0 6px rgba(251,191,36,.25)"><span class="conv-arg">arg 4</span><span class="conv-reg" style="color:var(--warning)">r10</span><span class="conv-note">NOT rcx — syscall ABI differs from C ABI here</span></div>
+      <div class="conv-cell"><span class="conv-arg">arg 5</span><span class="conv-reg">r8</span><span class="conv-note">fifth argument</span></div>
+      <div class="conv-cell"><span class="conv-arg">arg 6</span><span class="conv-reg">r9</span><span class="conv-note">sixth argument</span></div>
       <div class="conv-cell"><span class="conv-arg">syscall #</span><span class="conv-reg">rax</span><span class="conv-note">before syscall</span></div>
       <div class="conv-cell"><span class="conv-arg">return</span><span class="conv-reg">rax</span><span class="conv-note">after syscall</span></div>
     </div>
 
     <table class="ref-table">
       <thead>
-        <tr><th>#</th><th>Name</th><th>rdi</th><th>rsi</th><th>rdx</th></tr>
+        <tr><th>#</th><th>Name</th><th>rdi</th><th>rsi</th><th>rdx / r10 / r8 / r9</th></tr>
       </thead>
       <tbody>
         <tr><td class="ref-num">0</td><td>read</td><td>fd</td><td>buf</td><td>count</td></tr>
         <tr><td class="ref-num">1</td><td>write</td><td>fd</td><td>buf</td><td>count</td></tr>
         <tr><td class="ref-num">2</td><td>open</td><td>path</td><td>flags</td><td>mode</td></tr>
         <tr><td class="ref-num">3</td><td>close</td><td>fd</td><td>—</td><td>—</td></tr>
+        <tr><td class="ref-num">9</td><td>mmap</td><td>addr</td><td>length</td><td>prot / <span style="color:var(--warning)">r10</span>=flags / r8=fd / r9=off</td></tr>
+        <tr><td class="ref-num">10</td><td>mprotect</td><td>addr</td><td>len</td><td>prot (1=R 2=W 4=X)</td></tr>
+        <tr><td class="ref-num">33</td><td>dup2</td><td>oldfd</td><td>newfd</td><td>—</td></tr>
         <tr><td class="ref-num">41</td><td>socket</td><td>domain</td><td>type</td><td>protocol</td></tr>
         <tr><td class="ref-num">43</td><td>accept</td><td>sockfd</td><td>addr</td><td>addrlen</td></tr>
-        <tr><td class="ref-num">49</td><td>bind</td><td>sockfd</td><td>&amp;addr</td><td>addrlen</td></tr>
-        <tr><td class="ref-num">50</td><td>listen</td><td>sockfd</td><td>backlog</td><td>—</td></tr>
         <tr><td class="ref-num">57</td><td>fork</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td class="ref-num">59</td><td>execve</td><td>path</td><td>argv[]</td><td>envp[]</td></tr>
         <tr><td class="ref-num">60</td><td>exit</td><td>status</td><td>—</td><td>—</td></tr>
       </tbody>
     </table>
     <div class="ref-note">
-      O_RDONLY=0 &nbsp;|&nbsp; O_WRONLY=0x01 &nbsp;|&nbsp; O_CREAT=0x40 &nbsp;|&nbsp; O_TRUNC=0x200
-      &nbsp;&nbsp;&mdash;&nbsp;&nbsp;
-      AF_INET=2 &nbsp;|&nbsp; SOCK_STREAM=1 &nbsp;|&nbsp; stdin=0 &nbsp;|&nbsp; stdout=1 &nbsp;|&nbsp; stderr=2
+      O_RDONLY=0 &nbsp;|&nbsp; O_WRONLY=0x01 &nbsp;|&nbsp; O_CREAT=0x40 &nbsp;|&nbsp; O_TRUNC=0x200<br>
+      PROT_READ=1 &nbsp;|&nbsp; PROT_WRITE=2 &nbsp;|&nbsp; PROT_EXEC=4 &nbsp;|&nbsp; PROT_RWX=7<br>
+      MAP_PRIVATE=0x02 &nbsp;|&nbsp; MAP_ANONYMOUS=0x20 &nbsp;|&nbsp; MAP_ANON|MAP_PRIVATE=0x22<br>
+      Callee-saved: rbx, rbp, r12&ndash;r15 &nbsp;|&nbsp; Caller-saved: rax, rcx, rdx, rsi, rdi, r8&ndash;r11
     </div>
   </div>
 </div>
@@ -332,186 +337,361 @@ h1{color:var(--accent);font-size:1.35rem;margin-bottom:.2rem;}
    CHALLENGE DATA
 ════════════════════════════════════════════════════════════ */
 const CHALLENGES = [
+
+  /* ──────────────────────────────────────────
+     TIER 1 — Foundation
+  ────────────────────────────────────────── */
   {
-    id: 'exit',
-    title: 'exit(0)',
-    category: 'Basic Syscalls',
-    icon: '&#128682;',
-    equiv: 'exit(0)',
-    narrative: '<strong>Syscall 60 = exit.</strong> <code>rdi</code> = exit status (0 = success). <code>rax</code> = syscall number. This is the simplest syscall — just two <code>mov</code>s and a <code>syscall</code>.',
-    lines: [
-      { parts: ['mov rdi, ', {b:0}],  comment: '# exit status (0 = success)' },
-      { parts: ['mov rax, ', {b:1}],  comment: '# syscall: exit' },
-      { parts: ['syscall'],            comment: '' },
-    ],
-    blanks: { 0: '0', 1: '60' },
-    tokens: ['0', '1', '2', '3', '41', '57', '60', 'rax', 'rdi'],
-  },
-  {
-    id: 'write',
-    title: 'write(1, buf, 13)',
-    category: 'Basic Syscalls',
-    icon: '&#9998;',
-    equiv: 'write(STDOUT_FILENO, msg, 13)',
-    narrative: '<strong>Syscall 1 = write.</strong> <code>rdi</code> = fd (<strong>1</strong> = stdout). <code>rsi</code> = buffer pointer. <code>rdx</code> = byte count. Returns bytes written in <code>rax</code>.',
-    lines: [
-      { parts: ['mov rdi, ', {b:0}],           comment: '# fd: 1 = stdout' },
-      { parts: ['lea rsi, [rip + msg]'],        comment: '# pointer to message' },
-      { parts: ['mov rdx, ', {b:1}],            comment: '# byte count = 13' },
-      { parts: ['mov rax, ', {b:2}],            comment: '# syscall: write' },
-      { parts: ['syscall'],                      comment: '' },
-    ],
-    blanks: { 0: '1', 1: '13', 2: '1' },
-    tokens: ['0', '1', '2', '3', '13', '60', '4096', 'rax', 'rdi'],
-  },
-  {
-    id: 'read',
-    title: 'read(0, buf, 4096)',
-    category: 'Basic Syscalls',
+    id: 'read-0x40',
+    title: 'read(stdin, rsp, 0x40)  — xor to zero',
+    category: 'Foundation',
     icon: '&#128214;',
-    equiv: 'read(STDIN_FILENO, buf, 4096)',
-    narrative: '<strong>Syscall 0 = read.</strong> <code>rdi</code> = fd (<strong>0</strong> = stdin). <code>rsi</code> = buffer. <code>rdx</code> = max bytes. Returns bytes read in <code>rax</code>. <strong>Note:</strong> syscall number and stdin fd are both 0!',
+    equiv: 'read(0, stack_buf, 64)',
+    narrative: '<strong>Syscall 0 = read.</strong> Use <code>xor rdi, rdi</code> to zero rdi instead of <code>mov rdi, 0</code> — same result, one byte shorter in shellcode. Both the syscall number AND the stdin fd are 0, so <code>rax</code> also stays 0 after the <code>xor rdi, rdi</code>... wait — set <code>rax</code> last with a <code>mov</code>.',
     lines: [
-      { parts: ['mov rdi, ', {b:0}],  comment: '# fd: 0 = stdin' },
-      { parts: ['mov rsi, rsp'],       comment: '# buffer pointer' },
-      { parts: ['mov rdx, ', {b:1}],  comment: '# max bytes to read' },
-      { parts: ['mov rax, ', {b:2}],  comment: '# syscall: read' },
-      { parts: ['syscall'],            comment: '' },
-    ],
-    blanks: { 0: '0', 1: '4096', 2: '0' },
-    tokens: ['0', '1', '2', '256', '4096', '60', 'rax', 'rdi'],
-  },
-  {
-    id: 'open-r',
-    title: 'open(path, O_RDONLY)',
-    category: 'File Syscalls',
-    icon: '&#128194;',
-    equiv: 'int fd = open(path, O_RDONLY)',
-    narrative: '<strong>Syscall 2 = open.</strong> <code>rdi</code> = null-terminated path. <code>rsi</code> = flags: <strong>O_RDONLY = 0</strong> (read-only, no creation). Returns fd in <code>rax</code>.',
-    lines: [
-      { parts: ['mov rdi, r9'],        comment: '# null-terminated path' },
-      { parts: ['mov rsi, ', {b:0}],   comment: '# flags: O_RDONLY = 0' },
-      { parts: ['mov rdx, 0'],         comment: '# mode (unused for reads)' },
-      { parts: ['mov rax, ', {b:1}],   comment: '# syscall: open' },
+      { parts: [{b:0}, ' rdi, rdi'],   comment: '# zero rdi -> stdin fd = 0' },
+      { parts: ['mov rsi, ', {b:1}],   comment: '# buffer on the stack' },
+      { parts: ['mov rdx, 0x40'],      comment: '# read 64 bytes' },
+      { parts: ['mov rax, 0'],         comment: '# sys_read' },
       { parts: ['syscall'],             comment: '' },
     ],
-    blanks: { 0: '0', 1: '2' },
-    tokens: ['0', '1', '2', '3', '0x41', '0x200', '60', 'rax', 'rdi'],
+    blanks: { 0: 'xor', 1: 'rsp' },
+    tokens: ['and', 'mov', 'not', 'or', 'sub', 'xor', 'rsp', 'rbp', 'r9'],
   },
   {
-    id: 'open-w',
-    title: 'open(path, O_WRONLY|O_CREAT, 0777)',
-    category: 'File Syscalls',
-    icon: '&#128190;',
-    equiv: 'int fd = open(path, O_WRONLY|O_CREAT, 0777)',
-    narrative: '<strong>O_WRONLY = 0x01, O_CREAT = 0x40</strong> &rarr; combined = <code>0x41</code>. <strong>Do NOT use 0x241</strong> (that adds O_TRUNC). Permissions <code>0x1ff</code> = octal 0777.',
+    id: 'write-rax',
+    title: 'write(1, rsp, rax)  — echo read length',
+    category: 'Foundation',
+    icon: '&#9998;',
+    equiv: '// write back exactly what read() returned in rax',
+    narrative: '<strong>Echo pattern.</strong> <code>read()</code> returns byte count in <code>rax</code>. Pass that same value to <code>rdx</code> for <code>write()</code> so you echo exactly what was received — no hardcoded length needed.',
     lines: [
-      { parts: ['mov rdi, r9'],        comment: '# null-terminated path' },
-      { parts: ['mov rsi, ', {b:0}],   comment: '# O_WRONLY | O_CREAT' },
-      { parts: ['mov rdx, ', {b:1}],   comment: '# 0777 permissions' },
-      { parts: ['mov rax, ', {b:2}],   comment: '# syscall: open' },
-      { parts: ['syscall'],             comment: '' },
-    ],
-    blanks: { 0: '0x41', 1: '0x1ff', 2: '2' },
-    tokens: ['0', '2', '0x41', '0x241', '0x1ff', '0xff', '60', 'rax'],
-  },
-  {
-    id: 'close',
-    title: 'close(4)',
-    category: 'File Syscalls',
-    icon: '&#128274;',
-    equiv: 'close(client_fd)',
-    narrative: '<strong>Syscall 3 = close.</strong> <code>rdi</code> = fd to close. In our web server, after <code>accept</code> returns client fd <strong>4</strong>, the parent closes it before looping back. Always close fds — leaking them causes "too many open files".',
-    lines: [
-      { parts: ['mov rdi, ', {b:0}],  comment: '# client fd (from accept)' },
-      { parts: ['mov rax, ', {b:1}],  comment: '# syscall: close' },
+      { parts: ['mov rdi, ', {b:0}],  comment: '# fd = stdout (1)' },
+      { parts: ['mov rsi, ', {b:1}],  comment: '# same buffer as read()' },
+      { parts: ['mov rdx, ', {b:2}],  comment: '# count = bytes read() returned' },
+      { parts: ['mov rax, ', {b:3}],  comment: '# sys_write' },
       { parts: ['syscall'],            comment: '' },
     ],
-    blanks: { 0: '4', 1: '3' },
-    tokens: ['0', '3', '4', '5', '2', '41', '60', 'rax', 'rdi'],
+    blanks: { 0: '1', 1: 'rsp', 2: 'rax', 3: '1' },
+    tokens: ['0', '1', '2', 'rax', 'rbx', 'rcx', 'rdx', 'rsp', 'rdi'],
   },
+
+  /* ──────────────────────────────────────────
+     TIER 2 — File Exploitation
+  ────────────────────────────────────────── */
   {
-    id: 'socket',
-    title: 'socket(AF_INET, SOCK_STREAM, 0)',
-    category: 'Network Syscalls',
-    icon: '&#128268;',
-    equiv: 'int sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP)',
-    narrative: '<strong>Syscall 41 = socket.</strong> <code>AF_INET = 2</code> (IPv4). <code>SOCK_STREAM = 1</code> (TCP). Protocol <code>0</code> = auto-select. Returns fd <strong>3</strong> (first available after stdin/stdout/stderr).',
+    id: 'open-read-write',
+    title: 'open() → read() → write(1,...)',
+    category: 'File Exploitation',
+    icon: '&#128196;',
+    equiv: 'fd = open(path,0); read(fd,rsp,0x80); write(1,rsp,0x80)',
+    narrative: '<strong>Classic flag-read chain.</strong> Open with <code>O_RDONLY=0</code>, read into stack buffer, write to stdout. The fd returned by <code>open</code> sits in <code>rax</code> — move it to <code>rdi</code> before <code>read</code>.',
     lines: [
-      { parts: ['mov rdi, ', {b:0}],  comment: '# AF_INET = 2 (IPv4)' },
-      { parts: ['mov rsi, ', {b:1}],  comment: '# SOCK_STREAM = 1 (TCP)' },
-      { parts: ['mov rdx, ', {b:2}],  comment: '# protocol = 0 (auto)' },
-      { parts: ['mov rax, ', {b:3}],  comment: '# syscall: socket' },
+      { parts: ['mov rdi, r9'],        comment: '# pointer to path string' },
+      { parts: ['xor rsi, rsi'],       comment: '# O_RDONLY = 0' },
+      { parts: ['mov rax, 2'],         comment: '# sys_open' },
+      { parts: ['syscall'],            comment: '# rax = fd' },
+      { parts: ['mov rdi, ', {b:0}],   comment: '# fd returned by open()' },
+      { parts: ['mov rsi, ', {b:1}],   comment: '# buffer on the stack' },
+      { parts: ['mov rdx, 0x80'],      comment: '# read 128 bytes' },
+      { parts: ['mov rax, ', {b:2}],   comment: '# sys_read' },
+      { parts: ['syscall'],            comment: '' },
+      { parts: ['mov rdi, ', {b:3}],   comment: '# write to stdout' },
+      { parts: ['mov rax, 1'],         comment: '# sys_write' },
       { parts: ['syscall'],            comment: '' },
     ],
-    blanks: { 0: '2', 1: '1', 2: '0', 3: '41' },
-    tokens: ['0', '1', '2', '3', '16', '41', '43', '49', '57', '60', 'rax'],
+    blanks: { 0: 'rax', 1: 'rsp', 2: '0', 3: '1' },
+    tokens: ['0', '1', '2', '3', 'rax', 'rbx', 'rbp', 'rsp', 'rdi', 'r9'],
   },
+
+  /* ──────────────────────────────────────────
+     TIER 3 — Classic Exploitation Syscalls
+  ────────────────────────────────────────── */
   {
-    id: 'bind',
-    title: 'bind(3, &sock_addr, 16)',
-    category: 'Network Syscalls',
-    icon: '&#128205;',
-    equiv: 'bind(sockfd, (sockaddr*)&addr, sizeof(sockaddr_in))',
-    narrative: '<strong>Syscall 49 = bind.</strong> <code>rdi</code> = sockfd (3). <code>rsi</code> = pointer to sockaddr_in struct. <code>rdx = 16</code> = sizeof(sockaddr_in). Attaches the socket to port 80.',
+    id: 'dup2',
+    title: 'dup2(client_fd, 0)  — pivot stdin',
+    category: 'Exploitation',
+    icon: '&#128257;',
+    equiv: 'dup2(client_fd, STDIN_FILENO)',
+    narrative: '<strong>Syscall 33 = dup2.</strong> Clones <code>rdi</code> (old fd) onto <code>rsi</code> (new fd number). Redirecting fd 4 to fd 0 (stdin) means shell reads come from the socket — the classic reverse-shell fd pivot.',
     lines: [
-      { parts: ['mov rdi, ', {b:0}],              comment: '# server socket fd' },
-      { parts: ['lea rsi, [rip + sock_addr]'],     comment: '# ptr to sockaddr_in' },
-      { parts: ['mov rdx, ', {b:1}],              comment: '# sizeof(sockaddr_in)' },
-      { parts: ['mov rax, ', {b:2}],              comment: '# syscall: bind' },
-      { parts: ['syscall'],                         comment: '' },
-    ],
-    blanks: { 0: '3', 1: '16', 2: '49' },
-    tokens: ['0', '3', '4', '8', '16', '41', '49', '50', '60', 'rax'],
-  },
-  {
-    id: 'listen',
-    title: 'listen(3, 0)',
-    category: 'Network Syscalls',
-    icon: '&#128251;',
-    equiv: 'listen(sockfd, 0)',
-    narrative: '<strong>Syscall 50 = listen.</strong> <code>rdi</code> = sockfd (3). <code>rsi</code> = backlog (queue size — 0 is fine for challenges). Marks the socket as passive and ready to accept connections.',
-    lines: [
-      { parts: ['mov rdi, ', {b:0}],  comment: '# server socket fd' },
-      { parts: ['mov rsi, ', {b:1}],  comment: '# backlog = 0' },
-      { parts: ['mov rax, ', {b:2}],  comment: '# syscall: listen' },
+      { parts: ['mov rdi, ', {b:0}],  comment: '# old fd (client socket = 4)' },
+      { parts: ['mov rsi, ', {b:1}],  comment: '# new fd (0 = stdin)' },
+      { parts: ['mov rax, ', {b:2}],  comment: '# sys_dup2' },
       { parts: ['syscall'],            comment: '' },
     ],
-    blanks: { 0: '3', 1: '0', 2: '50' },
-    tokens: ['0', '1', '3', '4', '41', '49', '50', '57', '60', 'rax'],
+    blanks: { 0: '4', 1: '0', 2: '33' },
+    tokens: ['0', '1', '2', '3', '4', '33', '41', '57', '59', '60'],
   },
   {
-    id: 'fork',
-    title: 'fork() — parent/child split',
-    category: 'Concurrency',
+    id: 'execve',
+    title: 'execve("/bin/sh", NULL, NULL)',
+    category: 'Exploitation',
+    icon: '&#128128;',
+    equiv: 'execve("/bin/sh", NULL, NULL)  // shellcode finale',
+    narrative: '<strong>Syscall 59 = execve.</strong> <code>rdi</code> = pointer to null-terminated path. <code>rsi</code> = argv (NULL = no args). <code>rdx</code> = envp (NULL = no env). <code>xor reg, reg</code> zeroes a register in one instruction.',
+    lines: [
+      { parts: [{b:0}, ' rdi, [rip + binsh]'],  comment: '# load address of "/bin/sh" string' },
+      { parts: ['xor rsi, rsi'],                 comment: '# argv = NULL' },
+      { parts: ['xor rdx, rdx'],                 comment: '# envp = NULL' },
+      { parts: [{b:1}, ' rax, ', {b:2}],         comment: '# sys_execve' },
+      { parts: ['syscall'],                       comment: '' },
+    ],
+    blanks: { 0: 'lea', 1: 'mov', 2: '59' },
+    tokens: ['lea', 'mov', 'movzx', 'xor', '33', '57', '59', '60', 'rax', 'rdi'],
+  },
+  {
+    id: 'mprotect',
+    title: 'mprotect(addr, 0x1000, PROT_RWX)',
+    category: 'Exploitation',
+    icon: '&#128737;',
+    equiv: 'mprotect(page, 4096, PROT_READ|PROT_WRITE|PROT_EXEC)',
+    narrative: '<strong>Syscall 10 = mprotect.</strong> Makes a page executable — needed before jumping to shellcode you\'ve written into memory. Protection flags: <strong>PROT_READ=1, PROT_WRITE=2, PROT_EXEC=4</strong>. Combined RWX = <strong>7</strong>.',
+    lines: [
+      { parts: ['mov rdi, ', {b:0}],  comment: '# page-aligned address' },
+      { parts: ['mov rsi, ', {b:1}],  comment: '# length = 0x1000 (one page)' },
+      { parts: ['mov rdx, ', {b:2}],  comment: '# PROT_READ|PROT_WRITE|PROT_EXEC' },
+      { parts: ['mov rax, ', {b:3}],  comment: '# sys_mprotect' },
+      { parts: ['syscall'],            comment: '' },
+    ],
+    blanks: { 0: 'rdi', 1: '0x1000', 2: '7', 3: '10' },
+    tokens: ['0', '4', '7', '9', '10', '0x1000', '0x2000', 'rax', 'rdi', 'rsi'],
+  },
+
+  /* ──────────────────────────────────────────
+     TIER 4 — 6-Arg Syscalls & ABI Gotchas
+  ────────────────────────────────────────── */
+  {
+    id: 'mmap-r10',
+    title: 'mmap — arg4 is r10, NOT rcx',
+    category: 'ABI Gotcha',
+    icon: '&#128752;',
+    equiv: 'mmap(NULL, 0x1000, PROT_RWX, MAP_ANON|MAP_PRIVATE, -1, 0)',
+    narrative: '<strong>KEY GOTCHA:</strong> The Linux <em>syscall</em> ABI uses <code>r10</code> for arg4 — the C ABI uses <code>rcx</code>. <code>mmap</code> has 6 args. <code>MAP_PRIVATE|MAP_ANONYMOUS = 0x22</code>. Anonymous maps use fd = <strong>-1</strong>.',
+    lines: [
+      { parts: ['xor rdi, rdi'],       comment: '# addr = NULL' },
+      { parts: ['mov rsi, 0x1000'],    comment: '# length = 4096' },
+      { parts: ['mov rdx, ', {b:0}],   comment: '# prot = PROT_RWX' },
+      { parts: ['mov r10, ', {b:1}],   comment: '# flags = MAP_PRIVATE|MAP_ANON' },
+      { parts: ['mov r8, ', {b:2}],    comment: '# fd = -1 (anonymous)' },
+      { parts: ['xor r9, r9'],         comment: '# offset = 0' },
+      { parts: ['mov rax, ', {b:3}],   comment: '# sys_mmap' },
+      { parts: ['syscall'],            comment: '# rax = mapped address' },
+    ],
+    blanks: { 0: '7', 1: '0x22', 2: '-1', 3: '9' },
+    tokens: ['0', '4', '7', '9', '10', '-1', '0x22', '0x20', 'rcx', 'r10'],
+  },
+  {
+    id: 'arg4-quiz',
+    title: 'C ABI vs Syscall ABI — arg4 register',
+    category: 'ABI Gotcha',
+    icon: '&#9888;',
+    equiv: '// one register differs between the two conventions',
+    narrative: '<strong>C function call:</strong> args go <code>rdi, rsi, rdx, rcx, r8, r9</code>. <strong>Kernel syscall:</strong> args go <code>rdi, rsi, rdx, <span style="color:var(--warning)">r10</span>, r8, r9</code>. The kernel recycles <code>rcx</code> internally during a syscall, so arg4 must be in <code>r10</code>.',
+    lines: [
+      { parts: ['# C call  arg4 → ', {b:0}],   comment: '# function call convention' },
+      { parts: ['# syscall arg4 → ', {b:1}],   comment: '# kernel syscall ABI' },
+      { parts: ['mov r10, some_flags'],    comment: '# correct way for a 4-arg syscall' },
+      { parts: ['mov rax, ', {b:2}],       comment: '# e.g. sys_mmap' },
+      { parts: ['syscall'],                comment: '' },
+    ],
+    blanks: { 0: 'rcx', 1: 'r10', 2: '9' },
+    tokens: ['r8', 'r9', 'r10', 'r11', 'rcx', 'rdx', 'rdi', '9', '10', '59'],
+  },
+
+  /* ──────────────────────────────────────────
+     TIER 5 — Bit Manipulation
+  ────────────────────────────────────────── */
+  {
+    id: 'byte-extract-and',
+    title: 'Extract byte 4 from rdi  (AND mask)',
+    category: 'Bit Tricks',
+    icon: '&#128202;',
+    equiv: 'rax = (rdi >> 32) & 0xff',
+    narrative: '<strong>Byte extraction.</strong> Byte index 4 starts at bit offset 32 (4 × 8). Shift right 32 to bring it to position 0, then <code>and rax, 0xff</code> to wipe the upper bytes.',
+    lines: [
+      { parts: ['mov rax, rdi'],          comment: '# copy input' },
+      { parts: ['shr rax, ', {b:0}],      comment: '# shift byte 4 to bit position 0' },
+      { parts: ['and rax, ', {b:1}],      comment: '# keep only the lowest byte' },
+    ],
+    blanks: { 0: '32', 1: '0xff' },
+    tokens: ['8', '16', '24', '32', '40', '56', '0xff', '0xffff', '0xffffffff', 'rax'],
+  },
+  {
+    id: 'byte-extract-shl',
+    title: 'Isolate byte 2 via shl/shr pair',
+    category: 'Bit Tricks',
+    icon: '&#128203;',
+    equiv: '// Pwn.College style — no AND needed',
+    narrative: '<strong>shl/shr wipe trick.</strong> Byte 2 is at bit offset 16. After <code>shr 16</code>, it sits at bit 0 but high bytes are still present. <code>shl 56</code> shoves everything above byte 0 off the left edge. <code>shr 56</code> slides it back down. 56 = 64 − 8.',
+    lines: [
+      { parts: ['mov rax, rdi'],          comment: '# copy input register' },
+      { parts: ['shr rax, ', {b:0}],      comment: '# byte 2 -> bit position 0' },
+      { parts: ['shl rax, ', {b:1}],      comment: '# clear upper 56 bits' },
+      { parts: ['shr rax, ', {b:2}],      comment: '# slide back down to bit 0' },
+    ],
+    blanks: { 0: '16', 1: '56', 2: '56' },
+    tokens: ['8', '16', '24', '32', '48', '56', '64', '0xff', 'rax'],
+  },
+  {
+    id: 'even-odd',
+    title: 'Even/odd check — no branch',
+    category: 'Bit Tricks',
+    icon: '&#128000;',
+    equiv: 'rax = (rdi % 2 == 0) ? 1 : 0',
+    narrative: '<strong>Bit 0 trick.</strong> Bit 0 of any integer is 1 for odd, 0 for even. <code>and rax, 1</code> isolates it. Then <code>xor rax, 1</code> inverts it because the problem wants 1=even, 0=odd. No branch needed.',
+    lines: [
+      { parts: ['xor rax, rax'],          comment: '# zero rax' },
+      { parts: ['or  rax, rdi'],          comment: '# rax = rdi' },
+      { parts: ['and rax, ', {b:0}],      comment: '# isolate bit 0 (0=even 1=odd)' },
+      { parts: ['xor rax, ', {b:1}],      comment: '# invert: 1=even 0=odd' },
+    ],
+    blanks: { 0: '1', 1: '1' },
+    tokens: ['0', '1', '2', '0xff', '0xffff', 'rax', 'rdi', 'rsi'],
+  },
+
+  /* ──────────────────────────────────────────
+     TIER 6 — Calling Convention Deep Cuts
+  ────────────────────────────────────────── */
+  {
+    id: 'callee-saved',
+    title: 'Preserve a value across a call',
+    category: 'Calling Convention',
+    icon: '&#128736;',
+    equiv: '// callee-saved: rbx rbp r12-r15 | caller-saved: rax rcx rdx rsi rdi r8-r11',
+    narrative: '<strong>Callee-saved registers</strong> (rbx, rbp, r12–r15) are preserved by the called function. Caller-saved ones (rax, rcx, rdx, rdi, rsi, r8–r11) may be trashed. Store the value you need in a callee-saved reg before the <code>call</code>.',
+    lines: [
+      { parts: ['mov ', {b:0}, ', rdi'],  comment: '# save rdi in a callee-saved reg' },
+      { parts: ['call compute'],          comment: '# rdi/rax/rcx may be trashed' },
+      { parts: ['mov rsi, ', {b:1}],      comment: '# original rdi still here!' },
+      { parts: ['mov rdi, 1'],            comment: '# stdout' },
+      { parts: ['mov rax, ', {b:2}],      comment: '# sys_write' },
+      { parts: ['syscall'],               comment: '' },
+    ],
+    blanks: { 0: 'r12', 1: 'r12', 2: '1' },
+    tokens: ['0', '1', 'rax', 'rcx', 'rdi', 'r10', 'r11', 'r12', 'r13', 'rsi'],
+  },
+  {
+    id: 'stack-align',
+    title: 'Fix stack alignment before call',
+    category: 'Calling Convention',
+    icon: '&#128290;',
+    equiv: '// rsp must be 16-byte aligned before any call',
+    narrative: '<strong>16-byte alignment rule.</strong> On function entry the return address push leaves rsp 8 bytes off. A callee-saved push (8 bytes) restores 16-byte alignment. Alternatively use <code>sub rsp, 8</code>. Misalignment causes SIGSEGV inside libc.',
+    lines: [
+      { parts: ['push ', {b:0}],           comment: '# callee-saved + aligns rsp to 16' },
+      { parts: ['call some_function'],     comment: '# safe: rsp is 16-byte aligned' },
+      { parts: ['pop ', {b:1}],            comment: '# restore register + undo align' },
+      { parts: ['ret'],                     comment: '' },
+    ],
+    blanks: { 0: 'rbx', 1: 'rbx' },
+    tokens: ['rax', 'rbx', 'rcx', 'rdx', 'rdi', 'rsi', 'r10', 'r11'],
+  },
+
+  /* ──────────────────────────────────────────
+     TIER 7 — Control Flow
+  ────────────────────────────────────────── */
+  {
+    id: 'error-check',
+    title: 'Check syscall return for error',
+    category: 'Control Flow',
+    icon: '&#128683;',
+    equiv: 'if (rax < 0) goto error_handler;  // -1 = failure',
+    narrative: '<strong>Syscalls return -1 (0xFFFFFFFFFFFFFFFF) on error.</strong> Use <code>cmp rax, 0</code> then <code>jl</code> (jump if less / signed negative) to branch on failure. Always validate open(), read(), and mmap() in real exploits.',
+    lines: [
+      { parts: ['syscall'],                        comment: '' },
+      { parts: ['cmp rax, ', {b:0}],               comment: '# negative = error' },
+      { parts: [{b:1}, ' error_handler'],           comment: '# jump if rax < 0' },
+      { parts: ['# ... success path ...'],          comment: '' },
+    ],
+    blanks: { 0: '0', 1: 'jl' },
+    tokens: ['0', '-1', 'je', 'jne', 'jl', 'jg', 'jle', 'jge'],
+  },
+  {
+    id: 'fork-branch',
+    title: 'fork() — parent/child dispatch',
+    category: 'Control Flow',
     icon: '&#127860;',
-    equiv: 'pid_t pid = fork();  // child gets 0, parent gets PID',
-    narrative: '<strong>Syscall 57 = fork.</strong> Both processes continue from <code>syscall</code>. <strong>Child: rax = 0. Parent: rax = child PID.</strong> The <code>je child</code> sends the child to its handler. Parent checks <code>rax, 0</code>.',
+    equiv: 'pid_t pid = fork();  child gets 0, parent gets PID',
+    narrative: '<strong>Syscall 57 = fork.</strong> Both processes resume after <code>syscall</code>. <strong>Child: rax = 0. Parent: rax = child PID.</strong> <code>test rax, rax</code> sets ZF if rax is zero (child). <code>jz child</code> sends the child to its handler.',
     lines: [
-      { parts: ['mov rax, ', {b:0}],  comment: '# syscall: fork' },
-      { parts: ['syscall'],            comment: '# child: rax=0  parent: rax=PID' },
-      { parts: ['cmp rax, ', {b:1}],  comment: '# child returns 0' },
-      { parts: ['je  child'],          comment: '# child jumps; parent falls through' },
+      { parts: ['mov rax, ', {b:0}],   comment: '# sys_fork' },
+      { parts: ['syscall'],             comment: '# child: rax=0  parent: rax=PID' },
+      { parts: ['test rax, ', {b:1}],  comment: '# sets ZF if child (rax==0)' },
+      { parts: [{b:2}, ' child'],       comment: '# child jumps; parent falls through' },
     ],
-    blanks: { 0: '57', 1: '0' },
-    tokens: ['0', '1', '57', '60', '41', 'rax', 'rdi', 'rsp', 'rbp'],
+    blanks: { 0: '57', 1: 'rax', 2: 'jz' },
+    tokens: ['0', '57', '59', '60', 'rax', 'rdi', 'je', 'jz', 'jl', 'jnz'],
+  },
+
+  /* ──────────────────────────────────────────
+     TIER 8 — Instruction Choice Challenges
+  ────────────────────────────────────────── */
+  {
+    id: 'movzx-byte',
+    title: 'movzx — safe byte load in a loop',
+    category: 'Instructions',
+    icon: '&#128065;',
+    equiv: 'uint8_t byte = *ptr;  // zero-extended, no stale high bits',
+    narrative: '<strong>movzx</strong> (move with zero-extend) loads 1 or 2 bytes and <strong>zero-fills the upper bits</strong> of the destination. A plain <code>mov al, [rbx]</code> only writes the low byte — if rax had a value before, bits 8-63 survive and corrupt comparisons. Always use <code>movzx</code> for byte reads in loops.',
+    lines: [
+      { parts: [{b:0}, ' rax, ', {b:1}, ' [rbx]'],  comment: '# 1 byte -> rax, upper bits = 0' },
+      { parts: ['cmp  rax, 0'],                       comment: '# null terminator?' },
+      { parts: ['je   done'],                          comment: '# yes -> exit loop' },
+      { parts: ['inc  rbx'],                           comment: '# advance pointer' },
+      { parts: [{b:2}, ' loop'],                       comment: '# continue' },
+    ],
+    blanks: { 0: 'movzx', 1: 'byte ptr', 2: 'jmp' },
+    tokens: ['byte ptr', 'dword ptr', 'jmp', 'jne', 'mov', 'movzx', 'movsxd', 'xor'],
   },
   {
-    id: 'accept',
-    title: 'accept(3, NULL, NULL)',
-    category: 'Network Syscalls',
-    icon: '&#129309;',
-    equiv: 'int client_fd = accept(sockfd, NULL, NULL)',
-    narrative: '<strong>Syscall 43 = accept.</strong> Blocks until a client connects. <code>rdi</code> = server sockfd (3). <code>rsi / rdx = 0</code> (NULL — we don\'t need the client\'s address). Returns new client fd in <code>rax</code>.',
+    id: 'lea-argv',
+    title: 'lea — argv[1] pointer at _start',
+    category: 'Instructions',
+    icon: '&#128073;',
+    equiv: 'char *arg1 = argv[1];  // [rsp+16] at _start',
+    narrative: '<strong>lea</strong> (Load Effective Address) computes an address <em>without</em> dereferencing it. At <code>_start</code>: <code>[rsp]</code> = argc, <code>[rsp+8]</code> = argv[0], <code>[rsp+16]</code> = argv[1]. <code>mov rdi, [rsp+16]</code> would dereference it; <code>lea rdi, [rsp+16]</code> gives you the pointer itself.',
     lines: [
-      { parts: ['mov rdi, ', {b:0}],  comment: '# server socket fd' },
-      { parts: ['mov rsi, ', {b:1}],  comment: '# addr ptr = NULL' },
-      { parts: ['mov rdx, ', {b:2}],  comment: '# addrlen ptr = NULL' },
-      { parts: ['mov rax, ', {b:3}],  comment: '# syscall: accept' },
-      { parts: ['syscall'],            comment: '# returns client fd in rax' },
+      { parts: [{b:0}, ' rdi, [rsp + ', {b:1}, ']'],  comment: '# pointer to argv[1] string' },
+      { parts: ['mov rsi, rsp'],                       comment: '# buffer' },
+      { parts: ['mov rdx, 0x40'],                      comment: '# 64 bytes' },
+      { parts: ['mov rax, 0'],                         comment: '# sys_read' },
+      { parts: ['syscall'],                            comment: '' },
     ],
-    blanks: { 0: '3', 1: '0', 2: '0', 3: '43' },
-    tokens: ['0', '1', '3', '4', '41', '43', '49', '57', '60', 'rax'],
+    blanks: { 0: 'lea', 1: '16' },
+    tokens: ['8', '16', '24', '32', 'lea', 'mov', 'xor', 'rsp'],
+  },
+  {
+    id: 'not-minus-one',
+    title: 'not — get -1 without a literal',
+    category: 'Instructions',
+    icon: '&#128308;',
+    equiv: 'int64_t fd = -1;  // anonymous mmap fd',
+    narrative: '<strong>not reg</strong> flips every bit. <code>not 0 = 0xFFFFFFFFFFFFFFFF = -1</code>. Shorter in shellcode than encoding a full 64-bit -1 literal. <code>xor r8, r8</code> zeroes the register, then <code>not r8</code> flips all bits to get -1 for the anonymous <code>mmap</code> fd argument.',
+    lines: [
+      { parts: [{b:0}, ' r8, r8'],      comment: '# r8 = 0' },
+      { parts: [{b:1}, ' r8'],          comment: '# r8 = ~0 = -1 (all bits set)' },
+      { parts: ['mov r10, 0x22'],       comment: '# MAP_PRIVATE|MAP_ANONYMOUS' },
+      { parts: ['mov rax, 9'],          comment: '# sys_mmap' },
+      { parts: ['syscall'],             comment: '' },
+    ],
+    blanks: { 0: 'xor', 1: 'not' },
+    tokens: ['and', 'dec', 'mov', 'neg', 'not', 'or', 'sub', 'xor'],
+  },
+  {
+    id: 'movsxd-trap',
+    title: 'movsxd vs mov eax — sign extension trap',
+    category: 'Instructions',
+    icon: '&#128270;',
+    equiv: 'int32_t val = arr[i];  // signed dword arithmetic',
+    narrative: '<strong>Sign extension trap.</strong> <code>movsxd rax, dword ptr [rdi+4]</code> sign-extends a negative 32-bit value into 64 bits (e.g. <code>0xffffac2d</code> becomes <code>0xffffffffffffac2d</code>). <code>mov eax, dword ptr [rdi+4]</code> zero-fills instead. For Pwn.College 32-bit arithmetic challenges, use <strong>32-bit register names</strong> to stay in the correct range.',
+    lines: [
+      { parts: [{b:0}, ' eax, dword ptr [rdi + 4]'],   comment: '# zero-fills upper 32 bits' },
+      { parts: [{b:1}, ' ebx, dword ptr [rdi + 8]'],   comment: '# safe 32-bit load' },
+      { parts: ['imul ', {b:2}, ', ebx'],               comment: '# 32-bit multiply stays clean' },
+    ],
+    blanks: { 0: 'mov', 1: 'mov', 2: 'eax' },
+    tokens: ['eax', 'ebx', 'ecx', 'mov', 'movzx', 'movsxd', 'rax', 'rbx'],
   },
 ];
 
@@ -612,7 +792,7 @@ function render(){
   if(allLocked){
     banner.classList.add('show');
     var isLast = curPos === order.length - 1;
-    document.getElementById('btn-next').textContent = isLast ? 'Finish &#127881;' : 'Next &#8594;';
+    document.getElementById('btn-next').innerHTML = isLast ? 'Finish &#127881;' : 'Next &#8594;';
   } else {
     banner.classList.remove('show');
   }
@@ -742,7 +922,7 @@ function tryPlace(bid, val){
     if(allDone){
       document.getElementById('complete-banner').classList.add('show');
       var isLast = curPos === order.length - 1;
-      document.getElementById('btn-next').textContent = isLast ? 'Finish &#127881;' : 'Next &#8594;';
+      document.getElementById('btn-next').innerHTML = isLast ? 'Finish &#127881;' : 'Next &#8594;';
       document.getElementById('score-badge').textContent = 'Score: ' + firstTryOk;
     }
 
