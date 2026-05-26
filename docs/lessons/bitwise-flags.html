@@ -536,13 +536,13 @@ var SECTIONS = [
         quiz: {
           question: 'What does (val ^ val) always equal, for any value of val?',
           options: [
-            '0 — every bit XOR'd with itself gives 0',
+            '0 — every bit XOR\'d with itself gives 0',
             'val — XOR with itself is identity',
             '0xFF — all bits flip',
             'Undefined — depends on val'
           ],
           correct: 0,
-          explanation: 'XOR rule: same inputs → 0. Every bit XOR'd with itself (same value) gives 0. So val ^ val = 0 regardless of val. This is actually used in x86 to zero a register: `xor eax, eax` — faster than `mov eax, 0` by 3 bytes.'
+          explanation: 'XOR rule: same inputs → 0. Every bit XOR\'d with itself (same value) gives 0. So val ^ val = 0 regardless of val. This is actually used in x86 to zero a register: `xor eax, eax` — faster than `mov eax, 0` by 3 bytes.'
         }
       }
     ]
