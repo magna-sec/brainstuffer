@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gate Gauntlet — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+button{color:var(--text);font-family:'Courier New',monospace;-webkit-appearance:none;appearance:none;}
+
+body{
+  font-family:'Courier New',monospace;
+  color:var(--text);
+  min-height:100vh;
+  padding:0;margin:0;
+  display:flex;flex-direction:column;align-items:center;
+  overflow-x:hidden;
+}
+
+#screen-title,#screen-game,#screen-over{
+  width:100%;max-width:680px;
+  padding:1.5rem 1rem 3rem;
+}
+#screen-game,#screen-over{display:none;}
+
+/* ═══ TITLE SCREEN ═══ */
+.title-hero{text-align:center;padding:3rem 1rem 1.5rem;}
+.title-hero h1{
+  font-size:3rem;letter-spacing:.1em;color:var(--accent);margin:0 0 .4rem;
+  text-shadow:0 0 28px var(--glow),0 0 60px var(--glow),0 0 100px var(--glow);
+}
+.title-sub{color:var(--muted);font-size:.9rem;letter-spacing:.04em;margin-bottom:2rem;}
+.hi-badge{
+  display:inline-block;background:var(--card);border:1px solid var(--card-border);
+  border-radius:10px;padding:.5rem 1.4rem;font-size:.85rem;color:var(--muted);margin-bottom:2rem;
+}
+.hi-badge span{color:var(--accent);font-weight:700;font-size:1rem;}
+.start-btn{
+  display:block;margin:0 auto 2rem;
+  background:var(--accent);color:var(--bg);border:none;border-radius:12px;
+  padding:1.1rem 4rem;font-size:1.15rem;font-family:'Courier New',monospace;
+  font-weight:700;cursor:pointer;letter-spacing:.12em;
+  box-shadow:0 0 28px var(--glow),0 6px 24px rgba(0,0,0,.45);
+  transition:opacity .15s,transform .1s,box-shadow .15s;
+}
+.start-btn:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 0 44px var(--glow),0 8px 28px rgba(0,0,0,.45);}
+.start-btn:active{transform:translateY(0);}
+.how-card{
+  background:var(--card);border:1px solid var(--card-border);
+  border-radius:12px;padding:1.2rem 1.5rem;text-align:left;
+}
+.how-card h3{margin:0 0 .7rem;color:var(--accent);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;}
+.how-card li{color:var(--muted);font-size:.8rem;margin:.35rem 0;line-height:1.5;}
+.how-card strong{color:var(--text);}
+
+/* ═══ HUD ═══ */
+.game-hud{
+  display:flex;align-items:center;gap:1rem;
+  padding:.7rem 1rem;margin-bottom:.5rem;
+  background:var(--card);border:1px solid var(--card-border);
+  border-radius:12px;
+}
+.hud-lives{font-size:1.2rem;letter-spacing:.08rem;line-height:1;min-width:56px;}
+.combo-pill{
+  font-size:.8rem;font-weight:700;
+  background:var(--accent);color:var(--bg);
+  border-radius:20px;padding:.18rem .7rem;
+  letter-spacing:.04em;transition:background .2s,color .2s,transform .15s;
+}
+.combo-pill.dim{background:var(--card-border);color:var(--muted);}
+.combo-pill.pop{transform:scale(1.35);}
+.hud-sep{flex:1;}
+.hud-level{font-size:.72rem;color:var(--muted);letter-spacing:.04em;white-space:nowrap;}
+.hud-score{font-size:1.1rem;font-weight:700;color:var(--accent);min-width:52px;text-align:right;letter-spacing:.04em;}
+
+/* timer */
+.timer-wrap{
+  width:100%;height:8px;background:var(--card);
+  border-radius:4px;overflow:hidden;margin-bottom:1.2rem;
+  box-shadow:inset 0 1px 4px rgba(0,0,0,.3);
+}
+#timer-fill{height:100%;width:100%;border-radius:4px;background:var(--accent);box-shadow:0 0 8px var(--glow);transition:background .35s;}
+
+/* tier strip */
+.tier-strip{
+  font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--muted);text-align:center;margin-bottom:1rem;
+}
+
+/* ═══ CIRCUIT BOARD ═══ */
+.circuit-board{
+  background:var(--card);
+  background-image:radial-gradient(circle,var(--card-border) 1px,transparent 1px);
+  background-size:22px 22px;
+  border:1px solid var(--card-border);
+  border-radius:18px;
+  padding:1.4rem 1rem;
+  margin-bottom:1rem;
+  position:relative;
+  box-shadow:0 4px 40px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.03);
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:.5rem .8rem;
+  align-items:center;
+  width:100%;
+}
+
+/* columns — centered so badge above/below bits works naturally */
+.input-col{display:flex;flex-direction:column;gap:.55rem;align-items:center;}
+.gate-col{display:flex;flex-direction:column;align-items:center;}
+.output-col{display:flex;flex-direction:column;gap:.55rem;align-items:center;}
+
+/* io-slot: badge stacks above/below the bit row */
+.io-slot{display:flex;flex-direction:column;align-items:center;gap:.3rem;}
+
+/* slot badge */
+.slot-badge{
+  font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:.18rem .48rem;border-radius:7px;white-space:nowrap;
+  line-height:1.4;
+}
+.badge-a{background:rgba(100,116,139,.18);color:var(--muted);border:1px solid var(--card-border);}
+.badge-b{background:var(--accent);color:var(--bg);}
+.badge-out{background:rgba(100,116,139,.18);color:var(--muted);border:1px solid var(--card-border);}
+.badge-tgt{background:rgba(251,191,36,.18);color:#fbbf24;border:1px solid rgba(251,191,36,.3);}
+
+/* bit nodes row */
+.bit-nodes{display:flex;gap:.3rem;align-items:center;flex-wrap:nowrap;}
+
+/* ═══ LED NODES ═══ */
+.led{
+  width:40px;height:40px;border-radius:50%;
+  border:2.5px solid var(--card-border);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  cursor:default;
+  position:relative;user-select:none;flex-shrink:0;
+  transition:border-color .1s,background .1s,box-shadow .1s,transform .06s;
+}
+.led-val{font-size:.9rem;font-weight:700;line-height:1;pointer-events:none;}
+.led-key{
+  position:absolute;bottom:2px;
+  font-size:.46rem;color:var(--muted);letter-spacing:.02em;line-height:1;
+  pointer-events:none;
+}
+
+/* size variants */
+.bit-nodes.sz-4 .led{width:42px;height:42px;}
+.bit-nodes.sz-4 .led-val{font-size:.95rem;}
+.bit-nodes.sz-8 .led{width:28px;height:28px;}
+.bit-nodes.sz-8 .led-val{font-size:.65rem;}
+.bit-nodes.sz-8 .led-key{font-size:.4rem;bottom:1px;}
+
+/* OFF */
+.led.led-off{
+  background:var(--bg);border-color:var(--card-border);
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.4);
+}
+.led.led-off .led-val{color:var(--muted);}
+
+/* ON — neon sphere */
+.led.led-on{
+  background:radial-gradient(circle at 38% 35%,rgba(255,255,255,.3),transparent 60%),var(--accent);
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent),0 0 20px 7px var(--glow),inset 0 2px 6px rgba(255,255,255,.35);
+}
+.led.led-on .led-val{color:var(--bg);text-shadow:0 1px 2px rgba(0,0,0,.4);}
+
+/* fixed / locked */
+.led.led-fixed{opacity:.38;}
+
+/* flippable B */
+.led.led-flippable{cursor:pointer;}
+.led.led-flippable:hover{
+  border-color:var(--accent);
+  box-shadow:0 0 0 2px var(--accent),0 0 14px 4px var(--glow);
+}
+.led.active-key{transform:scale(.86);box-shadow:0 0 0 3px var(--accent),0 0 20px 8px var(--glow) !important;}
+
+/* output states */
+.led.led-out-match{
+  background:radial-gradient(circle at 38% 35%,rgba(255,255,255,.22),transparent 60%),rgba(74,222,128,.7);
+  border-color:#4ade80;
+  box-shadow:0 0 0 3px #4ade80,0 0 20px 7px rgba(74,222,128,.5);
+}
+.led.led-out-match .led-val{color:#052e16;text-shadow:none;}
+.led.led-out-miss{
+  background:rgba(248,113,113,.45);border-color:#f87171;
+  box-shadow:0 0 0 2px #f87171,0 0 14px 4px rgba(248,113,113,.38);
+}
+.led.led-out-miss .led-val{color:#fff;}
+.led.led-out-neutral{
+  background:var(--bg);border-color:var(--card-border);
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.4);
+}
+.led.led-out-neutral .led-val{color:var(--muted);}
+
+/* ═══ GATE SVG ═══ */
+.gate-label{
+  font-size:.85rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);text-align:center;margin-bottom:.4rem;
+  text-shadow:0 0 14px var(--glow);
+}
+.gate-svg-wrap{
+  width:140px;height:80px;
+  color:var(--accent);
+  filter:drop-shadow(0 0 10px var(--glow)) drop-shadow(0 0 24px var(--glow));
+  flex-shrink:0;
+}
+.gate-svg-wrap svg{width:100%;height:100%;}
+
+/* ═══ KEY HINT ═══ */
+.key-hint{font-size:.72rem;color:var(--muted);text-align:center;margin-bottom:.8rem;line-height:1.7;}
+.key-hint kbd{
+  display:inline-block;background:var(--card);border:1px solid var(--card-border);
+  border-radius:5px;padding:.05rem .36rem;font-family:'Courier New',monospace;
+  font-size:.68rem;color:var(--text);margin:0 .1rem;
+  box-shadow:0 2px 0 var(--card-border);
+}
+
+/* ═══ FEEDBACK ═══ */
+.feedback{
+  background:var(--card);border-left:3px solid var(--accent);
+  border-radius:0 10px 10px 0;padding:.7rem 1rem;
+  font-size:.8rem;color:var(--muted);min-height:2.4rem;
+  line-height:1.5;margin-bottom:1rem;
+}
+.feedback.ok{border-color:#4ade80;color:var(--text);}
+.feedback.fail{border-color:#f87171;color:var(--text);}
+
+/* ═══ NEXT BTN ═══ */
+.next-btn{
+  background:var(--accent);color:var(--bg);border:none;border-radius:10px;
+  padding:.75rem 2.4rem;font-family:'Courier New',monospace;
+  font-size:1rem;font-weight:700;cursor:pointer;display:none;
+  margin-bottom:1rem;letter-spacing:.1em;
+  box-shadow:0 0 20px var(--glow);transition:opacity .15s,transform .1s;
+}
+.next-btn:hover{opacity:.88;transform:translateY(-1px);}
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes boardFlashOK{
+  0%{box-shadow:0 4px 40px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.03),0 0 60px rgba(74,222,128,.7),0 0 120px rgba(74,222,128,.3);}
+  100%{box-shadow:0 4px 40px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.03);}
+}
+.circuit-board.flash-correct{animation:boardFlashOK .65s ease-out forwards;}
+
+@keyframes boardShake{
+  0%,100%{transform:translateX(0);}
+  16%{transform:translateX(-10px);}
+  33%{transform:translateX(10px);}
+  50%{transform:translateX(-6px);}
+  66%{transform:translateX(6px);}
+  83%{transform:translateX(-3px);}
+}
+.circuit-board.flash-wrong{animation:boardShake .45s ease-out forwards;}
+
+@keyframes floatUp{
+  0%{opacity:1;transform:translateY(0) scale(1.3);}
+  100%{opacity:0;transform:translateY(-70px) scale(.7);}
+}
+.float-pts{
+  position:fixed;font-size:1.4rem;font-weight:700;color:#4ade80;
+  pointer-events:none;animation:floatUp 1s ease-out forwards;
+  font-family:'Courier New',monospace;
+  text-shadow:0 0 16px rgba(74,222,128,.9);z-index:100;
+}
+
+@keyframes particleFly{
+  0%{opacity:1;transform:translate(0,0) scale(1);}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0);}
+}
+.particle{position:fixed;width:7px;height:7px;border-radius:50%;pointer-events:none;z-index:99;}
+
+/* ═══ GAME OVER ═══ */
+.over-box{text-align:center;padding:3rem 1rem;}
+.over-box h2{font-size:2.2rem;color:var(--accent);margin-bottom:.3rem;text-shadow:0 0 26px var(--glow);}
+.final-score{font-size:4rem;color:var(--text);font-weight:700;margin:.5rem 0;letter-spacing:.06em;}
+.hi-note{font-size:.9rem;color:var(--muted);margin-bottom:1.5rem;}
+.stars{font-size:2.4rem;letter-spacing:.3rem;margin-bottom:1.8rem;}
+.over-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.over-btn{
+  background:var(--accent);color:var(--bg);border:none;border-radius:10px;
+  padding:.85rem 2.2rem;font-family:'Courier New',monospace;
+  font-size:.95rem;font-weight:700;cursor:pointer;letter-spacing:.08em;
+  box-shadow:0 0 18px var(--glow);transition:opacity .15s;
+}
+.over-btn.sec{background:var(--card);color:var(--text);border:1px solid var(--card-border);box-shadow:none;}
+.over-btn:hover{opacity:.85;}
+
+/* ═══ SKIN TOGGLE ═══ */
+#skin-toggle{position:fixed;top:.8rem;right:.8rem;background:var(--card);border:1px solid var(--card-border);border-radius:8px;padding:.35rem .55rem;font-size:1.1rem;cursor:pointer;color:var(--text);z-index:200;}
+#skin-panel{display:none;position:fixed;top:2.8rem;right:.8rem;background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.6rem .5rem;z-index:201;min-width:140px;}
+#skin-panel.open{display:block;}
+
+.back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);font-size:.8rem;text-decoration:none;margin-bottom:1rem;}
+
+/* ═══ MOBILE ═══ */
+@media(max-width:560px){
+  #screen-title,#screen-game,#screen-over{padding:1rem .75rem 2.5rem;}
+  .circuit-board{
+    grid-template-columns:1fr;
+    justify-items:center;
+    padding:1.2rem .75rem;
+    gap:.8rem;
+  }
+  .input-col,.gate-col,.output-col{width:100%;align-items:center;}
+  .bit-nodes.sz-4 .led{width:46px;height:46px;}
+  .bit-nodes.sz-4 .led-val{font-size:1.05rem;}
+  .bit-nodes.sz-8 .led{width:32px;height:32px;}
+  .bit-nodes.sz-8 .led-val{font-size:.72rem;}
+  .gate-svg-wrap{width:180px;height:100px;}
+  .title-hero h1{font-size:2.2rem;}
+  .start-btn{padding:.9rem 2.5rem;font-size:1rem;}
+}
+</style>
+</head>
+<body>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<!-- TITLE SCREEN -->
+<div id="screen-title">
+  <a href="index.html#learn" class="back-link">&#8592; Back to Interactive Learning</a>
+  <div class="title-hero">
+    <h1>Gate Gauntlet</h1>
+    <p class="title-sub">Flip bits to satisfy the logic gate &mdash; beat the clock</p>
+    <div class="hi-badge">High Score: <span id="hi-display">0</span></div>
+    <button class="start-btn" id="btn-start">START GAME</button>
+    <div class="how-card">
+      <h3>How to play</h3>
+      <ul>
+        <li><strong>Input A</strong> is fixed (locked). You only control <strong>Input B</strong>.</li>
+        <li>Make the gate output match the <strong>Target</strong> &mdash; green = correct bit.</li>
+        <li><strong>Number keys 1&ndash;8</strong> flip bits in B (leftmost = key 1).</li>
+        <li>NOT gate: only one input, flip with keys 1&ndash;N.</li>
+        <li>Beat the timer to keep your combo multiplier.</li>
+        <li>Gates: <strong>NOT, AND, OR, XOR, NAND, NOR, XNOR</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="screen-game">
+  <!-- HUD -->
+  <div class="game-hud">
+    <span class="hud-lives" id="hud-lives">&#9829;&#9829;&#9829;</span>
+    <span class="combo-pill dim" id="hud-combo">x1</span>
+    <span class="hud-sep"></span>
+    <span class="hud-level" id="hud-level">LVL 1 / 30</span>
+    <span class="hud-score" id="hud-score">0</span>
+  </div>
+  <div class="timer-wrap"><div id="timer-fill"></div></div>
+  <div class="tier-strip" id="tier-strip">Tier 1 — Introduction</div>
+
+  <!-- Circuit board: 3-column grid (inputs | gate | outputs) -->
+  <div class="circuit-board" id="gate-card">
+    <!-- Left: inputs -->
+    <div class="input-col">
+      <div class="io-slot" id="row-a" style="display:none;">
+        <span class="slot-badge badge-a">A FIXED</span>
+        <div class="bit-nodes" id="bits-a"></div>
+      </div>
+      <div class="io-slot">
+        <span class="slot-badge badge-b" id="b-badge">B INPUT</span>
+        <div class="bit-nodes" id="bits-b"></div>
+      </div>
+    </div>
+
+    <!-- Center: gate -->
+    <div class="gate-col">
+      <div class="gate-label" id="gate-label">AND</div>
+      <div class="gate-svg-wrap" id="gate-svg-wrap"></div>
+    </div>
+
+    <!-- Right: output + target -->
+    <div class="output-col">
+      <div class="io-slot">
+        <div class="bit-nodes" id="bits-out"></div>
+        <span class="slot-badge badge-out">OUTPUT</span>
+      </div>
+      <div class="io-slot">
+        <div class="bit-nodes" id="bits-target"></div>
+        <span class="slot-badge badge-tgt">TARGET</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="key-hint" id="key-hint"></div>
+  <div class="feedback" id="feedback"></div>
+  <button class="next-btn" id="btn-next">NEXT &#8594;</button>
+  <a href="index.html#learn" class="back-link">&#8592; Back to Interactive Learning</a>
+</div>
+
+<!-- GAME OVER -->
+<div id="screen-over">
+  <div class="over-box">
+    <h2 id="over-title">Game Over</h2>
+    <div class="final-score" id="final-score">0</div>
+    <div class="hi-note" id="hi-note"></div>
+    <div class="stars" id="over-stars"></div>
+    <div class="over-btns">
+      <button class="over-btn" id="btn-retry">PLAY AGAIN</button>
+      <button class="over-btn sec" id="btn-menu">MENU</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Skin switcher ── */
+(function(){
+  var t=document.getElementById('skin-toggle'),p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click',function(e){e.stopPropagation();p.classList.toggle('open');});
+  document.addEventListener('click',function(){p.classList.remove('open');});
+  p.addEventListener('click',function(e){e.stopPropagation();});
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click',function(){
+      var sk=o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin',sk);
+      localStorage.setItem('bs-skin',sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+
+/* ── SVG gate schematics ──
+   viewBox 0 0 200 100, stroke via currentColor (color:var(--accent) on wrapper) */
+function getGateSVG(gate){
+  var s='<svg viewBox="0 0 200 100" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">';
+  if(gate==='AND'){
+    /* D-shape: flat left, semicircle right */
+    s+='<path d="M30,15 H78 A35,35 0 0,1 78,85 H30 Z"/>';
+    s+='<line x1="0" y1="32" x2="30" y2="32"/>';
+    s+='<line x1="0" y1="68" x2="30" y2="68"/>';
+    s+='<line x1="113" y1="50" x2="200" y2="50"/>';
+  } else if(gate==='OR'){
+    /* concave left, pointed right */
+    s+='<path d="M28,15 Q56,15 90,50 Q56,85 28,85 Q48,50 28,15 Z"/>';
+    s+='<line x1="0" y1="32" x2="34" y2="32"/>';
+    s+='<line x1="0" y1="68" x2="34" y2="68"/>';
+    s+='<line x1="90" y1="50" x2="200" y2="50"/>';
+  } else if(gate==='XOR'){
+    s+='<path d="M28,15 Q56,15 90,50 Q56,85 28,85 Q48,50 28,15 Z"/>';
+    s+='<path d="M20,15 Q36,50 20,85" fill="none"/>';
+    s+='<line x1="0" y1="32" x2="24" y2="32"/>';
+    s+='<line x1="0" y1="68" x2="24" y2="68"/>';
+    s+='<line x1="90" y1="50" x2="200" y2="50"/>';
+  } else if(gate==='NOT'){
+    s+='<path d="M25,15 L120,50 L25,85 Z"/>';
+    s+='<circle cx="131" cy="50" r="11"/>';
+    s+='<line x1="0" y1="50" x2="25" y2="50"/>';
+    s+='<line x1="142" y1="50" x2="200" y2="50"/>';
+  } else if(gate==='NAND'){
+    s+='<path d="M30,15 H74 A35,35 0 0,1 74,85 H30 Z"/>';
+    s+='<circle cx="120" cy="50" r="11"/>';
+    s+='<line x1="0" y1="32" x2="30" y2="32"/>';
+    s+='<line x1="0" y1="68" x2="30" y2="68"/>';
+    s+='<line x1="131" y1="50" x2="200" y2="50"/>';
+  } else if(gate==='NOR'){
+    s+='<path d="M28,15 Q56,15 86,50 Q56,85 28,85 Q48,50 28,15 Z"/>';
+    s+='<circle cx="97" cy="50" r="11"/>';
+    s+='<line x1="0" y1="32" x2="34" y2="32"/>';
+    s+='<line x1="0" y1="68" x2="34" y2="68"/>';
+    s+='<line x1="108" y1="50" x2="200" y2="50"/>';
+  } else if(gate==='XNOR'){
+    s+='<path d="M28,15 Q56,15 86,50 Q56,85 28,85 Q48,50 28,15 Z"/>';
+    s+='<path d="M20,15 Q36,50 20,85" fill="none"/>';
+    s+='<circle cx="97" cy="50" r="11"/>';
+    s+='<line x1="0" y1="32" x2="24" y2="32"/>';
+    s+='<line x1="0" y1="68" x2="24" y2="68"/>';
+    s+='<line x1="108" y1="50" x2="200" y2="50"/>';
+  }
+  s+='</svg>';
+  return s;
+}
+
+/* ── Level definitions ── */
+/* All levels start at 4-bit minimum — 1-bit had only 2 states so was trivially easy */
+var LEVELS=[
+  /* Tier 1 — AND, 4-bit: learn both inputs must be 1 */
+  {gate:'AND', bits:4,tier:'Tier 1',tierName:'AND Gate — 4-bit'},
+  {gate:'AND', bits:4,tier:'Tier 1',tierName:'AND Gate — 4-bit'},
+  {gate:'AND', bits:4,tier:'Tier 1',tierName:'AND Gate — 4-bit'},
+  {gate:'AND', bits:4,tier:'Tier 1',tierName:'AND Gate — 4-bit'},
+  /* Tier 2 — OR, 4-bit: learn either input being 1 gives 1 */
+  {gate:'OR',  bits:4,tier:'Tier 2',tierName:'OR Gate — 4-bit'},
+  {gate:'OR',  bits:4,tier:'Tier 2',tierName:'OR Gate — 4-bit'},
+  {gate:'OR',  bits:4,tier:'Tier 2',tierName:'OR Gate — 4-bit'},
+  {gate:'OR',  bits:4,tier:'Tier 2',tierName:'OR Gate — 4-bit'},
+  /* Tier 3 — XOR / NOT, 4-bit */
+  {gate:'XOR', bits:4,tier:'Tier 3',tierName:'XOR Gate — 4-bit'},
+  {gate:'XOR', bits:4,tier:'Tier 3',tierName:'XOR Gate — 4-bit'},
+  {gate:'NOT', bits:4,tier:'Tier 3',tierName:'NOT Gate — 4-bit'},
+  {gate:'NOT', bits:4,tier:'Tier 3',tierName:'NOT Gate — 4-bit'},
+  /* Tier 4 — mixed 4-bit */
+  {gate:'AND', bits:4,tier:'Tier 4',tierName:'Mixed — 4-bit'},
+  {gate:'OR',  bits:4,tier:'Tier 4',tierName:'Mixed — 4-bit'},
+  {gate:'XOR', bits:4,tier:'Tier 4',tierName:'Mixed — 4-bit'},
+  {gate:'NOT', bits:4,tier:'Tier 4',tierName:'Mixed — 4-bit'},
+  /* Tier 5 — 8-bit gates */
+  {gate:'AND', bits:8,tier:'Tier 5',tierName:'AND Gate — 8-bit'},
+  {gate:'OR',  bits:8,tier:'Tier 5',tierName:'OR Gate — 8-bit'},
+  {gate:'XOR', bits:8,tier:'Tier 5',tierName:'XOR Gate — 8-bit'},
+  {gate:'NOT', bits:8,tier:'Tier 5',tierName:'NOT Gate — 8-bit'},
+  {gate:'AND', bits:8,tier:'Tier 5',tierName:'Mixed — 8-bit'},
+  {gate:'OR',  bits:8,tier:'Tier 5',tierName:'Mixed — 8-bit'},
+  /* Tier 6 — NAND / NOR, 4-bit */
+  {gate:'NAND',bits:4,tier:'Tier 6',tierName:'NAND Gate — universal'},
+  {gate:'NOR', bits:4,tier:'Tier 6',tierName:'NOR Gate — universal'},
+  {gate:'NAND',bits:4,tier:'Tier 6',tierName:'NAND Gate — universal'},
+  {gate:'NOR', bits:4,tier:'Tier 6',tierName:'NOR Gate — universal'},
+  /* Tier 7 — expert 8-bit */
+  {gate:'NAND',bits:8,tier:'Tier 7',tierName:'Expert — NAND 8-bit'},
+  {gate:'NOR', bits:8,tier:'Tier 7',tierName:'Expert — NOR 8-bit'},
+  {gate:'XNOR',bits:8,tier:'Tier 7',tierName:'Expert — XNOR 8-bit'},
+  {gate:'XOR', bits:8,tier:'Tier 7',tierName:'Expert — mixed 8-bit'}
+];
+
+var KEY_DIGITS=['1','2','3','4','5','6','7','8'];
+
+/* ── Gate logic ── */
+function computeGate(gate,a,b,mask){
+  if(gate==='NOT')  return (~b)&mask;
+  if(gate==='AND')  return (a&b)&mask;
+  if(gate==='OR')   return (a|b)&mask;
+  if(gate==='XOR')  return (a^b)&mask;
+  if(gate==='NAND') return (~(a&b))&mask;
+  if(gate==='NOR')  return (~(a|b))&mask;
+  if(gate==='XNOR') return (~(a^b))&mask;
+  return 0;
+}
+
+function maskFor(bits){ return (1<<bits)-1; }
+function randBits(mask){ return Math.floor(Math.random()*(mask+1)); }
+
+/* ── State ── */
+var score=0,lives=3,combo=1,levelIdx=0;
+var answered=false,timerRaf=null,timerStart=0,timerDur=8000;
+var inputA=0,inputB=0,targetOut=0,curMask=1;
+var curGate='NOT',curBits=1;
+var advTimer=null,nextFn=null,inputCooldown=false;
+
+function getHi(){ return parseInt(localStorage.getItem('gg-hi')||'0',10); }
+function setHi(n){ localStorage.setItem('gg-hi',String(n)); }
+
+/* ── Schedule auto-advance; btn-next can fire it early ── */
+function scheduleAdvance(fn,delay){
+  nextFn=fn;
+  advTimer=setTimeout(function(){nextFn=null;advTimer=null;fn();},delay);
+}
+function advanceNow(){
+  if(!nextFn) return;
+  clearTimeout(advTimer);
+  var f=nextFn;nextFn=null;advTimer=null;
+  f();
+}
+
+function showScreen(id){
+  document.getElementById('screen-title').style.display='none';
+  document.getElementById('screen-game').style.display='none';
+  document.getElementById('screen-over').style.display='none';
+  document.getElementById(id).style.display='block';
+}
+
+function updateHud(){
+  var hearts='';
+  for(var i=0;i<3;i++) hearts+=(i<lives)?'&#9829;':'&#9825;';
+  document.getElementById('hud-lives').innerHTML=hearts;
+  var cp=document.getElementById('hud-combo');
+  cp.textContent='x'+combo;
+  if(combo>1){cp.classList.remove('dim');}else{cp.classList.add('dim');}
+  document.getElementById('hud-level').textContent='LVL '+(levelIdx+1)+' / '+LEVELS.length;
+  document.getElementById('hud-score').textContent=score;
+}
+
+/* ── Build LED row ── */
+function buildBitRow(container,value,bits,type){
+  container.innerHTML='';
+  for(var i=0;i<bits;i++){
+    var bitPos=bits-1-i;
+    var bitVal=(value>>bitPos)&1;
+    var cell=document.createElement('div');
+    var isOn=bitVal===1;
+    if(type==='fixed'){
+      cell.className='led led-fixed '+(isOn?'led-on':'led-off');
+    } else if(type==='flip'){
+      cell.className='led led-flippable '+(isOn?'led-on':'led-off');
+    } else if(type==='out'){
+      cell.className='led led-out-neutral';
+    } else {
+      /* target — show fixed but with normal opacity */
+      cell.className='led led-fixed '+(isOn?'led-on':'led-off');
+    }
+    cell.setAttribute('data-pos',bitPos);
+    var vs=document.createElement('span');
+    vs.className='led-val';
+    vs.textContent=bitVal;
+    cell.appendChild(vs);
+    if(type==='flip'){
+      var ks=document.createElement('span');
+      ks.className='led-key';
+      ks.textContent=KEY_DIGITS[i]||'';
+      cell.appendChild(ks);
+      (function(bp){cell.addEventListener('click',function(){if(!answered&&!inputCooldown) flipBit(bp);});})(bitPos);
+    }
+    container.appendChild(cell);
+  }
+}
+
+function updateBitRow(container,value,bits){
+  var cells=container.querySelectorAll('.led');
+  for(var i=0;i<cells.length;i++){
+    var bitPos=bits-1-i;
+    var bitVal=(value>>bitPos)&1;
+    cells[i].querySelector('.led-val').textContent=bitVal;
+    if(bitVal===1){cells[i].classList.add('led-on');cells[i].classList.remove('led-off');}
+    else{cells[i].classList.remove('led-on');cells[i].classList.add('led-off');}
+  }
+}
+
+function updateOutputRow(){
+  var outVal=computeGate(curGate,inputA,inputB,curMask);
+  var container=document.getElementById('bits-out');
+  var cells=container.querySelectorAll('.led');
+  for(var i=0;i<cells.length;i++){
+    var bitPos=curBits-1-i;
+    var outBit=(outVal>>bitPos)&1;
+    var tgtBit=(targetOut>>bitPos)&1;
+    cells[i].querySelector('.led-val').textContent=outBit;
+    cells[i].className='led '+(outBit===tgtBit?'led-out-match':'led-out-miss');
+  }
+  if(outVal===targetOut&&!answered) onCorrect();
+}
+
+function flipBit(bitPos){
+  inputB=inputB^(1<<bitPos);
+  updateBitRow(document.getElementById('bits-b'),inputB,curBits);
+  updateOutputRow();
+}
+
+/* ── Solve for B ── */
+function solveB(gate,a,want,mask){
+  if(gate==='NOT') return (~want)&mask;
+  for(var b=0;b<=mask;b++){
+    if(computeGate(gate,a,b,mask)===want) return b;
+  }
+  return -1;
+}
+
+/* ── Level setup ── */
+function loadLevel(idx){
+  if(idx>=LEVELS.length){endGame(true);return;}
+  clearTimeout(advTimer);advTimer=null;nextFn=null;
+  /* 200ms cooldown so queued keypresses from prior rapid input don't hit the new level */
+  inputCooldown=true;
+  setTimeout(function(){inputCooldown=false;},200);
+  var lvl=LEVELS[idx];
+  curGate=lvl.gate;curBits=lvl.bits;curMask=maskFor(curBits);
+  answered=false;
+
+  document.getElementById('feedback').textContent='';
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('btn-next').style.display='none';
+  document.getElementById('tier-strip').textContent=lvl.tierName;
+
+  /* Generate puzzle — ensure inputB=0 does NOT trivially solve it */
+  var solvedB=-1;
+  var attempts=0;
+  var initialOut=0;
+  do {
+    inputA=(curGate==='NOT')?0:randBits(curMask);
+    targetOut=randBits(curMask);
+    initialOut=computeGate(curGate,inputA,0,curMask);
+    solvedB=solveB(curGate,inputA,targetOut,curMask);
+    attempts++;
+    /* Reject: no solution, or starting at B=0 already wins */
+  } while((solvedB<0 || targetOut===initialOut) && attempts<30);
+
+  /* Fallback: if still stuck, force a solvable non-trivial puzzle */
+  if(solvedB<0 || targetOut===initialOut){
+    /* pick a target that's != output of B=0 */
+    inputA=(curGate==='NOT')?0:randBits(curMask);
+    initialOut=computeGate(curGate,inputA,0,curMask);
+    targetOut=(initialOut===curMask)?0:curMask; /* flip all bits from initial */
+    solvedB=solveB(curGate,inputA,targetOut,curMask);
+    if(solvedB<0) solvedB=1; /* last resort */
+  }
+
+  inputB=0; /* player starts at zero */
+
+  /* Gate SVG and label */
+  document.getElementById('gate-label').textContent=curGate;
+  document.getElementById('gate-svg-wrap').innerHTML=getGateSVG(curGate);
+
+
+  /* Input A row */
+  var rowA=document.getElementById('row-a');
+  if(curGate==='NOT'){
+    rowA.style.display='none';
+    document.getElementById('b-badge').textContent='INPUT';
+  } else {
+    rowA.style.display='flex';
+    document.getElementById('b-badge').textContent='B INPUT';
+    buildBitRow(document.getElementById('bits-a'),inputA,curBits,'fixed');
+  }
+
+  /* Build bit rows */
+  buildBitRow(document.getElementById('bits-b'),inputB,curBits,'flip');
+  buildBitRow(document.getElementById('bits-out'),computeGate(curGate,inputA,inputB,curMask),curBits,'out');
+  buildBitRow(document.getElementById('bits-target'),targetOut,curBits,'target');
+
+  /* Size classes on bit-node containers */
+  var conts=[
+    document.getElementById('bits-a'),
+    document.getElementById('bits-b'),
+    document.getElementById('bits-out'),
+    document.getElementById('bits-target')
+  ];
+  conts.forEach(function(c){
+    c.classList.remove('sz-4','sz-8');
+    if(curBits===4) c.classList.add('sz-4');
+    if(curBits===8) c.classList.add('sz-8');
+  });
+
+  /* Key hint */
+  var hint='Keys ';
+  for(var i=0;i<curBits;i++) hint+='<kbd>'+KEY_DIGITS[i]+'</kbd> ';
+  hint+='&mdash; flip bits'+(curGate==='NOT'?'':' in B')+' (left = key 1)';
+  document.getElementById('key-hint').innerHTML=hint;
+
+  updateOutputRow();
+  startTimer();
+  updateHud();
+}
+
+/* ── Timer ── */
+function startTimer(){
+  if(timerRaf) cancelAnimationFrame(timerRaf);
+  timerStart=performance.now();
+  var fill=document.getElementById('timer-fill');
+  fill.style.width='100%';
+  fill.style.background='var(--accent)';
+  function tick(now){
+    var pct=1-(now-timerStart)/timerDur;
+    if(pct<=0){pct=0;fill.style.width='0%';if(!answered) onTimeout();return;}
+    fill.style.width=(pct*100)+'%';
+    if(pct<0.25) fill.style.background='#f87171';
+    else if(pct<0.5) fill.style.background='#fbbf24';
+    else fill.style.background='var(--accent)';
+    timerRaf=requestAnimationFrame(tick);
+  }
+  timerRaf=requestAnimationFrame(tick);
+}
+function stopTimer(){if(timerRaf){cancelAnimationFrame(timerRaf);timerRaf=null;}}
+
+/* ── Particles ── */
+function spawnParticles(anchorEl){
+  var r=anchorEl.getBoundingClientRect();
+  var cx=r.left+r.width/2;
+  var cy=r.top+r.height/3;
+  var cols=['#4ade80','#38bdf8','#fbbf24','#f472b6','#a78bfa','#4ade80'];
+  for(var i=0;i<24;i++){
+    var el=document.createElement('div');
+    el.className='particle';
+    var angle=(i/24)*Math.PI*2;
+    var dist=50+Math.random()*80;
+    var dx=Math.round(Math.cos(angle)*dist);
+    var dy=Math.round(Math.sin(angle)*dist-25);
+    el.style.left=cx+'px';
+    el.style.top=cy+'px';
+    el.style.background=cols[i%cols.length];
+    el.style.setProperty('--dx',dx+'px');
+    el.style.setProperty('--dy',dy+'px');
+    var dur=(0.45+Math.random()*0.5).toFixed(2);
+    el.style.animation='particleFly '+dur+'s ease-out forwards';
+    document.body.appendChild(el);
+    el.addEventListener('animationend',function(){if(el.parentNode) el.parentNode.removeChild(el);});
+  }
+}
+
+/* ── Correct / Timeout ── */
+function onCorrect(){
+  if(answered) return;
+  answered=true;
+  stopTimer();
+  var pts=100*combo;
+  score+=pts;
+  combo++;
+  if(levelIdx===9)  timerDur=6000;
+  if(levelIdx===19) timerDur=5000;
+
+  spawnParticles(document.getElementById('gate-card'));
+  floatPts(document.getElementById('gate-card'),'+'+pts);
+  var gc=document.getElementById('gate-card');
+  gc.classList.remove('flash-wrong');
+  gc.classList.add('flash-correct');
+  setTimeout(function(){gc.classList.remove('flash-correct');},700);
+
+  /* combo pop animation */
+  var cp=document.getElementById('hud-combo');
+  cp.classList.add('pop');
+  setTimeout(function(){cp.classList.remove('pop');},200);
+
+  document.getElementById('feedback').className='feedback ok';
+  document.getElementById('feedback').innerHTML='<strong>Correct!</strong> '+gateExplanation();
+  document.getElementById('btn-next').style.display='inline-block';
+  updateHud();
+  scheduleAdvance(function(){levelIdx++;loadLevel(levelIdx);},1500);
+}
+
+function onTimeout(){
+  if(answered) return;
+  answered=true;
+  stopTimer();
+  combo=1;lives--;
+  var gc=document.getElementById('gate-card');
+  gc.classList.add('flash-wrong');
+  setTimeout(function(){gc.classList.remove('flash-wrong');},500);
+  document.getElementById('feedback').className='feedback fail';
+  document.getElementById('feedback').innerHTML='<strong>Time\'s up!</strong> '+gateExplanation();
+  document.getElementById('btn-next').style.display='inline-block';
+  updateHud();
+  if(lives<=0){
+    scheduleAdvance(function(){endGame(false);},1600);
+  } else {
+    scheduleAdvance(function(){loadLevel(levelIdx);},1600);
+  }
+}
+
+function gateExplanation(){
+  var sol=solveB(curGate,inputA,targetOut,curMask);
+  var aStr=toBinStr(inputA,curBits);
+  var bStr=toBinStr(sol<0?0:sol,curBits);
+  var oStr=toBinStr(targetOut,curBits);
+  if(curGate==='NOT')  return 'NOT flips every bit: NOT '+bStr+' = '+oStr+'.';
+  if(curGate==='AND')  return aStr+' AND '+bStr+' = '+oStr+'. Both bits must be 1.';
+  if(curGate==='OR')   return aStr+' OR '+bStr+' = '+oStr+'. Either bit being 1 gives 1.';
+  if(curGate==='XOR')  return aStr+' XOR '+bStr+' = '+oStr+'. Bits differ = 1, same = 0.';
+  if(curGate==='NAND') return 'NAND: NOT('+aStr+' AND '+bStr+') = '+oStr+'.';
+  if(curGate==='NOR')  return 'NOR: NOT('+aStr+' OR '+bStr+') = '+oStr+'.';
+  if(curGate==='XNOR') return 'XNOR: NOT('+aStr+' XOR '+bStr+') = '+oStr+'. Same bits = 1.';
+  return '';
+}
+
+function toBinStr(val,bits){
+  var s='';for(var i=bits-1;i>=0;i--) s+=(val>>i)&1;return s;
+}
+
+function floatPts(anchorEl,text){
+  var r=anchorEl.getBoundingClientRect();
+  var el=document.createElement('div');
+  el.className='float-pts';
+  el.textContent=text;
+  el.style.left=(r.left+r.width/2-24)+'px';
+  el.style.top=(r.top+window.scrollY-10)+'px';
+  document.body.appendChild(el);
+  el.addEventListener('animationend',function(){el.remove();});
+}
+
+/* ── Game flow ── */
+function startGame(){
+  score=0;lives=3;combo=1;levelIdx=0;timerDur=8000;
+  showScreen('screen-game');
+  loadLevel(0);
+}
+
+function endGame(completed){
+  stopTimer();
+  var hi=getHi();
+  var newHi=score>hi;
+  if(newHi) setHi(score);
+  document.getElementById('hi-display').textContent=getHi();
+  showScreen('screen-over');
+  document.getElementById('over-title').textContent=completed?'Gauntlet Clear!':'Game Over';
+  document.getElementById('final-score').textContent=score;
+  document.getElementById('hi-note').textContent=newHi?'New high score!':'High score: '+getHi();
+  var stars=score>=2000?'&#9733;&#9733;&#9733;':score>=1000?'&#9733;&#9733;&#9734;':score>=400?'&#9733;&#9734;&#9734;':'&#9734;&#9734;&#9734;';
+  document.getElementById('over-stars').innerHTML=stars;
+}
+
+/* ── Keyboard ── */
+document.addEventListener('keydown',function(e){
+  if(answered||inputCooldown) return;
+  var key=e.key;
+  var idx=KEY_DIGITS.indexOf(key);
+  if(idx<0||idx>=curBits) return;
+  e.preventDefault();
+  flipBit(curBits-1-idx);
+  var cells=document.getElementById('bits-b').querySelectorAll('.led');
+  if(cells[idx]){
+    cells[idx].classList.add('active-key');
+    setTimeout(function(){cells[idx].classList.remove('active-key');},130);
+  }
+});
+
+/* ── Wire buttons ── */
+document.getElementById('hi-display').textContent=getHi();
+document.getElementById('btn-start').addEventListener('click',startGame);
+document.getElementById('btn-retry').addEventListener('click',startGame);
+document.getElementById('btn-menu').addEventListener('click',function(){showScreen('screen-title');});
+document.getElementById('btn-next').addEventListener('click',advanceNow);
+</script>
+</body>
+</html>

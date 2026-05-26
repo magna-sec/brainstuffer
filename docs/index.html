@@ -218,6 +218,30 @@
                         <p>AND to test a bit, OR to set it, XOR to flip it, NOT to invert. Step through 14 animated examples using a real Minesweeper cell byte &mdash; masking, toggling, packing booleans. Live interactive playground.</p>
                         <span class="learn-card-tag">AND / OR / XOR</span><span class="learn-card-tag">bit ops</span>
                     </a>
+                    <a class="learn-card" href="bit-flip.html">
+                        <div class="learn-card-icon">&#128257;</div>
+                        <h3>Bit Flip</h3>
+                        <p>Transform a byte from start to target using bitwise ops &mdash; NOT, SHL, SHR, XOR, AND, OR. Solve each puzzle in par moves for 3 stars.</p>
+                        <span class="learn-card-tag">Puzzles &bull; 10 levels</span>
+                    </a>
+                    <a class="learn-card" href="gate-gauntlet.html">
+                        <div class="learn-card-icon">&#9654;</div>
+                        <h3>Gate Gauntlet</h3>
+                        <p>A logic gate appears with a fixed input and a target output. Flip bits on Input B using number keys to make the output match the target. 30 levels &mdash; 4-bit to 8-bit, AND through XNOR.</p>
+                        <span class="learn-card-tag">Bitwise &bull; 30 levels</span>
+                    </a>
+                    <a class="learn-card" href="register-race.html">
+                        <div class="learn-card-icon">&#9889;</div>
+                        <h3>Register Race</h3>
+                        <p>Rapid-fire syscall and register trivia. Answer before the timer drains &mdash; build combos, survive 3 lives, beat your high score.</p>
+                        <span class="learn-card-tag">Speed &bull; High Score</span>
+                    </a>
+                    <a class="learn-card" href="asm-unscramble.html">
+                        <div class="learn-card-icon">&#127922;</div>
+                        <h3>Assembly Unscramble</h3>
+                        <p>Shuffled assembly lines &mdash; race against the clock to restore the correct order. 12 puzzles from basic syscalls to shellcode.</p>
+                        <span class="learn-card-tag">Speed &bull; 12 puzzles</span>
+                    </a>
                     <div class="learn-cat-header">Stack &amp; Memory</div>
                     <a class="learn-card" href="fakestack.html">
                         <div class="learn-card-icon">&#128421;</div>
@@ -231,17 +255,17 @@
                         <p>Push, pop, call frames, recursion, and stack overflows &mdash; visualised step by step with animated memory cells and interactive demos.</p>
                         <span class="learn-card-tag">6 sections</span>
                     </a>
-                    <a class="learn-card" href="stack-sprint.html">
-                        <div class="learn-card-icon">&#127939;</div>
-                        <h3>Stack Sprint</h3>
-                        <p>Predict RSP and stack values after each instruction. push, pop, call, ret, sub rsp &mdash; watch the stack animate and test your mental model under the clock.</p>
-                        <span class="learn-card-tag">Game &bull; 30 rounds</span>
-                    </a>
                     <a class="learn-card" href="binary-workbench.html">
                         <div class="learn-card-icon">&#128290;</div>
                         <h3>Binary Workbench</h3>
                         <p>Live converter for binary, hex, decimal, and two&rsquo;s complement with bit-level visualisation.</p>
                         <span class="learn-card-tag">Number Systems</span>
+                    </a>
+                    <a class="learn-card" href="stack-sprint.html">
+                        <div class="learn-card-icon">&#127939;</div>
+                        <h3>Stack Sprint</h3>
+                        <p>Predict RSP and stack values after each instruction. push, pop, call, ret, sub rsp &mdash; watch the stack animate and test your mental model under the clock.</p>
+                        <span class="learn-card-tag">Interactive &bull; 30 rounds</span>
                     </a>
                     <div class="learn-cat-header">Linux Internals</div>
                     <a class="learn-card" href="fd-explorer.html">
@@ -308,31 +332,6 @@
                         <p>Explore Windows COM from vtables and reference counting to apartments and HRESULT decoding. Step through the full object lifecycle.</p>
                         <span class="learn-card-tag">6 sections</span>
                     </a>
-                    <div class="learn-cat-header">Games</div>
-                    <a class="learn-card" href="register-race.html">
-                        <div class="learn-card-icon">&#9889;</div>
-                        <h3>Register Race</h3>
-                        <p>Rapid-fire syscall and register trivia. Answer before the timer drains &mdash; build combos, survive 3 lives, beat your high score.</p>
-                        <span class="learn-card-tag">Speed &bull; High Score</span>
-                    </a>
-                    <a class="learn-card" href="bit-flip.html">
-                        <div class="learn-card-icon">&#128257;</div>
-                        <h3>Bit Flip</h3>
-                        <p>Transform a byte from start to target using bitwise ops &mdash; NOT, SHL, SHR, XOR, AND, OR. Solve each puzzle in par moves for 3 stars.</p>
-                        <span class="learn-card-tag">Puzzles &bull; 10 levels</span>
-                    </a>
-                    <a class="learn-card" href="asm-unscramble.html">
-                        <div class="learn-card-icon">&#127922;</div>
-                        <h3>Assembly Unscramble</h3>
-                        <p>Shuffled assembly lines &mdash; race against the clock to restore the correct order. 12 puzzles from basic syscalls to shellcode.</p>
-                        <span class="learn-card-tag">Speed &bull; 12 puzzles</span>
-                    </a>
-                    <a class="learn-card" href="lessons/asm-syscalls.html">
-                        <div class="learn-card-icon">&#9000;</div>
-                        <h3>Assembly Syscall Drill</h3>
-                        <p>Drag tokens into blank slots to complete real assembly. 19 challenges covering syscalls, mmap, execve, bit tricks, calling convention, and more. Shuffle mode included.</p>
-                        <span class="learn-card-tag">19 challenges</span><span class="learn-card-tag">drill</span>
-                    </a>
                     <div class="learn-cat-header">Music Theory</div>
                     <a class="learn-card" href="circle-of-fifths.html">
                         <div class="learn-card-icon">&#127925;</div>
@@ -344,6 +343,7 @@
             </div>
             <nav><a id="learn-home-link">&#8592; Back</a></nav>
         </div>
+
 
         <!-- ════════════════════ PAGE: CREATOR ════════════════════ -->
         <div id="page-creator" class="page">
