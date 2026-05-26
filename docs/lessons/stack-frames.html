@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<title>Stack Frames Visualized — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);
+     min-height:100vh;padding:1.5rem 1rem 4rem;}
+.wrap{max-width:900px;margin:0 auto;}
+
+.back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--subtle);
+           font-size:.8rem;text-decoration:none;margin-bottom:1.5rem;}
+.back-link:hover{color:var(--accent);}
+h1{color:var(--accent);font-size:1.35rem;margin-bottom:.2rem;}
+.sub{color:var(--subtle);font-size:.82rem;margin-bottom:.4rem;line-height:1.55;}
+.attribution{font-size:.72rem;color:var(--muted);margin-bottom:1.4rem;}
+.attribution a{color:var(--accent2);text-decoration:none;}
+.attribution a:hover{text-decoration:underline;}
+
+/* ── Step meta ───────────────────────────────────────────── */
+.step-meta{display:flex;align-items:center;gap:.65rem;margin-bottom:.6rem;flex-wrap:wrap;}
+.step-counter{font-size:.72rem;color:var(--muted);flex-shrink:0;}
+.step-title{font-size:.88rem;font-weight:700;color:var(--accent);flex:1;}
+.pips{display:flex;gap:4px;flex-wrap:wrap;}
+.pip{width:8px;height:8px;border-radius:50%;background:var(--card-border);
+     cursor:pointer;transition:background .2s,transform .2s;flex-shrink:0;}
+.pip.done{background:var(--accent2);}
+.pip.active{background:var(--accent);transform:scale(1.4);}
+
+/* ── Layout ──────────────────────────────────────────────── */
+.lesson-grid{
+  display:grid;
+  grid-template-columns:2fr 3fr;
+  gap:.75rem;
+  margin-bottom:.75rem;
+  align-items:start;
+}
+@media(max-width:600px){.lesson-grid{grid-template-columns:1fr;}}
+
+.panel{background:var(--card);border:1px solid var(--card-border);border-radius:10px;padding:.75rem;}
+.panel-lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;
+           letter-spacing:.09em;color:var(--muted);margin-bottom:.55rem;}
+
+/* ── Code panel ──────────────────────────────────────────── */
+#code-pre{
+  font-size:.78rem;line-height:1.85;overflow-x:auto;
+  background:var(--bg2);border-radius:6px;padding:.6rem .8rem;
+}
+.code-row{padding:0 .3rem;border-radius:3px;display:block;white-space:pre;}
+.code-row.hl{
+  background:rgba(129,140,248,.18);border-left:2px solid var(--accent);
+  padding-left:.4rem;margin-left:-.4rem;
+}
+.ck{color:var(--accent2);}    /* keyword */
+.cc{color:var(--muted);font-style:italic;}  /* comment */
+.cr{color:var(--accent);}     /* register */
+.cf{color:#e879f9;}           /* function name */
+.cn{color:#34d399;}           /* number */
+
+/* ── Registers ───────────────────────────────────────────── */
+.reg-row{display:flex;gap:.5rem;margin-bottom:.7rem;flex-wrap:wrap;}
+.reg-badge{
+  font-size:.75rem;padding:.25rem .7rem;border-radius:20px;
+  font-weight:700;border:1.5px solid;letter-spacing:.02em;
+}
+.ebp-badge{color:#fbbf24;border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.07);}
+.esp-badge{color:#60a5fa;border-color:rgba(96,165,250,.4);background:rgba(96,165,250,.07);}
+
+/* ── Stack ───────────────────────────────────────────────── */
+.stack-dir{
+  font-size:.62rem;color:var(--muted);margin-bottom:.3rem;
+  display:flex;align-items:center;gap:.35rem;
+}
+.stack-dir::before{content:'▼';font-size:.55rem;}
+
+#stack-view{display:flex;flex-direction:column;gap:3px;}
+
+.stack-row{
+  display:grid;
+  grid-template-columns:58px 68px 1fr;
+  align-items:stretch;
+  gap:0;
+}
+.ptr-col{
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-end;
+  gap:2px;padding-right:5px;
+}
+.ptr{
+  font-size:.58rem;font-weight:900;padding:.08rem .28rem;border-radius:3px;
+  line-height:1.3;text-align:center;white-space:nowrap;
+}
+.ptr-ebp{color:#fbbf24;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.35);}
+.ptr-esp{color:#60a5fa;background:rgba(96,165,250,.15);border:1px solid rgba(96,165,250,.35);}
+.addr-col{
+  font-size:.62rem;color:var(--muted);display:flex;align-items:center;
+  justify-content:flex-end;padding-right:6px;white-space:nowrap;
+}
+
+/* ── Cell states ─────────────────────────────────────────── */
+.cell{
+  border-radius:6px;padding:.28rem .55rem;
+  display:flex;flex-direction:column;justify-content:center;
+  min-height:36px;transition:background .3s,border-color .3s,opacity .3s;
+}
+.cell-lbl{font-size:.73rem;line-height:1.3;}
+.cell-val{font-size:.6rem;opacity:.7;margin-top:.1rem;}
+
+.cell-unused{
+  background:var(--bg);border:1px dashed rgba(100,116,139,.2);
+  opacity:.22;
+}
+.cell-unused .cell-lbl{color:var(--muted);}
+
+.cell-ds{background:rgba(129,140,248,.1);border:1px solid var(--accent);}
+.cell-ds .cell-lbl{color:var(--accent);}
+
+.cell-dl{background:rgba(52,211,153,.1);border:1px solid #34d399;}
+.cell-dl .cell-lbl{color:#34d399;}
+
+.cell-caller{background:var(--bg2);border:1px solid var(--card-border);opacity:.38;}
+.cell-caller .cell-lbl{color:var(--muted);}
+
+.cell-freed{background:var(--bg);border:1px dashed rgba(100,116,139,.18);opacity:.22;}
+.cell-freed .cell-lbl{color:var(--muted);text-decoration:line-through;}
+
+.cell-new{box-shadow:0 0 0 1px var(--accent),0 0 10px rgba(129,140,248,.35);}
+.cell-dl.cell-new{box-shadow:0 0 0 1px #34d399,0 0 10px rgba(52,211,153,.35);}
+
+/* ── Narrative ───────────────────────────────────────────── */
+.narr{
+  border-left:2px solid var(--accent);
+  background:linear-gradient(90deg,rgba(129,140,248,.08) 0%,transparent 65%);
+  border-radius:0 8px 8px 0;padding:.7rem .95rem;
+  font-size:.85rem;line-height:1.65;margin-bottom:.75rem;
+}
+.narr strong{color:var(--accent);}
+.narr code{color:var(--accent2);font-size:.82rem;}
+.narr .ebp-hi{color:#fbbf24;font-weight:700;}
+.narr .esp-hi{color:#60a5fa;font-weight:700;}
+
+/* ── Nav ─────────────────────────────────────────────────── */
+.nav-row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
+.btn-nav{
+  padding:.5rem 1.1rem;border-radius:7px;font-family:'Courier New',monospace;
+  font-size:.82rem;font-weight:700;cursor:pointer;
+  border:1.5px solid var(--card-border);background:var(--card);color:var(--subtle);
+  transition:border-color .15s,color .15s;
+}
+.btn-nav:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.btn-nav.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-nav.primary:hover:not(:disabled){opacity:.85;}
+.btn-nav:disabled{opacity:.28;cursor:default;}
+</style>
+</head>
+<body>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="wrap">
+  <a class="back-link" href="../index.html#learn">&#8592; Back to Interactive Learning</a>
+
+  <h1>&#127959; Stack Frames: DrawSquare &#8594; DrawLine</h1>
+  <p class="sub">Watch EBP and ESP change instruction-by-instruction as a nested function call creates and tears down a stack frame.</p>
+  <p class="attribution">Visual aid for <a href="https://ophirharpaz.com/begin.re/assignment-2.html" target="_blank" rel="noopener">begin.re Assignment 2</a> by Ophir Harpaz.</p>
+
+  <div class="step-meta">
+    <span class="step-counter" id="step-counter">Step 1 / 9</span>
+    <span class="step-title" id="step-title"></span>
+    <div class="pips" id="pips"></div>
+  </div>
+
+  <div class="lesson-grid">
+
+    <!-- LEFT: assembly code -->
+    <div class="panel">
+      <div class="panel-lbl">Assembly</div>
+      <div id="code-pre"></div>
+    </div>
+
+    <!-- RIGHT: stack diagram -->
+    <div class="panel">
+      <div class="panel-lbl">Stack memory &nbsp;&mdash;&nbsp;
+        <span style="font-size:.6rem;color:var(--muted);">lower addresses at top</span>
+      </div>
+      <div class="reg-row">
+        <span class="reg-badge ebp-badge" id="ebp-val">EBP = 0xFFC00C</span>
+        <span class="reg-badge esp-badge" id="esp-val">ESP = 0xFFC004</span>
+      </div>
+      <div class="stack-dir">higher addresses (older frames) at bottom</div>
+      <div id="stack-view"></div>
+    </div>
+
+  </div>
+
+  <div class="narr" id="narr"></div>
+
+  <div class="nav-row">
+    <button class="btn-nav" id="btn-prev">&#8592; Prev</button>
+    <button class="btn-nav primary" id="btn-next">Next &#8594;</button>
+  </div>
+</div>
+
+<script>
+/*
+  Stack layout (visual order: top = low addr, bottom = high addr)
+  Index  Address    Label
+    0    0xFFBFF4   DrawLine local 2            (EBP-8 of DrawLine)
+    1    0xFFBFF8   DrawLine local 1            (EBP-4 of DrawLine)
+    2    0xFFBFFC   saved EBP of DrawSquare     (EBP+0 of DrawLine) ← DrawLine's EBP
+    3    0xFFC000   return addr → DrawSquare    (EBP+4 of DrawLine)
+    4    0xFFC004   DrawSquare local 2          (EBP-8 of DrawSquare)
+    5    0xFFC008   DrawSquare local 1          (EBP-4 of DrawSquare)
+    6    0xFFC00C   saved EBP of main           (EBP+0 of DrawSquare) ← DrawSquare's EBP
+    7    0xFFC010   return addr → main()        (EBP+4 of DrawSquare)
+    8    0xFFC014   ⋮  main's frame  ⋮
+*/
+var CELLS = [
+  { addr:'0xFFBFF4', label:'DrawLine local 2',        val:null          },
+  { addr:'0xFFBFF8', label:'DrawLine local 1',        val:null          },
+  { addr:'0xFFBFFC', label:'saved EBP (DrawSquare)',  val:'= 0xFFC00C'  },
+  { addr:'0xFFC000', label:'return addr → DrawSquare', val:null    },
+  { addr:'0xFFC004', label:'DrawSquare local 2',      val:null          },
+  { addr:'0xFFC008', label:'DrawSquare local 1',      val:null          },
+  { addr:'0xFFC00C', label:'saved EBP (main)',        val:'= 0xFF8040'  },
+  { addr:'0xFFC010', label:'return addr → main()', val:null        },
+  { addr:'0xFFC014', label:'⋮  main\'s frame  ⋮', val:null   }
+];
+
+var DS = [
+  'DrawSquare:',
+  '  push ebp',
+  '  mov  ebp, esp',
+  '  sub  esp, 8',
+  '  ; ... body ...',
+  '  call DrawLine',
+  '  ; ... continues ...'
+];
+var DL = [
+  'DrawLine:',
+  '  push ebp',
+  '  mov  ebp, esp',
+  '  sub  esp, 8',
+  '  ; ... body ...',
+  '  ; (leave = next 2)',
+  '  mov  esp, ebp',
+  '  pop  ebp',
+  '  ret'
+];
+
+/*
+  State strings:  'unused' | 'ds' | 'dl' | 'caller' | 'freed'
+  Append '-new' to flash the cell as newly written: e.g. 'dl-new'
+  ebp/esp = cell index (0–8)
+*/
+var STEPS = [
+  {
+    title: 'DrawSquare is running',
+    code: DS, hl: 4,
+    ebp: 6, esp: 4,
+    states: ['unused','unused','unused','unused','ds','ds','ds','ds','caller'],
+    narr: 'DrawSquare\'s prologue (<code>push ebp / mov ebp, esp / sub esp, 8</code>) has already run. <strong class="ebp-hi">EBP = 0xFFC00C</strong> — locked in as DrawSquare\'s stable base pointer. <strong class="esp-hi">ESP = 0xFFC004</strong> — two 4-byte local variables sit above EBP. DrawSquare is about to call DrawLine.'
+  },
+  {
+    title: 'CALL DrawLine — return address pushed',
+    code: DS, hl: 5,
+    ebp: 6, esp: 3,
+    states: ['unused','unused','unused','dl-new','ds','ds','ds','ds','caller'],
+    narr: '<code>call DrawLine</code> does two things atomically: (1) decrements ESP by 4, (2) writes the return address (the instruction <em>after</em> the call) to the new top-of-stack. <strong>EBP is unchanged at 0xFFC00C.</strong> The return address is now safely stored — DrawSquare knows where to resume when DrawLine finishes.'
+  },
+  {
+    title: 'PUSH EBP — save DrawSquare\'s base pointer',
+    code: DL, hl: 1,
+    ebp: 6, esp: 2,
+    states: ['unused','unused','dl-new','dl','ds','ds','ds','ds','caller'],
+    narr: 'First instruction of DrawLine: <code>push ebp</code> saves DrawSquare\'s current EBP value (0xFFC00C) into the cell at 0xFFBFFC. <strong>EBP has not changed yet — it still equals 0xFFC00C.</strong> That saved value is the link back to DrawSquare\'s frame; it will be restored later.'
+  },
+  {
+    title: 'MOV EBP, ESP — DrawLine claims its base pointer',
+    code: DL, hl: 2,
+    ebp: 2, esp: 2,
+    states: ['unused','unused','dl','dl','ds','ds','ds','ds','caller'],
+    narr: '<code>mov ebp, esp</code> sets EBP to the current value of ESP. <strong class="ebp-hi">EBP jumps from 0xFFC00C to 0xFFBFFC.</strong> This is now DrawLine\'s frame anchor. DrawLine can address its saved caller EBP at <code>[ebp+0]</code>, the return address at <code>[ebp+4]</code>, and its own locals at <code>[ebp-4]</code>, <code>[ebp-8]</code>.'
+  },
+  {
+    title: 'SUB ESP, 8 — allocate DrawLine\'s locals',
+    code: DL, hl: 3,
+    ebp: 2, esp: 0,
+    states: ['dl-new','dl-new','dl','dl','ds','ds','ds','ds','caller'],
+    narr: '<code>sub esp, 8</code> moves ESP down by 8 bytes, carving out space for DrawLine\'s two 4-byte local variables. <strong>EBP does not move — it remains at 0xFFBFFC.</strong> DrawLine\'s locals live at <code>[ebp-4]</code> (0xFFBFF8) and <code>[ebp-8]</code> (0xFFBFF4).'
+  },
+  {
+    title: 'DrawLine executes — EBP is the fixed anchor',
+    code: DL, hl: 4,
+    ebp: 2, esp: 0,
+    states: ['dl','dl','dl','dl','ds','ds','ds','ds','caller'],
+    narr: 'Throughout DrawLine\'s body, <strong>EBP never moves</strong>. ESP may fluctuate — sub-calls, pushes, pops — but <strong class="ebp-hi">EBP at 0xFFBFFC is always the stable reference</strong>. Every local variable access uses an EBP-relative address. This is why the base <em>pointer</em> is called a pointer: it points to a fixed frame boundary.'
+  },
+  {
+    title: 'MOV ESP, EBP — free DrawLine\'s locals',
+    code: DL, hl: 6,
+    ebp: 2, esp: 2,
+    states: ['freed','freed','dl','dl','ds','ds','ds','ds','caller'],
+    narr: 'First half of <code>leave</code>: <code>mov esp, ebp</code> snaps ESP back to EBP\'s value. The two local variable cells are now <em>below</em> ESP — logically freed. The memory isn\'t zeroed, but anything below ESP is considered available and will be silently overwritten by the next push or call.'
+  },
+  {
+    title: 'POP EBP — restore DrawSquare\'s base pointer',
+    code: DL, hl: 7,
+    ebp: 6, esp: 3,
+    states: ['freed','freed','freed','dl','ds','ds','ds','ds','caller'],
+    narr: 'Second half of <code>leave</code>: <code>pop ebp</code> reads the value at the current stack top (0xFFBFFC, which holds <strong>0xFFC00C</strong>) into EBP, then increments ESP past it. <strong class="ebp-hi">EBP snaps back to 0xFFC00C — DrawSquare\'s frame is fully restored.</strong> The chain saved in step 3 is fulfilled.'
+  },
+  {
+    title: 'RET — execution returns to DrawSquare',
+    code: DS, hl: 6,
+    ebp: 6, esp: 4,
+    states: ['freed','freed','freed','freed','ds','ds','ds','ds','caller'],
+    narr: '<code>ret</code> pops the return address from the stack (cell 3) into EIP and jumps to it. <strong class="esp-hi">ESP is now 0xFFC004</strong> — exactly where DrawSquare left it before the call. DrawLine\'s entire frame was created and destroyed without disturbing DrawSquare\'s state at all. DrawSquare resumes as if nothing happened.'
+  }
+];
+
+var cur = 0;
+
+function colorCode(line) {
+  var s = line
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  s = s.replace(/(;.*)$/, '<span class="cc">$1</span>');
+  s = s.replace(/^(\s*)(push|pop|mov|sub|call|ret|leave)\b/i,
+    '$1<span class="ck">$2</span>');
+  s = s.replace(/\b(ebp|esp|eax|ebx|ecx|edx)\b/g, '<span class="cr">$&</span>');
+  s = s.replace(/\b(DrawSquare|DrawLine)\b/g, '<span class="cf">$&</span>');
+  s = s.replace(/\b(0x[0-9a-fA-F]+|\b\d+\b)/g, '<span class="cn">$&</span>');
+  return s;
+}
+
+function render() {
+  var s = STEPS[cur];
+
+  /* pips + counter */
+  document.getElementById('step-counter').textContent = 'Step ' + (cur+1) + ' / ' + STEPS.length;
+  document.getElementById('step-title').textContent = s.title;
+
+  var pipsEl = document.getElementById('pips');
+  pipsEl.innerHTML = '';
+  STEPS.forEach(function(_, i) {
+    var d = document.createElement('div');
+    d.className = 'pip' + (i < cur ? ' done' : '') + (i === cur ? ' active' : '');
+    (function(idx){ d.addEventListener('click', function(){ cur = idx; render(); }); })(i);
+    pipsEl.appendChild(d);
+  });
+
+  /* register badges */
+  document.getElementById('ebp-val').textContent = 'EBP = ' + CELLS[s.ebp].addr;
+  document.getElementById('esp-val').textContent = 'ESP = ' + CELLS[s.esp].addr;
+
+  /* code */
+  document.getElementById('code-pre').innerHTML =
+    s.code.map(function(line, i) {
+      var cls = 'code-row' + (i === s.hl ? ' hl' : '');
+      return '<span class="' + cls + '">' + colorCode(line) + '</span>';
+    }).join('');
+
+  /* stack */
+  var sv = document.getElementById('stack-view');
+  sv.innerHTML = CELLS.map(function(cell, ci) {
+    var raw = s.states[ci];
+    var isNew = raw.slice(-4) === '-new';
+    var base = isNew ? raw.slice(0, -4) : raw;
+
+    var cellCls = 'cell cell-' + base + (isNew ? ' cell-new' : '');
+
+    var ptrHtml = '';
+    if (s.ebp === ci) ptrHtml += '<span class="ptr ptr-ebp">EBP</span>';
+    if (s.esp === ci) ptrHtml += '<span class="ptr ptr-esp">ESP</span>';
+
+    var valHtml = '';
+    if (ci === 2 && (base === 'dl')) {
+      valHtml = '<div class="cell-val">' + cell.val + '</div>';
+    }
+    if (ci === 6 && (base === 'ds')) {
+      valHtml = '<div class="cell-val">' + cell.val + '</div>';
+    }
+
+    return '<div class="stack-row">' +
+      '<div class="ptr-col">' + ptrHtml + '</div>' +
+      '<div class="addr-col">' + cell.addr + '</div>' +
+      '<div class="' + cellCls + '">' +
+        '<div class="cell-lbl">' + cell.label + '</div>' + valHtml +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  /* narrative */
+  document.getElementById('narr').innerHTML = s.narr;
+
+  /* buttons */
+  document.getElementById('btn-prev').disabled = cur === 0;
+  var btnNext = document.getElementById('btn-next');
+  btnNext.innerHTML = cur === STEPS.length - 1 ? '&#10003; Done' : 'Next &#8594;';
+  btnNext.disabled = false;
+}
+
+document.getElementById('btn-next').addEventListener('click', function() {
+  if (cur < STEPS.length - 1) { cur++; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+});
+document.getElementById('btn-prev').addEventListener('click', function() {
+  if (cur > 0) { cur--; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+});
+
+/* ── Skin switcher ─────────────────────────────────────── */
+(function(){
+  var t=document.getElementById('skin-toggle'), p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click', function(e){ e.stopPropagation(); p.classList.toggle('open'); });
+  document.addEventListener('click', function(){ p.classList.remove('open'); });
+  p.addEventListener('click', function(e){ e.stopPropagation(); });
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click', function(){
+      var sk = o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+
+render();
+</script>
+</body>
+</html>

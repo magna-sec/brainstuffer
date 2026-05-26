@@ -70,6 +70,21 @@ a.home:hover{color:#a78bfa}
     <div class="card-desc">Drag-and-drop (or tap) tokens into blank slots to complete real assembly code. 11 challenges covering <code>exit</code>, <code>read</code>, <code>write</code>, <code>open</code>, <code>close</code>, <code>socket</code>, <code>bind</code>, <code>listen</code>, <code>fork</code>, and <code>accept</code>. Shuffle mode for spaced repetition. Built-in syscall reference.</div>
     <span class="tag">x86-64</span><span class="tag">syscalls</span><span class="tag">drill</span><span class="tag">pwn.college</span>
   </a>
+  <a class="card" href="stack-frames.html">
+    <div class="card-title">Stack Frames: DrawSquare &rarr; DrawLine</div>
+    <div class="card-desc">Step through 9 instructions and watch <code>EBP</code> and <code>ESP</code> change in real time as a nested function call builds and tears down a stack frame &mdash; <code>push ebp</code>, <code>mov ebp,esp</code>, <code>sub esp,8</code>, <code>leave</code>, <code>ret</code> all visualized against a live memory diagram.</div>
+    <span class="tag">x86</span><span class="tag">stack frames</span><span class="tag">EBP/ESP</span><span class="tag">begin.re</span>
+  </a>
+  <a class="card" href="disasm-patterns.html">
+    <div class="card-title">Disassembly Pattern Recognition</div>
+    <div class="card-desc">Given a snippet of x86-64 assembly, identify the high-level construct: function prologue, for loop, strcmp check, null guard, heap allocation, and more. 15 challenges with explanations. Train your eye to flip between C and machine code instantly.</div>
+    <span class="tag">RE</span><span class="tag">patterns</span><span class="tag">x86-64</span><span class="tag">begin.re</span>
+  </a>
+  <a class="card" href="re-methodology.html">
+    <div class="card-title">Reverse Engineering Methodology</div>
+    <div class="card-desc">Walk through a real RE workflow step by step: <code>strings</code> &rarr; <code>ltrace</code> &rarr; disassembler &rarr; xrefs &rarr; patching. Analyse a simple crackme from zero knowledge to bypassing the password check. Includes quiz questions and tool reference.</div>
+    <span class="tag">RE</span><span class="tag">methodology</span><span class="tag">crackme</span><span class="tag">begin.re</span>
+  </a>
 </div>
 </body>
 </html>

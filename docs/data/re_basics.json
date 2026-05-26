@@ -1,0 +1,324 @@
+[
+  {
+    "question": "You run `strings ./crackme` and see the line `s3cr3t_k3y` in the output. What is the most likely explanation?",
+    "answers": [
+      "It is the hardcoded password stored as a plaintext string",
+      "It is random noise from the compiled binary",
+      "It is the name of a libc function",
+      "It is the program's version number"
+    ],
+    "correct": "It is the hardcoded password stored as a plaintext string",
+    "explanation": "Compiled binaries keep string literals in plaintext. `strings` finds all sequences of printable characters ≥4 bytes, which includes passwords, URLs, and error messages. Always run strings first.",
+    "code": "$ strings ./crackme\nEnter password:\ns3cr3t_k3y\nAccess granted!\nWrong password.",
+    "code_lang": "text"
+  },
+  {
+    "question": "What does `ltrace ./crackme` show that `strings` does not?",
+    "answers": [
+      "The actual arguments passed to library functions at runtime",
+      "The ELF section headers",
+      "The binary's import table",
+      "Decompiled C source code"
+    ],
+    "correct": "The actual arguments passed to library functions at runtime",
+    "explanation": "ltrace intercepts library calls (strcmp, printf, fgets, etc.) and shows their arguments live. If strcmp is called, ltrace shows both the user input AND the expected password — even if strings didn't find it.",
+    "code": "$ ltrace ./crackme\nstrcmp(\"wrongpass\", \"s3cr3t_k3y\") = -1",
+    "code_lang": "text"
+  },
+  {
+    "question": "After calling `strcmp(input, expected)`, the code reads: `test eax, eax; jne .fail`. When does control fall through to the success block?",
+    "answers": [
+      "When strcmp returns 0 (strings are equal)",
+      "When strcmp returns 1 (strings differ)",
+      "When strcmp returns -1 (input < expected)",
+      "Always — jne never fires"
+    ],
+    "correct": "When strcmp returns 0 (strings are equal)",
+    "explanation": "strcmp returns 0 when strings are equal. test eax,eax sets ZF=1 when eax==0. jne fires on ZF=0 (not zero), jumping to .fail when strings differ. When they match, eax=0, ZF=1, jne does NOT fire — execution falls through to the success block.",
+    "code": "call   strcmp\ntest   eax, eax\njne    .fail      ; jump if NOT equal\n; success path here",
+    "code_lang": "asm"
+  },
+  {
+    "question": "What does `xor eax, eax` accomplish, and why do compilers prefer it over `mov eax, 0`?",
+    "answers": [
+      "Zeroes RAX; shorter encoding (2 bytes vs 5 bytes for mov eax,0)",
+      "Flips all bits in EAX; equivalent to NOT",
+      "Tests EAX for zero without modifying it",
+      "Sets EAX to 1; used as a boolean true"
+    ],
+    "correct": "Zeroes RAX; shorter encoding (2 bytes vs 5 bytes for mov eax,0)",
+    "explanation": "XOR of any value with itself is always 0. Because writing to EAX zero-extends into RAX, the full 64-bit register is cleared. The encoding is just 2 bytes, vs 5 for `mov eax, 0`. Compilers always emit this idiom.",
+    "code": "xor    eax, eax   ; RAX = 0 (2 bytes)\n; vs:\nmov    eax, 0     ; RAX = 0 (5 bytes)",
+    "code_lang": "asm"
+  },
+  {
+    "question": "You see `test rdi, rdi; jz .error` at the start of a function. What is this guard checking?",
+    "answers": [
+      "Whether the pointer argument (RDI) is NULL",
+      "Whether RDI holds a negative value",
+      "Whether RDI equals RDI (always true)",
+      "Whether the carry flag is set"
+    ],
+    "correct": "Whether the pointer argument (RDI) is NULL",
+    "explanation": "test rdi,rdi computes RDI & RDI and sets ZF=1 only when RDI is zero (NULL). jz fires on ZF=1. This is the canonical null-pointer check — cheaper than `cmp rdi, 0` by one byte.",
+    "code": "test   rdi, rdi\njz     .error     ; if (ptr == NULL) goto error",
+    "code_lang": "asm"
+  },
+  {
+    "question": "What is a cross-reference (xref) in a disassembler like IDA or Ghidra?",
+    "answers": [
+      "A list of all places in the binary that reference a given address",
+      "A jump table for switch statements",
+      "A list of imported library functions",
+      "The call stack at a breakpoint"
+    ],
+    "correct": "A list of all places in the binary that reference a given address",
+    "explanation": "Xrefs (cross-references) let you find every instruction that reads, writes, or jumps to an address. Right-click a string like 'Access granted' → list xrefs → jump directly to the branch that decides success vs failure. This is the fastest navigation technique in static analysis.",
+    "code": null
+  },
+  {
+    "question": "What is the function prologue sequence and why is it important for reversers?",
+    "answers": [
+      "push rbp; mov rbp, rsp — marks the start of every non-leaf function",
+      "pop rbp; ret — marks the end of every function",
+      "sub rsp, 0x28 — allocates exactly 40 bytes for all functions",
+      "call __stack_chk_fail — triggers a stack canary check"
+    ],
+    "correct": "push rbp; mov rbp, rsp — marks the start of every non-leaf function",
+    "explanation": "push rbp saves the caller's frame pointer. mov rbp, rsp establishes a stable reference point for local variables ([rbp-N]) and arguments ([rbp+N]). Seeing this sequence tells you: a new function started here. IDA/Ghidra use it to detect function boundaries automatically.",
+    "code": "push   rbp\nmov    rbp, rsp\nsub    rsp, 0x28   ; reserve locals",
+    "code_lang": "asm"
+  },
+  {
+    "question": "What does `mov rax, [rbx + rcx*8]` compute?",
+    "answers": [
+      "Loads arr[rcx] where arr starts at rbx and each element is 8 bytes",
+      "Multiplies rbx by rcx and divides by 8",
+      "Loads the 8th element of any array",
+      "Moves 8 bytes from the stack into rax"
+    ],
+    "correct": "Loads arr[rcx] where arr starts at rbx and each element is 8 bytes",
+    "explanation": "The SIB (Scale-Index-Base) addressing mode: base=rbx, index=rcx, scale=8. Address = rbx + rcx*8. Then [] dereferences it. This is arr[i] where sizeof(element)=8 (e.g., uint64_t* or pointer array). The scale is always a power of 2 matching the element size.",
+    "code": "mov    rax, [rbx + rcx*8]  ; rax = arr[i]",
+    "code_lang": "asm"
+  },
+  {
+    "question": "Which tool intercepts Linux syscalls at runtime and shows their arguments?",
+    "answers": [
+      "strace",
+      "ltrace",
+      "strings",
+      "objdump"
+    ],
+    "correct": "strace",
+    "explanation": "strace traces system calls (open, read, write, connect, execve, etc.) using ptrace. ltrace traces library calls. strings finds printable bytes. objdump disassembles. For raw syscall visibility, strace is the tool.",
+    "code": "$ strace ./crackme\nopen(\"flag.txt\", O_RDONLY) = 3\nread(3, \"CTF{...\", 64) = 16",
+    "code_lang": "text"
+  },
+  {
+    "question": "A binary has `mov edi, 64; call malloc; mov [rbp-0x8], rax`. What is stored at rbp-0x8?",
+    "answers": [
+      "A pointer to a 64-byte heap allocation",
+      "The integer 64",
+      "The return address of malloc",
+      "A pointer to the stack"
+    ],
+    "correct": "A pointer to a 64-byte heap allocation",
+    "explanation": "malloc(64) returns a heap pointer in RAX. mov [rbp-0x8], rax saves that pointer into a local variable on the stack. The local variable at rbp-0x8 is `char *ptr = malloc(64);`.",
+    "code": "mov    edi, 64\ncall   malloc\nmov    [rbp-0x8], rax  ; ptr = malloc(64)",
+    "code_lang": "asm"
+  },
+  {
+    "question": "You want to patch a binary so a license check is always bypassed. The check is: `jne .fail`. What is the most direct patch?",
+    "answers": [
+      "Replace `jne` (opcode 75) with `jmp` (opcode EB) — always jump to the success path",
+      "Set RIP to 0x00",
+      "Add a second call to the check function",
+      "Change the return address on the stack"
+    ],
+    "correct": "Replace `jne` (opcode 75) with `jmp` (opcode EB) — always jump to the success path",
+    "explanation": "jne (75) is a conditional jump. Replacing it with jmp (EB) makes it unconditional. Since jne currently jumps to .fail when the check fails, making it unconditional means it always jumps to .fail — wait, we want the opposite. The cleaner approach is to replace jne with two NOPs (90 90) so the check is skipped entirely and execution falls through to the success block.",
+    "code": "; Original:\njne    .fail      ; opcode: 75 XX\n\n; Patched:\nnop              ; opcode: 90\nnop              ; opcode: 90",
+    "code_lang": "asm"
+  },
+  {
+    "question": "What does `leave; ret` expand to?",
+    "answers": [
+      "mov rsp, rbp; pop rbp; then pop the return address into RIP",
+      "push rbp; mov rbp, rsp",
+      "sub rsp, 8; jmp [rsp]",
+      "xor rbp, rbp; ret"
+    ],
+    "correct": "mov rsp, rbp; pop rbp; then pop the return address into RIP",
+    "explanation": "`leave` is syntactic sugar for `mov rsp, rbp; pop rbp`. It tears down the current stack frame by restoring RSP and RBP to their pre-call values. `ret` then pops the return address from the (now restored) stack into RIP. This is the mirror image of the prologue.",
+    "code": "; leave is:\nmov    rsp, rbp\npop    rbp\n; then ret:\npop    rip        ; (conceptually)",
+    "code_lang": "asm"
+  },
+  {
+    "question": "In x86-64 Linux, where does a function's return value live?",
+    "answers": [
+      "RAX",
+      "RDI",
+      "RSP",
+      "RBP"
+    ],
+    "correct": "RAX",
+    "explanation": "The System V AMD64 ABI: return values ≤ 64 bits go in RAX, 65–128 bits go in RAX:RDX. The first six integer arguments go in RDI, RSI, RDX, RCX, R8, R9. This is why `test eax, eax` after a call checks the return value.",
+    "code": "call   some_function\n; return value is now in RAX\ntest   rax, rax\njz     .null_check",
+    "code_lang": "asm"
+  },
+  {
+    "question": "What registers hold the first three integer arguments in the x86-64 Linux calling convention?",
+    "answers": [
+      "RDI, RSI, RDX",
+      "RAX, RBX, RCX",
+      "R8, R9, R10",
+      "RSP, RBP, RIP"
+    ],
+    "correct": "RDI, RSI, RDX",
+    "explanation": "System V AMD64 ABI argument registers in order: RDI (1st), RSI (2nd), RDX (3rd), RCX (4th), R8 (5th), R9 (6th). Additional arguments go on the stack. For syscalls: RDI (1st), RSI (2nd), RDX (3rd), R10 (4th), R8 (5th), R9 (6th) — note RCX becomes R10 for syscalls.",
+    "code": "mov    rdi, 1      ; 1st arg: fd\nlea    rsi, [msg]  ; 2nd arg: buf\nmov    rdx, 13    ; 3rd arg: count\nmov    rax, 1     ; write()\nsyscall",
+    "code_lang": "asm"
+  },
+  {
+    "question": "What does `dec ecx; jnz .loop` do as a loop terminator?",
+    "answers": [
+      "Decrements ECX and loops while ECX is non-zero — runs exactly N times",
+      "Increments ECX and loops forever",
+      "Loops while the carry flag is set",
+      "Halts the CPU when ECX reaches zero"
+    ],
+    "correct": "Decrements ECX and loops while ECX is non-zero — runs exactly N times",
+    "explanation": "dec ecx subtracts 1 and sets ZF=1 when the result is 0. jnz (jump if not zero) continues the loop while ZF=0. Load ECX with N before the loop and the body executes exactly N times. This is the canonical count-down loop — common in memset/memcpy implementations.",
+    "code": "mov    ecx, 10     ; loop 10 times\n.loop:\n  ; body\n  dec    ecx\n  jnz    .loop      ; while ecx != 0",
+    "code_lang": "asm"
+  },
+  {
+    "question": "The `file` command on a binary outputs: `ELF 64-bit LSB executable, x86-64, dynamically linked, stripped`. What does 'stripped' mean?",
+    "answers": [
+      "Symbol table removed — function names are gone, making reversing harder",
+      "No NX protection — the stack is executable",
+      "The binary was compiled without optimisation",
+      "The binary has no .text section"
+    ],
+    "correct": "Symbol table removed — function names are gone, making reversing harder",
+    "explanation": "A stripped binary has had its symbol table deleted. Function names like main(), check_password(), etc. are gone — the disassembler shows addresses like sub_401050 instead. You must reconstruct names from behaviour. Most release binaries and CTF challenges are stripped.",
+    "code": "$ file ./crackme\n./crackme: ELF 64-bit ... stripped\n$ nm ./crackme\nnm: ./crackme: no symbols",
+    "code_lang": "text"
+  },
+  {
+    "question": "You see `cmp edi, 5; jle .else` in a function. Which condition causes the branch to .else?",
+    "answers": [
+      "EDI ≤ 5 (less than or equal)",
+      "EDI ≥ 5 (greater than or equal)",
+      "EDI == 5 (equal)",
+      "EDI != 5 (not equal)"
+    ],
+    "correct": "EDI ≤ 5 (less than or equal)",
+    "explanation": "jle (jump if less or equal) fires when ZF=1 OR (SF≠OF) — the signed 'less than or equal' condition. After `cmp edi, 5`, this means EDI ≤ 5. If EDI > 5, the fall-through (the 'if body') executes. The compiler negates your source condition to decide the jump direction.",
+    "code": "cmp    edi, 5\njle    .else       ; if (edi <= 5) goto else\n; if body (edi > 5)\njmp    .end\n.else:\n  ; else body\n.end:",
+    "code_lang": "asm"
+  },
+  {
+    "question": "What is the top-down approach in reverse engineering?",
+    "answers": [
+      "Start from main() and follow execution forward through function calls",
+      "Start from a known string or function and work outward via xrefs",
+      "Patch the binary first and observe behaviour changes",
+      "Decompile to C first, then read source top-to-bottom"
+    ],
+    "correct": "Start from main() and follow execution forward through function calls",
+    "explanation": "Top-down: enter at main() or the program entry point and follow the call graph depth-first. Good for understanding program structure. Contrast with bottom-up: start from a specific artefact (string, imported function, known address) and follow xrefs to callers. Bottom-up is faster for targeted questions like 'where is the password check?'",
+    "code": null
+  },
+  {
+    "question": "A loop reads `cmp byte ptr [rdi], 0; je .done; inc rdi; jmp .loop` then `sub rdi, rsi`. What function is this?",
+    "answers": [
+      "strlen — scan until null terminator, return byte count",
+      "strcpy — copy bytes from RSI to RDI",
+      "memset — fill memory with zero bytes",
+      "memchr — search for a specific byte"
+    ],
+    "correct": "strlen — scan until null terminator, return byte count",
+    "explanation": "The loop walks forward byte-by-byte until it finds 0 (the null terminator). After the loop, `sub rdi, rsi` computes end_ptr - start_ptr = length in bytes. That's strlen(). The giveaway is: scan for zero, then pointer subtraction.",
+    "code": "mov    rsi, rdi       ; save start\n.scan:\n  cmp    byte ptr [rdi], 0\n  je     .done\n  inc    rdi\n  jmp    .scan\n.done:\n  sub    rdi, rsi      ; length = end - start",
+    "code_lang": "asm"
+  },
+  {
+    "question": "What does `setg al` do after a `cmp` instruction?",
+    "answers": [
+      "Sets AL to 1 if the 'greater' condition is true, 0 otherwise — a branchless boolean",
+      "Sets AL to the value of the operand",
+      "Jumps if AL is greater than zero",
+      "Stores the carry flag in AL"
+    ],
+    "correct": "Sets AL to 1 if the 'greater' condition is true, 0 otherwise — a branchless boolean",
+    "explanation": "SETcc instructions materialise a condition as a 0/1 byte. setg = 'set if greater' (signed). Combined with a prior `xor eax, eax` to zero the register, this implements `result = (a > b) ? 1 : 0` without any branch — useful for optimised comparisons and flag computations.",
+    "code": "xor    eax, eax\ncmp    edi, esi\nsetg   al         ; al = (edi > esi) ? 1 : 0",
+    "code_lang": "asm"
+  },
+  {
+    "question": "In Ghidra or IDA, you double-click a function call and land at `sub_401234`. What does this prefix indicate?",
+    "answers": [
+      "The function has no name — it was stripped; 0x401234 is its address",
+      "The function is a subroutine that always returns 0x1234",
+      "The function was inlined by the compiler",
+      "The function is imported from a shared library"
+    ],
+    "correct": "The function has no name — it was stripped; 0x401234 is its address",
+    "explanation": "IDA names unnamed functions sub_XXXXXX where XXXXXX is the hex address. Ghidra uses FUN_XXXXXX. This naming is purely the disassembler's placeholder for a stripped symbol. Understanding what the function does is your job — rename it as you go to track your analysis.",
+    "code": null
+  },
+  {
+    "question": "What does `push rbp; mov rbp, rsp` followed by `mov [rbp-0x8], rdi` suggest about the first argument?",
+    "answers": [
+      "It is being spilled to a local variable slot on the stack for later use",
+      "It is being pushed onto the heap",
+      "It is the return value being stored before ret",
+      "It is an argument to the next function call"
+    ],
+    "correct": "It is being spilled to a local variable slot on the stack for later use",
+    "explanation": "When a function saves an argument register (RDI/RSI/RDX…) to [rbp-N] early in the prologue, it's 'spilling' the value — moving it from a volatile register to a stable stack slot. This happens when the register is needed later but will be clobbered by a function call first.",
+    "code": "push   rbp\nmov    rbp, rsp\nsub    rsp, 0x10\nmov    [rbp-0x8], rdi  ; spill arg1 to stack\n; now RDI can be reused for the next call",
+    "code_lang": "asm"
+  },
+  {
+    "question": "A binary opens a file called `flag.txt` at startup (visible via strace). What RE technique revealed this without disassembly?",
+    "answers": [
+      "Dynamic analysis with strace to trace the open() syscall",
+      "Static analysis with objdump to read the .data section",
+      "Cross-referencing the string 'flag.txt' in IDA",
+      "Decompiling with Ghidra"
+    ],
+    "correct": "Dynamic analysis with strace to trace the open() syscall",
+    "explanation": "strace shows every syscall with its arguments: `open(\"flag.txt\", O_RDONLY) = 3`. You see the exact filename passed to the kernel. This is dynamic analysis — you learn about file access by running the binary, not by reading assembly.",
+    "code": "$ strace ./chall\nexecve(\"./chall\", ...) = 0\nopen(\"flag.txt\", O_RDONLY) = 3\nread(3, \"CTF{...}\", 512) = 24",
+    "code_lang": "text"
+  },
+  {
+    "question": "What does `movzx eax, byte ptr [rbp-0x5]` do differently from `mov eax, [rbp-0x5]`?",
+    "answers": [
+      "Loads a single byte and zero-extends it to 32 bits (then 64 bits via EAX write)",
+      "Loads 4 bytes and sign-extends to 64 bits",
+      "Loads 8 bytes with no extension",
+      "Equivalent — both load 4 bytes"
+    ],
+    "correct": "Loads a single byte and zero-extends it to 32 bits (then 64 bits via EAX write)",
+    "explanation": "movzx (move with zero extension) reads 1 byte from memory and pads the upper bits with zeros. Writing to EAX also clears the upper 32 bits of RAX. This is how compilers read `char` / `uint8_t` values safely. Compare with movsx which sign-extends (for signed char).",
+    "code": "movzx  eax, byte ptr [rbp-0x5]  ; uint8_t → uint64_t\n; contrast:\nmovsx  eax, byte ptr [rbp-0x5]  ; int8_t  → int32_t (sign extended)",
+    "code_lang": "asm"
+  },
+  {
+    "question": "The `syscall` instruction in Linux always destroys which two registers?",
+    "answers": [
+      "RCX and R11 (saved/clobbered by the hardware syscall mechanism)",
+      "RAX and RDI (used for return value and first argument)",
+      "RSP and RBP (stack pointers)",
+      "RSI and RDX (second and third arguments)"
+    ],
+    "correct": "RCX and R11 (saved/clobbered by the hardware syscall mechanism)",
+    "explanation": "The x86-64 syscall instruction saves RIP into RCX (for sysret to return) and RFLAGS into R11. Both registers are therefore clobbered after syscall returns. Never store a value you need after a syscall in R11 or RCX — the kernel will overwrite them.",
+    "code": "mov    rax, 0     ; read()\nsyscall\n; RCX now = return address (clobbered)\n; R11 now = rflags  (clobbered)\n; RAX    = bytes read (return value)",
+    "code_lang": "asm"
+  }
+]

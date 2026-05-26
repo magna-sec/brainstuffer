@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<title>Disassembly Pattern Recognition — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);
+     min-height:100vh;padding:1.5rem 1rem 4rem;}
+.wrap{max-width:700px;margin:0 auto;}
+
+.back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--subtle);
+           font-size:.8rem;text-decoration:none;margin-bottom:1.5rem;}
+.back-link:hover{color:var(--accent);}
+
+h1{color:var(--accent);font-size:1.35rem;margin-bottom:.2rem;}
+.sub{color:var(--subtle);font-size:.82rem;margin-bottom:.5rem;line-height:1.55;}
+.attribution{font-size:.72rem;color:var(--muted);margin-bottom:1.4rem;}
+.attribution a{color:var(--accent2);text-decoration:none;}
+.attribution a:hover{text-decoration:underline;}
+
+/* ── Progress ─────────────────────────────────────────────── */
+.prog-wrap{
+  background:var(--card);border:1px solid var(--card-border);border-radius:8px;
+  padding:.55rem .9rem;margin-bottom:1.1rem;
+  display:flex;align-items:center;gap:.65rem;
+}
+.prog-track{flex:1;height:5px;background:var(--bg2);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s ease;}
+.prog-label{font-size:.72rem;color:var(--subtle);white-space:nowrap;flex-shrink:0;}
+.score-badge{font-size:.68rem;padding:.15rem .5rem;border-radius:20px;
+             border:1px solid var(--card-border);color:var(--muted);white-space:nowrap;}
+
+/* ── Challenge card ───────────────────────────────────────── */
+.challenge{
+  background:var(--card);border:1px solid var(--card-border);border-radius:12px;
+  padding:1.1rem 1.2rem;margin-bottom:.9rem;
+}
+.ch-header{display:flex;align-items:center;gap:.55rem;margin-bottom:.7rem;flex-wrap:wrap;}
+.ch-num{font-size:.75rem;color:var(--muted);flex-shrink:0;}
+.ch-tags{margin-left:auto;display:flex;gap:.35rem;}
+.ch-tag{font-size:.6rem;padding:.12rem .4rem;border-radius:20px;
+        border:1px solid var(--card-border);color:var(--muted);}
+.ch-question{font-size:.9rem;color:var(--subtle);margin-bottom:.9rem;line-height:1.55;}
+
+/* ── Assembly block ───────────────────────────────────────── */
+.asm-block{
+  background:var(--bg2);border-radius:8px;padding:.75rem 1rem;
+  margin-bottom:1rem;font-size:.82rem;line-height:1.9;
+  overflow-x:auto;border:1px solid var(--card-border);
+  white-space:pre;tab-size:8;
+}
+.asm-kw{color:var(--accent2);}
+.asm-reg{color:var(--accent);}
+.asm-cm{color:var(--muted);font-style:italic;}
+.asm-lbl{color:#fb923c;}
+.asm-num{color:#34d399;}
+
+/* ── Options ──────────────────────────────────────────────── */
+.options{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:.9rem;}
+@media(max-width:480px){.options{grid-template-columns:1fr;}}
+.opt{
+  background:var(--bg2);border:1.5px solid var(--card-border);border-radius:8px;
+  padding:.6rem .85rem;font-family:'Courier New',monospace;font-size:.82rem;
+  color:var(--text);cursor:pointer;text-align:left;
+  transition:border-color .12s,background .12s,color .12s;
+  line-height:1.4;
+}
+.opt:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.opt.correct{border-color:#4ade80;background:rgba(74,222,128,.1);color:#4ade80;cursor:default;}
+.opt.wrong{border-color:#f87171;background:rgba(248,113,113,.08);color:#f87171;cursor:default;
+           animation:opt-shake .32s ease-out;}
+.opt.dimmed{opacity:.35;cursor:default;}
+@keyframes opt-shake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-5px);}
+  40%{transform:translateX(5px);}
+  60%{transform:translateX(-4px);}
+  80%{transform:translateX(3px);}
+}
+
+/* ── Feedback ─────────────────────────────────────────────── */
+.feedback{
+  border-left:2px solid var(--accent);
+  background:linear-gradient(90deg,rgba(129,140,248,.08) 0%,transparent 65%);
+  border-radius:0 8px 8px 0;padding:.65rem .9rem;
+  font-size:.82rem;line-height:1.6;margin-bottom:.9rem;display:none;
+}
+.feedback.show{display:block;}
+.feedback.correct-fb{border-left-color:#4ade80;}
+.feedback.wrong-fb{border-left-color:#f87171;}
+.fb-title{font-size:.75rem;font-weight:700;text-transform:uppercase;
+          letter-spacing:.06em;margin-bottom:.3rem;}
+.fb-title.correct-fb{color:#4ade80;}
+.fb-title.wrong-fb{color:#f87171;}
+
+/* ── Next button ──────────────────────────────────────────── */
+.btn-next{
+  background:var(--accent);color:#fff;border:none;border-radius:8px;
+  padding:.6rem 1.5rem;font-family:'Courier New',monospace;font-size:.85rem;
+  font-weight:700;cursor:pointer;display:none;
+  transition:opacity .15s;
+}
+.btn-next:hover{opacity:.85;}
+
+/* ── Finish screen ────────────────────────────────────────── */
+#finish{display:none;text-align:center;
+  background:var(--card);border:1px solid var(--card-border);border-radius:12px;
+  padding:2rem 1.5rem;
+}
+.finish-score{font-size:3rem;font-weight:900;color:var(--accent);line-height:1;}
+.finish-label{font-size:.85rem;color:var(--subtle);margin-bottom:1.2rem;}
+.finish-msg{font-size:.9rem;color:var(--text);margin-bottom:1.5rem;line-height:1.6;}
+.btn-restart{
+  background:transparent;border:1.5px solid var(--accent);border-radius:8px;
+  padding:.55rem 1.3rem;font-family:'Courier New',monospace;font-size:.82rem;
+  color:var(--accent);cursor:pointer;margin-right:.55rem;
+}
+.btn-restart:hover{background:rgba(129,140,248,.1);}
+.btn-shuffle{
+  background:var(--accent);color:#fff;border:none;border-radius:8px;
+  padding:.55rem 1.3rem;font-family:'Courier New',monospace;font-size:.82rem;
+  font-weight:700;cursor:pointer;
+}
+.btn-shuffle:hover{opacity:.85;}
+</style>
+</head>
+<body>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="wrap">
+  <a class="back-link" href="../index.html#learn">&#8592; Back to Interactive Learning</a>
+
+  <h1>&#128269; Disassembly Pattern Recognition</h1>
+  <p class="sub">Read a snippet of x86-64 assembly and identify the high-level construct it implements.<br>Train your eye to flip between C and machine code instantly.</p>
+  <p class="attribution">Inspired by <a href="https://ophirharpaz.com/begin.re" target="_blank" rel="noopener">begin.re</a> by Ophir Harpaz &mdash; the reverse engineering workshop.</p>
+
+  <div class="prog-wrap">
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <span class="prog-label" id="prog-label">1 / 15</span>
+    <span class="score-badge" id="score-badge">&#9733; 0</span>
+  </div>
+
+  <div class="challenge" id="ch-card">
+    <div class="ch-header">
+      <span class="ch-num" id="ch-num">Challenge 1 of 15</span>
+      <div class="ch-tags" id="ch-tags"></div>
+    </div>
+    <div class="ch-question" id="ch-question"></div>
+    <pre class="asm-block" id="asm-block"></pre>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback">
+      <div class="fb-title" id="fb-title"></div>
+      <div id="fb-body"></div>
+    </div>
+    <button class="btn-next" id="btn-next">Next &#8594;</button>
+  </div>
+
+  <div id="finish">
+    <div class="finish-score" id="finish-score"></div>
+    <div class="finish-label" id="finish-label"></div>
+    <div class="finish-msg" id="finish-msg"></div>
+    <button class="btn-restart" id="btn-restart">Restart</button>
+    <button class="btn-shuffle" id="btn-shuffle">Shuffle &amp; Replay</button>
+  </div>
+</div>
+
+<script>
+var CHALLENGES = [
+  {
+    tags: ['prologue','stack frame'],
+    question: 'What is this sequence doing at the start of a function?',
+    asm:
+      'push   rbp\n' +
+      'mov    rbp, rsp\n' +
+      'sub    rsp, 0x28',
+    options: [
+      'Function prologue — saves caller\'s frame, allocates 40 bytes on stack',
+      'Buffer overflow — writing past the stack boundary',
+      'Function epilogue — cleaning up before return',
+      'System call setup — preparing kernel arguments'
+    ],
+    correct: 0,
+    explanation: '<strong>push rbp</strong> saves the caller\'s base pointer. <strong>mov rbp, rsp</strong> establishes this function\'s frame. <strong>sub rsp, 0x28</strong> (40 bytes) makes room for local variables. Every non-leaf function starts like this.'
+  },
+  {
+    tags: ['epilogue','return'],
+    question: 'What does this sequence accomplish?',
+    asm:
+      'mov    eax, 0\n' +
+      'leave\n' +
+      'ret',
+    options: [
+      'Function epilogue — return 0 to the caller',
+      'Clear the stack and crash',
+      'Infinite loop via ret',
+      'Syscall exit(0)'
+    ],
+    correct: 0,
+    explanation: '<strong>mov eax, 0</strong> sets the return value (RAX) to 0. <strong>leave</strong> is shorthand for <code>mov rsp, rbp; pop rbp</code> — it tears down the current frame. <strong>ret</strong> pops the return address and jumps to the caller.'
+  },
+  {
+    tags: ['zeroing','idiom'],
+    question: 'A single instruction. What does it do — and why not just <code>mov eax, 0</code>?',
+    asm:
+      'xor    eax, eax',
+    options: [
+      'Zero out RAX — faster encoding than mov eax, 0 (no immediate operand)',
+      'XOR-encrypt EAX with a secret key',
+      'Flip all bits in EAX (bitwise NOT)',
+      'Set the Zero Flag without changing EAX'
+    ],
+    correct: 0,
+    explanation: 'XOR-ing a register with itself always produces zero. Compilers prefer this because the encoding is 2 bytes vs. 5 bytes for <code>mov eax, 0</code>. Also: writing to EAX <em>zero-extends</em> into RAX, so the full 64-bit register is cleared.'
+  },
+  {
+    tags: ['null check','branch'],
+    question: 'A pointer arrives in RDI. What guard does this implement?',
+    asm:
+      'test   rdi, rdi\n' +
+      'jz     .null_handler',
+    options: [
+      'Null pointer check — jump away if RDI == NULL',
+      'Parity check — jump if RDI has even parity',
+      'Overflow check — jump if RDI is negative',
+      'Range check — jump if RDI > threshold'
+    ],
+    correct: 0,
+    explanation: '<strong>test rdi, rdi</strong> is AND without storing: it sets ZF=1 only when RDI is zero (NULL). <strong>jz</strong> fires on ZF=1. This is the canonical null-pointer guard, cheaper than <code>cmp rdi, 0</code> by one byte.'
+  },
+  {
+    tags: ['for loop','control flow'],
+    question: 'What C construct does this implement?',
+    asm:
+      'mov    ecx, 0\n' +
+      '.loop:\n' +
+      '  cmp    ecx, 10\n' +
+      '  jge    .done\n' +
+      '  ; ... loop body ...\n' +
+      '  inc    ecx\n' +
+      '  jmp    .loop\n' +
+      '.done:',
+    options: [
+      'for (i = 0; i < 10; i++)',
+      'while (i >= 10)',
+      'do { } while (i != 0)',
+      'switch (i) { case 10: ... }'
+    ],
+    correct: 0,
+    explanation: 'Initialise counter to 0, test <em>before</em> the body, increment at the bottom, jump back. The pre-test (<strong>jge .done</strong>) means the body may execute zero times — the signature of a <code>for</code>/<code>while</code> loop. The symmetry with <code>i < 10</code> / <code>jge</code> (the opposite) is the compiler\'s flip.'
+  },
+  {
+    tags: ['count-down loop','dec/jnz'],
+    question: 'What loop pattern is this, and what is its iteration count?',
+    asm:
+      'mov    ecx, 10\n' +
+      '.top:\n' +
+      '  ; ... body ...\n' +
+      '  dec    ecx\n' +
+      '  jnz    .top',
+    options: [
+      'Count-down loop — executes body exactly 10 times',
+      'Infinite loop — ECX never reaches zero',
+      'Count-up loop — increments from 0 to 10',
+      'Conditional loop — only runs if ECX was already 0'
+    ],
+    correct: 0,
+    explanation: '<strong>dec ecx</strong> sets ZF when ECX reaches 0. <strong>jnz</strong> loops while ZF=0 (not zero). Starting at 10 and decrementing: body runs on 10, 9, 8 … 1, then hits 0 → ZF=1 → loop exits. Exactly 10 iterations. Compilers emit this when they can prove the count is non-zero.'
+  },
+  {
+    tags: ['return value','error check'],
+    question: 'A function was just called. What does this sequence check?',
+    asm:
+      'call   some_function\n' +
+      'test   rax, rax\n' +
+      'jz     .handle_null',
+    options: [
+      'Checks if the function returned NULL / 0 (failure path)',
+      'Checks if the function returned a negative value',
+      'Checks if the return address is valid',
+      'Checks if the stack was corrupted by the call'
+    ],
+    correct: 0,
+    explanation: 'By convention, RAX holds the return value. <strong>test rax, rax</strong> sets ZF if RAX is zero. <strong>jz .handle_null</strong> branches to the error handler if the return was zero/NULL. This idiom is ubiquitous: <code>if (!ptr) goto error;</code>'
+  },
+  {
+    tags: ['strcmp','password check'],
+    question: 'What security-relevant operation does this perform?',
+    asm:
+      'lea    rdi, [rbp-0x40]   ; user input\n' +
+      'lea    rsi, [rip+0x2f4]  ; hardcoded string\n' +
+      'call   strcmp\n' +
+      'test   eax, eax\n' +
+      'jne    .wrong_password',
+    options: [
+      'Password check — compare user input against a hardcoded string',
+      'Copy user input into a global buffer',
+      'Hash the password before comparing',
+      'Encrypt the input using the hardcoded key'
+    ],
+    correct: 0,
+    explanation: '<strong>strcmp</strong> returns 0 when strings are <em>equal</em>. <strong>test eax, eax; jne .wrong_password</strong> jumps away on non-zero — i.e., a mismatch. This is the classic crackme pattern: find the hardcoded string at <code>rip+0x2f4</code> and you have the password.'
+  },
+  {
+    tags: ['if/else','branch'],
+    question: 'What C construct does this assembly implement?',
+    asm:
+      'cmp    edi, 5\n' +
+      'jle    .else_branch\n' +
+      '; --- then: edi > 5 ---\n' +
+      'jmp    .end\n' +
+      '.else_branch:\n' +
+      '; --- else: edi <= 5 ---\n' +
+      '.end:',
+    options: [
+      'if (arg > 5) { ... } else { ... }',
+      'switch (arg) { case 5: ... }',
+      'while (arg > 5) { ... }',
+      'for (i = 0; i <= 5; i++)'
+    ],
+    correct: 0,
+    explanation: '<strong>jle .else_branch</strong> is "jump if ≤ 5". The compiler negates your condition to jump <em>over</em> the then-block. So the then-path executes when arg > 5, else-path when arg ≤ 5. The trailing <code>jmp .end</code> skips the else-block after the then-path finishes.'
+  },
+  {
+    tags: ['strlen','pointer scan'],
+    question: 'This loop scans memory byte by byte. What is it computing?',
+    asm:
+      'mov    rdi, rsi          ; pointer to string\n' +
+      '.scan:\n' +
+      '  cmp    byte ptr [rdi], 0\n' +
+      '  je     .done\n' +
+      '  inc    rdi\n' +
+      '  jmp    .scan\n' +
+      '.done:\n' +
+      'sub    rdi, rsi          ; length = end - start',
+    options: [
+      'strlen — scan until null terminator, compute distance',
+      'memset — fill memory with zeros',
+      'memcpy — copy bytes from source to destination',
+      'strchr — find a specific character in the string'
+    ],
+    correct: 0,
+    explanation: 'Walk forward until <code>[rdi] == 0</code> (the null terminator), then subtract the original pointer to get byte count. That\'s exactly <code>strlen</code>. The sub at the end is the giveaway — pointer arithmetic measures the distance walked.'
+  },
+  {
+    tags: ['array access','addressing'],
+    question: 'What memory access pattern does this implement?',
+    asm:
+      'mov    eax, edi           ; index (32-bit, zero-extended)\n' +
+      'mov    rax, [rbx + rax*8]',
+    options: [
+      'Array element access: arr[index] where each element is 8 bytes (uint64_t)',
+      'Structure field access by byte offset',
+      'Stack canary check',
+      'Virtual function dispatch via vtable'
+    ],
+    correct: 0,
+    explanation: '<strong>rax*8</strong> is the scaled index — multiply the index by the element size (8 bytes for a 64-bit pointer/integer). Adding the base pointer <strong>rbx</strong> gives <code>&amp;arr[index]</code>. The <code>[]</code> dereferences it. This is the classic <code>arr[i]</code> for 8-byte elements.'
+  },
+  {
+    tags: ['heap','malloc'],
+    question: 'What does this sequence allocate?',
+    asm:
+      'mov    edi, 64\n' +
+      'call   malloc\n' +
+      'mov    [rbp-0x8], rax    ; save pointer',
+    options: [
+      'Heap allocation — malloc(64 bytes), pointer saved on the stack',
+      'Stack allocation — push 64 bytes onto the stack',
+      'mmap anonymous region — 64 pages',
+      'Open a file descriptor (64 is the flags argument)'
+    ],
+    correct: 0,
+    explanation: '<strong>malloc(64)</strong> returns a heap pointer in RAX. Storing RAX at <code>[rbp-0x8]</code> is saving it in a local variable (<code>char *ptr</code>). If you see a call to malloc followed by a test/jz, that\'s the compiler generating the NULL-check for the returned pointer.'
+  },
+  {
+    tags: ['ternary','setcc'],
+    question: 'What one-liner does this implement?',
+    asm:
+      'xor    eax, eax\n' +
+      'cmp    edi, 0\n' +
+      'setg   al',
+    options: [
+      'result = (arg > 0) ? 1 : 0',
+      'result = (arg == 0) ? 1 : 0',
+      'result = ~arg',
+      'result = arg % 2'
+    ],
+    correct: 0,
+    explanation: '<strong>xor eax, eax</strong> pre-zeros RAX. <strong>setg al</strong> sets AL to 1 if the "greater" condition is true, 0 otherwise. Because AL is the low byte of RAX and RAX was already zeroed, RAX becomes either 0 or 1 — a boolean. Compilers emit <code>setcc</code> to avoid a branch entirely.'
+  },
+  {
+    tags: ['local buffer','stack vuln'],
+    question: 'What is suspicious about this code?',
+    asm:
+      'sub    rsp, 0x40          ; 64-byte local buffer\n' +
+      'mov    rdi, rsp\n' +
+      'call   gets               ; read into buffer',
+    options: [
+      'Stack buffer overflow risk — gets() has no length limit',
+      'Heap allocation via gets()',
+      'Privileged instruction — gets() requires ring 0',
+      'This is safe: gets() always null-terminates'
+    ],
+    correct: 0,
+    explanation: '<strong>gets()</strong> reads until newline with <em>no bounds check</em>. The 64-byte buffer on the stack can be overflowed with 65+ bytes of input. The return address lives above the buffer — overflow it and you control RIP. This is the classic stack buffer overflow pattern that beginner crackmes deliberately include.'
+  },
+  {
+    tags: ['syscall','linux ABI'],
+    question: 'What Linux syscall is being invoked?',
+    asm:
+      'mov    rdi, 1             ; fd = stdout\n' +
+      'lea    rsi, [rip+0x3a]   ; buf = message\n' +
+      'mov    rdx, 13           ; count = 13 bytes\n' +
+      'mov    rax, 1            ; syscall: write\n' +
+      'syscall',
+    options: [
+      'write(1, message, 13) — write 13 bytes to stdout',
+      'read(1, message, 13) — read 13 bytes from fd 1',
+      'open() — open a file named "message"',
+      'exit(13) — terminate with status 13'
+    ],
+    correct: 0,
+    explanation: 'Linux syscall ABI: <strong>rax</strong> = syscall number (1 = write), <strong>rdi</strong> = first arg (fd), <strong>rsi</strong> = second arg (buf), <strong>rdx</strong> = third arg (count). Syscall 1 = write(). So this writes 13 bytes from the RIP-relative string to stdout.'
+  }
+];
+
+var order = CHALLENGES.map(function(_, i){ return i; });
+var cur = 0;
+var score = 0;
+var answered = 0;
+var totalQ = CHALLENGES.length;
+
+function shuffle(arr){
+  for(var i = arr.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  }
+}
+
+function colorAsm(raw){
+  var lines = raw.split('\n');
+  return lines.map(function(line){
+    var hl = line
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;');
+    /* comment */
+    hl = hl.replace(/(;.*)$/, '<span class="asm-cm">$1</span>');
+    /* labels */
+    hl = hl.replace(/^(\s*)(\.[a-z_][a-z0-9_]*:)/i, '$1<span class="asm-lbl">$2</span>');
+    /* numbers 0x... or plain digits (not inside words) */
+    hl = hl.replace(/\b(0x[0-9a-fA-F]+|\b\d+\b)/g, '<span class="asm-num">$1</span>');
+    /* registers */
+    hl = hl.replace(/\b(r[a-d]x|r[sb]p|r[sd]i|r8|r9|r1[0-5]|e[a-d]x|e[sb]p|e[sd]i|[a-d][lh]|[a-d]x|sp|bp|si|di)\b/g,
+      '<span class="asm-reg">$&</span>');
+    /* mnemonics (first token on line) */
+    hl = hl.replace(/^(\s*)([a-z][a-z0-9]*)/i, function(m, sp, mn){
+      var kws = 'push pop mov lea add sub cmp test jmp je jne jz jnz jl jg jle jge jae jbe jc jnc call ret leave xor and or not neg inc dec shl shr sar imul idiv mul div movzx movsx movsxd syscall setg setl sete setne setge setle seta setb dec'.split(' ');
+      if(kws.indexOf(mn.toLowerCase()) !== -1)
+        return sp + '<span class="asm-kw">' + mn + '</span>';
+      return m;
+    });
+    return hl;
+  }).join('\n');
+}
+
+function updateProgress(){
+  var pct = (cur / totalQ) * 100;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = (cur + 1) + ' / ' + totalQ;
+  document.getElementById('score-badge').textContent = '★ ' + score;
+}
+
+function renderChallenge(){
+  var idx = order[cur];
+  var ch = CHALLENGES[idx];
+
+  document.getElementById('ch-num').textContent = 'Challenge ' + (cur + 1) + ' of ' + totalQ;
+
+  var tagsEl = document.getElementById('ch-tags');
+  tagsEl.innerHTML = ch.tags.map(function(t){ return '<span class="ch-tag">' + t + '</span>'; }).join('');
+
+  document.getElementById('ch-question').textContent = ch.question;
+  document.getElementById('asm-block').innerHTML = colorAsm(ch.asm);
+
+  var optEl = document.getElementById('options');
+  optEl.innerHTML = '';
+  ch.options.forEach(function(text, i){
+    var btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.textContent = text;
+    btn.addEventListener('click', function(){ handleAnswer(i); });
+    optEl.appendChild(btn);
+  });
+
+  var fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.style.display = 'none';
+  document.getElementById('btn-next').style.display = 'none';
+
+  updateProgress();
+}
+
+function handleAnswer(picked){
+  var idx = order[cur];
+  var ch = CHALLENGES[idx];
+  var opts = document.getElementById('options').querySelectorAll('.opt');
+
+  opts.forEach(function(btn){ btn.disabled = true; });
+
+  var correct = (picked === ch.correct);
+  if(correct) score++;
+
+  opts[ch.correct].classList.add('correct');
+  if(!correct) opts[picked].classList.add('wrong');
+  opts.forEach(function(btn, i){
+    if(i !== ch.correct && i !== picked) btn.classList.add('dimmed');
+  });
+
+  var fb = document.getElementById('feedback');
+  var fbTitle = document.getElementById('fb-title');
+  var fbBody = document.getElementById('fb-body');
+
+  fbTitle.textContent = correct ? '✓ Correct!' : '✗ Not quite';
+  fbTitle.className = 'fb-title ' + (correct ? 'correct-fb' : 'wrong-fb');
+  fbBody.innerHTML = ch.explanation;
+  fb.className = 'feedback show ' + (correct ? 'correct-fb' : 'wrong-fb');
+  fb.style.display = 'block';
+
+  document.getElementById('score-badge').textContent = '★ ' + score;
+
+  var btnNext = document.getElementById('btn-next');
+  btnNext.textContent = (cur < totalQ - 1) ? 'Next →' : 'See Results →';
+  btnNext.style.display = 'inline-block';
+}
+
+document.getElementById('btn-next').addEventListener('click', function(){
+  cur++;
+  if(cur >= totalQ){
+    showFinish();
+  } else {
+    renderChallenge();
+  }
+});
+
+function showFinish(){
+  document.getElementById('ch-card').style.display = 'none';
+  document.getElementById('prog-fill').style.width = '100%';
+  document.getElementById('prog-label').textContent = totalQ + ' / ' + totalQ;
+
+  var pct = Math.round((score / totalQ) * 100);
+  var finish = document.getElementById('finish');
+  finish.style.display = 'block';
+
+  document.getElementById('finish-score').textContent = pct + '%';
+  document.getElementById('finish-label').textContent = score + ' correct out of ' + totalQ;
+
+  var msg;
+  if(pct === 100) msg = 'Perfect. You read assembly like a disassembler. Time to patch binaries.';
+  else if(pct >= 80) msg = 'Strong pattern recognition. A few edge cases to sharpen — try shuffle mode.';
+  else if(pct >= 60) msg = 'Solid start. The patterns you missed are worth re-reading in context.';
+  else msg = 'Keep going. Assembly becomes readable with repetition — each pass gets faster.';
+  document.getElementById('finish-msg').textContent = msg;
+}
+
+document.getElementById('btn-restart').addEventListener('click', function(){
+  order = CHALLENGES.map(function(_, i){ return i; });
+  cur = 0; score = 0;
+  document.getElementById('finish').style.display = 'none';
+  document.getElementById('ch-card').style.display = 'block';
+  renderChallenge();
+});
+
+document.getElementById('btn-shuffle').addEventListener('click', function(){
+  order = CHALLENGES.map(function(_, i){ return i; });
+  shuffle(order);
+  cur = 0; score = 0;
+  document.getElementById('finish').style.display = 'none';
+  document.getElementById('ch-card').style.display = 'block';
+  renderChallenge();
+});
+
+/* ── Skin switcher ───────────────────────────── */
+(function(){
+  var t=document.getElementById('skin-toggle'), p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click', function(e){ e.stopPropagation(); p.classList.toggle('open'); });
+  document.addEventListener('click', function(){ p.classList.remove('open'); });
+  p.addEventListener('click', function(e){ e.stopPropagation(); });
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click', function(){
+      var sk = o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+
+renderChallenge();
+</script>
+</body>
+</html>

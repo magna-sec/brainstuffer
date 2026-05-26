@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<title>RE Methodology — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);
+     min-height:100vh;padding:1.5rem 1rem 4rem;}
+.wrap{max-width:760px;margin:0 auto;}
+
+.back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--subtle);
+           font-size:.8rem;text-decoration:none;margin-bottom:1.5rem;}
+.back-link:hover{color:var(--accent);}
+
+h1{color:var(--accent);font-size:1.35rem;margin-bottom:.2rem;}
+.sub{color:var(--subtle);font-size:.82rem;margin-bottom:.5rem;line-height:1.55;}
+.attribution{font-size:.72rem;color:var(--muted);margin-bottom:1.4rem;}
+.attribution a{color:var(--accent2);text-decoration:none;}
+.attribution a:hover{text-decoration:underline;}
+
+/* ── Chapter tabs ─────────────────────────────────────────── */
+.chapter-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.1rem;}
+.ch-tab{
+  padding:.3rem .85rem;border-radius:6px;border:1.5px solid var(--card-border);
+  background:var(--card);color:var(--subtle);font-size:.75rem;font-weight:700;
+  cursor:pointer;font-family:'Courier New',monospace;
+  transition:border-color .2s,color .2s,background .2s;
+}
+.ch-tab:hover{border-color:var(--accent);color:var(--accent);}
+.ch-tab.active{border-color:var(--accent);color:var(--accent);background:var(--bg2);
+               box-shadow:0 0 10px var(--glow);}
+
+/* ── Step counter / pips ──────────────────────────────────── */
+.step-meta{display:flex;align-items:center;gap:.65rem;margin-bottom:.8rem;flex-wrap:wrap;}
+.step-counter{font-size:.72rem;color:var(--muted);}
+.step-pips{display:flex;gap:4px;flex-wrap:wrap;}
+.pip{width:8px;height:8px;border-radius:50%;background:var(--card-border);
+     cursor:pointer;transition:background .2s,transform .2s;flex-shrink:0;}
+.pip.done{background:var(--accent2);}
+.pip.active{background:var(--accent);transform:scale(1.35);}
+
+/* ── Panels ───────────────────────────────────────────────── */
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;}
+@media(max-width:680px){.panels{grid-template-columns:1fr;}}
+
+.panel{background:var(--card);border:1px solid var(--card-border);border-radius:10px;
+       padding:.85rem 1rem;}
+.panel-title{font-size:.68rem;font-weight:700;text-transform:uppercase;
+             letter-spacing:.08em;color:var(--muted);margin-bottom:.6rem;}
+
+/* ── Code panel ───────────────────────────────────────────── */
+.code-panel{background:var(--bg2);border:1px solid var(--card-border);border-radius:10px;
+            padding:.75rem 1rem;font-size:.82rem;line-height:1.9;overflow-x:auto;
+            white-space:pre;margin-bottom:.75rem;}
+.code-line-wrap{display:flex;gap:.5rem;align-items:flex-start;min-height:1.9em;}
+.ln{color:var(--muted);font-size:.7rem;min-width:1.8rem;text-align:right;
+    flex-shrink:0;padding-top:.15em;user-select:none;}
+.code-line{flex:1;white-space:pre;}
+.hl-line .code-line{background:rgba(129,140,248,.15);border-radius:3px;
+                    border-left:2px solid var(--accent);padding-left:.4rem;}
+.asm-kw{color:var(--accent2);}
+.asm-reg{color:var(--accent);}
+.asm-cm{color:var(--muted);font-style:italic;}
+.asm-lbl{color:#fb923c;}
+.asm-num{color:#34d399;}
+.asm-str{color:#fbbf24;}
+.asm-fn{color:#e879f9;}
+
+/* ── Narrative ────────────────────────────────────────────── */
+.narr{
+  border-left:2px solid var(--accent);
+  background:linear-gradient(90deg,rgba(129,140,248,.08) 0%,transparent 65%);
+  border-radius:0 8px 8px 0;padding:.7rem .95rem;
+  font-size:.85rem;line-height:1.65;margin-bottom:.75rem;
+}
+.narr strong{color:var(--accent);}
+.narr code{color:var(--accent2);font-size:.82rem;}
+
+/* ── State table ──────────────────────────────────────────── */
+.state-table{width:100%;border-collapse:collapse;font-size:.78rem;}
+.state-table th{text-align:left;color:var(--muted);font-weight:700;
+                border-bottom:1px solid var(--card-border);padding:.3rem .5rem;}
+.state-table td{padding:.3rem .5rem;border-bottom:1px solid rgba(51,65,85,.4);}
+.state-table tr.new-row td{color:var(--accent);font-weight:700;}
+.state-table tr.old-row td{opacity:.45;}
+
+/* ── Quiz ──────────────────────────────────────────────────── */
+.quiz-card{background:var(--card);border:1.5px solid var(--accent);border-radius:10px;
+           padding:.85rem 1rem;margin-bottom:.75rem;box-shadow:0 0 12px var(--glow);}
+.quiz-q{font-size:.85rem;font-weight:700;color:var(--accent);margin-bottom:.65rem;}
+.quiz-opts{display:flex;flex-direction:column;gap:.4rem;}
+.q-opt{
+  background:var(--bg2);border:1.5px solid var(--card-border);border-radius:7px;
+  padding:.5rem .8rem;font-family:'Courier New',monospace;font-size:.8rem;
+  color:var(--text);cursor:pointer;text-align:left;
+  transition:border-color .12s,background .12s;
+}
+.q-opt:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.q-opt.q-correct{border-color:#4ade80;background:rgba(74,222,128,.1);color:#4ade80;cursor:default;}
+.q-opt.q-wrong{border-color:#f87171;background:rgba(248,113,113,.08);color:#f87171;cursor:default;}
+.q-opt.q-dim{opacity:.35;cursor:default;}
+.q-explain{margin-top:.6rem;font-size:.78rem;color:var(--subtle);line-height:1.55;
+           border-left:2px solid #4ade80;padding-left:.65rem;display:none;}
+.q-explain.show{display:block;}
+
+/* ── Nav ──────────────────────────────────────────────────── */
+.nav-row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
+.btn-nav{
+  padding:.5rem 1.1rem;border-radius:7px;font-family:'Courier New',monospace;
+  font-size:.82rem;font-weight:700;cursor:pointer;
+  transition:opacity .15s,border-color .15s;
+  border:1.5px solid var(--card-border);background:var(--card);color:var(--subtle);
+}
+.btn-nav:hover{border-color:var(--accent);color:var(--accent);}
+.btn-nav.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-nav.primary:hover{opacity:.85;}
+.btn-nav:disabled{opacity:.28;cursor:default;}
+
+/* ── Info box ─────────────────────────────────────────────── */
+.infobox{
+  background:var(--card);border:1px solid var(--card-border);border-radius:10px;
+  padding:.75rem 1rem;margin-bottom:.75rem;
+}
+.infobox-title{font-size:.7rem;font-weight:700;text-transform:uppercase;
+               letter-spacing:.08em;color:var(--accent2);margin-bottom:.4rem;}
+.infobox-body{font-size:.8rem;color:var(--subtle);line-height:1.6;}
+.infobox-body code{color:var(--accent2);}
+
+/* ── Tool badge list ──────────────────────────────────────── */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.5rem;margin-top:.5rem;}
+.tool-badge{background:var(--bg2);border:1px solid var(--card-border);border-radius:8px;
+            padding:.5rem .7rem;font-size:.75rem;}
+.tool-name{color:var(--accent);font-weight:700;margin-bottom:.2rem;}
+.tool-desc{color:var(--subtle);font-size:.68rem;line-height:1.4;}
+</style>
+</head>
+<body>
+
+<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
+<div id="skin-panel" role="listbox" aria-label="Colour skins">
+  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom</div>
+  <div class="skin-opt" data-skin="neon"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix</div>
+  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire</div>
+  <div class="skin-opt" data-skin="ocean"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss</div>
+  <div class="skin-opt" data-skin="amber"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor</div>
+  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman</div>
+  <div class="skin-opt" data-skin="win95"   role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95</div>
+  <div class="skin-opt" data-skin="aero"    role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;"><span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero</div>
+</div>
+
+<div class="wrap">
+  <a class="back-link" href="../index.html#learn">&#8592; Back to Interactive Learning</a>
+
+  <h1>&#128300; Reverse Engineering Methodology</h1>
+  <p class="sub">Walk through a real approach to analysing an unknown binary — from zero knowledge to reading the algorithm.</p>
+  <p class="attribution">Inspired by <a href="https://ophirharpaz.com/begin.re" target="_blank" rel="noopener">begin.re</a> by Ophir Harpaz &mdash; the reverse engineering workshop.</p>
+
+  <div class="chapter-tabs" id="chapter-tabs"></div>
+
+  <div class="step-meta">
+    <span class="step-counter" id="step-counter">Step 1 / 1</span>
+    <div class="step-pips" id="step-pips"></div>
+  </div>
+
+  <div id="lesson-body"></div>
+
+  <div class="nav-row">
+    <button class="btn-nav" id="btn-prev">&#8592; Prev</button>
+    <button class="btn-nav primary" id="btn-next">Next &#8594;</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   CHAPTER / STEP DATA
+   ═══════════════════════════════════════════════════════════════ */
+var CHAPTERS = [
+  {
+    title: '1. What is RE?',
+    steps: [
+      {
+        narrative: '<strong>Reverse engineering</strong> is the process of understanding a program without access to its source code. You start with a compiled binary — a stream of bytes — and reconstruct <em>what it does</em>, <em>how it does it</em>, and sometimes <em>why</em>.',
+        body: function(){
+          return '<div class="infobox"><div class="infobox-title">The core question</div><div class="infobox-body">Given only a compiled binary, can you answer:<br><br>' +
+            '&bull; What algorithm does this implement?<br>' +
+            '&bull; What is the password / secret / key?<br>' +
+            '&bull; Where is the bug that can be exploited?<br>' +
+            '&bull; What does this malware actually do?<br><br>' +
+            'RE gives you a systematic method to answer all of these.</div></div>' +
+            '<div class="infobox"><div class="infobox-title">Source vs Binary</div><div class="infobox-body">' +
+            'Source code: <code>if (strcmp(input, "s3cr3t") == 0) grant_access();</code><br><br>' +
+            'After compilation, the string <code>"s3cr3t"</code> still exists in the binary — strings are never hidden by default. The compiled code still calls <code>strcmp</code>. A reverser finds it in minutes.</div></div>';
+        }
+      },
+      {
+        narrative: 'The two fundamental <strong>strategies</strong> are <em>top-down</em> and <em>bottom-up</em>. Expert reversers switch fluidly between both depending on what the binary reveals.',
+        body: function(){
+          return '<div class="panels">' +
+            '<div class="panel"><div class="panel-title">&#8593; Top-Down</div>' +
+            '<div style="font-size:.8rem;color:var(--subtle);line-height:1.65;">' +
+            'Start from <strong style="color:var(--accent);">main()</strong> and follow execution forward.<br><br>' +
+            '&bull; Good when you know entry point<br>' +
+            '&bull; Follow function calls like a debugger<br>' +
+            '&bull; Trace the happy path first<br>' +
+            '&bull; Can miss deeply nested functions<br>' +
+            '&bull; Tools: GDB, strace, ltrace, dynamic analysis' +
+            '</div></div>' +
+            '<div class="panel"><div class="panel-title">&#8595; Bottom-Up</div>' +
+            '<div style="font-size:.8rem;color:var(--subtle);line-height:1.65;">' +
+            'Start from a <strong style="color:var(--accent);">specific function</strong> (a string, an import, a bug) and work outward.<br><br>' +
+            '&bull; Good when you have a target (e.g. "grant_access")<br>' +
+            '&bull; Jump straight to interesting code<br>' +
+            '&bull; Use cross-references (xrefs) to find callers<br>' +
+            '&bull; Miss overall context initially<br>' +
+            '&bull; Tools: IDA, Ghidra, strings, objdump' +
+            '</div></div></div>';
+        }
+      }
+    ]
+  },
+  {
+    title: '2. First Look',
+    steps: [
+      {
+        narrative: 'Before opening a disassembler, run the <strong>strings command</strong>. It finds all printable ASCII sequences ≥ 4 characters. This one step often reveals passwords, URLs, error messages, and function names directly.',
+        body: function(){
+          return '<div class="code-panel" style="font-size:.8rem;line-height:1.7;">' +
+            '<span style="color:var(--muted);">$ </span><span style="color:var(--accent2);">strings</span> ./crackme\n' +
+            '<span style="color:var(--muted);">...\n</span>' +
+            '<span style="color:#fbbf24);">Enter password: </span>\n' +
+            '<span style="color:#4ade80;">s3cr3t_k3y</span>          <span style="color:var(--muted);font-style:italic;">← the password, in plaintext</span>\n' +
+            '<span style="color:var(--muted);">Access granted!\n' +
+            'Wrong password.\n' +
+            'libc.so.6\n' +
+            'strcmp\n' +
+            'puts\n' +
+            '...</span>' +
+            '</div>' +
+            '<div class="narr">The string <code>s3cr3t_k3y</code> is sitting in the binary unprotected. Many beginner crackmes end here. <strong>Always run strings first.</strong> If you see the password, you\'re done.</div>';
+        }
+      },
+      {
+        narrative: 'Check what <strong>library functions</strong> the binary imports. These are the syscall wrappers the binary calls by name — they reveal intent before you read a single instruction.',
+        body: function(){
+          return '<div class="code-panel" style="font-size:.8rem;line-height:1.7;">' +
+            '<span style="color:var(--muted);">$ </span><span style="color:var(--accent2);">objdump</span> -d ./crackme | <span style="color:var(--accent2);">grep</span> "call"\n\n' +
+            '  <span style="color:var(--muted);">401050:</span>  <span style="color:var(--accent);">call</span>  <span style="color:#e879f9;">printf</span>     <span style="color:var(--muted);font-style:italic;">← printing something</span>\n' +
+            '  <span style="color:var(--muted);">401067:</span>  <span style="color:var(--accent);">call</span>  <span style="color:#e879f9;">fgets</span>      <span style="color:var(--muted);font-style:italic;">← reading user input</span>\n' +
+            '  <span style="color:var(--muted);">40107e:</span>  <span style="color:var(--accent);">call</span>  <span style="color:#e879f9;">strcmp</span>     <span style="color:var(--muted);font-style:italic;">← comparing two strings ← KEY</span>\n' +
+            '  <span style="color:var(--muted);">401095:</span>  <span style="color:var(--accent);">call</span>  <span style="color:#e879f9;">puts</span>       <span style="color:var(--muted);font-style:italic;">← printing result</span>' +
+            '</div>' +
+            '<div class="narr">Seeing <code>strcmp</code> tells you: the program compares the input against something. Jump straight to <code>0x40107e</code> in IDA/Ghidra and trace the arguments — that\'s where the secret lives.</div>';
+        }
+      },
+      {
+        narrative: 'Use <strong>ltrace</strong> to intercept library calls at runtime. It shows you the <em>actual arguments</em> passed to functions — no disassembly required.',
+        body: function(){
+          return '<div class="code-panel" style="font-size:.8rem;line-height:1.7;">' +
+            '<span style="color:var(--muted);">$ </span><span style="color:var(--accent2);">ltrace</span> ./crackme\n' +
+            '<span style="color:#e879f9;">printf</span>("Enter password: ")  = 16\n' +
+            '<span style="color:#e879f9;">fgets</span>(0x7fff..., 64, stdin)  = "wrongpass\\n"\n' +
+            '<span style="color:#4ade80;">strcmp</span>(<span style="color:#fbbf24;">"wrongpass"</span>, <span style="color:#4ade80;">"s3cr3t_k3y"</span>)  = <span style="color:#f87171;">-1</span>\n' +
+            '<span style="color:#e879f9;">puts</span>("Wrong password.")    = 17\n' +
+            '+++ exited (status 1) +++' +
+            '</div>' +
+            '<div class="narr"><strong>ltrace shows both arguments to strcmp.</strong> The first is what you typed, the second is the correct password — leaked in plaintext. Even if strings didn\'t find it, ltrace will at runtime.</div>';
+        },
+        quiz: {
+          question: 'If ltrace shows <code>strcmp("test", "hunter2")</code>, what is the correct password?',
+          options: ['hunter2', 'test', 'strcmp', 'The binary is obfuscated'],
+          correct: 0,
+          explanation: 'strcmp(input, expected) — the second argument is the hardcoded expected value. "hunter2" is the correct password.'
+        }
+      }
+    ]
+  },
+  {
+    title: '3. Into the Disassembler',
+    steps: [
+      {
+        narrative: 'When dynamic tools aren\'t enough, open the binary in a disassembler. The <strong>control flow graph (CFG)</strong> shows you branches, loops, and the structure of a function at a glance.',
+        body: function(){
+          return '<div class="code-panel" style="font-size:.8rem;line-height:1.75;">' +
+            '<span style="color:var(--muted);">; Disassembly of check_password()</span>\n' +
+            '<span style="color:#fb923c;">check_password</span>:\n' +
+            '  <span style="color:var(--accent);">push</span>   <span style="color:var(--accent);">rbp</span>\n' +
+            '  <span style="color:var(--accent);">mov</span>    <span style="color:var(--accent);">rbp</span>, <span style="color:var(--accent);">rsp</span>\n' +
+            '  <span style="color:var(--accent);">sub</span>    <span style="color:var(--accent);">rsp</span>, <span style="color:#34d399;">0x50</span>\n' +
+            '  <span style="color:var(--accent);">lea</span>    <span style="color:var(--accent);">rdi</span>, [<span style="color:var(--accent);">rbp</span>-<span style="color:#34d399;">0x40</span>]  <span style="color:var(--muted);font-style:italic;">; local buffer</span>\n' +
+            '  <span style="color:var(--accent);">mov</span>    <span style="color:var(--accent);">esi</span>, <span style="color:#34d399;">64</span>            <span style="color:var(--muted);font-style:italic;">; max 64 bytes</span>\n' +
+            '  <span style="color:var(--accent);">mov</span>    <span style="color:var(--accent);">rdx</span>, <span style="color:var(--muted);">[stdin]</span>\n' +
+            '  <span style="color:var(--accent);">call</span>   <span style="color:#e879f9;">fgets</span>\n' +
+            '  <span style="color:var(--accent);">lea</span>    <span style="color:var(--accent);">rdi</span>, [<span style="color:var(--accent);">rbp</span>-<span style="color:#34d399;">0x40</span>]  <span style="color:var(--muted);font-style:italic;">; user input</span>\n' +
+            '  <span style="color:var(--accent);">lea</span>    <span style="color:var(--accent);">rsi</span>, [<span style="color:var(--accent);">rip</span>+<span style="color:#34d399;">0x2e8</span>]  <span style="color:var(--muted);font-style:italic;">; "s3cr3t_k3y" ← xref target</span>\n' +
+            '  <span style="color:var(--accent);">call</span>   <span style="color:#e879f9;">strcmp</span>\n' +
+            '  <span style="color:var(--accent);">test</span>   <span style="color:var(--accent);">eax</span>, <span style="color:var(--accent);">eax</span>       <span style="color:var(--muted);font-style:italic;">; eax == 0?</span>\n' +
+            '  <span style="color:var(--accent);">jne</span>    <span style="color:#fb923c;">.wrong</span>\n' +
+            '<span style="color:#4ade80;">.correct</span>:\n' +
+            '  <span style="color:var(--accent);">lea</span>    <span style="color:var(--accent);">rdi</span>, [<span style="color:var(--accent);">rip</span>+...]  <span style="color:var(--muted);font-style:italic;">; "Access granted!"</span>\n' +
+            '  <span style="color:var(--accent);">call</span>   <span style="color:#e879f9;">puts</span>\n' +
+            '  <span style="color:var(--accent);">jmp</span>    <span style="color:#fb923c;">.done</span>\n' +
+            '<span style="color:#f87171;">.wrong</span>:\n' +
+            '  <span style="color:var(--accent);">lea</span>    <span style="color:var(--accent);">rdi</span>, [<span style="color:var(--accent);">rip</span>+...]  <span style="color:var(--muted);font-style:italic;">; "Wrong password."</span>\n' +
+            '  <span style="color:var(--accent);">call</span>   <span style="color:#e879f9;">puts</span>\n' +
+            '<span style="color:#fb923c;">.done</span>:\n' +
+            '  <span style="color:var(--accent);">leave</span>\n' +
+            '  <span style="color:var(--accent);">ret</span>' +
+            '</div>';
+        }
+      },
+      {
+        narrative: 'The key skill: following <strong>cross-references (xrefs)</strong>. When you see a string like "Access granted!" in the binary, jump to <em>all places that reference it</em> — you\'ll land right next to the branch that decides success vs failure.',
+        body: function(){
+          return '<div class="infobox"><div class="infobox-title">Cross-Reference Workflow</div><div class="infobox-body">' +
+            '1. Find a string that interests you: <code>strings ./binary | grep -i "pass\\|grant\\|secret"</code><br>' +
+            '2. In IDA/Ghidra: right-click the string → <strong>List xrefs to</strong><br>' +
+            '3. Jump to the reference — you land at the <code>lea rsi, [address_of_string]</code> instruction<br>' +
+            '4. Scroll up slightly — the <code>strcmp</code> and branch will be nearby<br>' +
+            '5. Trace what\'s in RDI (the other strcmp argument) — that\'s the user input buffer<br>' +
+            '</div></div>' +
+            '<div class="narr">Xrefs are <strong>the most powerful navigation tool</strong> in static analysis. Instead of reading from main() through thousands of instructions, you teleport directly to the code you care about.</div>';
+        },
+        quiz: {
+          question: 'After strcmp, you see: <code>test eax, eax; jne .fail</code>. What does this branch check?',
+          options: [
+            'Jump to .fail if strings are NOT equal (eax ≠ 0)',
+            'Jump to .fail if strings ARE equal (eax == 0)',
+            'Jump to .fail if eax is negative',
+            'Jump to .fail always'
+          ],
+          correct: 0,
+          explanation: 'strcmp returns 0 when strings are equal. test eax,eax sets ZF=1 when eax==0. jne fires on ZF=0 — i.e., when strings are NOT equal. The happy path falls through the jne straight to the success block.'
+        }
+      }
+    ]
+  },
+  {
+    title: '4. Patching',
+    steps: [
+      {
+        narrative: 'Sometimes you don\'t want to find the password — you want to <strong>patch the binary</strong> so it always succeeds. The key insight: one branch instruction is the difference between "Access granted" and "Wrong password".',
+        body: function(){
+          return '<div class="panels">' +
+            '<div class="panel"><div class="panel-title">&#128296; Original Binary</div>' +
+            '<div class="code-panel" style="margin-bottom:0;font-size:.78rem;line-height:1.8;">' +
+            '<span style="color:var(--accent);">call</span>   <span style="color:#e879f9;">strcmp</span>\n' +
+            '<span style="color:var(--accent);">test</span>   <span style="color:var(--accent);">eax</span>, <span style="color:var(--accent);">eax</span>\n' +
+            '<span style="color:#f87171;">jne    .wrong</span>   <span style="color:var(--muted);font-style:italic;">← change this</span>' +
+            '</div></div>' +
+            '<div class="panel"><div class="panel-title">&#9989; Patched Binary</div>' +
+            '<div class="code-panel" style="margin-bottom:0;font-size:.78rem;line-height:1.8;">' +
+            '<span style="color:var(--accent);">call</span>   <span style="color:#e879f9;">strcmp</span>\n' +
+            '<span style="color:var(--accent);">test</span>   <span style="color:var(--accent);">eax</span>, <span style="color:var(--accent);">eax</span>\n' +
+            '<span style="color:#4ade80;">jmp    .correct</span>  <span style="color:var(--muted);font-style:italic;">← always jump to success</span>' +
+            '</div></div></div>' +
+            '<div class="narr" style="margin-top:.75rem;">In hex: <code>jne</code> is opcode <code>75</code>. Replace it with <code>eb</code> (unconditional <code>jmp</code>) using a hex editor or GDB\'s <code>set {char}addr=0xeb</code>. One byte changes the entire control flow.</div>';
+        }
+      },
+      {
+        narrative: 'The same logic applies to <strong>license checks, anti-debug, and authentication loops</strong>. Find the branch, flip it (or NOP it out). This is the core skill behind binary patching.',
+        body: function(){
+          return '<div class="infobox"><div class="infobox-title">Common Patch Targets</div><div class="infobox-body">' +
+            '<code>jne → jmp</code> &nbsp;&mdash; always take the success path<br>' +
+            '<code>je  → jmp</code> &nbsp;&mdash; always take the non-zero path<br>' +
+            '<code>jnz → nop nop</code> &nbsp;&mdash; neutralise the branch entirely (opcode 0x90)<br>' +
+            '<code>call check → nop×5</code> &nbsp;&mdash; skip a validation function<br><br>' +
+            'Tools: <code>xxd</code> + <code>sed</code>, GDB <code>set</code>, IDA patching, Ghidra assembler, r2 (radare2) <code>wx</code>' +
+            '</div></div>' +
+            '<div class="infobox"><div class="infobox-title">&#127881; The RE Loop</div><div class="infobox-body">' +
+            '1. <strong>strings</strong> — find low-hanging fruit<br>' +
+            '2. <strong>ltrace / strace</strong> — watch function calls live<br>' +
+            '3. <strong>Disassemble</strong> — read the algorithm statically<br>' +
+            '4. <strong>xrefs</strong> — jump to the interesting part<br>' +
+            '5. <strong>Patch</strong> — flip the branch, bypass the check<br><br>' +
+            'Each step narrows the search space. You rarely need all five for a beginner crackme.' +
+            '</div></div>';
+        },
+        quiz: {
+          question: 'You want to skip a license check call entirely. Which approach works?',
+          options: [
+            'Overwrite the 5-byte call instruction with 5 NOP (0x90) bytes',
+            'Change the return address on the stack',
+            'Set EIP to 0x00',
+            'Run the binary as root'
+          ],
+          correct: 0,
+          explanation: 'A near call is 5 bytes (opcode E8 + 4-byte offset). NOP (0x90) is a single no-operation instruction. Writing 5 NOPs replaces the call with "do nothing" and execution continues to the next instruction, effectively skipping the check.'
+        }
+      }
+    ]
+  },
+  {
+    title: '5. Tools',
+    steps: [
+      {
+        narrative: 'The right tool depends on the question you\'re asking. <strong>Static tools</strong> work on the binary file; <strong>dynamic tools</strong> run the binary and intercept execution.',
+        body: function(){
+          return '<div class="tool-grid">' +
+            '<div class="tool-badge"><div class="tool-name">strings</div><div class="tool-desc">Dump printable strings from any binary. First tool to run.</div></div>' +
+            '<div class="tool-badge"><div class="tool-name">file</div><div class="tool-desc">Identify binary format: ELF/PE, 32/64-bit, stripped?</div></div>' +
+            '<div class="tool-badge"><div class="tool-name">objdump</div><div class="tool-desc">Disassemble sections, list imports, dump headers.</div></div>' +
+            '<div class="tool-badge"><div class="tool-name">readelf</div><div class="tool-desc">ELF sections, symbols, dynamic linking info.</div></div>' +
+            '<div class="tool-badge"><div class="tool-name">ltrace</div><div class="tool-desc">Intercept library calls with arguments at runtime.</div></div>' +
+            '<div class="tool-badge"><div class="tool-name">strace</div><div class="tool-desc">Intercept syscalls — open, read, write, connect…</div></div>' +
+            '<div class="tool-badge"><div class="tool-name">GDB</div><div class="tool-desc">Full debugger. Set breakpoints, inspect registers, patch bytes.</div></div>' +
+            '<div class="tool-badge"><div class="tool-name">Ghidra</div><div class="tool-desc">Free NSA decompiler. C-code view + CFG + xrefs.</div></div>' +
+            '<div class="tool-badge"><div class="tool-name">IDA Free</div><div class="tool-desc">Industry standard disassembler. Graph mode, xrefs, scripting.</div></div>' +
+            '<div class="tool-badge"><div class="tool-name">radare2</div><div class="tool-desc">Command-line RE framework. Scripting-friendly.</div></div>' +
+            '<div class="tool-badge"><div class="tool-name">pwndbg</div><div class="tool-desc">GDB plugin for exploitation — stack, heap, memory views.</div></div>' +
+            '<div class="tool-badge"><div class="tool-name">binwalk</div><div class="tool-desc">Firmware analysis, embedded file extraction.</div></div>' +
+            '</div>' +
+            '<div class="narr" style="margin-top:.75rem;">Start with <code>file</code> → <code>strings</code> → <code>ltrace/strace</code> → disassembler. Most beginner crackmes fall before you even need IDA.</div>';
+        }
+      },
+      {
+        narrative: 'You\'ve seen the full methodology. The table below summarises when to use each approach.',
+        body: function(){
+          return '<table class="state-table"><thead><tr>' +
+            '<th>Situation</th><th>Best first move</th></tr></thead><tbody>' +
+            '<tr><td>First look at any binary</td><td><code>strings</code> + <code>file</code></td></tr>' +
+            '<tr><td>Suspect strcmp password</td><td><code>ltrace ./binary</code></td></tr>' +
+            '<tr><td>Need to see syscalls</td><td><code>strace ./binary</code></td></tr>' +
+            '<tr><td>Hardcoded key in data section</td><td><code>strings -a</code> or hex editor</td></tr>' +
+            '<tr><td>Complex algorithm (no string)</td><td>Ghidra / IDA decompiler</td></tr>' +
+            '<tr><td>Want to bypass a check</td><td>Find branch → patch jne → jmp</td></tr>' +
+            '<tr><td>Obfuscated / packed binary</td><td><code>strace</code> → <code>ltrace</code> → unpack + re-analyse</td></tr>' +
+            '</tbody></table>' +
+            '<div class="narr" style="margin-top:.85rem;">Every RE session is a narrowing search: gather intel, form a hypothesis, test it. You\'re done when you can answer the original question. <a href="disasm-patterns.html" style="color:var(--accent2);text-decoration:none;">&#8594; Practice reading disassembly patterns</a></div>';
+        }
+      }
+    ]
+  }
+];
+
+/* ═══════════════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════════════ */
+var curCh   = 0;
+var curStep = 0;
+var quizAnswered = false;
+
+/* ═══════════════════════════════════════════════════════════════
+   RENDER
+   ═══════════════════════════════════════════════════════════════ */
+function renderTabs(){
+  var tabs = document.getElementById('chapter-tabs');
+  tabs.innerHTML = '';
+  CHAPTERS.forEach(function(ch, i){
+    var btn = document.createElement('button');
+    btn.className = 'ch-tab' + (i === curCh ? ' active' : '');
+    btn.textContent = ch.title;
+    btn.addEventListener('click', function(){ curCh = i; curStep = 0; render(); });
+    tabs.appendChild(btn);
+  });
+}
+
+function renderPips(){
+  var ch = CHAPTERS[curCh];
+  var pips = document.getElementById('step-pips');
+  pips.innerHTML = '';
+  ch.steps.forEach(function(_, i){
+    var div = document.createElement('div');
+    div.className = 'pip' + (i < curStep ? ' done' : '') + (i === curStep ? ' active' : '');
+    div.addEventListener('click', function(){ curStep = i; render(); });
+    pips.appendChild(div);
+  });
+  document.getElementById('step-counter').textContent =
+    'Step ' + (curStep + 1) + ' / ' + ch.steps.length;
+}
+
+function renderBody(){
+  var ch = CHAPTERS[curCh];
+  var step = ch.steps[curStep];
+  quizAnswered = false;
+
+  var html = '<div class="narr">' + step.narrative + '</div>';
+  html += step.body();
+
+  if(step.quiz){
+    var q = step.quiz;
+    html += '<div class="quiz-card"><div class="quiz-q">&#10067; ' + q.question + '</div>' +
+      '<div class="quiz-opts">' +
+      q.options.map(function(opt, i){
+        return '<button class="q-opt" data-qi="' + i + '">' + opt + '</button>';
+      }).join('') +
+      '</div>' +
+      '<div class="q-explain" id="q-explain">' + q.explanation + '</div>' +
+      '</div>';
+  }
+
+  document.getElementById('lesson-body').innerHTML = html;
+
+  if(step.quiz){
+    var q = step.quiz;
+    document.getElementById('lesson-body').querySelectorAll('.q-opt').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        if(quizAnswered) return;
+        quizAnswered = true;
+        var picked = parseInt(btn.getAttribute('data-qi'));
+        document.getElementById('lesson-body').querySelectorAll('.q-opt').forEach(function(b, i){
+          b.disabled = true;
+          if(i === q.correct) b.classList.add('q-correct');
+          else if(i === picked) b.classList.add('q-wrong');
+          else b.classList.add('q-dim');
+        });
+        document.getElementById('q-explain').classList.add('show');
+      });
+    });
+  }
+}
+
+function render(){
+  renderTabs();
+  renderPips();
+  renderBody();
+
+  var ch = CHAPTERS[curCh];
+  document.getElementById('btn-prev').disabled = (curCh === 0 && curStep === 0);
+  var isLast = (curCh === CHAPTERS.length - 1) && (curStep === ch.steps.length - 1);
+  var btn = document.getElementById('btn-next');
+  btn.innerHTML = isLast ? '🎉 Done' : 'Next →';
+  btn.disabled = false;
+}
+
+document.getElementById('btn-next').addEventListener('click', function(){
+  var ch = CHAPTERS[curCh];
+  if(curStep < ch.steps.length - 1){
+    curStep++;
+  } else if(curCh < CHAPTERS.length - 1){
+    curCh++;
+    curStep = 0;
+  }
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+document.getElementById('btn-prev').addEventListener('click', function(){
+  if(curStep > 0){
+    curStep--;
+  } else if(curCh > 0){
+    curCh--;
+    curStep = CHAPTERS[curCh].steps.length - 1;
+  }
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/* ── Skin switcher ──────────────────────────────── */
+(function(){
+  var t=document.getElementById('skin-toggle'), p=document.getElementById('skin-panel');
+  if(!t||!p) return;
+  t.addEventListener('click', function(e){ e.stopPropagation(); p.classList.toggle('open'); });
+  document.addEventListener('click', function(){ p.classList.remove('open'); });
+  p.addEventListener('click', function(e){ e.stopPropagation(); });
+  p.querySelectorAll('.skin-opt').forEach(function(o){
+    o.addEventListener('click', function(){
+      var sk = o.getAttribute('data-skin');
+      document.documentElement.setAttribute('data-skin', sk);
+      localStorage.setItem('bs-skin', sk);
+      p.classList.remove('open');
+    });
+  });
+})();
+
+render();
+</script>
+</body>
+</html>
