@@ -718,9 +718,9 @@ body.on-home .logo-svg:not(.breathing) { animation: brain-home-pulse 2.8s ease-i
 .skin-opt:hover, .skin-opt.active { background: var(--bg2); color: var(--text); }
 
 .skin-swatch {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
     flex-shrink: 0;
     border: 2px solid rgba(255,255,255,.15);
 }

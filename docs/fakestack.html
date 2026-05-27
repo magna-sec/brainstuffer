@@ -439,34 +439,6 @@ body { padding-top: 1.25rem; }
 </head>
 <body>
 <!-- Skin switcher -->
-<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
-<div id="skin-panel" role="listbox" aria-label="Colour skins">
-  <div class="skin-panel-title" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.25rem;">Colour Skin</div>
-  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
-    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom
-  </div>
-  <div class="skin-opt" data-skin="neon" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
-    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix
-  </div>
-  <div class="skin-opt" data-skin="crimson" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
-    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire
-  </div>
-  <div class="skin-opt" data-skin="ocean" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
-    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss
-  </div>
-  <div class="skin-opt" data-skin="amber" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
-    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor
-  </div>
-  <div class="skin-opt" data-skin="caveman" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
-    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman
-  </div>
-  <div class="skin-opt" data-skin="win95" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
-    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95
-  </div>
-  <div class="skin-opt" data-skin="aero" role="option" style="display:flex;align-items:center;gap:.6rem;padding:.35rem .5rem;border-radius:8px;cursor:pointer;font-size:.85rem;">
-    <span class="skin-swatch" style="width:18px;height:18px;border-radius:4px;flex-shrink:0;background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero
-  </div>
-</div>
 
 <div class="fs-container">
   <div class="fs-header">
@@ -561,29 +533,6 @@ body { padding-top: 1.25rem; }
 <script>
 'use strict';
 
-/* ───────────────────────────────────────────────────────────────
-   SKIN SWITCHER
-─────────────────────────────────────────────────────────────── */
-(function(){
-  const toggle = document.getElementById('skin-toggle');
-  const panel  = document.getElementById('skin-panel');
-  const saved  = localStorage.getItem('bs-skin') || 'midnight';
-  document.documentElement.setAttribute('data-skin', saved);
-
-  toggle.addEventListener('click', () => panel.classList.toggle('open'));
-  document.addEventListener('click', e => {
-    if (!toggle.contains(e.target) && !panel.contains(e.target))
-      panel.classList.remove('open');
-  });
-  panel.querySelectorAll('.skin-opt').forEach(opt => {
-    opt.addEventListener('click', () => {
-      const s = opt.dataset.skin;
-      document.documentElement.setAttribute('data-skin', s);
-      localStorage.setItem('bs-skin', s);
-      panel.classList.remove('open');
-    });
-  });
-})();
 
 /* ───────────────────────────────────────────────────────────────
    HELPERS
@@ -1992,5 +1941,6 @@ document.getElementById('uaf-ok').addEventListener('click', () => {
 ─────────────────────────────────────────────────────────────── */
 render();
 </script>
+<script src="js/skin.js"></script>
 </body>
 </html>

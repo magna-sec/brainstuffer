@@ -669,10 +669,6 @@ body { padding-top: 1.25rem; }
 </head>
 <body>
 <script>
-(function() {
-  var sk = localStorage.getItem('bs-skin');
-  if (sk) document.documentElement.setAttribute('data-skin', sk);
-})();
 </script>
 
 <!-- Skin toggle -->
@@ -1138,26 +1134,6 @@ body { padding-top: 1.25rem; }
 <script>
 'use strict';
 
-/* ── Skin switcher ────────────────────────────────────────────── */
-(function() {
-  var toggle = document.getElementById('skin-toggle');
-  var panel  = document.getElementById('skin-panel');
-  if (!toggle || !panel) return;
-  toggle.addEventListener('click', function(e) {
-    e.stopPropagation();
-    panel.classList.toggle('open');
-  });
-  document.addEventListener('click', function() { panel.classList.remove('open'); });
-  panel.addEventListener('click', function(e) { e.stopPropagation(); });
-  panel.querySelectorAll('.skin-opt').forEach(function(opt) {
-    opt.addEventListener('click', function() {
-      var sk = opt.getAttribute('data-skin');
-      document.documentElement.setAttribute('data-skin', sk);
-      localStorage.setItem('bs-skin', sk);
-      panel.classList.remove('open');
-    });
-  });
-})();
 
 /* ── Section nav ──────────────────────────────────────────────── */
 (function() {
@@ -1500,5 +1476,6 @@ function quizRetry() { qCur = 0; qScore = 0; qAnswered = false; renderQuiz(); }
 renderQuiz();
 
 </script>
+<script src="js/skin.js"></script>
 </body>
 </html>

@@ -473,35 +473,6 @@
 </head>
 <body>
 
-<!-- Skin switcher -->
-<button id="skin-toggle" title="Change skin" aria-label="Change colour skin">&#9681;</button>
-<div id="skin-panel" role="listbox" aria-label="Colour skins">
-    <div class="skin-panel-title">Colour Skin</div>
-    <div class="skin-opt" data-skin="aero" role="option">
-        <span class="skin-swatch" style="background:linear-gradient(135deg,#818cf8,#38bdf8)"></span> Phantom
-    </div>
-    <div class="skin-opt" data-skin="neon" role="option">
-        <span class="skin-swatch" style="background:linear-gradient(135deg,#4ade80,#86efac)"></span> Matrix
-    </div>
-    <div class="skin-opt" data-skin="crimson" role="option">
-        <span class="skin-swatch" style="background:linear-gradient(135deg,#f87171,#fca5a5)"></span> Hellfire
-    </div>
-    <div class="skin-opt" data-skin="ocean" role="option">
-        <span class="skin-swatch" style="background:linear-gradient(135deg,#2dd4bf,#67e8f9)"></span> Abyss
-    </div>
-    <div class="skin-opt" data-skin="amber" role="option">
-        <span class="skin-swatch" style="background:linear-gradient(135deg,#fbbf24,#fde68a)"></span> Reactor
-    </div>
-    <div class="skin-opt" data-skin="caveman" role="option">
-        <span class="skin-swatch" style="background:linear-gradient(135deg,#e8732a,#f0b040)"></span> Caveman
-    </div>
-    <div class="skin-opt" data-skin="win95" role="option">
-        <span class="skin-swatch" style="background:linear-gradient(135deg,#000080,#c0c0c0)"></span> Win 95
-    </div>
-    <div class="skin-opt" data-skin="aero" role="option">
-        <span class="skin-swatch" style="background:linear-gradient(135deg,#4fa3e0,#a8d4f5)"></span> Aero
-    </div>
-</div>
 
 <div class="container">
     <header>
@@ -656,42 +627,6 @@
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════════════
-// SKIN SWITCHER
-// ════════════════════════════════════════════════════════════════
-(function() {
-    const SKINS = ['midnight','neon','crimson','ocean','amber','caveman','win95','aero'];
-    const saved = localStorage.getItem('bs-skin') || 'midnight';
-    document.documentElement.setAttribute('data-skin', saved);
-
-    function updateActive(skin) {
-        document.querySelectorAll('.skin-opt').forEach(el => {
-            el.classList.toggle('active', el.dataset.skin === skin);
-        });
-    }
-    updateActive(saved);
-
-    const toggle = document.getElementById('skin-toggle');
-    const panel  = document.getElementById('skin-panel');
-
-    toggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        panel.classList.toggle('open');
-    });
-
-    document.addEventListener('click', () => panel.classList.remove('open'));
-    panel.addEventListener('click', e => e.stopPropagation());
-
-    document.querySelectorAll('.skin-opt').forEach(el => {
-        el.addEventListener('click', () => {
-            const sk = el.dataset.skin;
-            document.documentElement.setAttribute('data-skin', sk);
-            localStorage.setItem('bs-skin', sk);
-            updateActive(sk);
-            panel.classList.remove('open');
-        });
-    });
-})();
 
 // ════════════════════════════════════════════════════════════════
 // TAB SWITCHER
@@ -1544,5 +1479,6 @@ const ALL_QUESTIONS = [
     }
 })();
 </script>
+<script src="js/skin.js"></script>
 </body>
 </html>
