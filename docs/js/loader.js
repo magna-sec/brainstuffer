@@ -4,7 +4,7 @@
 
 async function loadManifest() {
     try {
-        const resp = await fetch('data/manifest.json');
+        const resp = await fetch('data/manifest.json?v=' + Date.now());
         manifest = await resp.json();
         const sel = document.getElementById('filename');
         sel.innerHTML = '<option value="" disabled selected>-- select a file --</option>';
