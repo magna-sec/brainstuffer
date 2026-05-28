@@ -30,6 +30,12 @@
     "category": "Technology"
   },
   {
+    "file": "windows_exploit_dev.json",
+    "label": "Windows Exploit Development",
+    "count": 49,
+    "category": "Technology"
+  },
+  {
     "file": "science_discovery.json",
     "label": "Science & Discovery",
     "count": 74,
