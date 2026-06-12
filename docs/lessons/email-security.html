@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<title>Email Security: SPF, DKIM &amp; DMARC — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../css/style.css">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Courier New',monospace;background:var(--bg);color:var(--text);
+     min-height:100vh;padding:1.5rem 1rem 4rem;}
+.wrap{max-width:880px;margin:0 auto;}
+.back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--subtle);
+           font-size:.8rem;text-decoration:none;margin-bottom:1.5rem;}
+.back-link:hover{color:var(--accent);}
+h1{color:var(--accent);font-size:1.35rem;margin-bottom:.2rem;}
+.sub{color:var(--subtle);font-size:.82rem;margin-bottom:1.4rem;line-height:1.55;}
+
+/* ── Section tabs ─────────────────────────────────────── */
+.sect-tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.9rem;}
+.sect-tab{padding:.28rem .8rem;border-radius:6px;border:1.5px solid var(--card-border);
+  background:var(--card);color:var(--subtle);font-size:.75rem;font-weight:700;
+  cursor:pointer;font-family:'Courier New',monospace;
+  transition:border-color .15s,color .15s,background .15s;}
+.sect-tab:hover{border-color:var(--accent);color:var(--accent);}
+.sect-tab.active{border-color:var(--accent);color:var(--accent);
+  background:var(--bg2);box-shadow:0 0 8px var(--glow);}
+
+/* ── Step meta ────────────────────────────────────────── */
+.step-meta{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem;flex-wrap:wrap;}
+.step-counter{font-size:.7rem;color:var(--muted);}
+.step-title-lbl{font-size:.87rem;font-weight:700;color:var(--accent);flex:1;}
+.pips{display:flex;gap:4px;flex-wrap:wrap;}
+.pip{width:8px;height:8px;border-radius:50%;background:var(--card-border);
+     cursor:pointer;transition:background .2s,transform .2s;flex-shrink:0;}
+.pip.done{background:var(--accent2);}
+.pip.active{background:var(--accent);transform:scale(1.4);}
+
+/* ── Panel ────────────────────────────────────────────── */
+.panel{background:var(--card);border:1px solid var(--card-border);border-radius:10px;
+       padding:.85rem 1rem;margin-bottom:.75rem;overflow-x:auto;}
+.panel-lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;
+           letter-spacing:.09em;color:var(--muted);margin-bottom:.55rem;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;}
+@media(max-width:580px){.two-col{grid-template-columns:1fr;}}
+
+/* ── Flow diagram ─────────────────────────────────────── */
+.flow{display:flex;align-items:center;justify-content:center;gap:.1rem;
+      flex-wrap:wrap;padding:.5rem 0;}
+.flow-node{display:flex;flex-direction:column;align-items:center;gap:.3rem;}
+.flow-box{border:1.5px solid var(--card-border);border-radius:8px;background:var(--bg2);
+          padding:.45rem .7rem;font-size:.73rem;font-weight:700;text-align:center;
+          transition:border-color .3s,background .3s,box-shadow .3s;white-space:nowrap;}
+.flow-box small{font-weight:400;color:var(--muted);display:block;font-size:.65rem;}
+.flow-box.hl {border-color:var(--accent);background:rgba(129,140,248,.12);box-shadow:0 0 10px var(--glow);}
+.flow-box.hl2{border-color:var(--accent2);background:rgba(52,211,153,.1);}
+.flow-box.warn{border-color:#fbbf24;background:rgba(251,191,36,.09);}
+.flow-box.danger{border-color:#f87171;background:rgba(248,113,113,.09);}
+.flow-box.ok  {border-color:#4ade80;background:rgba(74,222,128,.09);}
+.flow-icon{font-size:1.4rem;line-height:1;}
+.flow-lbl{font-size:.62rem;color:var(--muted);text-align:center;max-width:90px;}
+.flow-arr{font-size:1rem;color:var(--muted);padding:0 .2rem;align-self:center;flex-shrink:0;}
+.flow-arr.hl{color:var(--accent);}
+
+/* ── Record token rows ────────────────────────────────── */
+.record-raw{font-family:'Courier New',monospace;font-size:.77rem;background:var(--bg2);
+            border-radius:6px;padding:.65rem .9rem;margin-bottom:.7rem;overflow-x:auto;
+            white-space:pre;color:var(--text);border:1px solid var(--card-border);line-height:1.6;}
+.tokens{display:flex;flex-direction:column;gap:.3rem;}
+.tok-row{display:grid;grid-template-columns:auto auto 1fr;align-items:baseline;
+         gap:.5rem;padding:.3rem .45rem;border-radius:6px;background:var(--bg2);
+         border:1px solid var(--card-border);}
+.tok-key{font-weight:900;font-size:.78rem;white-space:nowrap;}
+.tok-val{font-size:.76rem;font-family:'Courier New',monospace;white-space:nowrap;}
+.tok-desc{font-size:.7rem;color:var(--muted);line-height:1.4;}
+.tok-v .tok-key{color:var(--muted);}        .tok-v .tok-val{color:var(--muted);}
+.tok-p .tok-key{color:#4ade80;}              .tok-p .tok-val{color:#4ade80;}
+.tok-a .tok-key{color:var(--accent);}        .tok-a .tok-val{color:var(--accent2);}
+.tok-r .tok-key{color:var(--accent2);}       .tok-r .tok-val{color:var(--accent2);}
+.tok-w .tok-key{color:#fbbf24;}              .tok-w .tok-val{color:#fbbf24;}
+.tok-x .tok-key{color:#f87171;}              .tok-x .tok-val{color:#f87171;}
+
+/* ── Envelope display ─────────────────────────────────── */
+.env-rows{display:flex;flex-direction:column;gap:.5rem;}
+.env-row{border-radius:8px;padding:.55rem .85rem;display:flex;align-items:flex-start;
+         gap:.7rem;font-size:.82rem;}
+.env-row.smtp  {background:rgba(129,140,248,.07);border:1.5px solid var(--accent);}
+.env-row.hdr   {background:rgba(52,211,153,.06);border:1.5px solid var(--accent2);}
+.env-badge{font-size:.58rem;font-weight:900;text-transform:uppercase;letter-spacing:.05em;
+           padding:.15rem .45rem;border-radius:4px;white-space:nowrap;flex-shrink:0;}
+.env-badge.smtp{background:rgba(129,140,248,.2);color:var(--accent);}
+.env-badge.hdr {background:rgba(52,211,153,.15);color:var(--accent2);}
+.env-val{font-family:'Courier New',monospace;color:var(--text);}
+.env-note{font-size:.65rem;color:var(--muted);margin-top:.18rem;line-height:1.4;}
+
+/* ── Check result pill ────────────────────────────────── */
+.chk{display:flex;align-items:center;gap:.5rem;margin-top:.5rem;font-size:.82rem;
+     font-weight:700;padding:.4rem .75rem;border-radius:7px;}
+.chk.pass{background:rgba(74,222,128,.09);border:1px solid #4ade80;color:#4ade80;}
+.chk.fail{background:rgba(248,113,113,.09);border:1px solid #f87171;color:#f87171;}
+.chk.soft{background:rgba(251,191,36,.09);border:1px solid #fbbf24;color:#fbbf24;}
+.chk.none{background:var(--bg2);border:1px solid var(--card-border);color:var(--muted);}
+
+/* ── Table ────────────────────────────────────────────── */
+.tbl{width:100%;border-collapse:collapse;font-size:.79rem;}
+.tbl th{text-align:left;color:var(--muted);font-size:.67rem;font-weight:700;
+        text-transform:uppercase;letter-spacing:.05em;
+        padding:.3rem .6rem;border-bottom:1px solid var(--card-border);}
+.tbl td{padding:.38rem .6rem;border-bottom:1px solid rgba(100,116,139,.12);vertical-align:top;}
+.tbl td:first-child{font-family:'Courier New',monospace;font-weight:700;}
+.tbl .r{color:#f87171;} .tbl .y{color:#fbbf24;} .tbl .g{color:#4ade80;}
+.tbl .d{color:var(--muted);}
+
+/* ── Alignment matrix ─────────────────────────────────── */
+.matrix{border-collapse:collapse;font-size:.78rem;width:100%;}
+.matrix th{background:var(--bg2);padding:.38rem .65rem;color:var(--muted);
+           font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;
+           text-align:center;border:1px solid var(--card-border);}
+.matrix td{padding:.42rem .65rem;text-align:center;border:1px solid var(--card-border);
+           font-size:.78rem;}
+.matrix td.pass{background:rgba(74,222,128,.09);color:#4ade80;font-weight:700;}
+.matrix td.fail{background:rgba(248,113,113,.09);color:#f87171;font-weight:700;}
+.matrix td.na  {background:var(--bg2);color:var(--muted);}
+.matrix td.rh  {font-weight:700;text-align:left;background:var(--bg2);color:var(--text);
+                font-size:.76rem;}
+
+/* ── Key pair ─────────────────────────────────────────── */
+.key-pair{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;}
+@media(max-width:480px){.key-pair{grid-template-columns:1fr;}}
+.key-box{border-radius:8px;padding:.7rem .85rem;font-size:.78rem;}
+.key-box.priv{background:rgba(248,113,113,.07);border:1.5px solid rgba(248,113,113,.35);}
+.key-box.pub {background:rgba(52,211,153,.06);border:1.5px solid rgba(52,211,153,.3);}
+.key-lbl{font-size:.6rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.35rem;}
+.key-box.priv .key-lbl{color:#f87171;} .key-box.pub .key-lbl{color:#4ade80;}
+.key-val{font-family:'Courier New',monospace;color:var(--muted);font-size:.71rem;word-break:break-all;line-height:1.5;}
+
+/* ── DNS lookup display ───────────────────────────────── */
+.dns-lookup{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;
+            margin-bottom:.5rem;font-size:.76rem;}
+.dns-q{background:rgba(129,140,248,.1);border:1px solid var(--accent);
+       border-radius:5px;padding:.18rem .5rem;color:var(--accent);}
+.dns-arr{color:var(--muted);}
+.dns-a{background:rgba(52,211,153,.09);border:1px solid var(--accent2);
+       border-radius:5px;padding:.18rem .5rem;color:var(--accent2);}
+
+/* ── Attack boxes ─────────────────────────────────────── */
+.atk{border-radius:10px;padding:.8rem 1rem;margin-bottom:.7rem;border:1.5px solid;}
+.atk.bad{border-color:#f87171;background:rgba(248,113,113,.06);}
+.atk.good{border-color:#4ade80;background:rgba(74,222,128,.06);}
+.atk.warn{border-color:#fbbf24;background:rgba(251,191,36,.06);}
+.atk-lbl{font-size:.63rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem;}
+.atk.bad .atk-lbl{color:#f87171;} .atk.good .atk-lbl{color:#4ade80;} .atk.warn .atk-lbl{color:#fbbf24;}
+.atk-body{font-size:.8rem;line-height:1.65;}
+.atk-body code{color:var(--accent2);font-size:.78rem;}
+.astep{display:flex;align-items:flex-start;gap:.45rem;margin:.3rem 0;font-size:.79rem;}
+.anum{width:17px;height:17px;border-radius:50%;background:rgba(248,113,113,.18);color:#f87171;
+      font-size:.62rem;font-weight:900;display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;margin-top:.12rem;}
+.typo{color:#f87171;font-weight:900;text-decoration:underline wavy #f87171;}
+.good-txt{color:#4ade80;font-weight:900;}
+
+/* ── Narrative ────────────────────────────────────────── */
+.narr{border-left:2px solid var(--accent);
+      background:linear-gradient(90deg,rgba(129,140,248,.08) 0%,transparent 65%);
+      border-radius:0 8px 8px 0;padding:.7rem .95rem;
+      font-size:.85rem;line-height:1.65;margin-bottom:.75rem;}
+.narr strong{color:var(--accent);}
+.narr code{color:var(--accent2);font-size:.82rem;}
+.narr .g{color:#4ade80;font-weight:700;} .narr .r{color:#f87171;font-weight:700;}
+.narr .y{color:#fbbf24;font-weight:700;}
+
+/* ── Quiz ─────────────────────────────────────────────── */
+.quiz-card{background:var(--card);border:1.5px solid var(--accent);border-radius:10px;
+           padding:.85rem 1rem;margin-bottom:.75rem;box-shadow:0 0 12px var(--glow);}
+.quiz-q{font-size:.85rem;font-weight:700;color:var(--accent);margin-bottom:.65rem;}
+.quiz-opts{display:flex;flex-direction:column;gap:.4rem;}
+.q-opt{background:var(--bg2);border:1.5px solid var(--card-border);border-radius:7px;
+       padding:.5rem .8rem;font-family:'Courier New',monospace;font-size:.8rem;
+       color:var(--text);cursor:pointer;text-align:left;
+       transition:border-color .12s,background .12s;}
+.q-opt:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.q-opt.q-correct{border-color:#4ade80;background:rgba(74,222,128,.1);color:#4ade80;cursor:default;}
+.q-opt.q-wrong  {border-color:#f87171;background:rgba(248,113,113,.08);color:#f87171;cursor:default;}
+.q-opt.q-dim    {opacity:.35;cursor:default;}
+.q-explain{margin-top:.6rem;font-size:.78rem;color:var(--subtle);line-height:1.55;
+           border-left:2px solid #4ade80;padding-left:.65rem;display:none;}
+.q-explain.show{display:block;}
+
+/* ── Nav ──────────────────────────────────────────────── */
+.nav-row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
+.btn-nav{padding:.5rem 1.1rem;border-radius:7px;font-family:'Courier New',monospace;
+         font-size:.82rem;font-weight:700;cursor:pointer;
+         border:1.5px solid var(--card-border);background:var(--card);color:var(--subtle);
+         transition:border-color .15s,color .15s;}
+.btn-nav:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.btn-nav.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-nav.primary:hover:not(:disabled){opacity:.85;}
+.btn-nav:disabled{opacity:.28;cursor:default;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back-link" href="../index.html#learn">&#8592; Back to Interactive Learning</a>
+  <h1>&#128231; Email Security: SPF, DKIM &amp; DMARC</h1>
+  <p class="sub">How email authentication works — and what attackers look for when it breaks.</p>
+
+  <div class="sect-tabs" id="sect-tabs"></div>
+
+  <div class="step-meta">
+    <span class="step-counter" id="step-counter">Step 1 / 1</span>
+    <span class="step-title-lbl" id="step-title"></span>
+    <div class="pips" id="pips"></div>
+  </div>
+
+  <div id="main-display"></div>
+  <div class="narr" id="narr"></div>
+  <div id="quiz-area"></div>
+
+  <div class="nav-row">
+    <button class="btn-nav" id="btn-prev">&#8592; Prev</button>
+    <button class="btn-nav primary" id="btn-next">Next &#8594;</button>
+  </div>
+</div>
+
+<script>
+/* ── Quiz state ─────────────────────────────────────────── */
+var quizAnswered = {};
+
+function renderQuiz(q, key) {
+  if (!q) return '';
+  var ans = quizAnswered[key];
+  var html = '<div class="quiz-card"><div class="quiz-q">&#10067; ' + q.q + '</div><div class="quiz-opts" id="qo-' + key + '">';
+  q.opts.forEach(function(opt, i) {
+    var cls = 'q-opt';
+    if (ans !== undefined) {
+      if (i === q.correct) cls += ' q-correct';
+      else if (i === ans) cls += ' q-wrong';
+      else cls += ' q-dim';
+    }
+    html += '<button class="' + cls + '"' + (ans !== undefined ? ' disabled' : '') +
+      ' onclick="answerQuiz(\'' + key + '\',' + i + ')">' + opt + '</button>';
+  });
+  html += '</div>';
+  if (ans !== undefined) html += '<div class="q-explain show">' + q.explain + '</div>';
+  html += '</div>';
+  return html;
+}
+
+function answerQuiz(key, i) {
+  quizAnswered[key] = i;
+  renderAll();
+}
+
+/* ── Tiny helpers ───────────────────────────────────────── */
+function panel(lbl, inner) {
+  return '<div class="panel"><div class="panel-lbl">' + lbl + '</div>' + inner + '</div>';
+}
+function tok(cls, key, val, desc) {
+  return '<div class="tok-row tok-' + cls + '"><span class="tok-key">' + key +
+    '</span><span class="tok-val">' + val + '</span><span class="tok-desc">' + desc + '</span></div>';
+}
+function atk(cls, lbl, body) {
+  return '<div class="atk ' + cls + '"><div class="atk-lbl">' + lbl + '</div><div class="atk-body">' + body + '</div></div>';
+}
+function chk(cls, txt) {
+  return '<div class="chk ' + cls + '">' + txt + '</div>';
+}
+function fnode(icon, label, boxCls, note) {
+  return '<div class="flow-node">' +
+    (icon ? '<div class="flow-icon">' + icon + '</div>' : '') +
+    '<div class="flow-box' + (boxCls ? ' ' + boxCls : '') + '">' + label + '</div>' +
+    (note ? '<div class="flow-lbl">' + note + '</div>' : '') +
+    '</div>';
+}
+function farr(hl) { return '<div class="flow-arr' + (hl ? ' hl' : '') + '">&#8594;</div>'; }
+function astep(n, html) {
+  return '<div class="astep"><div class="anum">' + n + '</div><div>' + html + '</div></div>';
+}
+
+/* ── Section / step data ────────────────────────────────── */
+var SECTIONS = [
+
+/* ════════════════════════════════════════════════════════
+   0 · MX RECORDS
+   ════════════════════════════════════════════════════════ */
+{
+  label: '1 · MX',
+  steps: [
+    {
+      title: 'MX Records: routing email to the right server',
+      display: function() {
+        return panel('DNS MX lookup — "Who receives mail for example.com?"',
+          '<div class="flow" style="gap:.25rem;">' +
+            fnode('&#128140;', 'alice<br>@company.com', 'hl', 'Sender') +
+            farr(true) +
+            fnode('&#127968;', 'company.com<br><small>SMTP / MTA</small>', '') +
+            farr() +
+            '<div class="flow-node"><div style="font-size:.67rem;color:var(--muted);text-align:center;margin-bottom:.22rem;">DNS query:<br><code style="color:var(--accent);">MX example.com</code></div>' +
+            '<div class="flow-box warn">&#127760; DNS</div></div>' +
+            farr() +
+            fnode('&#127968;', 'mail.example.com<br><small>:25 SMTP</small>', 'hl2', 'Highest-priority MX') +
+            farr(true) +
+            fnode('&#128235;', 'bob<br>@example.com', 'hl', 'Delivered') +
+          '</div>') +
+        panel('DNS response — priority-ordered list of mail servers',
+          '<div class="tokens">' +
+            tok('a','example.com.','MX 10  mail.example.com.','Primary — lower number = higher priority, tried first') +
+            tok('r','example.com.','MX 20  backup.example.com.','Fallback — only used if priority 10 is unreachable') +
+          '</div>');
+      },
+      narr: 'Before Alice\'s server can deliver to <strong>bob@example.com</strong> it asks DNS: "What mail servers accept mail for this domain?" DNS returns <strong>MX (Mail eXchanger) records</strong> — a priority-ordered list of hostnames. Lower number = higher priority. The sender tries the highest-priority host first; if it\'s down, it tries the next. This is why you typically see two or three MX entries: pure <strong>redundancy</strong>, not load balancing.',
+      quiz: null
+    },
+    {
+      title: 'MX routes mail — it does not authenticate it',
+      display: function() {
+        return panel('Any server on the internet can knock on your MX port',
+          '<div class="flow" style="gap:.25rem;flex-wrap:wrap;">' +
+            fnode('&#128373;', 'attacker<br>server', 'danger', 'Any random IP') +
+            farr() +
+            '<div class="flow-node">' +
+              '<div class="flow-box hl" style="text-align:left;padding:.5rem .8rem;">' +
+                '<strong>mail.example.com:25</strong><br>' +
+                '<small style="font-weight:400;">HELO attacker.net<br>MAIL FROM: &lt;ceo@example.com&gt;<br>RCPT TO: &lt;bob@example.com&gt;</small>' +
+              '</div>' +
+            '</div>' +
+            farr() +
+            fnode('&#128235;', 'Bob\'s inbox?', 'warn', 'Spoofed sender<br>delivered?') +
+          '</div>') +
+        '<div class="two-col">' +
+          atk('bad', '&#9888; The gap', 'MX records tell any sender where to connect. They say nothing about whether the sender is who they claim to be. Anyone can send <code>MAIL FROM: &lt;ceo@yourdomain.com&gt;</code> — MX routing will accept the connection.') +
+          atk('good', '&#10003; The fix (next 3 sections)', 'SPF, DKIM, and DMARC are the three authentication layers bolted on top of the MX routing system. Together they answer: "Is this sender actually authorised to use this From: address?"') +
+        '</div>';
+      },
+      narr: 'MX solves a routing problem, not a security problem. <strong>The SMTP protocol has no built-in sender verification.</strong> Any host can connect to your mail server and claim any From: address. This is why email spoofing has been trivially easy since the 1970s. SPF, DKIM, and DMARC are the retrofit authentication stack that addresses this — each layer closes a different gap.',
+      quiz: null
+    }
+  ]
+},
+
+/* ════════════════════════════════════════════════════════
+   1 · SPF
+   ════════════════════════════════════════════════════════ */
+{
+  label: '2 · SPF',
+  steps: [
+    {
+      title: 'SPF: a DNS allowlist of authorised sending IPs',
+      display: function() {
+        return panel('DNS TXT record published at: example.com',
+          '<div class="record-raw">v=spf1  ip4:203.0.113.0/24  include:_spf.google.com  -all</div>' +
+          '<div class="tokens">' +
+            tok('v','v=spf1','','Version — must be first; identifies this as an SPF record') +
+            tok('a','ip4:','203.0.113.0/24','This /24 block of IP addresses is authorised to send mail as example.com') +
+            tok('a','include:','_spf.google.com','Fetch Google\'s SPF and add all their IPs too (used when you send via Google Workspace)') +
+            tok('x','-all','','<strong>Hard fail</strong> — any IP not matched by the above mechanisms must be rejected') +
+          '</div>') +
+        panel('How the check runs at the receiving server',
+          '<div class="flow" style="gap:.25rem;flex-wrap:wrap;">' +
+            fnode('&#127968;', 'phishing server<br><small>IP: 1.2.3.4</small>', 'danger') +
+            farr() +
+            '<div class="flow-node">' +
+              '<div class="flow-box hl">' +
+                'mail.example.com<br><small>looks up SPF for<br>example.com</small>' +
+              '</div>' +
+            '</div>' +
+            farr() +
+            '<div class="flow-node">' +
+              '<div class="flow-box danger">SPF: FAIL<br><small>1.2.3.4 not listed</small></div>' +
+              '<div class="flow-lbl">-all → reject</div>' +
+            '</div>' +
+          '</div>');
+      },
+      narr: 'SPF (Sender Policy Framework) is a <strong>DNS TXT record at your domain</strong> listing every IP and service authorised to send email as you. When a receiving server gets an email claiming to be from <code>@example.com</code> it looks up this record and checks whether the connecting IP is on the list. Mechanisms are evaluated <strong>left to right — first match wins</strong>. The final <code>-all</code> acts as the catch-all: reject anything not explicitly authorised.',
+      quiz: null
+    },
+    {
+      title: 'The critical gap: MAIL FROM vs From: header',
+      display: function() {
+        return panel('Every email carries two distinct sender fields',
+          '<div class="env-rows">' +
+            '<div class="env-row smtp"><span class="env-badge smtp">SMTP<br>envelope</span>' +
+              '<div><div class="env-val">MAIL FROM: &lt;bounce@sendgrid.net&gt;</div>' +
+                '<div class="env-note">The technical return-path used for routing and bounces. <strong>This is what SPF checks.</strong> Recipients never see it.</div></div></div>' +
+            '<div class="env-row hdr"><span class="env-badge hdr">Email<br>header</span>' +
+              '<div><div class="env-val">From: "CEO" &lt;ceo@example.com&gt;</div>' +
+                '<div class="env-note">What the recipient reads in their email client. <strong>SPF never checks this field.</strong></div></div></div>' +
+          '</div>') +
+        '<div class="two-col">' +
+          atk('bad', '&#9888; SPF limitation', 'An attacker can route mail through their own server — so MAIL FROM passes SPF for <em>their</em> domain — while writing any <code>From:</code> header they like. SPF alone cannot stop this. It does not look at the header the user sees.') +
+          atk('good', '&#128200; DMARC alignment', 'DMARC closes this gap by requiring that the authenticated domain (SPF or DKIM) <em>matches</em> the From: header domain. Without DMARC on top, SPF is a routing guard, not a spoofing guard.') +
+        '</div>';
+      },
+      narr: 'This is the most important SPF concept to understand. There are two "from" addresses in every email: the <strong>SMTP envelope</strong> (MAIL FROM), used by servers for routing and bounces, and the <strong>From: header</strong> that your email client displays. SPF only checks the envelope. An attacker who controls any domain can pass SPF while spoofing any visible From: address. <em>DMARC alignment is the mechanism that finally ties authentication to what users see.</em>',
+      quiz: {
+        q: 'SPF record: <code>v=spf1 include:thirdparty.com ~all</code>. Attacker sends phishing email from an unlisted IP. What most likely happens?',
+        opts: [
+          'Email is rejected — SPF hard-fails it',
+          'Email is delivered — SoftFail (~all) is only advisory and most servers accept it',
+          'Email goes to spam automatically',
+          'The include: causes the check to be skipped'
+        ],
+        correct: 1,
+        explain: 'SoftFail (~all) tells receivers the sender is "probably not authorised" but most mail servers still accept the message, potentially adding a spam score point. Without DMARC p=reject or p=quarantine enforcing action on failures, ~all provides almost no protection.'
+      }
+    },
+    {
+      title: 'SPF qualifiers and the include: chain',
+      display: function() {
+        return panel('Qualifiers — what happens when a mechanism matches',
+          '<table class="tbl">' +
+            '<thead><tr><th>Symbol</th><th>Name</th><th>Result</th><th>Typical server action</th></tr></thead>' +
+            '<tbody>' +
+              '<tr><td class="g">+all</td><td>Pass</td><td>Authorised</td><td>Accept (default if no symbol shown)</td></tr>' +
+              '<tr><td class="d">?all</td><td>Neutral</td><td>No assertion</td><td>Accept — no recommendation</td></tr>' +
+              '<tr><td class="y">~all</td><td>SoftFail</td><td>Probably not authorised</td><td>Accept but may mark suspicious</td></tr>' +
+              '<tr><td class="r">-all</td><td>Fail</td><td>Definitively not authorised</td><td>Reject (enforced by DMARC)</td></tr>' +
+            '</tbody>' +
+          '</table>') +
+        panel('The include: chain is a supply-chain dependency',
+          '<div class="record-raw">v=spf1 include:mail.crm.io include:smtp.newsletter.net -all</div>' +
+          atk('warn', '&#9888; Dangling include attack',
+            astep(1, 'Your SPF includes <code>mail.crm.io</code> — a vendor you stopped using 2 years ago.') +
+            astep(2, 'The <code>crm.io</code> domain expires and becomes available for registration.') +
+            astep(3, 'Attacker registers <code>crm.io</code> and publishes any SPF they like, listing their own IPs.') +
+            astep(4, 'Your domain\'s SPF now authorises the attacker\'s IPs. They send mail as you — and pass SPF.')) +
+          atk('good', '&#10003; Audit your SPF chain', 'Run <code>whois</code> on every domain referenced in your SPF (including those referenced by your includes\' includes). Any expired or unrecognised domain is a hijack point. Remove <code>include:</code> entries for services you no longer use.'));
+      },
+      narr: 'The <code>include:</code> mechanism is a <strong>live, recursive DNS resolution</strong> at delivery time — if the included domain\'s SPF changes, your authorised sender set changes instantly, with no action on your part. Abandoned include targets are a real supply-chain risk: the moment that domain expires and is re-registered, its new owner is implicitly authorised to send as you. <strong>Audit every include target with whois regularly.</strong>',
+      quiz: null
+    }
+  ]
+},
+
+/* ════════════════════════════════════════════════════════
+   2 · DKIM
+   ════════════════════════════════════════════════════════ */
+{
+  label: '3 · DKIM',
+  steps: [
+    {
+      title: 'DKIM: a cryptographic signature that travels with the email',
+      display: function() {
+        return '<div class="key-pair">' +
+          '<div class="key-box priv"><div class="key-lbl">&#128274; Private key (on your mail server)</div>' +
+            '<div class="key-val">rsa_private_key.pem<br><br>Never published.<br>Signs each outgoing email.<br>Compromise = attacker can forge signed mail as you.</div></div>' +
+          '<div class="key-box pub"><div class="key-lbl">&#128275; Public key (in DNS)</div>' +
+            '<div class="dns-lookup"><span class="dns-q">mail._domainkey.example.com TXT</span><span class="dns-arr">&#8594;</span><span class="dns-a">v=DKIM1; k=rsa; p=MIGf…</span></div>' +
+            '<div class="key-val">World-readable.<br>Used by any receiver to verify the signature.<br>You can have multiple selectors (one per service).</div></div>' +
+        '</div>' +
+        panel('Signing and verification flow',
+          '<div class="flow" style="gap:.2rem;flex-wrap:wrap;">' +
+            fnode('&#128235;', 'Outgoing email<br><small>body + headers</small>', 'hl') +
+            farr(true) +
+            fnode('', 'Sign with<br>private key', 'danger', 'adds DKIM-Signature: header') +
+            farr() +
+            fnode('&#127968;', 'Receiver<br>gets email', 'hl2') +
+            farr(true) +
+            fnode('', 'Fetch public<br>key from DNS', 'ok', 'verify signature') +
+            farr() +
+            fnode('', 'Signature<br>valid?', 'ok', 'body + headers<br>not tampered') +
+          '</div>');
+      },
+      narr: 'DKIM uses <strong>asymmetric cryptography</strong>. Your mail server holds a private key and uses it to sign every outgoing email, producing a hash of the body and selected headers. The matching public key is published in DNS under a <em>selector</em> subdomain. Any receiver can fetch that public key and verify the signature — confirming the email genuinely came from a server controlling that private key and <strong>was not altered in transit</strong>.',
+      quiz: null
+    },
+    {
+      title: 'The DKIM-Signature header decoded',
+      display: function() {
+        return panel('Every DKIM-signed email carries this header',
+          '<div class="record-raw">DKIM-Signature: v=1; a=rsa-sha256; d=example.com; s=mail;\n  h=from:to:subject:date:message-id;\n  bh=2jmj7l5rSw0yVb/vlWAYkK/YBwk=;\n  b=ABC123…long_signature_here…</div>' +
+          '<div class="tokens">' +
+            tok('v','v=','1','DKIM version') +
+            tok('v','a=','rsa-sha256','Signing algorithm — RSA with SHA-256 hash') +
+            tok('p','d=','example.com','<strong>Signing domain</strong> — DMARC checks this against the From: header domain') +
+            tok('a','s=','mail','<strong>Selector</strong> — which key to look up: mail._domainkey.example.com') +
+            tok('a','h=','from:to:subject:date','Headers that were signed — tampering any of these invalidates the signature') +
+            tok('r','bh=','2jmj7l5r…','Hash of the email body — body tampering is detected here') +
+            tok('r','b=','ABC123…','The actual RSA cryptographic signature') +
+          '</div>');
+      },
+      narr: 'The <code>d=</code> (domain) and <code>s=</code> (selector) fields together form the DNS lookup: <code>mail._domainkey.example.com</code>. The selector is what allows you to have <strong>multiple active keys simultaneously</strong> — one for your own mail server, one for Mailchimp, one for Salesforce — so you can rotate or revoke individual keys without disrupting others. <strong>The <code>d=</code> value is the domain DMARC alignment checks against your From: header.</strong>',
+      quiz: null
+    },
+    {
+      title: 'DKIM alignment and why DKIM survives forwarding',
+      display: function() {
+        return '<div class="two-col">' +
+          '<div class="panel">' +
+            '<div class="panel-lbl" style="color:#4ade80;">&#10003; DKIM passes + aligned</div>' +
+            '<div class="env-rows">' +
+              '<div class="env-row smtp"><span class="env-badge smtp">DKIM</span><div><div class="env-val">d=<strong>example.com</strong></div><div class="env-note">Signing domain</div></div></div>' +
+              '<div class="env-row hdr"><span class="env-badge hdr">From:</span><div><div class="env-val">alice@<strong>example.com</strong></div><div class="env-note">From header</div></div></div>' +
+            '</div>' +
+            chk('pass','&#10003; Domains match — DMARC alignment: PASS') +
+          '</div>' +
+          '<div class="panel">' +
+            '<div class="panel-lbl" style="color:#f87171;">&#10007; Attacker attempt</div>' +
+            '<div class="env-rows">' +
+              '<div class="env-row smtp"><span class="env-badge smtp">DKIM</span><div><div class="env-val">d=<strong>attacker.com</strong></div><div class="env-note">Signed with attacker\'s key</div></div></div>' +
+              '<div class="env-row hdr"><span class="env-badge hdr">From:</span><div><div class="env-val">ceo@<strong>example.com</strong></div><div class="env-note">Spoofed From header</div></div></div>' +
+            '</div>' +
+            chk('fail','&#10007; Domains differ — DMARC alignment: FAIL') +
+          '</div>' +
+        '</div>' +
+        panel('Why DKIM survives forwarding (SPF does not)',
+          '<div class="flow" style="gap:.2rem;flex-wrap:wrap;">' +
+            fnode('&#128235;', 'Original email<br>DKIM-signed', 'hl') +
+            farr() +
+            fnode('&#127968;', 'Mailing list<br>forwarder', 'warn', 'New IP — SPF breaks<br>DKIM sig intact') +
+            farr() +
+            fnode('&#128235;', 'Forwarded<br>email', 'hl2', 'DKIM still passes<br>body unchanged') +
+          '</div>');
+      },
+      narr: '<strong>Alignment</strong> is what makes DKIM useful against spoofing. The <code>d=</code> signing domain must match (or be a subdomain of) the From: header domain — DMARC enforces this. An attacker\'s own valid DKIM signature is worthless if it\'s signed with <code>d=attacker.com</code> while the From: says <code>example.com</code>. DKIM\'s crucial advantage over SPF: <strong>the signature travels with the message</strong>, surviving forwarding through mailing lists where SPF always fails (the forwarding IP is never in the original SPF).',
+      quiz: null
+    }
+  ]
+},
+
+/* ════════════════════════════════════════════════════════
+   3 · DMARC
+   ════════════════════════════════════════════════════════ */
+{
+  label: '4 · DMARC',
+  steps: [
+    {
+      title: 'DMARC: the policy that binds SPF + DKIM to From:',
+      display: function() {
+        return panel('DMARC decision matrix — passes if at least one check is aligned',
+          '<table class="matrix">' +
+            '<thead><tr>' +
+              '<th style="text-align:left;">Scenario</th>' +
+              '<th>SPF pass + aligned?</th>' +
+              '<th>DKIM pass + aligned?</th>' +
+              '<th>DMARC result</th>' +
+            '</tr></thead>' +
+            '<tbody>' +
+              '<tr><td class="rh">Your own mail server</td><td class="pass">&#10003; PASS</td><td class="pass">&#10003; PASS</td><td class="pass">&#10003; PASS</td></tr>' +
+              '<tr><td class="rh">Authorised vendor (e.g. Mailchimp with DKIM set up)</td><td class="na">&#8212; not aligned</td><td class="pass">&#10003; PASS</td><td class="pass">&#10003; PASS</td></tr>' +
+              '<tr><td class="rh">Forwarded via mailing list</td><td class="fail">&#10007; FAIL</td><td class="pass">&#10003; PASS</td><td class="pass">&#10003; PASS</td></tr>' +
+              '<tr><td class="rh">Spoofed email (attacker)</td><td class="fail">&#10007; FAIL</td><td class="fail">&#10007; FAIL</td><td class="fail">&#10007; FAIL &#8594; p= enforced</td></tr>' +
+            '</tbody>' +
+          '</table>') +
+        panel('DMARC lives in DNS at _dmarc.example.com',
+          '<div class="record-raw">_dmarc.example.com. TXT "v=DMARC1; p=reject; pct=100; fo=1;\n  rua=mailto:dmarc@example.com; ruf=mailto:forensic@example.com"</div>');
+      },
+      narr: 'DMARC asks one question: <strong>does at least one of SPF or DKIM pass AND have its domain aligned with the From: header?</strong> If yes, DMARC passes. If both fail (or fail alignment), the <code>p=</code> policy fires. This alignment requirement is what closes the gap SPF alone leaves open — it ensures authentication is tied to the domain the recipient actually reads.',
+      quiz: null
+    },
+    {
+      title: 'DMARC record anatomy',
+      display: function() {
+        return panel('v=DMARC1; p=reject; pct=100; fo=1; rua=…; ruf=…',
+          '<div class="tokens">' +
+            tok('v','v=','DMARC1','Version — must be exactly this string') +
+            tok('p','p=','reject','<strong>Policy:</strong> <code>none</code> = monitor only &nbsp;|&nbsp; <code>quarantine</code> = spam folder &nbsp;|&nbsp; <code>reject</code> = block') +
+            tok('a','pct=','100','% of failing mail the policy applies to. Lower values let you roll out gradually (e.g. pct=10 first).') +
+            tok('a','fo=','1','Forensic report trigger: <code>0</code>=any fail, <code>1</code>=any policy failure (most common), <code>d</code>=DKIM fail, <code>s</code>=SPF fail') +
+            tok('r','rua=','mailto:…','<strong>Aggregate report</strong> recipients — daily XML of all traffic. <em>Audit every domain here!</em>') +
+            tok('r','ruf=','mailto:…','<strong>Forensic report</strong> recipients — per-email failure reports. Can expose headers, subjects, sender infrastructure.') +
+            tok('a','sp=','(optional)','Subdomain policy — if absent, subdomains inherit <code>p=</code>. Set explicitly to prevent subdomain spoofing bypass.') +
+            tok('a','adkim=','r','DKIM alignment: <code>r</code>=relaxed (subdomains OK) | <code>s</code>=strict (exact match)') +
+            tok('a','aspf=','r','SPF alignment: <code>r</code>=relaxed | <code>s</code>=strict') +
+          '</div>');
+      },
+      narr: '<code>p=</code> is the most critical tag. Organisations typically start at <code>p=none</code> to collect data without affecting delivery, watch RUA reports for a few weeks to discover all sending sources, then graduate to <code>p=quarantine</code> and <code>p=reject</code>. The <strong><code>rua=</code> and <code>ruf=</code> destinations are where your email telemetry flows — these must point to domains you actually control</strong>. Any typo here is a data-leakage vector.',
+      quiz: {
+        q: 'DMARC record: <code>p=none; fo=1; ruf=mailto:sec@<span style="color:#f87171">securtiy</span>.com</code> (note "securtiy" — transposed i/t). An attacker registers securtiy.com. What do they get?',
+        opts: [
+          'Nothing — DMARC only sends to authorised domains',
+          'A copy of your DMARC policy record',
+          'Per-email forensic reports on every auth failure, including email headers, subjects, and sending infrastructure details',
+          'Your SPF record only'
+        ],
+        correct: 2,
+        explain: 'Forensic reports (ruf) with fo=1 are generated on any policy failure. They include the From: address, sending IP, subject line (in many implementations), and headers — enough to map your sending infrastructure and discover internal tooling. The attacker self-authorises by publishing yourdomain.com._report._dmarc.securtiy.com TXT "v=DMARC1".'
+      }
+    },
+    {
+      title: 'Aggregate reports: your full email traffic map',
+      display: function() {
+        return panel('What RUA (aggregate) reports contain — sent daily as XML',
+          '<table class="tbl">' +
+            '<thead><tr><th>Field</th><th>Example value</th><th>What it reveals to you</th></tr></thead>' +
+            '<tbody>' +
+              '<tr><td>source_ip</td><td style="color:var(--accent2)">198.41.128.47</td><td>Every IP sending mail claiming to be your domain</td></tr>' +
+              '<tr><td>count</td><td style="color:var(--accent2)">2,847</td><td>Volume from that source this reporting period</td></tr>' +
+              '<tr><td>spf result</td><td class="g">pass</td><td>Did SPF pass for this source?</td></tr>' +
+              '<tr><td>dkim result</td><td class="r">fail</td><td>Did DKIM pass? A fail here = unconfigured vendor or spoofing attempt</td></tr>' +
+              '<tr><td>dmarc result</td><td class="r">fail</td><td>Final DMARC verdict — fail = policy would/does apply</td></tr>' +
+              '<tr><td>header_from</td><td style="color:var(--accent2)">example.com</td><td>The From: domain being reported on</td></tr>' +
+            '</tbody>' +
+          '</table>') +
+        '<div class="two-col">' +
+          atk('good', '&#128202; Discovery value', 'Before enforcing p=reject you must get every legitimate sending source to DMARC-pass. RUA reports reveal all of them: your own servers, Salesforce, Mailchimp, Zendesk, your legacy on-prem relay — and whether each has SPF/DKIM configured. Most organisations discover 10–20 unknown senders in their first week.') +
+          atk('bad', '&#9888; If rua leaks…', 'An attacker receiving your RUA data gets a complete map of your sending infrastructure: which IPs, which vendors, traffic volumes, and which services currently fail authentication — all without touching your network or sending a single email.') +
+        '</div>';
+      },
+      narr: 'Aggregate reports are the most operationally valuable part of DMARC. Every domain receiving mail that claims to be from you sends a <strong>daily XML report to your rua address</strong>. This is how you inventory all your sending sources before enforcement. Parse them with a service like DMARC Analyzer, Postmark, or the open-source <code>parsedmarc</code>. Audit the rua/ruf destination domains regularly — any unregistered or typo\'d domain is a leakage risk.',
+      quiz: null
+    },
+    {
+      title: 'External Destination Validation (EDV)',
+      display: function() {
+        return panel('When rua/ruf point to a different organizational domain',
+          '<div class="flow" style="gap:.25rem;flex-wrap:wrap;margin-bottom:.75rem;">' +
+            '<div class="flow-node"><div class="flow-box hl" style="font-size:.7rem;max-width:150px;text-align:left;padding:.5rem .7rem;">' +
+              '_dmarc.example.com<br><small style="font-weight:400;">rua=mailto:r@reports.net</small>' +
+            '</div></div>' +
+            farr() +
+            '<div class="flow-node">' +
+              '<div class="flow-box warn">reports.net<br><small>external domain!</small></div>' +
+              '<div class="flow-lbl">Must consent to receive</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="tokens">' +
+            tok('a','Consent record required:','','The destination domain must publish an authorization record') +
+            tok('r','example.com._report._dmarc.reports.net','TXT "v=DMARC1"','reports.net grants permission to receive example.com\'s DMARC reports') +
+          '</div>') +
+        atk('bad', '&#128373; Typosquatting attack — the full chain',
+          astep(1, 'Your DMARC record has <code>ruf=mailto:sec@<span class="typo">securtiy</span>.com</code> (i/t transposed vs <span class="good-txt">security</span>.com).') +
+          astep(2, 'Attacker registers <code><span class="typo">securtiy</span>.com</code> for ~$10 and sets up a catch-all mailbox.') +
+          astep(3, 'Attacker publishes <code>example.com._report._dmarc.<span class="typo">securtiy</span>.com TXT "v=DMARC1"</code> — self-authorising.') +
+          astep(4, 'Spec-compliant receivers now see EDV passes. Every authentication failure generates a forensic report to the attacker: headers, subjects, sender IPs.') +
+          astep(5, '<strong>Audit:</strong> <code>dig +short TXT _dmarc.yourdomain.com | grep -oE \'mailto:[^;,"]+\' | sed \'s/.*@//\'</code> → <code>whois</code> every domain printed.'));
+      },
+      narr: 'RFC 7489 requires destination-domain consent for cross-domain report delivery. But <strong>the check only confirms the DNS record exists — it cannot verify who registered the destination domain</strong>. An attacker who registers the typo\'d domain and publishes their own consent record will see the EDV check pass, green across the board. The spec solves accidental report flooding; it does not protect against deliberate registration of typo\'d destinations. <em>There is no automated substitute for manually auditing every rua/ruf domain with whois.</em>',
+      quiz: null
+    }
+  ]
+},
+
+/* ════════════════════════════════════════════════════════
+   4 · ATTACKS
+   ════════════════════════════════════════════════════════ */
+{
+  label: '5 · Attacks',
+  steps: [
+    {
+      title: 'Attack: From: spoofing with p=none',
+      display: function() {
+        return atk('bad', '&#128373; Phishing via direct From: spoofing',
+          astep(1, 'Target: <code>bigbank.com</code> has DMARC <code>p=none</code> (monitoring mode — never graduated to enforcement).') +
+          astep(2, 'Attacker configures their own SMTP server with <code>From: "Security Team" &lt;alerts@bigbank.com&gt;</code>.') +
+          astep(3, 'DMARC check fires and fails alignment — attacker\'s domain ≠ bigbank.com. But <code>p=none</code> means: <em>take no action, just log it.</em>') +
+          astep(4, 'Email lands in every recipient\'s inbox. The From: header reads bigbank.com. Customers click the phishing link.')) +
+        panel('p= values under an active spoofing attack',
+          '<div style="display:flex;flex-direction:column;gap:.4rem;">' +
+            chk('none','p=none — email delivered normally; report sent to rua') +
+            chk('soft','p=quarantine — email moved to spam folder') +
+            chk('pass','p=reject — email rejected at SMTP; never reaches inbox') +
+          '</div>') +
+        atk('good', '&#10003; How to fix it',
+          '<strong>1.</strong> Deploy DMARC with <code>p=none; pct=100</code> and collect RUA for 2–4 weeks.<br>' +
+          '<strong>2.</strong> Identify all legitimate sending sources and get each to pass SPF or DKIM alignment.<br>' +
+          '<strong>3.</strong> Move to <code>p=quarantine; pct=10</code>, monitor, expand to <code>pct=100</code>.<br>' +
+          '<strong>4.</strong> Move to <code>p=reject; pct=100</code>. Full protection.');
+      },
+      narr: '<code>p=none</code> is a <strong>monitoring mode</strong>, not a protection mode. It generates reports but takes zero enforcement action on failed mail. From an attacker\'s perspective <code>p=none</code> is functionally identical to having no DMARC. The most common failure mode: an organisation deploys DMARC for monitoring, discovers a handful of unknown senders that are tricky to configure, and never completes the migration to enforcement — <em>leaving the spoofing gap permanently open</em>.',
+      quiz: null
+    },
+    {
+      title: 'Attack surface summary — what attackers enumerate',
+      display: function() {
+        return panel('Attacker\'s email security checklist',
+          '<table class="tbl">' +
+            '<thead><tr><th>What to check</th><th>Red flag</th><th>Risk</th></tr></thead>' +
+            '<tbody>' +
+              '<tr><td>DMARC policy</td><td>p=none or record missing</td><td class="r">From: spoofing → phishing / BEC</td></tr>' +
+              '<tr><td>DMARC rua/ruf domains</td><td>Typo\'d or unregistered destinations</td><td class="y">Email intelligence leak (aggregate + forensic reports)</td></tr>' +
+              '<tr><td>SPF qualifier</td><td>~all or ?all instead of -all</td><td class="y">SoftFail bypass — failures accepted</td></tr>' +
+              '<tr><td>SPF include: targets</td><td>Expired / unregistered included domain</td><td class="r">Attacker inherits SPF authorisation for your domain</td></tr>' +
+              '<tr><td>Subdomain policy</td><td>sp= absent when p=none</td><td class="y">Subdomains spoofable (e.g. payroll.example.com)</td></tr>' +
+              '<tr><td>pct= value</td><td>pct &lt; 100 with p=reject</td><td class="d">Policy bypassed for that percentage of mail</td></tr>' +
+              '<tr><td>Stale DKIM selectors</td><td>Old selectors still in DNS for revoked keys</td><td class="d">Key confusion; old compromised key still "valid"</td></tr>' +
+            '</tbody>' +
+          '</table>') +
+        panel('Quick DNS audit (run these for any domain)',
+          '<div class="record-raw"># DMARC record\ndig +short TXT _dmarc.example.com\n\n# SPF record\ndig +short TXT example.com\n\n# Extract rua/ruf destination domains\ndig +short TXT _dmarc.example.com \\\n  | grep -oE \'mailto:[^;,"]+\' | sed \'s/.*@//\'\n# → whois each domain that appears\n\n# DKIM key (replace \'mail\' with actual selector)\ndig +short TXT mail._domainkey.example.com</div>');
+      },
+      narr: 'The full email attack surface is broader than just spoofing. <strong>Report leakage</strong> (typo\'d rua/ruf) is passive intelligence gathering — the attacker collects your telemetry silently for months. <strong>Dangling SPF includes</strong> grant them authorised-sender status. <strong>Permanent p=none</strong> means zero enforcement regardless of SPF/DKIM quality. A few <code>dig</code> commands and a <code>whois</code> on each output domain is enough to find all of these in under five minutes.',
+      quiz: {
+        q: 'You run <code>dig +short TXT _dmarc.example.com</code> and get: <code>v=DMARC1; p=none; rua=mailto:dmarcreports@example.com</code>. As an attacker, what is the most immediately actionable finding?',
+        opts: [
+          'p=none — you can spoof From: example.com addresses directly and they will be delivered',
+          'The rua domain is on example.com so there is no typosquat opportunity',
+          'DMARC is absent so no further checks are needed',
+          'rua reports are encrypted so no data is exposed'
+        ],
+        correct: 0,
+        explain: 'p=none means the DMARC policy takes no enforcement action. Any email failing DMARC alignment is still delivered normally. An attacker can send convincing phishing emails with From: ceo@example.com and they will land in recipients\' inboxes. The rua points to example.com itself — no typosquat opportunity there, which is actually the correct/safe configuration for rua.'
+      }
+    }
+  ]
+}
+
+];
+
+/* ── Navigation state ───────────────────────────────────── */
+var curSect = 0;
+var curStep = 0;
+
+function renderAll() {
+  var sect = SECTIONS[curSect];
+  var step = sect.steps[curStep];
+  var key  = curSect + '_' + curStep;
+
+  /* tabs */
+  document.getElementById('sect-tabs').innerHTML = SECTIONS.map(function(s, i) {
+    var cls = 'sect-tab' + (i === curSect ? ' active' : '');
+    return '<button class="' + cls + '" onclick="goSect(' + i + ')">' + s.label + '</button>';
+  }).join('');
+
+  /* counter + title */
+  document.getElementById('step-counter').textContent =
+    'Step ' + (curStep + 1) + ' / ' + sect.steps.length;
+  document.getElementById('step-title').textContent = step.title;
+
+  /* pips */
+  document.getElementById('pips').innerHTML = sect.steps.map(function(_, i) {
+    var cls = 'pip' + (i < curStep ? ' done' : '') + (i === curStep ? ' active' : '');
+    return '<div class="' + cls + '" onclick="goStepDirect(' + i + ')"></div>';
+  }).join('');
+
+  /* main display */
+  document.getElementById('main-display').innerHTML = step.display();
+
+  /* narrative */
+  document.getElementById('narr').innerHTML = step.narr;
+
+  /* quiz */
+  document.getElementById('quiz-area').innerHTML = renderQuiz(step.quiz, key);
+
+  /* nav buttons */
+  document.getElementById('btn-prev').disabled = (curSect === 0 && curStep === 0);
+  var isLast = (curSect === SECTIONS.length - 1 && curStep === sect.steps.length - 1);
+  var btnNext = document.getElementById('btn-next');
+  btnNext.innerHTML = isLast ? '&#10003; Done' : 'Next &#8594;';
+  btnNext.disabled = false;
+
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function goSect(i) { curSect = i; curStep = 0; renderAll(); }
+function goStepDirect(i) { curStep = i; renderAll(); }
+
+document.getElementById('btn-next').addEventListener('click', function() {
+  var sect = SECTIONS[curSect];
+  if (curStep < sect.steps.length - 1) {
+    curStep++;
+  } else if (curSect < SECTIONS.length - 1) {
+    curSect++;
+    curStep = 0;
+  }
+  renderAll();
+});
+
+document.getElementById('btn-prev').addEventListener('click', function() {
+  if (curStep > 0) {
+    curStep--;
+  } else if (curSect > 0) {
+    curSect--;
+    curStep = SECTIONS[curSect].steps.length - 1;
+  }
+  renderAll();
+});
+
+renderAll();
+</script>
+<script src="../js/skin.js"></script>
+</body>
+</html>
