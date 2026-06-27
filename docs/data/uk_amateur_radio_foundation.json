@@ -1,0 +1,422 @@
+[
+  {
+    "question": "Which of the following is a level of UK amateur radio licence?",
+    "answers": ["Intermediate", "Technician", "General", "Beginner"],
+    "correct": "Intermediate",
+    "explanation": "The UK has three amateur radio licence levels: Foundation (entry level), Intermediate, and Full. 'Technician' and 'General' are US licence classes; 'Beginner' does not exist. Foundation is the starting point — it requires a 26-question exam and a practical assessment."
+  },
+  {
+    "question": "What callsign prefix do UK Foundation licensees receive?",
+    "answers": ["M7", "G0", "2E0", "M3"],
+    "correct": "M7",
+    "explanation": "UK Foundation licence holders receive callsigns starting with M7 (e.g. M7ABC). Intermediate licensees use 2E0 or 2E1, while Full licensees hold prefixes such as G0, M0, or G3. M3 was the old Foundation prefix, no longer issued."
+  },
+  {
+    "question": "How often must a UK amateur radio operator transmit their callsign?",
+    "answers": ["As frequently as is practicable", "Every five minutes without exception", "At the end of each individual over", "Every fifteen minutes on the clock"],
+    "correct": "As frequently as is practicable",
+    "explanation": "The UK licence requires operators to identify their station 'as frequently as is practicable'. This means at the start of operating, at the end, and at regular intervals during long contacts. The aim is that the station can always be identified — but there is no rigid five-minute rule."
+  },
+  {
+    "question": "Which of the following messages is NOT permitted under the UK amateur radio licence?",
+    "answers": ["A coded message intended to obscure its meaning", "A reply to a CQ call on an HF band", "Details of a club meeting passed to another amateur", "A message sent in Morse code (CW)"],
+    "correct": "A coded message intended to obscure its meaning",
+    "explanation": "The licence prohibits any code or abbreviation that obscures the meaning of a transmission rather than facilitating it. Ordinary operating shortcuts like Q codes are fine. Secret codes that hide the content of a message are not permitted. Morse code (CW) is fully allowed."
+  },
+  {
+    "question": "When MUST a UK Foundation licensee keep a written log of transmissions?",
+    "answers": ["When instructed to do so by an Ofcom official", "During all contacts made on HF bands", "Whenever a contest is being held on the same band", "At all times while the station is operational"],
+    "correct": "When instructed to do so by an Ofcom official",
+    "explanation": "There is no general requirement for Foundation licensees to keep a transmission log. However, if instructed by Ofcom (the regulator), you must do so. Keeping a log is considered good practice, but it is only mandatory when Ofcom specifically requires it."
+  },
+  {
+    "question": "After confirming your station meets EMF (Electromagnetic Field) requirements, what must you do?",
+    "answers": ["Keep a written record showing how the station is compliant", "Send a copy of your calculations to Ofcom immediately", "Enter the date of the compliance check in the station log", "Inform the RSGB and provide a copy of your results"],
+    "correct": "Keep a written record showing how the station is compliant",
+    "explanation": "Ofcom's licence conditions require you to assess your station's EMF levels and keep a written record demonstrating compliance. You do not need to send it to Ofcom unless asked, but you must be able to produce the record. Free online calculators are available to help with the assessment."
+  },
+  {
+    "question": "If you change your name or home address, who must you notify?",
+    "answers": ["Ofcom, who issue and maintain the amateur licence", "The RSGB, who administer the amateur exams", "The Post Office, to update your official records", "Your local amateur radio club committee"],
+    "correct": "Ofcom, who issue and maintain the amateur licence",
+    "explanation": "Ofcom issues the UK amateur radio licence and holds the official record of licence holders. If your name or address changes you are required to update your details with Ofcom, as your licence is linked to your name and station address."
+  },
+  {
+    "question": "An inspector arrives at your home to investigate a report of radio interference. Which organisation are they most likely to represent?",
+    "answers": ["Ofcom, the UK communications regulator", "The local authority planning department", "The Television Licensing authority", "The Radio Society of Great Britain"],
+    "correct": "Ofcom, the UK communications regulator",
+    "explanation": "Ofcom is the statutory regulator for UK radio communications. Ofcom engineers have powers to investigate interference, inspect stations, and take enforcement action. TV Licensing deals with the TV licence fee; the RSGB is a voluntary membership organisation."
+  },
+  {
+    "question": "What is the highest frequency band currently allocated to UK Foundation licensees?",
+    "answers": ["10,500 MHz (10.5 GHz)", "440 MHz (top of the 70 cm band)", "146 MHz (top of the 2 m band)", "5,800 MHz (top of the 5 GHz band)"],
+    "correct": "10,500 MHz (10.5 GHz)",
+    "explanation": "Following the 2024 Ofcom licence changes, Foundation licensees gained access to microwave bands including 2.4 GHz, 5 GHz, and up to 10.5 GHz (10,500 MHz). The 10 GHz (3 cm) band is the highest currently allocated to Foundation holders."
+  },
+  {
+    "question": "How often must tests for unwanted (spurious) emissions be carried out on a transmitter?",
+    "answers": ["From time to time during normal operation", "Before any new transmitter is used for the first time only", "Annually, at a fixed date each year", "Before each and every transmission period"],
+    "correct": "From time to time during normal operation",
+    "explanation": "The licence requires that tests for unwanted emissions are carried out 'from time to time'. This is a general obligation rather than a fixed schedule. It is good practice to check a transmitter when first acquired and periodically afterwards, especially if any adjustments or repairs are made."
+  },
+  {
+    "question": "What does an electrical cell (as used in a battery) store?",
+    "answers": ["Energy", "Current", "Voltage", "Resistance"],
+    "correct": "Energy",
+    "explanation": "A cell stores chemical energy and converts it to electrical energy when a circuit is connected. Current is the flow of charge (not stored), voltage is the potential difference, and resistance is a property of conductors. Batteries are made up of one or more cells in series."
+  },
+  {
+    "question": "In a resistor, what conversion of energy takes place?",
+    "answers": ["Electrical energy is converted to thermal energy (heat)", "Chemical energy is converted to electrical energy", "Thermal energy (heat) is converted to electrical energy", "Electrical energy is converted to chemical energy"],
+    "correct": "Electrical energy is converted to thermal energy (heat)",
+    "explanation": "When current flows through a resistor, the resistance opposes the flow and energy is dissipated as heat. This is why resistors and transmitter finals can get warm or hot during operation. The rate of heat dissipation is P = I²R watts."
+  },
+  {
+    "question": "Using Ohm's Law, a 12 V supply is connected across a 4 Ω resistor. What is the current?",
+    "answers": ["3 A", "8 A", "48 A", "0.3 A"],
+    "correct": "3 A",
+    "explanation": "Ohm's Law: V = I × R, so I = V ÷ R = 12 ÷ 4 = 3 A. Remember the triangle: cover what you want to find — V at the top, I and R at the bottom. Covering I gives V ÷ R."
+  },
+  {
+    "question": "A resistor draws 8 A from a 24 V supply. What is the resistance?",
+    "answers": ["3 Ω", "32 Ω", "192 Ω", "0.33 Ω"],
+    "correct": "3 Ω",
+    "explanation": "R = V ÷ I = 24 ÷ 8 = 3 Ω. This type of question appears regularly in the Foundation exam. A transmitter consuming 8 A from a 24 V supply draws 24 × 8 = 192 W of power."
+  },
+  {
+    "question": "An amateur transmitter draws 5 A from a 13.8 V supply. What is the power consumption?",
+    "answers": ["69 W", "18.8 W", "2.76 W", "138 W"],
+    "correct": "69 W",
+    "explanation": "P = I × V = 5 × 13.8 = 69 W. Most amateur radio transceivers run from 13.8 V supplies (nominal 12 V vehicle or station supply). The current draw varies with power output and operating mode."
+  },
+  {
+    "question": "What is the correct colour coding for a UK BS1363 three-pin mains plug?",
+    "answers": ["Brown = Live, Blue = Neutral, Green/Yellow = Earth", "Red = Live, Black = Neutral, Green = Earth", "Blue = Live, Brown = Neutral, Green/Yellow = Earth", "Brown = Live, Black = Neutral, Yellow = Earth"],
+    "correct": "Brown = Live, Blue = Neutral, Green/Yellow = Earth",
+    "explanation": "UK mains plugs use: Brown = Live (L), Blue = Neutral (N), Green and Yellow striped = Earth (E). The old UK colours (Red/Black/Green) were phased out in 2006 to harmonise with European standards. Confusing these colours can be lethal."
+  },
+  {
+    "question": "What distinguishes an analogue signal from a digital signal?",
+    "answers": ["An analogue signal continuously varies in amplitude or frequency", "An analogue signal exists only at fixed discrete voltage levels", "An analogue signal must be processed by computing software", "An analogue signal is always stored as binary data before use"],
+    "correct": "An analogue signal continuously varies in amplitude or frequency",
+    "explanation": "Analogue signals are continuously variable — they can take any value within a range. Digital signals are discrete — they exist only at defined levels (e.g. 0 or 1). A human voice waveform is analogue; the digital version would be a series of binary samples."
+  },
+  {
+    "question": "For a signal to be processed by computer software, it must first be in what form?",
+    "answers": ["Digital", "Analogue only", "Either analogue or digital", "A continuous frequency-modulated carrier"],
+    "correct": "Digital",
+    "explanation": "Software runs on processors that work with binary data (0s and 1s), so any signal must be converted to digital form before a computer can process it. This conversion is done by an ADC (Analogue-to-Digital Converter). Software-defined radio (SDR) works this way."
+  },
+  {
+    "question": "What does amplitude modulation (AM) produce?",
+    "answers": ["A full carrier and two sidebands", "One sideband with no carrier at all", "One sideband and a full carrier", "A carrier signal with no sidebands"],
+    "correct": "A full carrier and two sidebands",
+    "explanation": "AM creates a full-power carrier flanked by an upper sideband (USB) and a lower sideband (LSB), each containing the audio information. SSB (Single SideBand) removes the carrier and one sideband, transmitting only one sideband — making it more efficient."
+  },
+  {
+    "question": "What does a DAC do?",
+    "answers": ["Converts a digital signal into an analogue form", "Converts an analogue signal into digital form", "Converts direct current into alternating current", "Samples audio at a fixed rate and produces a digital code"],
+    "correct": "Converts a digital signal into an analogue form",
+    "explanation": "A DAC (Digital-to-Analogue Converter) turns a stream of digital values back into a continuously varying analogue signal — for example, converting digital audio data into a voltage waveform for a loudspeaker. The reverse device is an ADC (Analogue-to-Digital Converter)."
+  },
+  {
+    "question": "Why is SSB (Single Sideband) mode more efficient than AM?",
+    "answers": ["SSB transmits only one sideband with no carrier, wasting less power", "SSB uses a higher carrier frequency, reducing antenna losses", "SSB allows the transmitter output stage to run cooler", "SSB requires a simpler modulator circuit, reducing power losses"],
+    "correct": "SSB transmits only one sideband with no carrier, wasting less power",
+    "explanation": "In AM, the carrier itself carries no information yet uses a large proportion of the transmitted power. Both sidebands contain identical information, so one is redundant. SSB eliminates the carrier and one sideband, putting all the transmitter power into the useful sideband — roughly four times more efficient than AM for the same peak power."
+  },
+  {
+    "question": "What is demodulation in the context of a radio receiver?",
+    "answers": ["Extracting the information (audio) carried by a radio signal", "Removing unwanted signals that are close in frequency", "Tuning the receiver to the exact channel frequency", "Ensuring the transmitter and receiver are on the same frequency"],
+    "correct": "Extracting the information (audio) carried by a radio signal",
+    "explanation": "Demodulation is the process of recovering the original information (voice, data, etc.) from the radio-frequency carrier signal. Modulation puts the information onto the carrier at the transmitter; demodulation reverses this at the receiver."
+  },
+  {
+    "question": "What audio frequency range does the microphone amplifier in an analogue voice transmitter typically pass?",
+    "answers": ["300 Hz to 3,000 Hz", "20 Hz to 15,000 Hz", "50 Hz to 300 Hz", "3,000 Hz to 30,000 Hz"],
+    "correct": "300 Hz to 3,000 Hz",
+    "explanation": "The microphone amplifier in a voice transmitter deliberately limits audio to 300–3000 Hz. This range is sufficient for speech intelligibility and keeps the transmitted signal narrow — important for sharing the amateur bands. Wider audio would waste bandwidth and cause interference."
+  },
+  {
+    "question": "What stage in a basic transmitter determines the frequency of transmission?",
+    "answers": ["The oscillator stage", "The audio amplifier stage", "The RF power amplifier stage", "The modulator stage"],
+    "correct": "The oscillator stage",
+    "explanation": "The oscillator generates the basic carrier signal at the operating frequency. Modern transceivers use a synthesised oscillator (PLL) to provide accurate, stable, and variable frequency control. The other stages amplify and modulate this signal but do not set the frequency."
+  },
+  {
+    "question": "What can happen if a transmitter is operated into a poorly matched antenna?",
+    "answers": ["The transmitter's RF output stage can be damaged", "The transmitted signal will drift from the correct frequency", "The distant receiver will hear distorted audio only", "Standing waves will cause the antenna to burn out"],
+    "correct": "The transmitter's RF output stage can be damaged",
+    "explanation": "A poor impedance match causes power to be reflected back from the antenna into the transmitter. This reflected power can overheat and destroy the final amplifier transistors or valves in the output stage. Modern transceivers often have SWR protection that reduces power automatically."
+  },
+  {
+    "question": "In a basic radio receiver, what stage immediately follows the RF amplifier and tuner?",
+    "answers": ["The detector or demodulator stage", "The audio amplifier stage", "The loudspeaker or headphone output", "The antenna input to the receiver"],
+    "correct": "The detector or demodulator stage",
+    "explanation": "In a superhet or direct-conversion receiver, the signal path is: Antenna → RF amplifier/tuner → Mixer/IF stage → Detector/Demodulator → Audio amplifier → Speaker. The detector recovers the audio from the IF signal. The audio amplifier then boosts it to drive the speaker."
+  },
+  {
+    "question": "What does the abbreviation EIRP stand for?",
+    "answers": ["Effective Isotropic Radiated Power", "Equivalent Interference Reduction Protocol", "Effective Input RF Power", "Electromagnetic Interference Radiation Parameter"],
+    "correct": "Effective Isotropic Radiated Power",
+    "explanation": "EIRP is the power that an ideal isotropic antenna (one radiating equally in all directions) would need to produce the same signal level in the target direction. It is used to compare antenna systems. A directional antenna with gain effectively multiplies the transmitter power in one direction."
+  },
+  {
+    "question": "What is the main purpose of a balun?",
+    "answers": ["To connect a balanced antenna to an unbalanced coaxial feeder", "To replace a dummy load when no antenna is available", "To reduce high SWR in a badly matched coaxial feeder", "To act as an impedance-matching transformer at the transceiver"],
+    "correct": "To connect a balanced antenna to an unbalanced coaxial feeder",
+    "explanation": "A balun (BALanced to UNbalanced) is placed between a balanced antenna (like a dipole) and unbalanced coaxial cable. Without a balun, RF currents flow down the outside of the coax braid, causing it to radiate and potentially bringing RF interference into the shack."
+  },
+  {
+    "question": "A Yagi antenna has a power gain of 3 times. A transmitter feeds 20 W into it. What is the ERP?",
+    "answers": ["60 W", "23 W", "6.7 W", "17 W"],
+    "correct": "60 W",
+    "explanation": "ERP (Effective Radiated Power) = transmitter power × antenna gain = 20 × 3 = 60 W. Note that this gain is expressed as a numeric ratio (3 times), not in dBd. The Ofcom licence schedule specifies power limits in terms of ERP or EIRP on certain bands."
+  },
+  {
+    "question": "A band plan limits a frequency to 10 W ERP. If the transmitter produces 2.5 W and feeder loss is negligible, what is the maximum permitted antenna gain?",
+    "answers": ["4 times", "2 times", "3 times", "5 times"],
+    "correct": "4 times",
+    "explanation": "Maximum gain = ERP limit ÷ transmitter power = 10 ÷ 2.5 = 4 times. ERP is the product of transmitter power and antenna gain, so you cannot exceed the ERP limit by using a high-gain antenna if the power is already at the limit."
+  },
+  {
+    "question": "What should be used to allow a single wire antenna to operate effectively on multiple HF bands?",
+    "answers": ["An antenna tuning unit (ATU)", "A ferrite ring filter on the feeder cable", "A broadband quarter-wave matching section", "A balun at the antenna feed point"],
+    "correct": "An antenna tuning unit (ATU)",
+    "explanation": "An ATU (Antenna Tuning Unit, also called an antenna matching unit or transmatch) adjusts the impedance presented to the transmitter to a good match on each band, even though the antenna is not resonant on all of them. Without an ATU, the SWR would be high on most bands."
+  },
+  {
+    "question": "What happens to SWR when an antenna is disconnected from the feeder?",
+    "answers": ["It increases considerably to a very high value", "It decreases to a near-perfect 1:1 ratio", "It remains largely unchanged from before", "It increases only slightly above the normal value"],
+    "correct": "It increases considerably to a very high value",
+    "explanation": "Disconnecting the antenna creates an open circuit at the end of the feeder. An open circuit is the worst possible impedance mismatch, resulting in almost all power being reflected and SWR rising to a very high value. A short circuit at the same point has a similar effect."
+  },
+  {
+    "question": "How should the outer braid of a coaxial cable be connected inside a coaxial connector?",
+    "answers": ["Securely connected to the metallic body of the connector", "Left unconnected to prevent an accidental short circuit", "Connected to the centre conductor pin of the connector", "Carefully insulated so it does not contact the connector body"],
+    "correct": "Securely connected to the metallic body of the connector",
+    "explanation": "In a coaxial connector (PL-259, N-type, BNC, etc.) the outer braid must make a solid connection to the body/shell of the connector. The centre conductor connects to the pin. Poor braid connection is a very common cause of high SWR and intermittent faults."
+  },
+  {
+    "question": "What is a dummy load used for?",
+    "answers": ["Testing a transmitter without radiating a signal on air", "Improving the SWR of a mismatched antenna system", "Preventing RF currents from entering the mains supply", "Matching an unbalanced feeder to a balanced antenna"],
+    "correct": "Testing a transmitter without radiating a signal on air",
+    "explanation": "A dummy load is a non-inductive resistor (usually 50 Ω) that absorbs all transmitter power and converts it to heat, without radiating. This allows testing and adjustment of a transmitter without putting a signal on the air where it could cause interference."
+  },
+  {
+    "question": "What is the ionosphere?",
+    "answers": ["A region of ionised gas at heights of about 70 to 400 km above Earth", "A spherical reflecting layer surrounding the outer atmosphere", "A zone of radio-frequency interference above the weather layer", "A weather layer at 10 to 15 km altitude above the surface"],
+    "correct": "A region of ionised gas at heights of about 70 to 400 km above Earth",
+    "explanation": "The ionosphere consists of layers of gas (principally the D, E, and F layers) that are ionised by solar radiation. These ionised layers can refract HF radio waves back to Earth, enabling long-distance communication. The F2 layer, the highest, extends to about 400 km."
+  },
+  {
+    "question": "To approximately what height does the F2 layer of the ionosphere extend?",
+    "answers": ["400 km", "70 km", "7 km", "4 km"],
+    "correct": "400 km",
+    "explanation": "The F2 layer is the highest ionospheric layer, extending to roughly 400 km above Earth. It is the most important layer for long-distance HF propagation because it reflects signals over the greatest skip distances. During the day it exists alongside F1; at night F1 and F2 merge."
+  },
+  {
+    "question": "Why do VHF and UHF signals produce a 'radio shadow' behind hills, while HF signals can still be heard there?",
+    "answers": ["VHF/UHF travel in straight lines; HF is refracted by the ionosphere and diffracts around hills", "VHF/UHF travels faster so cannot follow the terrain the way HF can", "HF signals are generated at higher power and can penetrate solid obstructions", "VHF/UHF has shorter wavelengths so cannot bend around large obstacles"],
+    "correct": "VHF/UHF travel in straight lines; HF is refracted by the ionosphere and diffracts around hills",
+    "explanation": "At VHF and UHF, signals travel essentially line-of-sight and cannot get past terrain obstructions. HF signals at lower frequencies diffract around hills and are also refracted by the ionosphere, enabling them to follow the earth's curvature or return from above."
+  },
+  {
+    "question": "How far does a signal on 145.500 MHz normally travel under average conditions?",
+    "answers": ["Just beyond line of sight — typically 30 to 100 km", "Around the world via ionospheric propagation", "Nationwide across the UK on most days", "Only 1 to 5 km near urban centres"],
+    "correct": "Just beyond line of sight — typically 30 to 100 km",
+    "explanation": "VHF signals are broadly limited to line-of-sight distances, with some extension due to diffraction over the horizon. Range depends on antenna height above ground — a 2 m hand-held at ground level may reach only 5–10 km, while a hilltop antenna may reach 100 km or more."
+  },
+  {
+    "question": "What causes radio waves to change direction as they travel?",
+    "answers": ["Diffraction and reflection from obstacles or the ionosphere", "High SWR in the feeder cable connected to the antenna", "Excessive transmitter power causing signal bending", "The direction in which the transmitting antenna is polarised"],
+    "correct": "Diffraction and reflection from obstacles or the ionosphere",
+    "explanation": "Radio waves change direction through diffraction (bending around obstacles), reflection (bouncing off surfaces like buildings or the ionosphere), and refraction (bending when passing between media of different refractive index, as occurs in the ionosphere)."
+  },
+  {
+    "question": "Where should you place an antenna to achieve the greatest communication range?",
+    "answers": ["As high as possible — for example, on the roof of the building", "On a tripod in the garden, away from the building metalwork", "On the side of the building facing the target direction", "In an upstairs room close to the nearest window"],
+    "correct": "As high as possible — for example, on the roof of the building",
+    "explanation": "Height is the most important factor for VHF/UHF range. A higher antenna can 'see' further beyond the horizon, reducing shadowing from terrain and buildings. This is why repeaters are sited on hilltops, and why a roof-mounted antenna outperforms a loft or indoor one."
+  },
+  {
+    "question": "What type of propagation enables HF contacts over thousands of kilometres?",
+    "answers": ["Skywave — signals are refracted back to Earth by the ionosphere", "Ground wave — signals follow the surface of the Earth", "Tropospheric ducting in the lower atmosphere near the ground", "Sporadic-E scatter from ionised patches at low altitude"],
+    "correct": "Skywave — signals are refracted back to Earth by the ionosphere",
+    "explanation": "Skywave (or ionospheric) propagation occurs when HF signals are refracted by ionised layers (mainly the F layer) and returned to Earth thousands of kilometres away. This is what makes global HF communication possible. Ground wave only works up to a few hundred kilometres."
+  },
+  {
+    "question": "What is a harmonic of a radio signal?",
+    "answers": ["An unwanted signal at a whole-number multiple of the transmit frequency", "An echo of the signal reflected back from the ionosphere", "A signal at the same frequency but with inverted phase", "A spurious signal that is close to but slightly off the carrier frequency"],
+    "correct": "An unwanted signal at a whole-number multiple of the transmit frequency",
+    "explanation": "Harmonics are signals at 2×, 3×, 4× (etc.) the fundamental frequency. A transmitter on 50 MHz may produce harmonics at 100 MHz, 150 MHz, and so on. These can cause interference to other services operating at those frequencies. Good transmitter design and filtering keep harmonics to a minimum."
+  },
+  {
+    "question": "A transmitter operates on 50.5 MHz. On what frequency will its third harmonic appear?",
+    "answers": ["151.5 MHz", "100.5 MHz", "201.0 MHz", "53.5 MHz"],
+    "correct": "151.5 MHz",
+    "explanation": "Third harmonic = 3 × fundamental = 3 × 50.5 = 151.5 MHz. This falls in the VHF range and could interfere with services operating near that frequency. This is why spurious emission tests are required and transmitters must be kept well-filtered."
+  },
+  {
+    "question": "What is the RF earth used for in an amateur radio station?",
+    "answers": ["To provide a path for RF currents to earth rather than into the mains supply", "To protect the operator from electric shock if equipment faults occur", "To provide a return circuit should the mains power supply develop a fault", "To give a balanced antenna its required ground-plane reference"],
+    "correct": "To provide a path for RF currents to earth rather than into the mains supply",
+    "explanation": "An RF earth (separate from the mains safety earth) gives stray RF currents a low-impedance path to earth, preventing them from flowing along mains wiring into the house. Without an RF earth, RFI in mains wiring can cause interference to other equipment and feedback into the transmitter."
+  },
+  {
+    "question": "Your neighbour reports their television suffers interference when you transmit. What should you do first?",
+    "answers": ["Discuss the issue with your neighbour and offer to help identify the cause", "Ask your neighbour to contact Ofcom to investigate formally", "Deny all responsibility since you are operating within your licence", "Close down your station until the problem resolves itself"],
+    "correct": "Discuss the issue with your neighbour and offer to help identify the cause",
+    "explanation": "The first and most effective step is to open a friendly dialogue with your neighbour. Many interference cases are caused by factors on the affected equipment's side (e.g. poor immunity in an older TV). Working cooperatively is the quickest path to a resolution and keeps neighbourly relations positive."
+  },
+  {
+    "question": "Which type of household device is MOST likely to suffer interference from an amateur radio transmission?",
+    "answers": ["A radio or television receiver", "A battery-powered digital clock", "A domestic microwave oven", "An electric hair dryer"],
+    "correct": "A radio or television receiver",
+    "explanation": "Radio and television receivers contain tuned RF circuits that can pick up nearby transmitters, either via direct pickup through their front-ends or via harmonics falling on their operating frequencies. Digital clocks, microwave ovens, and hair dryers are far less susceptible."
+  },
+  {
+    "question": "What does a ferrite ring placed on the mains lead of a device suffering interference do?",
+    "answers": ["Minimises RF on the mains cable from entering the device", "Equalises the interference level on each mains conductor", "Discharges static electricity buildup on the outer sheath", "Prevents the device from needing a separate RF earth connection"],
+    "correct": "Minimises RF on the mains cable from entering the device",
+    "explanation": "A ferrite ring acts as a common-mode choke: it presents high impedance to RF currents flowing along the outside of the mains lead (which can conduct RF into the affected device) while having no effect on the 50 Hz mains current. It is a simple and often effective first step in curing mains-conducted RFI."
+  },
+  {
+    "question": "Which organisation in the UK produces guidance and advice on dealing with interference cases?",
+    "answers": ["The Radio Society of Great Britain (RSGB)", "The local authority planning department", "The national Police service", "Ofcom's broadcasting standards division"],
+    "correct": "The Radio Society of Great Britain (RSGB)",
+    "explanation": "The RSGB produces detailed EMC (Electromagnetic Compatibility) advice leaflets and guidance for amateur operators dealing with interference. Ofcom can be involved in enforcement, but day-to-day practical help comes from the RSGB's EMC committee resources."
+  },
+  {
+    "question": "Which mode of transmission is LEAST likely to cause interference to nearby electronic equipment?",
+    "answers": ["FM (frequency modulation)", "AM (amplitude modulation)", "CW (Morse/continuous wave)", "LSB (lower sideband)"],
+    "correct": "FM (frequency modulation)",
+    "explanation": "FM has a constant-amplitude envelope — the carrier power does not change. Most consumer electronics susceptible to interference detect amplitude variations, so an FM signal is the hardest for them to pick up. AM and CW both have amplitude variations (AM modulates it; CW switches it on and off) making them more likely to cause audible interference."
+  },
+  {
+    "question": "Which frequency band is most likely to cause direct pickup interference in a piece of consumer electronics?",
+    "answers": ["VHF frequencies (30–300 MHz)", "Medium wave frequencies (300 kHz–3 MHz)", "HF frequencies (3–30 MHz)", "Audio frequencies (20 Hz–20 kHz)"],
+    "correct": "VHF frequencies (30–300 MHz)",
+    "explanation": "Consumer electronics are most prone to direct pickup from VHF signals because their internal wiring dimensions are comparable to VHF wavelengths, making them act as unintentional antennas. Strong local VHF transmissions (including 2 m amateur signals) are a common cause of direct pickup."
+  },
+  {
+    "question": "What is the purpose of a calling channel or calling frequency?",
+    "answers": ["To provide a known frequency where initial contacts can be established", "To comply with a mandatory requirement in the amateur licence", "To allow club members to contact each other without disturbing others", "To maximise the number of contacts made during a busy operating session"],
+    "correct": "To provide a known frequency where initial contacts can be established",
+    "explanation": "A calling channel (such as 145.500 MHz on 2 m) is a widely-publicised frequency that any operator can monitor. By calling CQ or listening there, stations can find each other. Once contact is established, good practice is to move to a working channel so the calling frequency remains clear."
+  },
+  {
+    "question": "Why does a repeater use separate input and output frequencies?",
+    "answers": ["The repeater's transmitter would overload its own receiver on the same frequency", "Band plans require all repeaters to use separate transmit and receive frequencies", "Using one frequency would allow only one user to speak at a time", "The repeater cannot amplify signals on the same frequency as its output"],
+    "correct": "The repeater's transmitter would overload its own receiver on the same frequency",
+    "explanation": "A repeater receives a signal on one frequency (the input) and simultaneously retransmits it on another (the output), with a fixed offset. If it tried to receive and transmit on the same frequency, the high-power transmitter would completely swamp the sensitive receiver, making it impossible to hear any caller."
+  },
+  {
+    "question": "During a QSO through a repeater, a regular beeping tone sounds. What does this indicate?",
+    "answers": ["A time-out warning for a transmission that has been too long", "A malfunction in the repeater's main electronics", "A beat note between the repeater's input and output audio", "A prompt to enter a CTCSS tone to continue accessing the repeater"],
+    "correct": "A time-out warning for a transmission that has been too long",
+    "explanation": "Many repeaters include a time-out timer that triggers a beep after a certain period of continuous transmission (often 3–5 minutes). This discourages excessively long 'overs', prevents accidental blocking if a PTT button is stuck, and keeps the repeater available for other users."
+  },
+  {
+    "question": "Which frequency on the 2 m band should generally be avoided for terrestrial amateur contacts?",
+    "answers": ["145.900 MHz — this is within the satellite segment of the band", "145.500 MHz — this is the national FM calling frequency", "144.300 MHz — this is the SSB and weak-signal calling frequency", "144.050 MHz — this is the international CW calling frequency"],
+    "correct": "145.900 MHz — this is within the satellite segment of the band",
+    "explanation": "The 145.800–146.000 MHz segment of the 2 m band is internationally coordinated for amateur satellite use. Using these frequencies for terrestrial contacts would cause interference to satellite communication, and the band plan asks operators to keep this segment clear for satellite work."
+  },
+  {
+    "question": "A strong signal that is perfectly readable would be given what RST signal report?",
+    "answers": ["Five and nine (59)", "Five and five (55)", "Nine and nine (99)", "Nine and five (95)"],
+    "correct": "Five and nine (59)",
+    "explanation": "The RST system rates Readability (1–5) and Signal Strength (1–9). 5 = perfectly readable; 9 = extremely strong signal. So '59' is the best possible report for a voice contact. '5 and 5' means perfectly readable but only moderate strength. '9 and 5' would be an unusual combination."
+  },
+  {
+    "question": "You hear abusive language directed at another amateur on a local repeater. What should you do?",
+    "answers": ["Stay out of the exchange and speak to the person privately afterwards", "Transmit simultaneously to try to block the abusive signal", "Join in to support and defend the abused person on air", "Contact the Police immediately via the repeater frequency"],
+    "correct": "Stay out of the exchange and speak to the person privately afterwards",
+    "explanation": "Joining in on a heated exchange usually makes things worse and may mean you are also in breach of licence conditions. The best course is to note details and speak to the affected person off-air. Intentionally transmitting to block others is itself a licence breach. The RSGB and Ofcom can be involved in serious cases."
+  },
+  {
+    "question": "Using the NATO phonetic alphabet, how do you say the letters in 'MAC'?",
+    "answers": ["Mike, Alpha, Charlie", "Metro, Alpha, Charlie", "Mike, Apple, Charlie", "Mike, Alfa, Charge"],
+    "correct": "Mike, Alpha, Charlie",
+    "explanation": "The NATO phonetic alphabet: A = Alpha, B = Bravo, C = Charlie, M = Mike. The correct word for A is 'Alpha' (not 'Alfa', though that variant exists in aviation). Using the standard phonetics prevents confusion over similar-sounding letters like M and N, or B and D."
+  },
+  {
+    "question": "Using the phonetic alphabet, how is the word 'CONTACT' correctly spelled out?",
+    "answers": ["Charlie, Oscar, November, Tango, Alpha, Charlie, Tango", "Charlie, Oscar, Norway, Tango, Alpha, Charlie, Tango", "Charlie, Ontario, November, Tango, Alpha, Charlie, Tango", "Charlie, Oscar, November, Twin, Alpha, Charlie, Twin"],
+    "correct": "Charlie, Oscar, November, Tango, Alpha, Charlie, Tango",
+    "explanation": "C = Charlie, O = Oscar, N = November, T = Tango, A = Alpha, C = Charlie, T = Tango. The phonetic alphabet uses specific agreed words — 'Ontario' and 'Norway' are not part of the NATO standard. Consistent use of the standard words ensures operators worldwide understand each other."
+  },
+  {
+    "question": "An important difference between a fuse and an RCBO is that...",
+    "answers": ["An RCBO also detects small earth-leakage currents that a fuse alone would not break for", "An RCBO provides all the functions of a fuse but with no overload protection", "A fuse will always operate if the live wire is touched, but an RCBO may not", "An RCBO cannot be used in any circuit that also has a plug-top fuse"],
+    "correct": "An RCBO also detects small earth-leakage currents that a fuse alone would not break for",
+    "explanation": "A fuse only operates when current exceeds its rating — potentially too late to prevent electrocution. An RCBO (Residual Current Circuit Breaker with Overload) also senses tiny imbalances between live and neutral currents caused by leakage to earth (e.g. current passing through a person) and trips within milliseconds."
+  },
+  {
+    "question": "When climbing a ladder to erect an antenna, what essential safety precaution should you take?",
+    "answers": ["Always have an assistant present to hold the base of the ladder", "Only work on a very dry day to reduce effects of static electricity", "Use a wooden ladder at all times to reduce risk of electric shock", "Maintain a wire connection to earth throughout the entire process"],
+    "correct": "Always have an assistant present to hold the base of the ladder",
+    "explanation": "Working at height alone is dangerous — if you fall there is nobody to assist or call for help. An assistant steadies the ladder and can summon help if needed. Wooden ladders offer no special safety advantage over modern fibreglass or aluminium ladders with proper footings."
+  },
+  {
+    "question": "Why is it dangerous to touch an antenna while the transmitter is active?",
+    "answers": ["RF energy can cause burns or electric shock to the person touching it", "It will immediately cause permanent damage to the transmitter finals", "It will raise the SWR and significantly reduce the transmitted power", "The signal will not be correctly radiated to the intended receiving station"],
+    "correct": "RF energy can cause burns or electric shock to the person touching it",
+    "explanation": "Touching a transmitting antenna places you in direct contact with RF energy. RF currents heat tissue from the inside (similar to a microwave oven), causing RF burns that may not be felt immediately. Voltages on the antenna can also cause shock. Even at Foundation power levels (25 W), this is a real hazard."
+  },
+  {
+    "question": "What is the main benefit of using a tool belt when working at height?",
+    "answers": ["It keeps tools secure and frees both hands for safe climbing", "It reduces the number of trips required up and down the ladder", "It removes the need to wear other personal protective equipment", "It provides an anchor point for a safety lanyard against falling"],
+    "correct": "It keeps tools secure and frees both hands for safe climbing",
+    "explanation": "Climbing a ladder requires both hands on the rungs — carrying tools in your hands is hazardous. A tool belt holds tools securely so they cannot be dropped on anyone below, and both hands are free for safe climbing. Dropping tools from height can be as dangerous as falling yourself."
+  },
+  {
+    "question": "What is the main danger associated with incorrectly charging a lithium battery?",
+    "answers": ["It can catch fire or even explode if overcharged or mishandled", "It will leak corrosive fluid that can permanently damage the radio", "It rapidly loses charge capacity but poses no immediate safety hazard", "It discharges in reverse polarity, damaging connected equipment"],
+    "correct": "It can catch fire or even explode if overcharged or mishandled",
+    "explanation": "Lithium chemistry batteries can undergo thermal runaway if overcharged, short-circuited, physically damaged, or charged with an incompatible charger. This can result in fire or explosion. Always use a charger matched to the specific lithium battery type (Li-ion, LiFePO4, LiPo) and never leave charging unattended."
+  },
+  {
+    "question": "Someone is found collapsed over a repair bench in the club shack — apparently after receiving an electric shock. What is the FIRST action?",
+    "answers": ["Switch off all electrical power to the workshop immediately", "Check the person's pulse at the wrist or neck straight away", "Shake the person gently to see if they regain consciousness", "Leave the room immediately to find a phone and call for help"],
+    "correct": "Switch off all electrical power to the workshop immediately",
+    "explanation": "Before touching a casualty of electric shock, you must isolate the power supply. If you touch someone who is still in contact with live electricity, you will also receive a shock. Switching off the power first makes the environment safe, then you can administer first aid and call for help."
+  },
+  {
+    "question": "What is the frequency range of the VHF (Very High Frequency) band?",
+    "answers": ["30 MHz to 300 MHz", "3 MHz to 30 MHz", "300 MHz to 3,000 MHz", "0.3 MHz to 3 MHz"],
+    "correct": "30 MHz to 300 MHz",
+    "explanation": "VHF covers 30–300 MHz. The amateur 2 m band (144–146 MHz) sits within VHF. Below VHF is HF (3–30 MHz), which includes most amateur shortwave bands. Above VHF is UHF (300 MHz–3 GHz), which includes the amateur 70 cm band (430–440 MHz)."
+  },
+  {
+    "question": "Which amateur band contains the frequencies 28.225–28.300 MHz?",
+    "answers": ["10 metres", "30 metres", "15 metres", "40 metres"],
+    "correct": "10 metres",
+    "explanation": "The 10 m band spans 28.000–29.700 MHz. So 28.225–28.300 MHz falls within the 10 m band. The 15 m band is 21.000–21.450 MHz; the 30 m band is 10.100–10.150 MHz; the 40 m band is 7.000–7.200 MHz. Band names refer to the approximate wavelength."
+  },
+  {
+    "question": "The VHF radio band extends from...",
+    "answers": ["30 MHz to 300 MHz", "300 kHz to 3,000 kHz", "3 MHz to 30 MHz", "300 MHz to 3,000 MHz"],
+    "correct": "30 MHz to 300 MHz",
+    "explanation": "VHF = Very High Frequency = 30–300 MHz. The amateur 2 m band sits within this range at 144–146 MHz. UHF (Ultra High Frequency) runs from 300 MHz to 3 GHz and includes the 70 cm band. HF (High Frequency) covers 3–30 MHz."
+  },
+  {
+    "question": "Buildings in a town can block VHF radio signals at ground level. What is the effect of moving to a higher floor?",
+    "answers": ["Reception generally improves as obstructions become fewer", "Reception changes very little, since buildings are equally opaque at all heights", "Reception worsens, because the antenna is further from its earth return", "Reception improves only if the antenna is changed to a vertical polarisation"],
+    "correct": "Reception generally improves as obstructions become fewer",
+    "explanation": "VHF signals travel in essentially straight lines and are blocked or absorbed by buildings. A higher floor reduces the number of buildings between the antenna and the transmitter, reducing shadowing. This is why roof-mounted antennas perform significantly better than window-sill or indoor ones in urban areas."
+  },
+  {
+    "question": "What is the national 2 m FM calling frequency in the UK?",
+    "answers": ["145.500 MHz", "144.000 MHz", "145.000 MHz", "146.500 MHz"],
+    "correct": "145.500 MHz",
+    "explanation": "145.500 MHz is the UK's national 2 m FM calling channel. Stations call CQ or listen here to make initial contact, then move to a working channel to avoid blocking the calling frequency. It is monitored by many operators and is an excellent starting point for a beginner's first contact."
+  },
+  {
+    "question": "What is the national 70 cm FM calling frequency in the UK?",
+    "answers": ["433.500 MHz", "430.000 MHz", "435.000 MHz", "432.200 MHz"],
+    "correct": "433.500 MHz",
+    "explanation": "433.500 MHz is the national 70 cm FM calling frequency. Like 145.500 on 2 m, operators use it to establish initial contact then move to a working channel. The 70 cm band is popular for FM voice and is also used for repeaters, digital voice, and packet radio."
+  }
+]

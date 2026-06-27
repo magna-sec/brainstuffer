@@ -78,6 +78,12 @@
     "category": "Humanities"
   },
   {
+    "file": "uk_amateur_radio_foundation.json",
+    "label": "UK Amateur Radio (Foundation)",
+    "count": 70,
+    "category": "Arts & Hobbies"
+  },
+  {
     "file": "music_theory.json",
     "label": "Music Theory",
     "count": 88,
