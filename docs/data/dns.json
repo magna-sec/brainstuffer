@@ -1,0 +1,450 @@
+[
+  {
+    "question": "What is the MNAME field in an SOA record?",
+    "code": "example.com.  IN  SOA  ns1.example.com.  admin.example.com. (\n             2024010101  ; Serial\n             3600        ; Refresh\n             900         ; Retry\n             604800      ; Expire\n             300 )       ; Minimum TTL",
+    "code_lang": "text",
+    "answers": ["The primary (master) nameserver for the zone", "The mail server responsible for the domain", "The network address of the zone apex", "The administrator's hostname for SNMP polling"],
+    "correct": "The primary (master) nameserver for the zone",
+    "explanation": "MNAME is the first field after SOA — it names the primary nameserver that holds the original zone data. Secondary nameservers poll MNAME during zone refreshes. In the example above, MNAME is ns1.example.com."
+  },
+  {
+    "question": "What does the RNAME field in an SOA record represent?",
+    "code": "example.com.  IN  SOA  ns1.example.com.  hostmaster.example.com. (\n             2024010101  3600  900  604800  300 )",
+    "code_lang": "text",
+    "answers": ["The responsible person's email address, with @ replaced by a dot", "The reverse-lookup hostname for the primary nameserver", "The resource name used for zone delegation records", "The contact hostname of the secondary nameserver"],
+    "correct": "The responsible person's email address, with @ replaced by a dot",
+    "explanation": "RNAME encodes an email address in DNS label format: hostmaster.example.com. means hostmaster@example.com. The first dot (before 'example') replaces the @ symbol. By convention, 'hostmaster' is the standard mailbox name for DNS zone contacts."
+  },
+  {
+    "question": "In the SOA record below, what does the Serial field (2024010101) typically represent?",
+    "code": "example.com.  IN  SOA  ns1.example.com.  admin.example.com. (\n             2024010101  ; Serial\n             3600        ; Refresh\n             900         ; Retry\n             604800      ; Expire\n             300 )       ; Minimum TTL",
+    "code_lang": "text",
+    "answers": ["The zone version number, usually formatted as YYYYMMDDNN", "The Unix timestamp of when the zone was last modified", "The total number of records currently in the zone file", "The number of seconds since the zone was first created"],
+    "correct": "The zone version number, usually formatted as YYYYMMDDNN",
+    "explanation": "Serial is a 32-bit integer used by secondary nameservers to detect zone changes. The convention YYYYMMDDNN (e.g. 2024010101 = 1st January 2024, revision 01) is widely used. Secondary nameservers compare the serial to decide whether to pull a new copy of the zone."
+  },
+  {
+    "question": "What does the Refresh value in an SOA record control?",
+    "code": "example.com.  IN  SOA  ns1.example.com.  admin.example.com. (\n             2024010101  ; Serial\n             3600        ; Refresh  <---\n             900         ; Retry\n             604800      ; Expire\n             300 )       ; Minimum TTL",
+    "code_lang": "text",
+    "answers": ["How often (in seconds) secondary nameservers poll the primary for zone updates", "How long (in seconds) a resolver caches the SOA record itself", "How often (in seconds) the primary nameserver rewrites its zone file", "The TTL applied to all records in the zone unless overridden"],
+    "correct": "How often (in seconds) secondary nameservers poll the primary for zone updates",
+    "explanation": "Refresh tells secondary nameservers how frequently to check the primary's serial number. If the serial has increased, the secondary initiates a zone transfer. A value of 3600 means secondaries check every hour. With DNS NOTIFY, zone changes are pushed immediately regardless."
+  },
+  {
+    "question": "What does the Retry value in an SOA record control?",
+    "code": "example.com.  IN  SOA  ns1.example.com.  admin.example.com. (\n             2024010101  ; Serial\n             3600        ; Refresh\n             900         ; Retry   <---\n             604800      ; Expire\n             300 )       ; Minimum TTL",
+    "code_lang": "text",
+    "answers": ["How long a secondary waits before retrying if the primary doesn't respond to a refresh", "How many times a secondary will attempt a zone transfer before giving up", "The cooldown period before a failed query is retried by a resolver", "How long before a secondary tries to contact a different upstream resolver"],
+    "correct": "How long a secondary waits before retrying if the primary doesn't respond to a refresh",
+    "explanation": "If a secondary nameserver cannot reach the primary during a scheduled refresh, it waits Retry seconds before trying again. Retry (900 s = 15 min) is always shorter than Refresh. If retries continue to fail until the Expire time is reached, the secondary stops serving the zone."
+  },
+  {
+    "question": "What does the Expire value in an SOA record control?",
+    "code": "example.com.  IN  SOA  ns1.example.com.  admin.example.com. (\n             2024010101  ; Serial\n             3600        ; Refresh\n             900         ; Retry\n             604800      ; Expire  <---\n             300 )       ; Minimum TTL",
+    "code_lang": "text",
+    "answers": ["How long a secondary keeps serving the zone if it cannot reach the primary", "The maximum time any record in the zone is allowed to be cached", "How long before the zone's delegation is automatically removed by the registrar", "The time after which the primary nameserver refreshes its own data from disk"],
+    "correct": "How long a secondary keeps serving the zone if it cannot reach the zone's primary",
+    "explanation": "If a secondary cannot reach the primary for Expire seconds (604800 = 7 days), it considers the zone stale and stops answering queries for it. This prevents outdated data from being served indefinitely. Expire must always be much larger than Refresh."
+  },
+  {
+    "question": "In modern DNS, what is the Minimum TTL (last SOA field) primarily used for?",
+    "code": "example.com.  IN  SOA  ns1.example.com.  admin.example.com. (\n             2024010101  ; Serial\n             3600        ; Refresh\n             900         ; Retry\n             604800      ; Expire\n             300 )       ; Minimum TTL  <---",
+    "code_lang": "text",
+    "answers": ["As the TTL for negative (NXDOMAIN) cache responses per RFC 2308", "As the floor TTL applied to every record in the zone", "As the TTL that resolvers must use when caching the SOA itself", "As the minimum time between allowed zone serial increments"],
+    "correct": "As the TTL for negative (NXDOMAIN) cache responses per RFC 2308",
+    "explanation": "RFC 2308 repurposed the Minimum TTL field to be the negative caching TTL — how long resolvers cache a 'name does not exist' (NXDOMAIN) or 'no records of this type' (NODATA) response. Previously it was the floor for all record TTLs, but that usage is obsolete."
+  },
+  {
+    "question": "What happens when a secondary nameserver's Expire timer runs out and it still cannot reach the primary?",
+    "answers": ["It stops answering queries for the zone entirely", "It continues serving stale zone data until the primary comes back", "It promotes itself to primary and starts accepting zone updates", "It falls back to querying root servers for authoritative answers"],
+    "correct": "It stops answering queries for the zone entirely",
+    "explanation": "Once the Expire time is exceeded without a successful refresh, the secondary considers its copy of the zone too stale to be reliable. It will return SERVFAIL rather than serve potentially outdated records. This is why Expire is typically set to days or weeks."
+  },
+  {
+    "question": "A dig query returns the SOA below. What is the responsible person's email address?",
+    "code": "example.com.  3600  IN  SOA  ns1.example.com.  dns-admin.ops.example.com.  2024060101 3600 900 604800 300",
+    "code_lang": "text",
+    "answers": ["dns-admin@ops.example.com", "dns-admin.ops@example.com", "admin@dns.ops.example.com", "dns.admin@ops.example.com"],
+    "correct": "dns-admin@ops.example.com",
+    "explanation": "In RNAME, the first dot separates the local part from the domain. dns-admin.ops.example.com. → dns-admin@ops.example.com. Subsequent dots are literal dots in the domain name. The trailing dot marks the end of the FQDN."
+  },
+  {
+    "question": "What dig command would you run to retrieve the SOA record for example.com?",
+    "answers": ["dig example.com SOA", "dig -type=SOA example.com", "dig example.com --soa", "dig SOA @example.com"],
+    "correct": "dig example.com SOA",
+    "explanation": "dig syntax is: dig [options] <name> <type>. Specifying SOA as the record type fetches the Start of Authority record. You can also use 'dig SOA example.com' (type before name also works in most implementations)."
+  },
+  {
+    "question": "What does an A record contain?",
+    "answers": ["An IPv4 address mapped to a hostname", "An IPv6 address mapped to a hostname", "An alias pointing to another hostname", "The authoritative nameservers for the zone"],
+    "correct": "An IPv4 address mapped to a hostname",
+    "explanation": "The A (Address) record maps a hostname to a 32-bit IPv4 address (e.g. 93.184.216.34). AAAA records map to 128-bit IPv6 addresses. A records are the most queried record type in DNS."
+  },
+  {
+    "question": "What does an AAAA record contain?",
+    "code": "example.com.  300  IN  AAAA  2606:2800:220:1:248:1893:25c8:1946",
+    "code_lang": "text",
+    "answers": ["An IPv6 address mapped to a hostname", "An IPv4 address mapped to a hostname", "Four A records grouped into a single record type", "An alias to four separate A records via round-robin"],
+    "correct": "An IPv6 address mapped to a hostname",
+    "explanation": "AAAA (pronounced 'quad-A') maps a hostname to a 128-bit IPv6 address. The name comes from IPv6 being four times the size of IPv4's 32 bits (4 × 32 = 128). Most modern domains publish both A and AAAA records."
+  },
+  {
+    "question": "What is a CNAME record used for?",
+    "code": "www.example.com.   300  IN  CNAME  example.com.\nexample.com.       300  IN  A      93.184.216.34",
+    "code_lang": "text",
+    "answers": ["Creating an alias from one name to another canonical hostname", "Specifying the canonical IP range for a zone's address block", "Delegating a subdomain to a different zone and nameserver", "Marking a hostname as the primary record for a cluster"],
+    "correct": "Creating an alias from one name to another canonical hostname",
+    "explanation": "A CNAME (Canonical Name) record makes one name an alias of another. A resolver that encounters a CNAME restarts the lookup using the target name. CNAMEs cannot coexist with other records at the same name — notably, you cannot put a CNAME at the zone apex (e.g. example.com itself)."
+  },
+  {
+    "question": "Why can't a CNAME record be placed at the zone apex (e.g., example.com. itself)?",
+    "answers": ["The zone apex must have NS and SOA records, which cannot coexist with a CNAME", "CNAME records are limited to subdomains by RFC convention only", "The zone apex is reserved for A records and AAAA records exclusively", "DNS resolvers do not process CNAME records for top-level zone names"],
+    "correct": "The zone apex must have NS and SOA records, which cannot coexist with a CNAME",
+    "explanation": "RFC 1034 states a CNAME must not have any other records at the same owner name. Since the apex needs SOA and NS records, a CNAME is forbidden there. Services like Cloudflare work around this with proprietary ALIAS/ANAME flattening that resolves the target IP at query time."
+  },
+  {
+    "question": "What does an MX record specify, and what does the priority number mean?",
+    "code": "example.com.  300  IN  MX  10  mail1.example.com.\nexample.com.  300  IN  MX  20  mail2.example.com.",
+    "code_lang": "text",
+    "answers": ["The mail server for the domain; lower number = higher preference", "The mail server for the domain; higher number = higher preference", "The maximum message size; lower number = smaller limit", "The mail relay host; the number is the TCP port to connect to"],
+    "correct": "The mail server for the domain; lower number = higher preference",
+    "explanation": "MX records point to mail servers. Sending MTAs try the lowest-priority number first. If mail1 (priority 10) is unreachable, they fall back to mail2 (priority 20). Equal priorities are tried in random order for load balancing. MX targets must be A/AAAA hostnames — not IP addresses or CNAMEs."
+  },
+  {
+    "question": "What does a PTR record do?",
+    "code": "34.216.184.93.in-addr.arpa.  3600  IN  PTR  example.com.",
+    "code_lang": "text",
+    "answers": ["Maps an IP address back to a hostname (reverse DNS)", "Marks the pointer to a primary nameserver for delegation", "Specifies the preferred TLD resolver for a domain", "Maps a hostname to a protocol-specific service port"],
+    "correct": "Maps an IP address back to a hostname (reverse DNS)",
+    "explanation": "PTR (Pointer) records live in the in-addr.arpa zone (IPv4) or ip6.arpa (IPv6). The IP is written in reversed octet order: 93.184.216.34 becomes 34.216.184.93.in-addr.arpa. PTR records are set by the IP address owner (usually the ISP) and are used for reverse lookups and spam filtering."
+  },
+  {
+    "question": "How is the IPv4 address 192.168.1.5 written as a PTR record owner name?",
+    "answers": ["5.1.168.192.in-addr.arpa.", "192.168.1.5.in-addr.arpa.", "5.168.192.in-addr.arpa.", "5.1.192.168.arpa.in-addr."],
+    "correct": "5.1.168.192.in-addr.arpa.",
+    "explanation": "For a PTR record, the IPv4 address octets are reversed and '.in-addr.arpa.' is appended. 192.168.1.5 becomes 5.1.168.192.in-addr.arpa. This reversal lets the DNS hierarchy work from general (192 = Class C) to specific (the host), mirroring how domain labels work left-to-right."
+  },
+  {
+    "question": "What does a TXT record contain?",
+    "code": "example.com.  300  IN  TXT  \"v=spf1 include:_spf.google.com ~all\"",
+    "code_lang": "text",
+    "answers": ["Arbitrary text data — used for SPF, DKIM, DMARC, and domain verification", "The plain-text description of the domain's service purpose", "Human-readable comments attached to other DNS record types", "The fully qualified domain name in a text-encoded format"],
+    "correct": "Arbitrary text data — used for SPF, DKIM, DKIM, and domain verification",
+    "explanation": "TXT records hold free-form strings up to 255 bytes each (multiple strings can be concatenated). Common uses: SPF (authorised mail senders), DKIM public keys (_domainkey subdomain), DMARC policy (_dmarc subdomain), and domain ownership verification for services like Google Search Console."
+  },
+  {
+    "question": "What does an NS record specify?",
+    "code": "example.com.  86400  IN  NS  ns1.example.com.\nexample.com.  86400  IN  NS  ns2.example.com.",
+    "code_lang": "text",
+    "answers": ["The authoritative nameservers for the zone", "The network service addresses for the domain's web servers", "The name of the secondary server responsible for backup resolution", "The list of acceptable name formats for subdomains in this zone"],
+    "correct": "The authoritative nameservers for the zone",
+    "explanation": "NS (Name Server) records delegate authority for a zone to specific nameservers. Multiple NS records provide redundancy. They appear both in the zone itself and in the parent zone (for delegation). Resolvers use NS records to find which servers to query for authoritative answers."
+  },
+  {
+    "question": "What is a glue record and why is it necessary?",
+    "answers": ["An A record for a nameserver that lives inside the zone it serves, placed in the parent zone", "A CNAME record that connects a subdomain to the parent zone's apex record", "An extra NS record added to prevent single-nameserver zones from expiring", "A TXT record that ties a zone's identity to its registrar for validation"],
+    "correct": "An A record for a nameserver that lives inside the zone it serves, placed in the parent zone",
+    "explanation": "Without glue, resolving example.com would be circular: 'ask ns1.example.com' — but to find ns1.example.com you'd need to look up example.com. The parent zone (.com) holds a glue A record for ns1.example.com so resolvers can bootstrap the lookup without hitting that loop."
+  },
+  {
+    "question": "What does an SRV record specify?",
+    "code": "_sip._tcp.example.com.  300  IN  SRV  10  20  5060  sip.example.com.",
+    "code_lang": "text",
+    "answers": ["The hostname, port, priority, and weight for a named service", "The server's response time target in milliseconds for SLA compliance", "The IPv4 address range reserved for service endpoints in the zone", "The secondary name record for a virtual server cluster"],
+    "correct": "The hostname, port, priority, and weight for a named service",
+    "explanation": "SRV records let clients discover services without hardcoded ports. Format: priority, weight, port, target. The above says: _sip._tcp clients should contact sip.example.com port 5060, priority 10, weight 20. Used heavily by SIP/VoIP, XMPP, and Microsoft Active Directory."
+  },
+  {
+    "question": "What does a CAA record do?",
+    "code": "example.com.  300  IN  CAA  0  issue  \"letsencrypt.org\"",
+    "code_lang": "text",
+    "answers": ["Specifies which Certificate Authorities may issue TLS certificates for the domain", "Certifies that the domain has completed Authority Acceptance validation", "Controls which CDN providers are allowed to cache assets for the domain", "Announces the Contact Address for Abuse reports for the domain"],
+    "correct": "Specifies which Certificate Authorities may issue TLS certificates for the domain",
+    "explanation": "CAA (Certification Authority Authorization) records restrict which CAs can issue certificates for your domain. If letsencrypt.org is the only CAA record, no other CA should issue a cert. This helps prevent fraudulent certificate issuance. Tags: 'issue' (DV certs), 'issuewild' (wildcards), 'iodef' (report violations)."
+  },
+  {
+    "question": "What is TTL in the context of DNS records?",
+    "code": "example.com.  300  IN  A  93.184.216.34\n               ^^^-- TTL in seconds",
+    "code_lang": "text",
+    "answers": ["The number of seconds a resolver may cache the record before re-querying", "The time limit for a DNS query to complete before it times out", "The total lifetime of the domain registration in seconds", "The number of hops allowed before a recursive query is abandoned"],
+    "correct": "The number of seconds a resolver may cache the record before re-querying",
+    "explanation": "TTL (Time to Live) controls DNS caching. A record with TTL 300 can be cached for 5 minutes. Short TTLs allow faster propagation of changes; long TTLs reduce DNS load. Before making DNS changes, it's good practice to lower TTLs in advance so the old value expires quickly."
+  },
+  {
+    "question": "What does 'dig example.com A' query?",
+    "code": "$ dig example.com A",
+    "code_lang": "bash",
+    "answers": ["The IPv4 address records for example.com using the system's default resolver", "All DNS records for example.com in the order they appear in the zone file", "The answer to whether example.com exists as a registered domain", "The A records for example.com via the authoritative nameserver only"],
+    "correct": "The IPv4 address records for example.com using the system's default resolver",
+    "explanation": "dig (Domain Information Groper) queries the DNS server configured in /etc/resolv.conf by default. Specifying 'A' as the record type fetches only A records. Without a type, dig defaults to A on most systems. The response includes the QUESTION, ANSWER, AUTHORITY, and ADDITIONAL sections."
+  },
+  {
+    "question": "What does the @ symbol do in a dig command?",
+    "code": "$ dig @8.8.8.8 example.com A",
+    "code_lang": "bash",
+    "answers": ["Sends the query to a specific nameserver (8.8.8.8) instead of the system default", "Marks the query as authoritative-only and rejects cached responses", "Filters the output to show only the answer section of the response", "Specifies the domain as an apex (root) record rather than a subdomain"],
+    "correct": "Sends the query to a specific nameserver (8.8.8.8) instead of the system default",
+    "explanation": "The @server syntax in dig directs the query to a specific resolver or nameserver. This is useful for testing: compare @8.8.8.8 (Google's resolver) vs @ns1.example.com (the authoritative server directly). Without @, dig uses /etc/resolv.conf."
+  },
+  {
+    "question": "What does 'dig +short example.com A' produce?",
+    "code": "$ dig +short example.com A\n93.184.216.34",
+    "code_lang": "bash",
+    "answers": ["Only the record value(s), with all headers and metadata stripped", "The shortest TTL among all A records for example.com", "A condensed summary of all record types present for example.com", "The query time in milliseconds with no other output"],
+    "correct": "Only the record value(s), with all headers and metadata stripped",
+    "explanation": "+short produces terse output — just the data. For an A query it prints the IP address(es). Very useful in scripts: $(dig +short example.com A) gives you just the IP. For MX it prints priority + hostname; for NS, just the nameserver names."
+  },
+  {
+    "question": "What does 'dig -x 93.184.216.34' do?",
+    "code": "$ dig -x 93.184.216.34\n;; ANSWER SECTION:\n34.216.184.93.in-addr.arpa.  3600  IN  PTR  example.com.",
+    "code_lang": "bash",
+    "answers": ["Performs a reverse DNS lookup for the IP address, querying for its PTR record", "Queries all extended (DNSSEC) records associated with that IP address", "Excludes 93.184.216.34 from the dig query and uses an alternative server", "Looks up the AAAA record that corresponds to the given IPv4 address"],
+    "correct": "Performs a reverse DNS lookup for the IP address, querying for its PTR record",
+    "explanation": "The -x flag triggers a reverse DNS lookup. dig automatically constructs the in-addr.arpa name (34.216.184.93.in-addr.arpa.) and queries for the PTR record. This is equivalent to 'dig 34.216.184.93.in-addr.arpa PTR' but saves you typing the reversed address manually."
+  },
+  {
+    "question": "What does 'dig +trace example.com A' do?",
+    "code": "$ dig +trace example.com A\n.                       518400  IN  NS  a.root-servers.net.\ncom.                    172800  IN  NS  a.gtld-servers.net.\nexample.com.            86400   IN  NS  ns1.example.com.\nexample.com.            300     IN  A   93.184.216.34",
+    "code_lang": "bash",
+    "answers": ["Traces the full DNS resolution path from root servers down to the answer", "Displays the network route (traceroute) to the authoritative nameserver", "Shows all cached responses in the local resolver that match the query", "Enables verbose timing information for each hop in the resolution chain"],
+    "correct": "Traces the full DNS resolution path from root servers down to the answer",
+    "explanation": "+trace makes dig perform iterative resolution itself, starting at the root servers. It shows each delegation step: root → .com TLD → example.com nameservers → final answer. This is invaluable for debugging delegation issues and seeing exactly which server returns each stage."
+  },
+  {
+    "question": "What does 'dig example.com AXFR @ns1.example.com' attempt?",
+    "code": "$ dig example.com AXFR @ns1.example.com",
+    "code_lang": "bash",
+    "answers": ["A full zone transfer — requesting all records in the zone from the nameserver", "An asynchronous extended fast refresh of the zone's SOA record", "The transfer of the example.com zone to the local system's cache permanently", "A query for all AAAA and A extended records in the zone simultaneously"],
+    "correct": "A full zone transfer — requesting all records in the zone from the nameserver",
+    "explanation": "AXFR (Authoritative Zone Transfer) requests the complete zone from a nameserver. Most production nameservers restrict AXFR to known secondary IPs using allow-transfer ACLs. An unrestricted AXFR exposes the entire zone — a significant reconnaissance aid for attackers. IXFR transfers only changed records."
+  },
+  {
+    "question": "What do the flags 'dig +noall +answer' do when combined?",
+    "code": "$ dig +noall +answer example.com MX\nexample.com.  300  IN  MX  10  mail.example.com.",
+    "code_lang": "bash",
+    "answers": ["+noall suppresses all output sections, then +answer re-enables just the answer section", "+noall disables DNSSEC and +answer shows only validated answer records", "+noall hides NXDOMAIN responses and +answer shows positive answers only", "+noall removes TTL values and +answer displays records without metadata"],
+    "correct": "+noall suppresses all output sections, then +answer re-enables just the answer section",
+    "explanation": "dig output has multiple sections: QUESTION, ANSWER, AUTHORITY, ADDITIONAL, comments, and stats. +noall disables all of them. Then +answer turns the answer section back on alone. This gives clean, human-readable record output without the surrounding noise — useful in scripts."
+  },
+  {
+    "question": "What does a SERVFAIL status code in a dig response indicate?",
+    "code": ";; ->>HEADER<<- opcode: QUERY, status: SERVFAIL, id: 12345\n;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 0",
+    "code_lang": "bash",
+    "answers": ["The nameserver failed to complete the query, often due to DNSSEC failure or upstream errors", "The record the client asked for doesn't exist at the queried nameserver", "The nameserver refused the query because the client is not authorised", "The server successfully answered but the record has a TTL of zero"],
+    "correct": "The nameserver failed to complete the query, often due to DNSSEC failure or upstream errors",
+    "explanation": "SERVFAIL (RCODE 2) means the nameserver was unable to process the request. Common causes: DNSSEC validation failure, inability to reach upstream nameservers, or a broken referral chain. Distinct from NXDOMAIN (name doesn't exist) and REFUSED (query not accepted)."
+  },
+  {
+    "question": "What does NXDOMAIN mean in a DNS response?",
+    "code": ";; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 54321\n;; AUTHORITY SECTION:\nexample.com.  300  IN  SOA  ns1.example.com.  admin.example.com.  (\n              2024010101 3600 900 604800 300 )",
+    "code_lang": "bash",
+    "answers": ["The queried name does not exist in DNS", "The nameserver is not configured to answer for that domain", "The record type requested is not supported by the nameserver", "The query exceeded the maximum number of DNS hops allowed"],
+    "correct": "The queried name does not exist in DNS",
+    "explanation": "NXDOMAIN (Non-eXistent DOMAIN, RCODE 3) means the name itself doesn't exist anywhere in the DNS hierarchy. The SOA record appears in the AUTHORITY section so resolvers know how long to negatively cache this response (per the Minimum TTL in the SOA)."
+  },
+  {
+    "question": "What does the REFUSED status mean in a dig response?",
+    "code": ";; ->>HEADER<<- opcode: QUERY, status: REFUSED, id: 9999",
+    "code_lang": "bash",
+    "answers": ["The nameserver declined to answer the query, usually due to an ACL or policy", "The queried record exists but the server refused to return its TTL value", "The query was malformed and the server refuses to process it further", "The nameserver is overloaded and has refused all incoming connections"],
+    "correct": "The nameserver declined to answer the query, usually due to an ACL or policy",
+    "explanation": "REFUSED (RCODE 5) means the server is up and reachable but has an access control policy that prevents it from answering this specific query. Common reasons: the source IP isn't in the allow-recursion list, or an AXFR attempt is rejected because the requesting IP isn't in allow-transfer."
+  },
+  {
+    "question": "How do you query MX records using nslookup?",
+    "code": "$ nslookup -type=MX example.com\nServer:  8.8.8.8\nAddress: 8.8.8.8#53\n\nexample.com  mail exchanger = 10 mail.example.com.",
+    "code_lang": "bash",
+    "answers": ["nslookup -type=MX example.com", "nslookup example.com MX", "nslookup --query=MX example.com", "nslookup example.com -record MX"],
+    "correct": "nslookup -type=MX example.com",
+    "explanation": "nslookup uses -type= (or -query= on some platforms) to specify the record type. The syntax differs from dig which puts the type after the name. On Windows nslookup is often the only built-in DNS tool; on Linux/macOS dig is generally preferred for scripting."
+  },
+  {
+    "question": "How do you point nslookup at a specific DNS server?",
+    "code": "$ nslookup example.com 8.8.8.8",
+    "code_lang": "bash",
+    "answers": ["Add the server IP as a second positional argument after the hostname", "Use -server=8.8.8.8 as a flag before the hostname argument", "Prefix the command with the server IP using the @ symbol", "Set the DNS server in interactive mode with 'set server=8.8.8.8'"],
+    "correct": "Add the server IP as a second positional argument after the hostname",
+    "explanation": "In nslookup, the second argument is the server to query: 'nslookup example.com 8.8.8.8' queries Google's resolver. In interactive mode you can type 'server 8.8.8.8' to switch servers. This contrasts with dig's @server syntax."
+  },
+  {
+    "question": "What does the nslookup command below perform?",
+    "code": "$ nslookup -type=PTR 34.216.184.93.in-addr.arpa",
+    "code_lang": "bash",
+    "answers": ["A reverse DNS lookup for the IP 93.184.216.34", "A forward lookup for a hostname ending in .in-addr.arpa", "A zone transfer of the 93.184.216 subnet's PTR zone", "A query for the PTR record of the local loopback interface"],
+    "correct": "A reverse DNS lookup for the IP 93.184.216.34",
+    "explanation": "This manually constructs the PTR query for 93.184.216.34 by reversing the octets and appending .in-addr.arpa. Unlike dig's -x shortcut, nslookup requires you to construct the reversed name yourself when using the command-line mode. The result would be the hostname associated with that IP."
+  },
+  {
+    "question": "How do you perform a reverse DNS lookup with dig without manually constructing the in-addr.arpa name?",
+    "code": "$ dig -x 192.168.1.1",
+    "code_lang": "bash",
+    "answers": ["Use the -x flag followed by the IP address", "Use the PTR record type with the normal IP: dig 192.168.1.1 PTR", "Use +reverse before the IP address", "Use the --rdns flag in dig's extended options"],
+    "correct": "Use the -x flag followed by the IP address",
+    "explanation": "dig -x <IP> automatically reverses the octets and appends .in-addr.arpa (for IPv4) or constructs the ip6.arpa nibble-reversed form (for IPv6). It's equivalent to typing 'dig 1.1.168.192.in-addr.arpa PTR' but saves the manual reversal step."
+  },
+  {
+    "question": "What is the difference between an authoritative nameserver and a recursive resolver?",
+    "answers": ["Authoritative servers hold zone data and answer definitively; recursive resolvers query on behalf of clients and cache results", "Authoritative servers cache results from multiple zones; recursive resolvers hold only the zone they are authorised for", "Authoritative servers answer only internal queries; recursive resolvers are internet-facing only", "Authoritative servers use TCP only; recursive resolvers use UDP exclusively"],
+    "correct": "Authoritative servers hold zone data and answer definitively; recursive resolvers query on behalf of clients and cache results",
+    "explanation": "Authoritative nameservers are the source of truth for a zone (e.g. ns1.example.com for example.com). They answer with the 'aa' (Authoritative Answer) flag set. Recursive resolvers (like your ISP's DNS or 8.8.8.8) do the legwork of querying root → TLD → authoritative servers on your behalf and cache the results."
+  },
+  {
+    "question": "What is a recursive DNS query?",
+    "answers": ["The resolver does all the work and returns a complete answer (or error) to the client", "The client performs each query step itself and assembles the final answer", "The nameserver passes partial answers back to the client for iterative processing", "The query loops through all known nameservers until an answer is found"],
+    "correct": "The resolver does all the work and returns a complete answer (or error) to the client",
+    "explanation": "In a recursive query, the client asks its resolver 'What is the IP for example.com?' and the resolver is responsible for doing all the work — querying root servers, TLD servers, and the authoritative server — then returning the final answer. The client doesn't need to know the DNS hierarchy."
+  },
+  {
+    "question": "What is an iterative DNS query?",
+    "answers": ["The nameserver returns the best referral it has; the client follows up by querying the next server itself", "The client repeats the same query to different nameservers until one answers", "The resolver iterates through all records in a zone to find the best match", "The client and server iterate through DNSSEC signatures to validate the response"],
+    "correct": "The nameserver returns the best referral it has; the client follows up by querying the next server itself",
+    "explanation": "In iterative mode, if a nameserver doesn't know the answer, it returns a referral to a closer nameserver rather than querying it itself. This is how recursive resolvers actually communicate with authoritative servers — root servers return TLD referrals, TLD servers return authoritative NS referrals."
+  },
+  {
+    "question": "How many root DNS server operators exist, and what are they labelled?",
+    "answers": ["13 operators, labelled A through M (though each runs many instances via anycast)", "12 operators, labelled 0 through 11 using numeric identifiers", "26 operators, one per letter of the alphabet, distributed globally", "13 operators, each running exactly one physical server per location"],
+    "correct": "13 operators, labelled A through M (though each runs many instances via anycast)",
+    "explanation": "There are 13 root server identities (A.root-servers.net through M.root-servers.net) — a limit set by the size of a UDP DNS packet. However, each identity is served by many physical servers worldwide using IP anycast, so there are actually hundreds of root server instances globally."
+  },
+  {
+    "question": "What is negative caching in DNS?",
+    "answers": ["Caching that a hostname or record type does NOT exist, to avoid repeated failed lookups", "A DNS security feature that blocks known malicious domains from resolving", "Caching only authoritative negative answers and discarding non-authoritative ones", "A mechanism to invalidate cached records when the zone serial increases"],
+    "correct": "Caching that a hostname or record type does NOT exist, to avoid repeated failed lookups",
+    "explanation": "RFC 2308 defines negative caching: resolvers cache NXDOMAIN and NODATA responses for the duration of the SOA's Minimum TTL. This prevents a flood of repeated queries for non-existent names (e.g. typos or probing). The cached 'absence' of a record is just as valid as the presence of one."
+  },
+  {
+    "question": "What is DNSSEC?",
+    "answers": ["A DNS extension that adds cryptographic signatures to responses to detect tampering", "A tunnelling protocol for sending DNS queries over TLS to prevent interception", "A firewall extension that filters DNS responses from unapproved nameservers", "An encryption layer that prevents DNS queries from being read in transit"],
+    "correct": "A DNS extension that adds cryptographic signatures to responses to detect tampering",
+    "explanation": "DNSSEC (DNS Security Extensions) uses public-key cryptography. Each DNS record set is signed with a private key (RRSIG). Resolvers verify the signature using the public key from DNSKEY records, chaining trust up to a DNSSEC-signed root zone. It prevents cache poisoning but does not encrypt DNS traffic."
+  },
+  {
+    "question": "What is DNS cache poisoning?",
+    "answers": ["Injecting forged DNS responses into a resolver's cache, redirecting users to malicious IPs", "Corrupting a zone file on an authoritative server with incorrect record data", "Overloading a DNS resolver's cache with thousands of junk entries via DDoS", "Inserting malicious SPF or TXT records to cause email authentication to fail"],
+    "correct": "Injecting forged DNS responses into a resolver's cache, redirecting users to malicious IPs",
+    "explanation": "Cache poisoning (Kaminsky attack) exploits the fact that DNS uses UDP with easily guessable transaction IDs. An attacker races to send a forged response with a matching ID before the real one arrives. Once poisoned, the resolver serves the attacker's IP for the target domain. DNSSEC mitigates this; DNS-over-TLS/HTTPS also helps."
+  },
+  {
+    "question": "What does 'dig +dnssec example.com A' add to the query?",
+    "code": "$ dig +dnssec example.com A\n;; ANSWER SECTION:\nexample.com.  300  IN  A      93.184.216.34\nexample.com.  300  IN  RRSIG  A 8 2 300 20240201 ... (signature)",
+    "code_lang": "bash",
+    "answers": ["Sets the DNSSEC OK (DO) bit, requesting DNSSEC records like RRSIG alongside the answer", "Encrypts the DNS query using DNSSEC's built-in TLS transport layer", "Validates the response and only shows it if the signature is correct", "Adds a DNSKEY record to the query so the server can authenticate the client"],
+    "correct": "Sets the DNSSEC OK (DO) bit, requesting DNSSEC records like RRSIG alongside the answer",
+    "explanation": "+dnssec sets the DO (DNSSEC OK) bit in the EDNS0 options of the query, asking the server to include RRSIG (signature) and other DNSSEC records in the response. dig itself doesn't validate the signatures — for that, use dig +sigchase or a validating resolver like Unbound."
+  },
+  {
+    "question": "What is a zone transfer, and what are the two types?",
+    "answers": ["Replicating a DNS zone from primary to secondary; AXFR (full) or IXFR (incremental)", "Migrating a domain between registrars; authorised (AXFR) or emergency (IXFR)", "Copying a zone file between servers; encrypted (AXFR) and unencrypted (IXFR) modes", "Backing up a DNS zone; automatic (AXFR) or manual (IXFR) trigger modes"],
+    "correct": "Replicating a DNS zone from primary to secondary; AXFR (full) or IXFR (incremental)",
+    "explanation": "AXFR (Authoritative Full Zone Transfer) transfers every record in the zone. IXFR (Incremental) transfers only the records that changed since a given serial number, making it more efficient. Zone transfers are triggered by NOTIFY messages from the primary, or by the secondary's Refresh timer firing."
+  },
+  {
+    "question": "What is split-horizon (split-brain) DNS?",
+    "answers": ["Serving different DNS answers for the same name depending on whether the query comes from inside or outside the network", "Splitting a large zone file into two halves served by different nameservers", "A DNS redundancy technique where two zones share the same nameserver IP address", "Dividing DNS query load between two recursive resolvers using round-robin"],
+    "correct": "Serving different DNS answers for the same name depending on whether the query comes from inside or outside the network",
+    "explanation": "Split-horizon DNS lets internal users resolve 'app.example.com' to a private RFC 1918 IP (10.x.x.x) while external users get the public IP. This is common for services behind a firewall where NAT hairpinning is impractical. Implemented by running separate views in BIND or separate resolver policies."
+  },
+  {
+    "question": "What DNS record type does SPF use, and what does the below record mean?",
+    "code": "example.com.  300  IN  TXT  \"v=spf1 mx a include:_spf.google.com -all\"",
+    "code_lang": "text",
+    "answers": ["TXT record; the domain's MX servers, its own A record IPs, and Google's sending IPs are allowed — all others are rejected", "SPF record; only Google-hosted mail is permitted for this domain, all others soft-fail", "TXT record; mail is accepted from all servers listed and mx stands for maximum size", "MX record; a special flag v=spf1 instructs mail servers to use DMARC instead"],
+    "correct": "TXT record; the domain's MX servers, its own A record IPs, and Google's sending IPs are allowed — all others are rejected",
+    "explanation": "SPF lives in a TXT record. 'v=spf1' is the version. 'mx' includes the domain's MX hosts; 'a' includes the A record IPs; 'include:_spf.google.com' whitelists Google's sending ranges. '-all' means anything else is a hard fail (reject). '~all' would be a softfail and '?all' neutral."
+  },
+  {
+    "question": "What is the purpose of a DNSKEY record?",
+    "code": "example.com.  3600  IN  DNSKEY  257 3 8 AwEAAbcs9... (public key data)",
+    "code_lang": "text",
+    "answers": ["Holds the public key used by DNSSEC to verify signatures on zone records", "Stores an encryption key used to encrypt DNS-over-HTTPS query bodies", "Contains the private key used by the primary nameserver to sign zone records", "Specifies which DNS servers are authorised to hold keys for the zone"],
+    "correct": "Holds the public key used by DNSSEC to verify signatures on zone records",
+    "explanation": "DNSKEY records publish the public half of DNSSEC key pairs. Flag 257 indicates a KSK (Key Signing Key) used to sign the DNSKEY RRset; flag 256 is a ZSK (Zone Signing Key) used to sign all other records. Resolvers use these to verify RRSIG signatures. Private keys are never published in DNS."
+  },
+  {
+    "question": "What does the DS (Delegation Signer) record do in DNSSEC?",
+    "answers": ["Contains a hash of a child zone's KSK, stored in the parent zone to create a chain of trust", "Delegates signing responsibility from the primary to a secondary nameserver", "Records which CA issued the TLS certificate associated with the domain's DANE record", "Stores a digital signature for the delegation NS records in the parent zone"],
+    "correct": "Contains a hash of a child zone's KSK, stored in the parent zone to create a chain of trust",
+    "explanation": "A DS (Delegation Signer) record in the parent zone (.com) contains a hash of the child zone's (example.com) Key Signing Key. Resolvers verify the chain: root DS → example.com DNSKEY → RRSIG on records. This chain of trust from the signed root is how DNSSEC validation works end-to-end."
+  },
+  {
+    "question": "What does the RD flag (Recursion Desired) in a DNS query header mean?",
+    "code": ";; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0",
+    "code_lang": "text",
+    "answers": ["The client is asking the resolver to perform recursive resolution on its behalf", "The server is reporting that it has recursion data available for this record", "The query requires the server to redirect it to the authoritative nameserver", "The response data is considered reliable and does not need further validation"],
+    "correct": "The client is asking the resolver to perform recursive resolution on its behalf",
+    "explanation": "RD (Recursion Desired) is set by the client when it wants the resolver to do the recursive work. RA (Recursion Available) in the response indicates the server supports recursion. Authoritative servers typically ignore RD and don't set RA; recursive resolvers set RA to signal they can handle recursive queries."
+  },
+  {
+    "question": "What does the 'aa' flag in a dig response indicate?",
+    "code": ";; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1",
+    "code_lang": "text",
+    "answers": ["Authoritative Answer — the response came directly from the zone's authoritative nameserver", "Always Accurate — the response has been DNSSEC-validated by the resolver", "Anycasted Address — the response was returned by an anycast instance of the server", "Already Available — the response was served instantly from the resolver's cache"],
+    "correct": "Authoritative Answer — the response came directly from the zone's authoritative nameserver",
+    "explanation": "The 'aa' flag means the responding server is authoritative for the queried zone — it holds the original zone data, not a cached copy. When querying a recursive resolver, 'aa' is typically absent because the resolver is serving from its cache. Query the nameserver directly (using @ns1.example.com) to see the 'aa' flag."
+  },
+  {
+    "question": "What does DNS-over-HTTPS (DoH) and DNS-over-TLS (DoT) provide that traditional DNS does not?",
+    "answers": ["Encryption of DNS queries in transit, preventing interception or tampering by network observers", "Digital signing of DNS records to prevent cache poisoning attacks", "Faster resolution by using HTTP/2 or TLS session reuse for persistent connections", "Authentication of the client to the DNS server using mutual TLS certificates"],
+    "correct": "Encryption of DNS queries in transit, preventing interception or tampering by network observers",
+    "explanation": "Traditional DNS uses UDP/TCP port 53 in plaintext — anyone on the network can see what you're looking up. DoT (port 853) and DoH (port 443, HTTPS) encrypt the transport. Note: they encrypt the channel, not the records themselves. DNSSEC signs records but doesn't encrypt them."
+  },
+  {
+    "question": "What DNS record type would you query to find which servers handle email for example.com?",
+    "code": "$ dig example.com ____",
+    "code_lang": "bash",
+    "answers": ["MX", "SMTP", "MAIL", "TXT"],
+    "correct": "MX",
+    "explanation": "MX (Mail eXchanger) records specify the mail servers for a domain. 'dig example.com MX' returns the list of mail servers and their priorities. SMTP is a protocol, not a record type. Mail server configuration is also augmented by TXT records (SPF/DKIM/DMARC) but the actual server hostnames come from MX records."
+  },
+  {
+    "question": "What well-known port does DNS use by default?",
+    "answers": ["UDP/TCP port 53", "TCP port 443 only for secure queries", "UDP port 5353 for all standard resolution", "TCP port 853 for all queries"],
+    "correct": "UDP/TCP port 53",
+    "explanation": "DNS uses port 53 on both UDP and TCP. UDP is used for most queries (faster, no connection overhead). TCP is used when responses exceed 512 bytes (or 4096 bytes with EDNS0), for zone transfers (AXFR/IXFR), and when the TC (Truncated) flag is set. DNS-over-TLS uses TCP port 853."
+  },
+  {
+    "question": "What does EDNS0 (Extension Mechanisms for DNS) add to DNS?",
+    "answers": ["Larger UDP payload support (up to 4096 bytes) and option fields for DNSSEC and other extensions", "End-to-end encryption for DNS queries between client and resolver", "Extended nameserver lists beyond the 13-root-server limit", "An error reporting mechanism that feeds back to the zone administrator"],
+    "correct": "Larger UDP payload support (up to 4096 bytes) and option fields for DNSSEC and other extensions",
+    "explanation": "EDNS0 (RFC 6891) extends DNS by adding an OPT pseudo-record to queries and responses. It raises the UDP payload limit from 512 bytes (original RFC 1035) to up to 4096 bytes, enabling larger DNSSEC responses. It also provides the DO (DNSSEC OK) bit and a standard way to add future option codes."
+  },
+  {
+    "question": "What does the TC flag in a DNS response header mean?",
+    "code": ";; flags: qr rd ra tc; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 0",
+    "code_lang": "text",
+    "answers": ["Truncated — the response was cut short and the client should retry over TCP", "Transfer Complete — the zone transfer finished successfully", "Time Critical — the record TTL is below the minimum acceptable caching threshold", "Type Conflict — two records of conflicting types were found for the same name"],
+    "correct": "Truncated — the response was cut short and the client should retry over TCP",
+    "explanation": "When a DNS response is too large for the UDP payload size, the server sends what it can with TC=1 set. The client must then retry the same query over TCP, which has no size limit. This is why DNS resolvers must support both UDP and TCP, and why EDNS0 (which raises the UDP limit) was important."
+  },
+  {
+    "question": "What does 'dig example.com NS' return?",
+    "code": "$ dig example.com NS\n;; ANSWER SECTION:\nexample.com.  86400  IN  NS  ns1.example.com.\nexample.com.  86400  IN  NS  ns2.example.com.",
+    "code_lang": "bash",
+    "answers": ["The authoritative nameservers delegated to serve the example.com zone", "The network service addresses registered for the domain at the NIC", "The list of recursive resolvers that are allowed to query the zone", "The nameserver's self-reported IP addresses for round-robin balancing"],
+    "correct": "The authoritative nameservers delegated to serve the example.com zone",
+    "explanation": "NS records list the authoritative nameservers for a zone. Having multiple NS records is required for redundancy — if ns1 is down, resolvers can use ns2. NS records have long TTLs (86400 = 24 h) because nameserver delegations change rarely and need to propagate slowly."
+  },
+  {
+    "question": "What is the NODATA response in DNS (distinct from NXDOMAIN)?",
+    "answers": ["The queried name exists but has no records of the requested type", "The nameserver has no data at all and cannot answer any queries", "The response contained records that have all expired and been removed", "The zone exists but the nameserver's zone file contains no records"],
+    "correct": "The queried name exists but has no records of the requested type",
+    "explanation": "NODATA means the name is valid (no NXDOMAIN), but there are no records of the specific type requested. For example, querying example.com AAAA when the domain only has A records returns NODATA (RCODE 0 with an empty answer section and an SOA in the authority section). The SOA's Minimum TTL governs negative caching here too."
+  },
+  {
+    "question": "What does this dig output's AUTHORITY SECTION tell you?",
+    "code": ";; AUTHORITY SECTION:\nexample.com.  900  IN  SOA  ns1.example.com.  admin.example.com. (\n              2024010101 3600 900 604800 300 )",
+    "code_lang": "text",
+    "answers": ["The queried name or type does not exist; the SOA tells resolvers how long to cache this negative answer", "The nameserver is authoritative and returning the SOA as additional information alongside the answer", "A zone transfer has been authorised and the SOA marks the beginning of the transferred zone", "The response was served from cache and the SOA shows when the cache entry expires"],
+    "correct": "The queried name or type does not exist; the SOA tells resolvers how long to cache this negative answer",
+    "explanation": "When a nameserver returns NXDOMAIN or NODATA, it includes the zone's SOA in the AUTHORITY section. Resolvers use the SOA's Minimum TTL field (300 in this example) as the negative caching TTL per RFC 2308. Without it, resolvers wouldn't know how long to cache the 'doesn't exist' answer."
+  },
+  {
+    "question": "What does the following dig command check, and what does the output reveal?",
+    "code": "$ dig +short @ns1.example.com example.com SOA\nns1.example.com. admin.example.com. 2024010101 3600 900 604800 300",
+    "code_lang": "bash",
+    "answers": ["It queries the authoritative nameserver directly for the SOA, confirming its serial and timing values", "It checks whether ns1.example.com is running and returns its uptime in the SOA serial field", "It triggers an immediate zone refresh by querying the SOA and comparing serials", "It returns the SOA from cache; the @ symbol forces a cached lookup from ns1"],
+    "correct": "It queries the authoritative nameserver directly for the SOA, confirming its serial and timing values",
+    "explanation": "Querying the authoritative server (@ns1.example.com) directly for the SOA is a common admin technique. The serial (2024010101) shows you the current zone version on that server. You can compare serials across all your nameservers to verify they're all in sync after a zone update."
+  }
+]

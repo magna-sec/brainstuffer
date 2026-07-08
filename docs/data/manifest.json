@@ -1,5 +1,11 @@
 [
   {
+    "file": "dns.json",
+    "label": "DNS Fundamentals",
+    "count": 61,
+    "category": "Technology"
+  },
+  {
     "file": "generic_cyber.json",
     "label": "Generic Cyber",
     "count": 428,
