@@ -274,8 +274,9 @@
 [data-skin="win95"] .alert-error   { background: #ecd4d4; border-color: #cc0000; color: #600000; }
 [data-skin="win95"] .alert-info    { background: #d4d4ec; border-color: #000080; color: #000060; }
 
-[data-skin="win95"] .answer-correct { background: #d4ecd4; border-color: #008000; color: #003800; }
-[data-skin="win95"] .answer-wrong   { background: #ecd4d4; border-color: #cc0000; color: #600000; }
+[data-skin="win95"] .answer-correct  { background: #d4ecd4; border-color: #008000; color: #003800; }
+[data-skin="win95"] .answer-wrong    { background: #ecd4d4; border-color: #cc0000; color: #600000; }
+[data-skin="win95"] .answer-question { background: #d4d4ec; border-color: #000080; color: #000060; }
 
 [data-skin="win95"] #skin-toggle {
     border-radius: 0;
@@ -812,8 +813,9 @@ body.on-home .logo-svg:not(.breathing) { animation: brain-home-pulse 2.8s ease-i
     border-left: 4px solid;
 }
 
-.answer-correct { background: #052e16; border-color: #22c55e; color: #86efac; }
-.answer-wrong   { background: #1c0606; border-color: #ef4444; color: #fca5a5; }
+.answer-correct  { background: #052e16; border-color: #22c55e; color: #86efac; }
+.answer-wrong    { background: #1c0606; border-color: #ef4444; color: #fca5a5; }
+.answer-question { background: var(--card); border-color: var(--accent); color: var(--text); }
 
 .meta {
     font-size: 0.8rem;

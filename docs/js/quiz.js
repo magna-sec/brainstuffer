@@ -192,6 +192,7 @@ function submitAnswer() {
 
     showFeedback({
         isCorrect, correct, selectedVal,
+        question: question.question,
         current: current + 1,
         total: store.quiz.length,
         isLast, flagged, tooSlow,
@@ -212,6 +213,10 @@ function showFeedback(data) {
     let html = '<div class="result-icon">' + (data.isCorrect ? '&#9989;' : '&#10060;') + '</div>';
     html += '<h2 class="result-heading" style="color:' + (data.isCorrect ? '#22c55e' : '#ef4444') + '">'
          + (data.isCorrect ? 'Correct!' : 'Incorrect') + '</h2>';
+
+    if (data.isCorrect && data.question) {
+        html += '<div class="answer-box answer-question"><strong>Question:</strong> ' + escHtml(data.question) + '</div>';
+    }
 
     if (!data.isCorrect) {
         html += '<div class="answer-box answer-wrong"><strong>Your answer:</strong> ' + escHtml(data.selectedVal || '(none)') + '</div>';
