@@ -214,7 +214,7 @@ function showFeedback(data) {
     html += '<h2 class="result-heading" style="color:' + (data.isCorrect ? '#22c55e' : '#ef4444') + '">'
          + (data.isCorrect ? 'Correct!' : 'Incorrect') + '</h2>';
 
-    if (data.isCorrect && data.question) {
+    if (data.question) {
         html += '<div class="answer-box answer-question"><strong>Question:</strong> ' + escHtml(data.question) + '</div>';
     }
 
