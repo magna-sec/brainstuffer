@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>Chess Openings Trainer — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css?v=2.0.2">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+<style>
+/* ── Board colours, derived per skin ──────────────────────────── */
+:root{
+    --sq-l:#b6bdea; --sq-d:#535ca0;
+    --pc-light:#f4f6fb; --pc-dark:#141826;
+    --pc-line-d:#0a0d16; --pc-line-l:#c7cddd;
+}
+[data-skin="neon"]   { --sq-l:#a8d8a8; --sq-d:#2d6b37; }
+[data-skin="crimson"]{ --sq-l:#e5b6b6; --sq-d:#7e3036; }
+[data-skin="ocean"]  { --sq-l:#a6d8d5; --sq-d:#22646b; }
+[data-skin="amber"]  { --sq-l:#e6cfa0; --sq-d:#7b5920; }
+[data-skin="caveman"]{ --sq-l:#c9a06a; --sq-d:#6b3f1c;
+                       --pc-light:#f7e3b4; --pc-dark:#241505;
+                       --pc-line-d:#140b02; --pc-line-l:#b4884e; }
+[data-skin="win95"]  { --sq-l:#d9d9d9; --sq-d:#6f6f8e;
+                       --pc-light:#ffffff; --pc-dark:#101010;
+                       --pc-line-d:#000000; --pc-line-l:#a0a0a0; }
+
+/* ── Layout ───────────────────────────────────────────────────── */
+.back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);
+           font-size:.8rem;text-decoration:none;margin-bottom:1.1rem;align-self:flex-start;}
+.back-link:hover{color:var(--accent);}
+h1.pg{color:var(--accent);font-size:1.45rem;margin-bottom:.2rem;}
+p.sub{color:var(--subtle);font-size:.82rem;margin-bottom:1.25rem;line-height:1.55;}
+
+.tab-bar{display:flex;gap:.25rem;margin-bottom:1.25rem;border-bottom:2px solid var(--card-border);
+         overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{background:none;border:none;color:var(--muted);font-size:.85rem;font-weight:700;
+         padding:.6rem .9rem;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;
+         transition:color .2s,border-color .2s;font-family:inherit;white-space:nowrap;
+         letter-spacing:.02em;touch-action:manipulation;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── Chessboard ───────────────────────────────────────────────── */
+.bwrap{display:flex;justify-content:center;margin:0 auto;}
+.bwrap.hide{display:none;}
+.bframe{
+    display:grid;
+    grid-template-columns:1.15rem 1fr;
+    grid-template-rows:1fr 1.15rem;
+    width:min(92vw,420px);
+    user-select:none;-webkit-user-select:none;
+}
+.board{
+    grid-row:1;grid-column:2;
+    display:grid;grid-template-columns:repeat(8,1fr);
+    aspect-ratio:1/1;
+    border:2px solid var(--card-border);
+    border-radius:4px;overflow:hidden;
+    box-shadow:0 6px 26px rgba(0,0,0,.4);
+}
+.ranks{grid-row:1;grid-column:1;display:grid;grid-template-rows:repeat(8,1fr);}
+.files{grid-row:2;grid-column:2;display:grid;grid-template-columns:repeat(8,1fr);}
+.bcorner{grid-row:2;grid-column:1;}
+.ranks div,.files div{
+    display:flex;align-items:center;justify-content:center;
+    font-size:.62rem;font-weight:700;color:var(--muted);
+    font-family:'Courier New',monospace;letter-spacing:.04em;
+}
+
+.sq{
+    position:relative;border:none;padding:0;margin:0;
+    display:flex;align-items:center;justify-content:center;
+    cursor:default;touch-action:manipulation;font-family:inherit;
+    transition:box-shadow .12s,filter .12s;
+}
+.sq.l{background:var(--sq-l);}
+.sq.d{background:var(--sq-d);}
+.board.pick .sq{cursor:pointer;}
+.board.pick .sq:hover{filter:brightness(1.12);}
+
+.sq .cr{
+    position:absolute;top:1px;left:2px;
+    font-size:.5rem;font-weight:700;line-height:1;
+    font-family:'Courier New',monospace;
+    opacity:.62;pointer-events:none;
+}
+.sq.l .cr{color:#1d2233;}
+.sq.d .cr{color:#eef1fa;}
+[data-skin="caveman"] .sq.l .cr{color:#2a1505;}
+[data-skin="caveman"] .sq.d .cr{color:#f3dcb5;}
+.sq .edge{font-weight:800;opacity:.95;}
+
+/* state overlays */
+.sq.last::after{content:"";position:absolute;inset:0;background:var(--accent);opacity:.30;pointer-events:none;}
+.sq.sel::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 3px var(--accent);pointer-events:none;}
+.sq.hit::after{content:"";position:absolute;inset:0;background:var(--success);opacity:.45;pointer-events:none;}
+.sq.miss::after{content:"";position:absolute;inset:0;background:var(--danger);opacity:.45;pointer-events:none;}
+.sq.target::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 3px var(--warning);pointer-events:none;}
+
+.pc{width:80%;height:80%;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;
+    pointer-events:none;position:relative;z-index:1;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.35));}
+.pc.w{fill:var(--pc-light);stroke:var(--pc-line-d);}
+.pc.b{fill:var(--pc-dark);stroke:var(--pc-line-l);}
+
+/* ── Panels / controls ────────────────────────────────────────── */
+.pane{background:var(--card);border:1px solid var(--card-border);border-radius:12px;
+      padding:1rem 1.1rem;margin-bottom:1rem;}
+.row{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;}
+.row.center{justify-content:center;}
+.pillbar{display:flex;gap:.4rem;overflow-x:auto;padding-bottom:.4rem;margin-bottom:.9rem;
+         scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.pillbar::-webkit-scrollbar{display:none;}
+.pill{background:var(--bg2);border:1px solid var(--card-border);color:var(--subtle);
+      font-family:inherit;font-size:.74rem;font-weight:700;padding:.4rem .7rem;border-radius:20px;
+      cursor:pointer;white-space:nowrap;touch-action:manipulation;transition:all .15s;}
+.pill:hover{border-color:var(--accent);color:var(--text);}
+.pill.on{border-color:var(--accent);color:var(--accent);box-shadow:0 0 8px var(--glow);}
+
+.ctl{background:var(--bg2);border:1px solid var(--card-border);color:var(--subtle);
+     font-family:inherit;font-size:.75rem;font-weight:700;padding:.45rem .8rem;border-radius:8px;
+     cursor:pointer;touch-action:manipulation;transition:all .15s;}
+.ctl:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.ctl:disabled{opacity:.35;cursor:not-allowed;}
+.ctl.on{border-color:var(--accent);color:var(--accent);}
+.ctl.wide{flex:1;min-width:88px;text-align:center;}
+
+/* ── Move list ────────────────────────────────────────────────── */
+.mlist{display:flex;flex-wrap:wrap;gap:.28rem;font-family:'Courier New',monospace;
+       font-size:.76rem;margin:.85rem 0 .2rem;line-height:1.6;}
+.mnum{color:var(--muted);padding:.12rem .1rem;}
+.mv{color:var(--subtle);padding:.12rem .34rem;border-radius:4px;cursor:pointer;
+    border:1px solid transparent;touch-action:manipulation;}
+.mv:hover{color:var(--text);border-color:var(--card-border);}
+.mv.on{color:var(--accent);border-color:var(--accent);font-weight:700;background:var(--bg2);}
+.mv.future{opacity:.38;}
+
+/* ── Narrative ────────────────────────────────────────────────── */
+.narr{background:linear-gradient(90deg,var(--glow) 0%,transparent 70%);
+      border-left:2px solid var(--accent);border-radius:0 7px 7px 0;
+      padding:.7rem .9rem;font-size:.85rem;line-height:1.65;margin-top:.8rem;}
+.narr b{color:var(--accent);}
+.narr i{color:var(--accent2);font-style:normal;}
+.plain{font-family:'Courier New',monospace;font-size:.74rem;color:var(--accent2);
+       margin-top:.5rem;padding-top:.5rem;border-top:1px dashed var(--card-border);}
+
+/* ── Quiz / options ───────────────────────────────────────────── */
+.qbox{margin-top:.9rem;background:var(--bg2);border:1.5px solid var(--accent);
+      border-radius:10px;padding:.8rem .9rem;box-shadow:0 0 16px var(--glow);}
+.qq{font-size:.84rem;font-weight:700;margin-bottom:.6rem;line-height:1.5;}
+.qopts{display:flex;flex-direction:column;gap:.35rem;}
+.copt{background:var(--card);border:1px solid var(--card-border);color:var(--text);
+      font-family:inherit;font-size:.8rem;text-align:left;padding:.55rem .7rem;border-radius:8px;
+      cursor:pointer;line-height:1.45;touch-action:manipulation;transition:all .13s;
+      border-left:4px solid var(--card-border);}
+.copt:hover:not(:disabled){border-color:var(--accent);}
+.copt:disabled{cursor:default;}
+.copt .san{font-family:'Courier New',monospace;font-weight:700;color:var(--accent);}
+.copt.answer-correct .san,.copt.answer-wrong .san{color:inherit;}
+.qexp{margin-top:.6rem;font-size:.8rem;line-height:1.6;color:var(--subtle);
+      border-top:1px dashed var(--card-border);padding-top:.55rem;}
+.qexp b{color:var(--accent);}
+.qexp i{color:var(--accent2);font-style:normal;}
+
+/* ── Stat strip ───────────────────────────────────────────────── */
+.stats{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:.9rem;}
+.stat{background:var(--bg2);border:1px solid var(--card-border);border-radius:8px;
+      padding:.4rem .75rem;text-align:center;min-width:64px;}
+.stat .k{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;}
+.stat .v{font-size:1rem;font-weight:800;color:var(--accent);font-family:'Courier New',monospace;}
+
+.prompt{text-align:center;font-size:.95rem;line-height:1.5;margin:.2rem 0 .9rem;}
+.prompt .big{font-family:'Courier New',monospace;font-size:1.6rem;font-weight:800;
+             color:var(--accent);display:block;margin:.15rem 0;letter-spacing:.06em;}
+.fb{text-align:center;font-size:.82rem;min-height:1.2rem;margin-top:.7rem;line-height:1.5;}
+.fb.ok{color:var(--success);}
+.fb.no{color:var(--danger);}
+
+/* ── Blind mode ───────────────────────────────────────────────── */
+.blind-log{background:var(--bg2);border:1px solid var(--card-border);border-radius:10px;
+           padding:.9rem 1rem;font-family:'Courier New',monospace;font-size:.9rem;
+           line-height:2;min-height:5rem;letter-spacing:.03em;}
+.blind-log .mnum{color:var(--muted);}
+.blind-log .w{color:var(--text);}
+.blind-log .b{color:var(--accent2);}
+.blind-log .cursor{color:var(--accent);animation:blink 1.1s steps(2,start) infinite;}
+@keyframes blink{to{visibility:hidden;}}
+.peekwrap{display:none;margin-top:.9rem;}
+.peekwrap.show{display:block;}
+.peek-t{text-align:center;font-size:.7rem;color:var(--warning);margin-top:.4rem;}
+.hint{font-size:.74rem;color:var(--muted);text-align:center;margin-top:.6rem;line-height:1.5;}
+
+/* ── Small screens ────────────────────────────────────────────── */
+@media (max-width:430px){
+    .tab-btn{font-size:.78rem;padding:.55rem .6rem;}
+    .pane{padding:.85rem .7rem;}
+    .bframe{width:min(96vw,420px);grid-template-columns:1rem 1fr;grid-template-rows:1fr 1rem;}
+    .sq .cr{font-size:.46rem;}
+    .ranks div,.files div{font-size:.58rem;}
+    h1.pg{font-size:1.2rem;}
+    .ctl{font-size:.72rem;padding:.42rem .6rem;}
+    .stat{min-width:56px;padding:.35rem .55rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Piece sprite (hidden) ──────────────────────────────────── -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="pc-P" viewBox="0 0 45 45">
+    <circle cx="22.5" cy="13" r="6.2"/>
+    <path d="M17.6 18.6h9.8l1.9 11.4H15.7z"/>
+    <path d="M12.4 30h20.2l2.6 7.6H9.8z"/>
+  </symbol>
+  <symbol id="pc-R" viewBox="0 0 45 45">
+    <path d="M11 10h5.2v4h4.1v-4h4.4v4h4.1v-4H34v10.2H11z"/>
+    <path d="M14.3 20.2h16.4l-1.9 11.6H16.2z"/>
+    <path d="M10 31.8h25v6H10z"/>
+  </symbol>
+  <symbol id="pc-N" viewBox="0 0 45 45">
+    <path d="M11.8 37.4v-9.2c0-5 2.9-8.4 6.9-10.6l-2.7-3.1 1.2-4.2 3.7 2.2 1.9-3.4 2.1 4.4c5.9 1.2 8.9 5.8 8.9 12.2v11.7z"/>
+    <circle cx="25.4" cy="19.6" r="1.4" style="fill:inherit;stroke:none"/>
+    <path d="M18.7 17.6l-4.3 4.6" style="fill:none"/>
+  </symbol>
+  <symbol id="pc-B" viewBox="0 0 45 45">
+    <circle cx="22.5" cy="8.6" r="2.7"/>
+    <path d="M22.5 11.6c5.9 3.3 8.1 9.6 5.9 14.9H16.6c-2.2-5.3 0-11.6 5.9-14.9z"/>
+    <path d="M22.5 15.8l4 5.4" style="fill:none"/>
+    <path d="M15.8 26.5h13.4l-1.5 5.1H17.3z"/>
+    <path d="M10.6 31.6h23.8v6H10.6z"/>
+  </symbol>
+  <symbol id="pc-Q" viewBox="0 0 45 45">
+    <path d="M9 22.6l1.9-9.4 5.4 7.2 6.2-9.6 6.2 9.6 5.4-7.2 1.9 9.4z"/>
+    <circle cx="10.9" cy="11.3" r="2.2"/>
+    <circle cx="22.5" cy="9.1" r="2.5"/>
+    <circle cx="34.1" cy="11.3" r="2.2"/>
+    <path d="M9.6 22.6h25.8l-1.7 5.9H11.3z"/>
+    <path d="M8.4 28.5h28.2v3.6H8.4z"/>
+    <path d="M7.4 32.1h30.2v5.5H7.4z"/>
+  </symbol>
+  <symbol id="pc-K" viewBox="0 0 45 45">
+    <path d="M21 5.4h3v3.3h3.3v3h-3.3V15h-3v-3.3h-3.3v-3H21z"/>
+    <path d="M22.5 15.4c-6.4 0-11.3 4.1-11.3 9.1l2 5.4h18.6l2-5.4c0-5-4.9-9.1-11.3-9.1z"/>
+    <path d="M10.7 30.1h23.6v3.6H10.7z"/>
+    <path d="M8.9 33.7h27.2v4.1H8.9z"/>
+  </symbol>
+</defs></svg>
+
+<div class="container">
+
+  <a class="back-link" href="index.html#learn">&#8592; Back to Interactive Learning</a>
+  <h1 class="pg">&#9819; Chess Openings Trainer</h1>
+  <p class="sub">Learn the openings <em>and</em> the notation at the same time. Every square is labelled,
+     every move is shown as algebraic notation and plain English &mdash; and when you are ready,
+     Blind mode takes the board away entirely.</p>
+
+  <div class="tab-bar" role="tablist">
+    <button class="tab-btn active" data-tab="learn"  type="button">Walkthrough</button>
+    <button class="tab-btn"        data-tab="drill"  type="button">Square Drill</button>
+    <button class="tab-btn"        data-tab="chal"   type="button">Your Move</button>
+    <button class="tab-btn"        data-tab="blind"  type="button">Blind Mode</button>
+  </div>
+
+  <!-- ═══════════════════════════════════ WALKTHROUGH ═══════════ -->
+  <section class="tab-panel active" id="tab-learn">
+    <div class="pillbar" id="learn-pills"></div>
+    <div class="pane">
+      <div id="learn-head" style="margin-bottom:.8rem;"></div>
+      <div class="bwrap" id="learn-board"></div>
+      <div class="row center" style="margin-top:.8rem;">
+        <button class="ctl" id="learn-first" type="button" title="Back to the start">&#8676;</button>
+        <button class="ctl wide" id="learn-prev" type="button">&#8592; Prev</button>
+        <button class="ctl wide" id="learn-next" type="button">Next &#8594;</button>
+        <button class="ctl" id="learn-flip" type="button" title="Flip the board">&#8645;</button>
+      </div>
+      <div class="row center" style="margin-top:.5rem;">
+        <button class="ctl on" id="learn-coords" type="button">Square labels</button>
+        <button class="ctl on" id="learn-plain" type="button">Plain English</button>
+      </div>
+      <div class="mlist" id="learn-moves"></div>
+      <div class="narr" id="learn-narr"></div>
+      <div id="learn-quiz"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ SQUARE DRILL ══════════ -->
+  <section class="tab-panel" id="tab-drill">
+    <div class="pillbar">
+      <button class="pill on" data-dmode="find" type="button">Find the square</button>
+      <button class="pill"    data-dmode="name" type="button">Name the square</button>
+      <button class="pill"    data-dmode="colour" type="button">Light or dark?</button>
+    </div>
+    <div class="pane">
+      <div class="stats">
+        <div class="stat"><div class="k">Q</div><div class="v" id="d-prog">1/20</div></div>
+        <div class="stat"><div class="k">Score</div><div class="v" id="d-score">0</div></div>
+        <div class="stat"><div class="k">Streak</div><div class="v" id="d-streak">0</div></div>
+        <div class="stat"><div class="k">Best</div><div class="v" id="d-best">0</div></div>
+      </div>
+      <div class="prompt" id="d-prompt"></div>
+      <div class="bwrap" id="drill-board"></div>
+      <div class="qopts" id="d-opts" style="margin-top:.9rem;"></div>
+      <div class="fb" id="d-fb"></div>
+      <div class="row center" style="margin-top:.8rem;">
+        <button class="ctl" id="d-restart" type="button">Restart run</button>
+        <button class="ctl on" id="d-side" type="button">White's view</button>
+      </div>
+      <div class="hint" id="d-hint">Files run <b>a&ndash;h</b> left to right, ranks <b>1&ndash;8</b> bottom to top.
+        A square is always named <b>file first</b>: e4, not 4e.</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ YOUR MOVE ═════════════ -->
+  <section class="tab-panel" id="tab-chal">
+    <div class="pillbar" id="chal-pills"></div>
+    <div class="pane">
+      <div class="stats">
+        <div class="stat"><div class="k">Move</div><div class="v" id="c-prog">1/6</div></div>
+        <div class="stat"><div class="k">Score</div><div class="v" id="c-score">0</div></div>
+        <div class="stat"><div class="k">Best</div><div class="v" id="c-best">0</div></div>
+      </div>
+      <div class="prompt" id="c-prompt"></div>
+      <div class="bwrap" id="chal-board"></div>
+      <div class="mlist" id="c-moves"></div>
+      <div class="qopts" id="c-opts" style="margin-top:.6rem;"></div>
+      <div class="fb" id="c-fb"></div>
+      <div id="c-exp"></div>
+      <div class="row center" style="margin-top:.8rem;">
+        <button class="ctl wide" id="c-next" type="button" disabled>Next &#8594;</button>
+        <button class="ctl" id="c-restart" type="button">Restart</button>
+      </div>
+      <div class="row center" style="margin-top:.5rem;">
+        <button class="ctl on" id="c-answer-mode" type="button">Answer: tap squares</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ BLIND MODE ════════════ -->
+  <section class="tab-panel" id="tab-blind">
+    <div class="pillbar" id="blind-pills"></div>
+    <div class="pane">
+      <div class="stats">
+        <div class="stat"><div class="k">Move</div><div class="v" id="b-prog">1/6</div></div>
+        <div class="stat"><div class="k">Score</div><div class="v" id="b-score">0</div></div>
+        <div class="stat"><div class="k">Peeks</div><div class="v" id="b-peeks">0</div></div>
+        <div class="stat"><div class="k">Best</div><div class="v" id="b-best">0</div></div>
+      </div>
+      <div id="b-head" class="prompt"></div>
+      <div class="blind-log" id="b-log"></div>
+      <div class="qopts" id="b-opts" style="margin-top:.9rem;"></div>
+      <div class="fb" id="b-fb"></div>
+      <div id="b-exp"></div>
+      <div class="row center" style="margin-top:.8rem;">
+        <button class="ctl wide" id="b-next" type="button" disabled>Next &#8594;</button>
+        <button class="ctl" id="b-peek" type="button">&#128065; Peek (&minus;1)</button>
+        <button class="ctl" id="b-restart" type="button">Restart</button>
+      </div>
+      <div class="peekwrap" id="b-peekwrap">
+        <div class="bwrap" id="blind-board"></div>
+        <div class="peek-t" id="b-peek-t"></div>
+      </div>
+      <div class="hint">No board. Read the moves, hold the position in your head, and play.
+        Peeking costs a point &mdash; try to get through a whole opening without one.</div>
+    </div>
+  </section>
+
+</div>
+
+<script src="js/chess-openings-data.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ═══════════════════════════════════════════════ Core chess model ═══ */
+
+var FILES = 'abcdefgh', RANKS = '12345678';
+var PIECE_NAME = {K:'king',Q:'queen',R:'rook',B:'bishop',N:'knight',P:'pawn'};
+
+function startPos(){
+  var p = {}, back = 'RNBQKBNR';
+  for (var f = 0; f < 8; f++){
+    p[FILES[f] + '1'] = 'w' + back[f];
+    p[FILES[f] + '2'] = 'wP';
+    p[FILES[f] + '7'] = 'bP';
+    p[FILES[f] + '8'] = 'b' + back[f];
+  }
+  return p;
+}
+
+/* Apply one authored move. Returns {captured:<code|null>}. */
+function applyMove(pos, mv){
+  var captured = pos[mv.to] || null;
+  pos[mv.to] = pos[mv.from];
+  delete pos[mv.from];
+  if (mv.rook){
+    pos[mv.rook.to] = pos[mv.rook.from];
+    delete pos[mv.rook.from];
+  }
+  return { captured: captured };
+}
+
+/* Position after the first n plies of an opening. */
+function posAfter(op, n){
+  var pos = startPos();
+  for (var i = 0; i < n; i++) applyMove(pos, op.moves[i]);
+  return pos;
+}
+
+/* "1.e4 e5 2.Nf3" style numbering for ply index i (0-based). */
+function moveNo(i){ return Math.floor(i / 2) + 1; }
+function isWhitePly(i){ return i % 2 === 0; }
+
+/* Plain-English rendering of a move, given the position BEFORE it. */
+function plainEnglish(pos, mv){
+  var code = pos[mv.from];
+  if (!code) return mv.san;
+  var who = code[0] === 'w' ? 'White' : 'Black';
+  if (mv.rook){
+    var sideTxt = mv.to[0] === 'g' ? 'kingside' : 'queenside';
+    return who + ' castles ' + sideTxt + ': king ' + mv.from + ' → ' + mv.to +
+           ', rook ' + mv.rook.from + ' → ' + mv.rook.to;
+  }
+  var txt = who + "'s " + PIECE_NAME[code[1]] + ' ' + mv.from + ' → ' + mv.to;
+  var tgt = pos[mv.to];
+  if (tgt) txt += ', capturing the ' + PIECE_NAME[tgt[1]];
+  if (mv.san.indexOf('+') > -1) txt += ' — check';
+  return txt;
+}
+
+function isLightSquare(sq){
+  return (FILES.indexOf(sq[0]) + RANKS.indexOf(sq[1])) % 2 === 1;
+}
+
+function shuffle(a){
+  for (var i = a.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function store(k, v){
+  try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); }
+  catch (e) { return null; }
+}
+
+/* ═════════════════════════════════════════════════ Board rendering ═══ */
+
+function BoardView(hostEl){
+  var frame = document.createElement('div'); frame.className = 'bframe';
+  var ranks = document.createElement('div'); ranks.className = 'ranks';
+  var board = document.createElement('div'); board.className = 'board';
+  var corner= document.createElement('div'); corner.className= 'bcorner';
+  var files = document.createElement('div'); files.className = 'files';
+  frame.appendChild(ranks); frame.appendChild(board);
+  frame.appendChild(corner); frame.appendChild(files);
+  hostEl.appendChild(frame);
+
+  var v = {
+    el: board, frame: frame,
+    pos: startPos(),
+    orient: 'w',
+    coords: true,
+    rulers: true,       /* the a–h / 1–8 gutters — hidden during recall drills */
+    showPieces: true,
+    marks: {},          /* square -> 'last' | 'sel' | 'hit' | 'miss' | 'target' */
+    onSquare: null
+  };
+
+  board.addEventListener('click', function(e){
+    var t = e.target;
+    while (t && t !== board && !t.getAttribute('data-sq')) t = t.parentNode;
+    if (!t || t === board) return;
+    if (v.onSquare) v.onSquare(t.getAttribute('data-sq'));
+  });
+
+  v.render = function(){
+    var rSeq = [], fSeq = [], i;
+    if (v.orient === 'w'){
+      for (i = 7; i >= 0; i--) rSeq.push(i);
+      for (i = 0; i < 8;  i++) fSeq.push(i);
+    } else {
+      for (i = 0; i < 8;  i++) rSeq.push(i);
+      for (i = 7; i >= 0; i--) fSeq.push(i);
+    }
+
+    var html = '';
+    rSeq.forEach(function(r, ri){
+      fSeq.forEach(function(f, fi){
+        var sq    = FILES[f] + RANKS[r];
+        var light = (f + r) % 2 === 1;
+        var cls   = 'sq ' + (light ? 'l' : 'd');
+        if (v.marks[sq]) cls += ' ' + v.marks[sq];
+
+        var lbl = '';
+        if (v.coords){
+          lbl = '<span class="cr">' + sq + '</span>';
+        } else if (v.rulers && (fi === 0 || ri === 7)){
+          /* minimal labels: rank down the first column, file along the last row */
+          var edge = (fi === 0 ? RANKS[r] : '') + (ri === 7 ? FILES[f] : '');
+          lbl = '<span class="cr edge">' + edge + '</span>';
+        }
+
+        var pc = '';
+        if (v.showPieces && v.pos[sq]){
+          var code = v.pos[sq];
+          pc = '<svg class="pc ' + code[0] + '" viewBox="0 0 45 45" aria-hidden="true">' +
+               '<use href="#pc-' + code[1] + '"/></svg>';
+        }
+
+        var label = sq + (v.pos[sq] && v.showPieces
+                     ? ', ' + (v.pos[sq][0] === 'w' ? 'white ' : 'black ') + PIECE_NAME[v.pos[sq][1]]
+                     : ', empty');
+        html += '<button type="button" class="' + cls + '" data-sq="' + sq +
+                '" aria-label="' + label + '">' + lbl + pc + '</button>';
+      });
+    });
+    board.innerHTML = html;
+
+    ranks.innerHTML = rSeq.map(function(r){ return '<div>' + (v.rulers ? RANKS[r] : '') + '</div>'; }).join('');
+    files.innerHTML = fSeq.map(function(f){ return '<div>' + (v.rulers ? FILES[f] : '') + '</div>'; }).join('');
+  };
+
+  v.setInteractive = function(on){ board.classList.toggle('pick', !!on); };
+  v.clearMarks = function(){ v.marks = {}; };
+  v.mark = function(sq, kind){ v.marks[sq] = kind; };
+  v.markMove = function(mv){
+    v.clearMarks();
+    if (!mv) return;
+    v.mark(mv.from, 'last'); v.mark(mv.to, 'last');
+    if (mv.rook){ v.mark(mv.rook.from, 'last'); v.mark(mv.rook.to, 'last'); }
+  };
+  v.render();
+  return v;
+}
+
+/* Shared move-list renderer. */
+function renderMoveList(el, moves, upTo, onClick, dimFuture){
+  var html = '';
+  for (var i = 0; i < moves.length; i++){
+    if (isWhitePly(i)) html += '<span class="mnum">' + moveNo(i) + '.</span>';
+    var cls = 'mv';
+    if (i === upTo - 1) cls += ' on';
+    if (dimFuture && i >= upTo) cls += ' future';
+    html += '<span class="' + cls + '" data-i="' + i + '">' + moves[i].san + '</span>';
+  }
+  el.innerHTML = html;
+  if (onClick){
+    el.querySelectorAll('.mv').forEach(function(n){
+      n.addEventListener('click', function(){ onClick(parseInt(n.getAttribute('data-i'), 10)); });
+    });
+  }
+}
+
+/* Indices of the plies the learner is responsible for. */
+function learnerPlies(op){
+  var out = [];
+  for (var i = 0; i < op.moves.length; i++){
+    var mine = op.side === 'w' ? isWhitePly(i) : !isWhitePly(i);
+    if (mine && op.moves[i].alts && op.moves[i].alts.length >= 3) out.push(i);
+  }
+  return out;
+}
+
+/* ═══════════════════════════════════════════════════════ Tabs ═══════ */
+
+var tabBtns = [].slice.call(document.querySelectorAll('.tab-btn'));
+tabBtns.forEach(function(b){
+  b.addEventListener('click', function(){
+    tabBtns.forEach(function(x){ x.classList.remove('active'); });
+    b.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.getElementById('tab-' + b.getAttribute('data-tab')).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+/* ═══════════════════════════════════════════════ 1 · WALKTHROUGH ═══ */
+
+var L = {
+  op: CHESS_OPENINGS[0],
+  ply: 0,                 /* how many moves have been played */
+  plain: true,
+  answered: false,
+  board: BoardView(document.getElementById('learn-board'))
+};
+
+(function buildLearnPills(){
+  var bar = document.getElementById('learn-pills');
+  bar.innerHTML = CHESS_OPENINGS.map(function(o, i){
+    return '<button type="button" class="pill' + (i === 0 ? ' on' : '') +
+           '" data-op="' + o.id + '">' + o.name + '</button>';
+  }).join('');
+  bar.addEventListener('click', function(e){
+    var id = e.target.getAttribute && e.target.getAttribute('data-op');
+    if (!id) return;
+    bar.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('on'); });
+    e.target.classList.add('on');
+    L.op = CHESS_OPENINGS.filter(function(o){ return o.id === id; })[0];
+    L.ply = 0;
+    L.board.orient = L.op.side;
+    learnRender();
+  });
+})();
+
+function learnRender(){
+  var op = L.op, i = L.ply;
+
+  document.getElementById('learn-head').innerHTML =
+    '<div style="font-size:.95rem;font-weight:800;color:var(--accent);">' + op.name +
+    ' <span style="font-size:.68rem;color:var(--muted);font-weight:400;">' + op.eco + ' · ' + op.tag +
+    '</span></div>' +
+    '<div style="font-size:.78rem;color:var(--subtle);line-height:1.55;margin-top:.25rem;">' + op.idea + '</div>';
+
+  L.board.pos = posAfter(op, i);
+  L.board.coords = document.getElementById('learn-coords').classList.contains('on');
+  L.board.markMove(i > 0 ? op.moves[i - 1] : null);
+  L.board.render();
+
+  renderMoveList(document.getElementById('learn-moves'), op.moves, i, function(k){
+    L.ply = k + 1; L.answered = false; learnRender();
+  }, true);
+
+  var narr = document.getElementById('learn-narr');
+  if (i === 0){
+    narr.innerHTML = '<b>Starting position.</b> ' + op.blurb +
+      ' Press <b>Next</b> to play through the line one move at a time.' +
+      (op.side === 'b' ? ' You will be playing <b>Black</b>, so the board is shown from Black’s side.' : '');
+  } else {
+    var mv  = op.moves[i - 1];
+    var pre = posAfter(op, i - 1);
+    var num = moveNo(i - 1) + (isWhitePly(i - 1) ? '.' : '...');
+    var h = '<div style="font-family:\'Courier New\',monospace;font-size:.95rem;font-weight:800;' +
+            'color:var(--accent);margin-bottom:.4rem;">' + num + ' ' + mv.san + '</div>' + mv.note;
+    if (L.plain) h += '<div class="plain">' + plainEnglish(pre, mv) + '</div>';
+    narr.innerHTML = h;
+  }
+
+  var qbox = document.getElementById('learn-quiz');
+  var qmv  = i > 0 ? op.moves[i - 1] : null;
+  if (qmv && qmv.quiz && !L.answered) renderLearnQuiz(qbox, qmv.quiz);
+  else if (qmv && qmv.quiz && L.answered) { /* leave rendered result in place */ }
+  else qbox.innerHTML = '';
+
+  document.getElementById('learn-prev').disabled  = i === 0;
+  document.getElementById('learn-first').disabled = i === 0;
+  document.getElementById('learn-next').disabled  = i >= op.moves.length;
+  document.getElementById('learn-next').textContent =
+    i >= op.moves.length ? 'Line complete ✓' : 'Next →';
+}
+
+function renderLearnQuiz(host, q){
+  var order = shuffle(q.opts.map(function(t, k){ return { t: t, k: k }; }));
+  host.innerHTML =
+    '<div class="qbox"><div class="qq">' + q.q + '</div><div class="qopts"></div>' +
+    '<div class="qexp" style="display:none"></div></div>';
+  var optsEl = host.querySelector('.qopts');
+  var expEl  = host.querySelector('.qexp');
+
+  order.forEach(function(o){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copt'; b.textContent = o.t;
+    b.addEventListener('click', function(){
+      L.answered = true;
+      optsEl.querySelectorAll('.copt').forEach(function(x){ x.disabled = true; });
+      var right = o.k === q.correct;
+      b.classList.add(right ? 'answer-correct' : 'answer-wrong');
+      if (!right){
+        optsEl.querySelectorAll('.copt').forEach(function(x, idx){
+          if (order[idx].k === q.correct) x.classList.add('answer-correct');
+        });
+      }
+      expEl.style.display = '';
+      expEl.innerHTML = (right ? '<b>Correct.</b> ' : '<b>Not quite.</b> ') + q.exp;
+    });
+    optsEl.appendChild(b);
+  });
+}
+
+document.getElementById('learn-next').addEventListener('click', function(){
+  if (L.ply < L.op.moves.length){ L.ply++; L.answered = false; learnRender(); }
+});
+document.getElementById('learn-prev').addEventListener('click', function(){
+  if (L.ply > 0){ L.ply--; L.answered = false; learnRender(); }
+});
+document.getElementById('learn-first').addEventListener('click', function(){
+  L.ply = 0; L.answered = false; learnRender();
+});
+document.getElementById('learn-flip').addEventListener('click', function(){
+  L.board.orient = L.board.orient === 'w' ? 'b' : 'w';
+  L.board.render();
+});
+document.getElementById('learn-coords').addEventListener('click', function(){
+  this.classList.toggle('on');
+  L.board.coords = this.classList.contains('on');
+  L.board.render();
+});
+document.getElementById('learn-plain').addEventListener('click', function(){
+  this.classList.toggle('on');
+  L.plain = this.classList.contains('on');
+  learnRender();
+});
+
+L.board.orient = L.op.side;
+learnRender();
+
+/* ═══════════════════════════════════════════════ 2 · SQUARE DRILL ═══ */
+
+var D = {
+  mode: 'find', total: 20, n: 0, score: 0, streak: 0,
+  target: null, locked: false, orient: 'w',
+  board: BoardView(document.getElementById('drill-board'))
+};
+D.board.showPieces = false;
+D.board.coords = false;
+D.board.onSquare = drillTap;
+D.board.setInteractive(true);
+
+function randSquare(){
+  return FILES[Math.floor(Math.random() * 8)] + RANKS[Math.floor(Math.random() * 8)];
+}
+
+function drillBestKey(){ return 'bs-chess-drill-best-' + D.mode; }
+
+function drillStart(){
+  D.n = 0; D.score = 0; D.streak = 0; D.locked = false;
+  document.getElementById('d-fb').textContent = '';
+  drillNext();
+}
+
+function drillNext(){
+  if (D.n >= D.total){ drillFinish(); return; }
+  D.n++;
+  D.locked = false;
+  D.target = randSquare();
+  D.board.clearMarks();
+  D.board.coords = false;
+  D.board.showPieces = false;
+  D.board.setInteractive(D.mode === 'find');
+
+  /* Only "find" gets the a–h / 1–8 gutters: in the other two modes they would
+     simply spell out the answer. "Light or dark?" hides the board entirely —
+     it is a pure visualisation exercise. */
+  D.board.rulers = D.mode === 'find';
+  document.getElementById('drill-board').classList.toggle('hide', D.mode === 'colour');
+
+  var prompt = document.getElementById('d-prompt');
+  var opts   = document.getElementById('d-opts');
+  opts.innerHTML = '';
+  document.getElementById('d-fb').textContent = '';
+  document.getElementById('d-fb').className = 'fb';
+
+  if (D.mode === 'find'){
+    prompt.innerHTML = 'Tap this square<span class="big">' + D.target + '</span>';
+    D.board.render();
+  } else if (D.mode === 'name'){
+    prompt.innerHTML = 'What square is highlighted?';
+    D.board.mark(D.target, 'target');
+    D.board.render();
+    drillOptions(D.target, function(){ return randSquare(); }, function(pick){
+      drillJudge(pick === D.target, 'The highlighted square was <b>' + D.target + '</b>.');
+    });
+  } else { /* colour */
+    prompt.innerHTML = 'Is this square light or dark?<span class="big">' + D.target + '</span>';
+    D.board.showPieces = false;
+    D.board.render();
+    var light = isLightSquare(D.target);
+    var host  = document.getElementById('d-opts');
+    ['Light', 'Dark'].forEach(function(lab){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'copt'; b.textContent = lab;
+      b.style.textAlign = 'center';
+      b.addEventListener('click', function(){
+        if (D.locked) return;
+        var right = (lab === 'Light') === light;
+        lockOpts(host, b, right, function(x, idx){
+          return (['Light', 'Dark'][idx] === 'Light') === light;
+        });
+        D.board.mark(D.target, right ? 'hit' : 'miss');
+        drillReveal();
+        drillJudge(right, '<b>' + D.target + '</b> is a <b>' + (light ? 'light' : 'dark') +
+          '</b> square. Trick: a1 is dark, and the colour flips with every step.');
+      });
+      host.appendChild(b);
+    });
+  }
+
+  drillStats();
+}
+
+/* After an answer, put every aid back and show the board so the learner
+   can check themselves against a fully labelled position. */
+function drillReveal(){
+  D.board.coords = true;
+  D.board.rulers = true;
+  D.board.setInteractive(false);
+  document.getElementById('drill-board').classList.remove('hide');
+  D.board.render();
+}
+
+function drillOptions(correct, gen, cb){
+  var set = [correct];
+  var guard = 0;
+  while (set.length < 4 && guard++ < 200){
+    var c = gen();
+    if (set.indexOf(c) === -1) set.push(c);
+  }
+  shuffle(set);
+  var host = document.getElementById('d-opts');
+  host.innerHTML = '';
+  set.forEach(function(s){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copt'; b.textContent = s;
+    b.style.textAlign = 'center';
+    b.style.fontFamily = "'Courier New',monospace";
+    b.style.fontWeight = '700';
+    b.addEventListener('click', function(){
+      if (D.locked) return;
+      lockOpts(host, b, s === correct, function(x){ return x.textContent === correct; });
+      D.board.mark(D.target, s === correct ? 'hit' : 'miss');
+      drillReveal();
+      cb(s);
+    });
+    host.appendChild(b);
+  });
+}
+
+function lockOpts(host, chosen, right, isRight){
+  var all = [].slice.call(host.querySelectorAll('.copt'));
+  all.forEach(function(x, idx){ x.disabled = true; if (isRight(x, idx)) x.classList.add('answer-correct'); });
+  if (!right) chosen.classList.add('answer-wrong');
+}
+
+function drillTap(sq){
+  if (D.mode !== 'find' || D.locked) return;
+  var right = sq === D.target;
+  D.board.clearMarks();
+  D.board.mark(sq, right ? 'hit' : 'miss');
+  if (!right) D.board.mark(D.target, 'target');
+  drillReveal();
+  drillJudge(right, right ? 'That is <b>' + D.target + '</b>.'
+    : 'You tapped <b>' + sq + '</b>. <b>' + D.target + '</b> is outlined.');
+}
+
+function drillJudge(right, msg){
+  D.locked = true;
+  if (right){ D.score++; D.streak++; } else { D.streak = 0; }
+  var fb = document.getElementById('d-fb');
+  fb.className = 'fb ' + (right ? 'ok' : 'no');
+  fb.innerHTML = (right ? '✓ ' : '✗ ') + msg;
+  drillStats();
+  setTimeout(function(){ if (D.locked) drillNext(); }, right ? 800 : 1900);
+}
+
+function drillStats(){
+  document.getElementById('d-prog').textContent  = Math.min(D.n, D.total) + '/' + D.total;
+  document.getElementById('d-score').textContent = D.score;
+  document.getElementById('d-streak').textContent= D.streak;
+  document.getElementById('d-best').textContent  = store(drillBestKey()) || 0;
+}
+
+function drillFinish(){
+  var best = parseInt(store(drillBestKey()) || '0', 10);
+  if (D.score > best){ store(drillBestKey(), D.score); best = D.score; }
+  D.locked = true;
+  D.board.setInteractive(false);
+  document.getElementById('d-prompt').innerHTML =
+    'Run complete<span class="big">' + D.score + ' / ' + D.total + '</span>';
+  document.getElementById('d-opts').innerHTML = '';
+  var fb = document.getElementById('d-fb');
+  fb.className = 'fb ok';
+  fb.innerHTML = D.score === D.total ? 'Perfect run. Try Blind mode next.'
+    : (D.score >= best ? 'New personal best.' : 'Best so far: ' + best + '/' + D.total + '.');
+  drillStats();
+}
+
+document.querySelectorAll('[data-dmode]').forEach(function(p){
+  p.addEventListener('click', function(){
+    document.querySelectorAll('[data-dmode]').forEach(function(x){ x.classList.remove('on'); });
+    p.classList.add('on');
+    D.mode = p.getAttribute('data-dmode');
+    drillStart();
+  });
+});
+document.getElementById('d-restart').addEventListener('click', drillStart);
+document.getElementById('d-side').addEventListener('click', function(){
+  D.orient = D.orient === 'w' ? 'b' : 'w';
+  D.board.orient = D.orient;
+  this.textContent = D.orient === 'w' ? "White's view" : "Black's view";
+  this.classList.toggle('on', D.orient === 'w');
+  D.board.render();
+});
+drillStart();
+
+/* ═══════════════════════════════════════════════ 3 · YOUR MOVE ═════ */
+
+var C = {
+  op: CHESS_OPENINGS[0],
+  plies: [], idx: 0, score: 0,
+  stage: 'from', picked: null, locked: false, tapMode: true,
+  board: BoardView(document.getElementById('chal-board'))
+};
+C.board.onSquare = chalTap;
+
+(function buildChalPills(){
+  var bar = document.getElementById('chal-pills');
+  bar.innerHTML = CHESS_OPENINGS.map(function(o, i){
+    return '<button type="button" class="pill' + (i === 0 ? ' on' : '') +
+           '" data-op="' + o.id + '">' + o.name + '</button>';
+  }).join('');
+  bar.addEventListener('click', function(e){
+    var id = e.target.getAttribute && e.target.getAttribute('data-op');
+    if (!id) return;
+    bar.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('on'); });
+    e.target.classList.add('on');
+    C.op = CHESS_OPENINGS.filter(function(o){ return o.id === id; })[0];
+    chalStart();
+  });
+})();
+
+function chalStart(){
+  C.plies = learnerPlies(C.op);
+  C.idx = 0; C.score = 0;
+  C.board.orient = C.op.side;
+  chalPose();
+}
+
+function chalPose(){
+  if (C.idx >= C.plies.length){ chalFinish(); return; }
+  var i = C.plies[C.idx];
+  C.stage = 'from'; C.picked = null; C.locked = false;
+
+  C.board.pos = posAfter(C.op, i);
+  C.board.markMove(i > 0 ? C.op.moves[i - 1] : null);
+  C.board.setInteractive(C.tapMode);
+  C.board.render();
+
+  renderMoveList(document.getElementById('c-moves'), C.op.moves.slice(0, i), i, null, false);
+
+  var who  = C.op.side === 'w' ? 'Black' : 'White';
+  var last = i > 0 ? C.op.moves[i - 1] : null;
+  var head = last
+    ? who + ' played <b style="color:var(--accent)">' + last.san + '</b>.'
+    : 'You have the first move.';
+  document.getElementById('c-prompt').innerHTML =
+    head + '<br><span style="font-size:.8rem;color:var(--subtle)">' +
+    (C.tapMode ? 'Tap the piece you want to move, then its destination square.'
+               : 'Choose your move in notation.') + '</span>';
+
+  document.getElementById('c-fb').textContent  = '';
+  document.getElementById('c-fb').className    = 'fb';
+  document.getElementById('c-exp').innerHTML   = '';
+  document.getElementById('c-next').disabled   = true;
+  document.getElementById('c-opts').innerHTML  = '';
+
+  if (!C.tapMode) chalOptions(i);
+  chalStats();
+}
+
+function chalOptions(i){
+  var mv   = C.op.moves[i];
+  var list = [{ san: mv.san, ok: true, why: mv.note }];
+  mv.alts.slice(0, 3).forEach(function(a){ list.push({ san: a.san, ok: false, why: a.why }); });
+  shuffle(list);
+
+  var host = document.getElementById('c-opts');
+  list.forEach(function(o){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copt';
+    b.innerHTML = '<span class="san">' + o.san + '</span>';
+    b.addEventListener('click', function(){
+      if (C.locked) return;
+      lockOpts(host, b, o.ok, function(x, idx){ return list[idx].ok; });
+      chalJudge(o.ok, i, o.ok ? null : o.why);
+    });
+    host.appendChild(b);
+  });
+}
+
+function chalTap(sq){
+  if (!C.tapMode || C.locked) return;
+  var i = C.plies[C.idx], mv = C.op.moves[i], mine = C.op.side;
+
+  if (C.stage === 'from'){
+    if (!C.board.pos[sq] || C.board.pos[sq][0] !== mine) return;
+    C.picked = sq;
+    C.stage  = 'to';
+    C.board.markMove(i > 0 ? C.op.moves[i - 1] : null);
+    C.board.mark(sq, 'sel');
+    C.board.render();
+    return;
+  }
+
+  if (sq === C.picked){                       /* tap again to deselect */
+    C.stage = 'from'; C.picked = null;
+    C.board.markMove(i > 0 ? C.op.moves[i - 1] : null);
+    C.board.render();
+    return;
+  }
+  if (C.board.pos[sq] && C.board.pos[sq][0] === mine){   /* switch selection */
+    C.picked = sq;
+    C.board.markMove(i > 0 ? C.op.moves[i - 1] : null);
+    C.board.mark(sq, 'sel');
+    C.board.render();
+    return;
+  }
+
+  var rightFrom = C.picked === mv.from, rightTo = sq === mv.to;
+  var why = null;
+  if (!rightTo && rightFrom){
+    why = 'Right piece, wrong square — it belongs on <b>' + mv.to + '</b>.';
+  } else if (!rightFrom){
+    var alt = (mv.alts || []).filter(function(a){ return a.san.slice(-2) === sq; })[0];
+    why = alt ? alt.why
+        : 'The move here is <b>' + mv.san + '</b> — the ' +
+          PIECE_NAME[C.board.pos[mv.from][1]] + ' from <b>' + mv.from + '</b> to <b>' + mv.to + '</b>.';
+  }
+  C.board.clearMarks();
+  C.board.mark(C.picked, rightFrom && rightTo ? 'hit' : 'miss');
+  C.board.mark(sq,       rightFrom && rightTo ? 'hit' : 'miss');
+  if (!(rightFrom && rightTo)){ C.board.mark(mv.from, 'target'); C.board.mark(mv.to, 'target'); }
+  C.board.setInteractive(false);
+  C.board.render();
+  chalJudge(rightFrom && rightTo, i, why);
+}
+
+function chalJudge(right, i, why){
+  C.locked = true;
+  if (right) C.score++;
+  var mv  = C.op.moves[i];
+  var pre = posAfter(C.op, i);
+  var fb  = document.getElementById('c-fb');
+  fb.className = 'fb ' + (right ? 'ok' : 'no');
+  fb.innerHTML = right ? '✓ ' + mv.san + ' — correct.'
+                       : '✗ The move is ' + mv.san + '.';
+  document.getElementById('c-exp').innerHTML =
+    '<div class="qexp" style="border-top:none;padding-top:.2rem;">' +
+    (why ? why + '<br><br>' : '') +
+    '<b>' + mv.san + '</b> — ' + plainEnglish(pre, mv) + '.<br>' + mv.note + '</div>';
+  document.getElementById('c-next').disabled = false;
+  document.getElementById('c-next').textContent =
+    C.idx + 1 >= C.plies.length ? 'See result →' : 'Next →';
+  chalStats();
+}
+
+function chalStats(){
+  document.getElementById('c-prog').textContent  =
+    Math.min(C.idx + 1, C.plies.length) + '/' + C.plies.length;
+  document.getElementById('c-score').textContent = C.score;
+  document.getElementById('c-best').textContent  = store('bs-chess-chal-best-' + C.op.id) || 0;
+}
+
+function chalFinish(){
+  var key  = 'bs-chess-chal-best-' + C.op.id;
+  var best = parseInt(store(key) || '0', 10);
+  if (C.score > best){ store(key, C.score); }
+  C.board.pos = posAfter(C.op, C.op.moves.length);
+  C.board.markMove(C.op.moves[C.op.moves.length - 1]);
+  C.board.setInteractive(false);
+  C.board.render();
+  document.getElementById('c-prompt').innerHTML =
+    C.op.name + ' complete<span class="big">' + C.score + ' / ' + C.plies.length + '</span>';
+  document.getElementById('c-opts').innerHTML = '';
+  document.getElementById('c-exp').innerHTML  = '';
+  renderMoveList(document.getElementById('c-moves'), C.op.moves, C.op.moves.length, null, false);
+  var fb = document.getElementById('c-fb');
+  fb.className = 'fb ok';
+  fb.innerHTML = C.score === C.plies.length
+    ? 'Every move correct. Now try it with no board at all — Blind mode.'
+    : 'Best for this opening: ' + Math.max(best, C.score) + '/' + C.plies.length + '.';
+  document.getElementById('c-next').disabled = true;
+  chalStats();
+}
+
+document.getElementById('c-next').addEventListener('click', function(){ C.idx++; chalPose(); });
+document.getElementById('c-restart').addEventListener('click', chalStart);
+document.getElementById('c-answer-mode').addEventListener('click', function(){
+  C.tapMode = !C.tapMode;
+  this.textContent = C.tapMode ? 'Answer: tap squares' : 'Answer: notation';
+  this.classList.toggle('on', C.tapMode);
+  chalPose();
+});
+chalStart();
+
+/* ═══════════════════════════════════════════════ 4 · BLIND MODE ════ */
+
+var B = {
+  op: CHESS_OPENINGS[0],
+  plies: [], idx: 0, score: 0, peeks: 0,
+  locked: false, peekTimer: null,
+  board: BoardView(document.getElementById('blind-board'))
+};
+
+(function buildBlindPills(){
+  var bar = document.getElementById('blind-pills');
+  bar.innerHTML = CHESS_OPENINGS.map(function(o, i){
+    return '<button type="button" class="pill' + (i === 0 ? ' on' : '') +
+           '" data-op="' + o.id + '">' + o.name + '</button>';
+  }).join('');
+  bar.addEventListener('click', function(e){
+    var id = e.target.getAttribute && e.target.getAttribute('data-op');
+    if (!id) return;
+    bar.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('on'); });
+    e.target.classList.add('on');
+    B.op = CHESS_OPENINGS.filter(function(o){ return o.id === id; })[0];
+    blindStart();
+  });
+})();
+
+function blindStart(){
+  B.plies = learnerPlies(B.op);
+  B.idx = 0; B.score = 0; B.peeks = 0;
+  B.board.orient = B.op.side;
+  blindHidePeek();
+  blindPose();
+}
+
+function blindLog(upTo){
+  var html = '', mv = B.op.moves;
+  for (var i = 0; i < upTo; i++){
+    if (isWhitePly(i)) html += '<span class="mnum">' + moveNo(i) + '.</span>&nbsp;';
+    html += '<span class="' + (isWhitePly(i) ? 'w' : 'b') + '">' + mv[i].san + '</span>&nbsp; ';
+  }
+  if (upTo < mv.length){
+    if (isWhitePly(upTo)) html += '<span class="mnum">' + moveNo(upTo) + '.</span>&nbsp;';
+    else if (upTo === 0)  html += '<span class="mnum">1.</span>&nbsp;';
+    html += '<span class="cursor">_</span>';
+  }
+  document.getElementById('b-log').innerHTML = html || '<span class="cursor">_</span>';
+}
+
+function blindPose(){
+  if (B.idx >= B.plies.length){ blindFinish(); return; }
+  var i = B.plies[B.idx];
+  B.locked = false;
+  blindHidePeek();
+
+  blindLog(i);
+
+  var who  = B.op.side === 'w' ? 'Black' : 'White';
+  var last = i > 0 ? B.op.moves[i - 1] : null;
+  document.getElementById('b-head').innerHTML =
+    (last ? who + ' played <b style="color:var(--accent)">' + last.san + '</b>.' : 'You move first.') +
+    '<br><span style="font-size:.8rem;color:var(--subtle)">Visualise the position. What do you play?</span>';
+
+  document.getElementById('b-fb').textContent = '';
+  document.getElementById('b-fb').className   = 'fb';
+  document.getElementById('b-exp').innerHTML  = '';
+  document.getElementById('b-next').disabled  = true;
+
+  var mv   = B.op.moves[i];
+  var list = [{ san: mv.san, ok: true, why: null }];
+  mv.alts.slice(0, 3).forEach(function(a){ list.push({ san: a.san, ok: false, why: a.why }); });
+  shuffle(list);
+
+  var host = document.getElementById('b-opts');
+  host.innerHTML = '';
+  list.forEach(function(o){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copt';
+    b.innerHTML = '<span class="san">' + o.san + '</span>';
+    b.addEventListener('click', function(){
+      if (B.locked) return;
+      lockOpts(host, b, o.ok, function(x, idx){ return list[idx].ok; });
+      blindJudge(o.ok, i, o.why);
+    });
+    host.appendChild(b);
+  });
+
+  blindStats();
+}
+
+function blindJudge(right, i, why){
+  B.locked = true;
+  if (right) B.score++;
+  var mv  = B.op.moves[i];
+  var pre = posAfter(B.op, i);
+  blindLog(i + 1);
+  var fb = document.getElementById('b-fb');
+  fb.className = 'fb ' + (right ? 'ok' : 'no');
+  fb.innerHTML = right ? '✓ ' + mv.san : '✗ The move is ' + mv.san + '.';
+  document.getElementById('b-exp').innerHTML =
+    '<div class="qexp" style="border-top:none;padding-top:.2rem;">' +
+    (why ? why + '<br><br>' : '') +
+    '<b>' + mv.san + '</b> — ' + plainEnglish(pre, mv) + '.<br>' + mv.note + '</div>';
+  document.getElementById('b-next').disabled = false;
+  document.getElementById('b-next').textContent =
+    B.idx + 1 >= B.plies.length ? 'See result →' : 'Next →';
+  blindStats();
+}
+
+function blindStats(){
+  document.getElementById('b-prog').textContent  =
+    Math.min(B.idx + 1, B.plies.length) + '/' + B.plies.length;
+  document.getElementById('b-score').textContent = B.score;
+  document.getElementById('b-peeks').textContent = B.peeks;
+  document.getElementById('b-best').textContent  = store('bs-chess-blind-best-' + B.op.id) || 0;
+}
+
+function blindHidePeek(){
+  if (B.peekTimer){ clearInterval(B.peekTimer); B.peekTimer = null; }
+  document.getElementById('b-peekwrap').classList.remove('show');
+  document.getElementById('b-peek-t').textContent = '';
+}
+
+document.getElementById('b-peek').addEventListener('click', function(){
+  if (B.idx >= B.plies.length) return;
+  var i = B.plies[B.idx];
+  B.peeks++;
+  B.score = Math.max(0, B.score - 1);
+  blindStats();
+
+  B.board.pos = posAfter(B.op, i);
+  B.board.markMove(i > 0 ? B.op.moves[i - 1] : null);
+  B.board.coords = true;
+  B.board.render();
+  document.getElementById('b-peekwrap').classList.add('show');
+
+  var left = 4;
+  var tEl  = document.getElementById('b-peek-t');
+  tEl.textContent = 'Hiding in ' + left + 's…';
+  if (B.peekTimer) clearInterval(B.peekTimer);
+  B.peekTimer = setInterval(function(){
+    left--;
+    if (left <= 0){ blindHidePeek(); return; }
+    tEl.textContent = 'Hiding in ' + left + 's…';
+  }, 1000);
+});
+
+function blindFinish(){
+  var key  = 'bs-chess-blind-best-' + B.op.id;
+  var best = parseInt(store(key) || '0', 10);
+  if (B.score > best) store(key, B.score);
+  blindHidePeek();
+  blindLog(B.op.moves.length);
+  document.getElementById('b-head').innerHTML =
+    B.op.name + ' played blind<span class="big">' + B.score + ' / ' + B.plies.length + '</span>';
+  document.getElementById('b-opts').innerHTML = '';
+  document.getElementById('b-exp').innerHTML  = '';
+  var fb = document.getElementById('b-fb');
+  fb.className = 'fb ok';
+  fb.innerHTML = (B.score === B.plies.length && B.peeks === 0)
+    ? 'A clean blindfold run. That is genuine visualisation.'
+    : 'Peeks used: ' + B.peeks + '. Best: ' + Math.max(best, B.score) + '/' + B.plies.length + '.';
+  document.getElementById('b-next').disabled = true;
+  blindStats();
+}
+
+document.getElementById('b-next').addEventListener('click', function(){ B.idx++; blindPose(); });
+document.getElementById('b-restart').addEventListener('click', blindStart);
+blindStart();
+
+})();
+</script>
+<script src="js/skin.js"></script>
+</body>
+</html>
