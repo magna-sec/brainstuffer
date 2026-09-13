@@ -16,7 +16,8 @@
   <h1 class="pg">&#9819; Chess Openings Trainer</h1>
   <p class="sub">Learn the openings <em>and</em> the notation at the same time. Every square is labelled,
      every move is shown as algebraic notation and plain English &mdash; and when you are ready,
-     Blind mode takes the board away entirely.</p>
+     Blind mode takes the board away entirely. Openings branch where real openings branch,
+     and live lichess data shows what players actually do in each position.</p>
 
   <div class="tab-bar" role="tablist">
     <button class="tab-btn active" data-tab="learn"  type="button">Walkthrough</button>
@@ -42,8 +43,13 @@
         <button class="ctl on" id="learn-plain" type="button">Plain English</button>
       </div>
       <div class="mlist" id="learn-moves"></div>
+      <div class="varbar" id="learn-vars"></div>
       <div class="narr" id="learn-narr"></div>
       <div id="learn-quiz"></div>
+      <div id="learn-explorer"></div>
+      <div class="row center" style="margin-top:.6rem;">
+        <button class="ctl on" id="learn-live" type="button">Live lichess stats</button>
+      </div>
     </div>
   </section>
 
@@ -77,6 +83,7 @@
   <!-- ═══════════════════════════════════ YOUR MOVE ═════════════ -->
   <section class="tab-panel" id="tab-chal">
     <div class="pillbar" id="chal-pills"></div>
+    <div class="pillbar sub" id="c-lines"></div>
     <div class="pane">
       <div class="stats">
         <div class="stat"><div class="k">Move</div><div class="v" id="c-prog">1/6</div></div>
@@ -102,6 +109,7 @@
   <!-- ═══════════════════════════════════ BLIND MODE ════════════ -->
   <section class="tab-panel" id="tab-blind">
     <div class="pillbar" id="blind-pills"></div>
+    <div class="pillbar sub" id="b-lines"></div>
     <div class="pane">
       <div class="stats">
         <div class="stat"><div class="k">Move</div><div class="v" id="b-prog">1/6</div></div>
@@ -132,6 +140,7 @@
 
 <script src="js/chess-pieces.js"></script>
 <script src="js/chess-core.js"></script>
+<script src="js/chess-explorer.js"></script>
 <script src="js/chess-openings-data.js"></script>
 <script src="js/chess-tabs.js"></script>
 <script src="js/chess-mode-learn.js"></script>

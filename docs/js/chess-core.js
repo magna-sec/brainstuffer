@@ -273,6 +273,23 @@ function enumerateLines(op){
   return out;
 }
 
+/* Pill row listing every complete line of an opening. Hidden when an
+   opening has no variations, so simple openings stay uncluttered. */
+function renderLinePicker(hostId, lines, active, onPick){
+  var host = document.getElementById(hostId);
+  if (!host) return;
+  if (!lines || lines.length < 2){ host.innerHTML = ''; return; }
+  host.innerHTML = lines.map(function(l, i){
+    return '<button type="button" class="pill' + (i === active ? ' on' : '') +
+           '" data-line="' + i + '">' + l.name + '</button>';
+  }).join('');
+  host.querySelectorAll('[data-line]').forEach(function(b){
+    b.addEventListener('click', function(){
+      onPick(parseInt(b.getAttribute('data-line'), 10));
+    });
+  });
+}
+
 /* Branches available instead of the move about to be played at `ply`. */
 function forksAt(line, ply){
   var m = line.moves[ply];
@@ -310,7 +327,8 @@ window.ChessKit = {
   enumerateLines: enumerateLines,
   lineKey: lineKey,
   forksAt: forksAt,
-  uciPath: uciPath
+  uciPath: uciPath,
+  renderLinePicker: renderLinePicker
 };
 
 })();

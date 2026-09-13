@@ -217,3 +217,58 @@ p.sub{color:var(--subtle);font-size:.82rem;margin-bottom:1.25rem;line-height:1.5
    The board is the entire point of this page, so the switcher scrolls away
    with the content instead of floating over it. */
 #skin-toggle, #skin-panel { position: absolute; }
+
+
+/* ── Variations ───────────────────────────────────────────────────────
+   Shown only where an opening actually forks, so straight lines stay
+   uncluttered. */
+.varbar{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin:.7rem 0 .2rem;}
+.var-lbl{font-size:.72rem;color:var(--muted);}
+.var-cur{font-size:.7rem;font-weight:700;color:var(--accent);
+         border:1px solid var(--accent);border-radius:20px;padding:.2rem .55rem;
+         box-shadow:0 0 8px var(--glow);}
+.pillbar.sub{margin-top:-.5rem;margin-bottom:.9rem;}
+.pillbar.sub .pill{font-size:.68rem;padding:.3rem .6rem;}
+
+/* ── Lichess explorer panel ───────────────────────────────────────────
+   Strictly additive: if the request fails the panel says so quietly and
+   the lesson is unaffected. */
+.xp{margin-top:.9rem;background:var(--bg2);border:1px solid var(--card-border);
+    border-radius:10px;padding:.7rem .85rem;}
+.xp-head{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;
+         margin-bottom:.5rem;}
+.xp-t{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+      color:var(--accent);}
+.xp-n{font-size:.68rem;color:var(--muted);font-family:'Courier New',monospace;}
+.xp-rows{display:flex;flex-direction:column;gap:.25rem;}
+.xp-row{display:grid;grid-template-columns:3.4rem 1fr 2.6rem 3rem;align-items:center;gap:.45rem;
+        font-size:.74rem;padding:.15rem .2rem;border-radius:5px;}
+.xp-row.mine{background:var(--card);box-shadow:inset 0 0 0 1px var(--accent);}
+.xp-san{font-family:'Courier New',monospace;font-weight:700;color:var(--text);}
+.xp-row.mine .xp-san{color:var(--accent);}
+.xp-bar{height:6px;background:var(--card-border);border-radius:3px;overflow:hidden;}
+.xp-fill{display:block;height:100%;background:var(--accent);}
+.xp-pct{font-family:'Courier New',monospace;color:var(--subtle);text-align:right;
+        font-size:.7rem;}
+.xp-wdl{display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--card-border);}
+.xp-wdl i{display:block;min-width:0;}
+.xp-wdl i.w{background:var(--subtle);}
+.xp-wdl i.d{background:var(--muted);opacity:.55;}
+.xp-wdl i.b{background:var(--bg);}
+.xp-msg{font-size:.76rem;color:var(--subtle);line-height:1.55;margin-top:.5rem;}
+.xp-msg b{color:var(--accent);}
+.xp-note{font-size:.68rem;color:var(--muted);line-height:1.5;margin-top:.45rem;}
+.xp-note b{color:var(--subtle);}
+.xp-src{border-top:1px dashed var(--card-border);padding-top:.4rem;}
+.xp-token{display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap;}
+.xp-token input{flex:1;min-width:150px;background:var(--card);border:1px solid var(--card-border);
+                color:var(--text);font-family:'Courier New',monospace;font-size:.72rem;
+                padding:.35rem .5rem;border-radius:6px;}
+.xp-token input:focus{outline:none;border-color:var(--accent);}
+.xp-inline{margin-top:.6rem;padding-top:.5rem;border-top:1px dashed var(--card-border);
+           font-size:.76rem;color:var(--accent2);font-family:'Courier New',monospace;}
+
+@media (max-width:430px){
+  .xp-row{grid-template-columns:3rem 1fr 2.4rem;}
+  .xp-wdl{display:none;}
+}

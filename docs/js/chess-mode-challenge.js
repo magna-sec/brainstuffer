@@ -6,6 +6,7 @@
 'use strict';
 
 var K = window.ChessKit;
+var X = window.ChessExplorer;
 var PIECE_NAME = K.PIECE_NAME;
 var posAfter = K.posAfter;
 var plainEnglish = K.plainEnglish;
@@ -15,10 +16,13 @@ var BoardView = K.BoardView;
 var renderMoveList = K.renderMoveList;
 var learnerPlies = K.learnerPlies;
 var lockOpts = K.lockOpts;
+var enumerateLines = K.enumerateLines;
+var uciPath = K.uciPath;
 
 
 var C = {
   op: CHESS_OPENINGS[0],
+  lines: [], li: 0, line: null,
   plies: [], idx: 0, score: 0,
   stage: 'from', picked: null, locked: false, tapMode: true,
   board: BoardView(document.getElementById('chal-board'))
@@ -37,15 +41,24 @@ C.board.onSquare = chalTap;
     bar.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('on'); });
     e.target.classList.add('on');
     C.op = CHESS_OPENINGS.filter(function(o){ return o.id === id; })[0];
+    C.li = 0;
     chalStart();
   });
 })();
 
 function chalStart(){
-  C.plies = learnerPlies(C.op);
+  C.lines = enumerateLines(C.op);
+  if (C.li >= C.lines.length) C.li = 0;
+  C.line  = C.lines[C.li];
+  C.plies = learnerPlies(C.op, C.line);
   C.idx = 0; C.score = 0;
   C.board.orient = C.op.side;
+  K.renderLinePicker('c-lines', C.lines, C.li, function(n){ C.li = n; chalStart(); });
   chalPose();
+}
+
+function chalKey(){
+  return 'bs-chess-chal-best-' + C.op.id + '-' + (C.line ? C.line.key : 'main');
 }
 
 function chalPose(){
@@ -53,15 +66,15 @@ function chalPose(){
   var i = C.plies[C.idx];
   C.stage = 'from'; C.picked = null; C.locked = false;
 
-  C.board.pos = posAfter(C.op, i);
-  C.board.markMove(i > 0 ? C.op.moves[i - 1] : null);
+  C.board.pos = posAfter(C.line.moves, i);
+  C.board.markMove(i > 0 ? C.line.moves[i - 1] : null);
   C.board.setInteractive(C.tapMode);
   C.board.render();
 
-  renderMoveList(document.getElementById('c-moves'), C.op.moves.slice(0, i), i, null, false);
+  renderMoveList(document.getElementById('c-moves'), C.line.moves.slice(0, i), i, null, false);
 
   var who  = C.op.side === 'w' ? 'Black' : 'White';
-  var last = i > 0 ? C.op.moves[i - 1] : null;
+  var last = i > 0 ? C.line.moves[i - 1] : null;
   var head = last
     ? who + ' played <b style="color:var(--accent)">' + last.san + '</b>.'
     : 'You have the first move.';
@@ -81,7 +94,7 @@ function chalPose(){
 }
 
 function chalOptions(i){
-  var mv   = C.op.moves[i];
+  var mv   = C.line.moves[i];
   var list = [{ san: mv.san, ok: true, why: mv.note }];
   mv.alts.slice(0, 3).forEach(function(a){ list.push({ san: a.san, ok: false, why: a.why }); });
   shuffle(list);
@@ -102,13 +115,13 @@ function chalOptions(i){
 
 function chalTap(sq){
   if (!C.tapMode || C.locked) return;
-  var i = C.plies[C.idx], mv = C.op.moves[i], mine = C.op.side;
+  var i = C.plies[C.idx], mv = C.line.moves[i], mine = C.op.side;
 
   if (C.stage === 'from'){
     if (!C.board.pos[sq] || C.board.pos[sq][0] !== mine) return;
     C.picked = sq;
     C.stage  = 'to';
-    C.board.markMove(i > 0 ? C.op.moves[i - 1] : null);
+    C.board.markMove(i > 0 ? C.line.moves[i - 1] : null);
     C.board.mark(sq, 'sel');
     C.board.render();
     return;
@@ -116,13 +129,13 @@ function chalTap(sq){
 
   if (sq === C.picked){                       /* tap again to deselect */
     C.stage = 'from'; C.picked = null;
-    C.board.markMove(i > 0 ? C.op.moves[i - 1] : null);
+    C.board.markMove(i > 0 ? C.line.moves[i - 1] : null);
     C.board.render();
     return;
   }
   if (C.board.pos[sq] && C.board.pos[sq][0] === mine){   /* switch selection */
     C.picked = sq;
-    C.board.markMove(i > 0 ? C.op.moves[i - 1] : null);
+    C.board.markMove(i > 0 ? C.line.moves[i - 1] : null);
     C.board.mark(sq, 'sel');
     C.board.render();
     return;
@@ -150,8 +163,8 @@ function chalTap(sq){
 function chalJudge(right, i, why){
   C.locked = true;
   if (right) C.score++;
-  var mv  = C.op.moves[i];
-  var pre = posAfter(C.op, i);
+  var mv  = C.line.moves[i];
+  var pre = posAfter(C.line.moves, i);
   var fb  = document.getElementById('c-fb');
   fb.className = 'fb ' + (right ? 'ok' : 'no');
   fb.innerHTML = right ? '✓ ' + mv.san + ' — correct.'
@@ -164,28 +177,39 @@ function chalJudge(right, i, why){
   document.getElementById('c-next').textContent =
     C.idx + 1 >= C.plies.length ? 'See result →' : 'Next →';
   chalStats();
+
+  /* what everyone else plays from this exact position */
+  if (X && X.enabled()){
+    X.lookup(uciPath(C.line.moves, i)).then(function(d){
+      var msg  = X.share(d, mv.san);
+      var host = document.getElementById('c-exp');
+      if (msg && host && C.locked && !host.querySelector('.xp-inline'))
+        host.insertAdjacentHTML('beforeend', '<div class="xp-inline">' + msg + '</div>');
+    });
+  }
 }
 
 function chalStats(){
   document.getElementById('c-prog').textContent  =
     Math.min(C.idx + 1, C.plies.length) + '/' + C.plies.length;
   document.getElementById('c-score').textContent = C.score;
-  document.getElementById('c-best').textContent  = store('bs-chess-chal-best-' + C.op.id) || 0;
+  document.getElementById('c-best').textContent  = store(chalKey()) || 0;
 }
 
 function chalFinish(){
-  var key  = 'bs-chess-chal-best-' + C.op.id;
+  var key  = chalKey();
   var best = parseInt(store(key) || '0', 10);
   if (C.score > best){ store(key, C.score); }
-  C.board.pos = posAfter(C.op, C.op.moves.length);
-  C.board.markMove(C.op.moves[C.op.moves.length - 1]);
+  C.board.pos = posAfter(C.line.moves, C.line.moves.length);
+  C.board.markMove(C.line.moves[C.line.moves.length - 1]);
   C.board.setInteractive(false);
   C.board.render();
   document.getElementById('c-prompt').innerHTML =
-    C.op.name + ' complete<span class="big">' + C.score + ' / ' + C.plies.length + '</span>';
+    C.op.name + (C.line.key === 'main' ? '' : ' · ' + C.line.name) +
+    ' complete<span class="big">' + C.score + ' / ' + C.plies.length + '</span>';
   document.getElementById('c-opts').innerHTML = '';
   document.getElementById('c-exp').innerHTML  = '';
-  renderMoveList(document.getElementById('c-moves'), C.op.moves, C.op.moves.length, null, false);
+  renderMoveList(document.getElementById('c-moves'), C.line.moves, C.line.moves.length, null, false);
   var fb = document.getElementById('c-fb');
   fb.className = 'fb ok';
   fb.innerHTML = C.score === C.plies.length
