@@ -52,7 +52,12 @@ p.sub{color:var(--subtle);font-size:.82rem;margin-bottom:1.25rem;line-height:1.5
 }
 .board{
     grid-row:1;grid-column:2;
-    display:grid;grid-template-columns:repeat(8,1fr);
+    display:grid;
+    /* BOTH axes must be declared. Without explicit rows the 64 squares flow
+       into implicit auto-sized rows, so ranks with no pieces on them collapse
+       and the board renders unevenly. */
+    grid-template-columns:repeat(8,1fr);
+    grid-template-rows:repeat(8,1fr);
     aspect-ratio:1/1;
     border:2px solid var(--card-border);
     border-radius:4px;overflow:hidden;
@@ -70,6 +75,7 @@ p.sub{color:var(--subtle);font-size:.82rem;margin-bottom:1.25rem;line-height:1.5
 .sq{
     position:relative;border:none;padding:0;margin:0;
     display:flex;align-items:center;justify-content:center;
+    min-width:0;min-height:0;overflow:hidden;
     cursor:default;touch-action:manipulation;font-family:inherit;
     transition:box-shadow .12s,filter .12s;
 }
@@ -203,3 +209,11 @@ p.sub{color:var(--subtle);font-size:.82rem;margin-bottom:1.25rem;line-height:1.5
     .ctl{font-size:.72rem;padding:.42rem .6rem;}
     .stat{min-width:56px;padding:.35rem .55rem;}
 }
+
+/* ── Skin switcher placement ──────────────────────────────────────────
+   js/skin.js injects the switcher fixed to the viewport. On every other
+   page that is fine, but here it parks a 34px button directly on top of
+   the h-file, so h8 (and whatever else scrolls under it) cannot be tapped.
+   The board is the entire point of this page, so the switcher scrolls away
+   with the content instead of floating over it. */
+#skin-toggle, #skin-panel { position: absolute; }

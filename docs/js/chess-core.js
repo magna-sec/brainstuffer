@@ -39,10 +39,12 @@ function applyMove(pos, mv){
   return { captured: captured };
 }
 
-/* Position after the first n plies of an opening. */
+/* Position after the first n plies. Accepts either an opening (mainline) or
+   a plain move array, so branch lines work without a second code path. */
 function posAfter(op, n){
+  var mv = op.moves || op;
   var pos = startPos();
-  for (var i = 0; i < n; i++) applyMove(pos, op.moves[i]);
+  for (var i = 0; i < n; i++) applyMove(pos, mv[i]);
   return pos;
 }
 
@@ -198,13 +200,91 @@ function renderMoveList(el, moves, upTo, onClick, dimFuture){
   }
 }
 
-/* Indices of the plies the learner is responsible for. */
-function learnerPlies(op){
+/* Indices of the plies the learner is responsible for. `line` may be an
+   opening (mainline) or a resolved line from resolveLine(). */
+function learnerPlies(op, line){
+  var mv  = (line && line.moves) || op.moves;
   var out = [];
-  for (var i = 0; i < op.moves.length; i++){
+  for (var i = 0; i < mv.length; i++){
     var mine = op.side === 'w' ? isWhitePly(i) : !isWhitePly(i);
-    if (mine && op.moves[i].alts && op.moves[i].alts.length >= 3) out.push(i);
+    if (mine && mv[i].alts && mv[i].alts.length >= 3) out.push(i);
   }
+  return out;
+}
+
+/* ── Variations ───────────────────────────────────────────────────────
+   A move may carry `branches`: alternatives played INSTEAD of that move.
+   Each branch supplies its own move list, continuing from the position
+   before the move it replaces.
+
+     moves[6] = { san:'Be2', …, branches:[ { name:'6.Bg5', moves:[…] } ] }
+
+   A path is a list of {ply, idx} choices applied in order. Because each
+   choice truncates at its ply and appends the branch's moves, a later
+   choice can sit inside an earlier branch — variations nest for free.
+─────────────────────────────────────────────────────────────────────── */
+
+function resolveLine(op, path){
+  var moves = op.moves.slice(), names = [], eco = op.eco, note = null;
+  (path || []).forEach(function(step){
+    var host = moves[step.ply];
+    var br   = host && host.branches && host.branches[step.idx];
+    if (!br) return;
+    moves = moves.slice(0, step.ply).concat(br.moves);
+    names.push(br.name);
+    if (br.eco)  eco  = br.eco;
+    if (br.note) note = br.note;
+  });
+  return {
+    moves: moves,
+    path: (path || []).slice(),
+    key: lineKey(path),
+    name: names.length ? names[names.length - 1] : 'Main line',
+    names: names,
+    eco: eco,
+    note: note
+  };
+}
+
+function lineKey(path){
+  if (!path || !path.length) return 'main';
+  return path.map(function(s){ return s.ply + '.' + s.idx; }).join('-');
+}
+
+/* Every complete line in an opening, mainline first. */
+function enumerateLines(op){
+  var out = [];
+  (function walk(path){
+    var line = resolveLine(op, path);
+    var forks = [];
+    line.moves.forEach(function(m, i){
+      if (m.branches && m.branches.length) forks.push(i);
+    });
+    var fresh = forks.filter(function(i){
+      return !(path || []).some(function(s){ return s.ply === i; });
+    });
+    out.push(line);
+    fresh.forEach(function(ply){
+      line.moves[ply].branches.forEach(function(br, idx){
+        walk((path || []).concat([{ ply: ply, idx: idx }]));
+      });
+    });
+  })([]);
+  return out;
+}
+
+/* Branches available instead of the move about to be played at `ply`. */
+function forksAt(line, ply){
+  var m = line.moves[ply];
+  return (m && m.branches) ? m.branches : [];
+}
+
+/* UCI move list for the lichess opening explorer: 'e2e4,e7e5,g1f3'.
+   Castling is the king's move only (e1g1), which is exactly what the
+   authored from/to already hold. */
+function uciPath(moves, upTo){
+  var out = [];
+  for (var i = 0; i < upTo && i < moves.length; i++) out.push(moves[i].from + moves[i].to);
   return out;
 }
 
@@ -225,7 +305,12 @@ window.ChessKit = {
   BoardView: BoardView,
   renderMoveList: renderMoveList,
   learnerPlies: learnerPlies,
-  lockOpts: lockOpts
+  lockOpts: lockOpts,
+  resolveLine: resolveLine,
+  enumerateLines: enumerateLines,
+  lineKey: lineKey,
+  forksAt: forksAt,
+  uciPath: uciPath
 };
 
 })();
