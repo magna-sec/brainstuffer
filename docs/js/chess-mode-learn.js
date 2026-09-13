@@ -104,8 +104,12 @@ function learnRender(){
 /* ── Variations ─────────────────────────────────────────────────────── */
 
 function renderVariations(moves, ply){
-  var host  = document.getElementById('learn-vars');
-  var forks = forksAt({ moves: moves }, ply);
+  var host = document.getElementById('learn-vars');
+  /* Fork choices come from the line WITHOUT any choice made at this ply --
+     otherwise, once a branch is taken, its own first move has no `branches`
+     and the fork would vanish along with the way back to the main line. */
+  var base  = resolveLine(L.op, L.path.filter(function(s){ return s.ply < ply; }));
+  var forks = forksAt(base, ply);
   var inBranch = L.path.length > 0;
 
   if (!forks.length && !inBranch){ host.innerHTML = ''; return; }
@@ -143,7 +147,7 @@ function renderVariations(moves, ply){
   });
 }
 
-/* The move the current line would play at `ply` if no branch is taken. */
+/* The move played at `ply` when no branch is taken there. */
 function mainMoveAt(ply){
   var base = resolveLine(L.op, L.path.filter(function(s){ return s.ply < ply; }));
   return base.moves[ply] ? base.moves[ply].san : '—';
@@ -193,7 +197,10 @@ function renderLearnQuiz(host, q){
 }
 
 document.getElementById('learn-next').addEventListener('click', function(){
-  if (L.ply < L.op.moves.length){ L.ply++; L.answered = false; learnRender(); }
+  /* Bound against the CURRENT line, not the mainline — a variation can be
+     longer, and bounding on op.moves would stall Next partway through it. */
+  var len = (L.line || L.op).moves.length;
+  if (L.ply < len){ L.ply++; L.answered = false; learnRender(); }
 });
 document.getElementById('learn-prev').addEventListener('click', function(){
   if (L.ply > 0){ L.ply--; L.answered = false; learnRender(); }
