@@ -20,3 +20,8 @@ Thumbs.db
 # Generated incorrect quiz files
 incorrect_*.json
 incorrect_*.yml
+
+*.pdf
+*.PDF
+*.epub
+*.djvu

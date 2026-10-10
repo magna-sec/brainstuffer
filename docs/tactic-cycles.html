@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-skin="aero">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>Tactic Cycles — BrainStuffer</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css?v=2.0.2">
+<link rel="stylesheet" href="css/tactic-cycles.css?v=1.0.0">
+<script>(function(){var sk=localStorage.getItem('bs-skin');if(sk)document.documentElement.setAttribute('data-skin',sk);})();</script>
+</head>
+<body>
+
+<div class="container">
+
+  <a class="back-link" href="index.html#learn">&#8592; Back to Interactive Learning</a>
+
+  <!-- ═══════════════════════ SHELF ═══════════════════════ -->
+  <section id="view-shelf" class="view on">
+
+    <h1 class="pg">&#9816; Tactic Cycles</h1>
+    <p class="sub">One fixed set of puzzles, solved over and over against a halving clock.
+      Not a puzzle feed &mdash; the whole point is meeting the <em>same</em> positions until
+      recognising them stops being calculation and becomes memory.</p>
+
+    <!-- first run: build the set -->
+    <div id="setup" class="pane">
+      <h2 class="pane-h">Build your set</h2>
+      <p class="hint">Pick your chapters. The set is frozen once you start &mdash; cycle times
+        mean nothing if the set changes underneath them. Puzzles come from the
+        <a href="https://database.lichess.org/" target="_blank" rel="noopener">Lichess puzzle
+        database</a> (CC0), chosen for short, pattern-rich solutions.</p>
+
+      <div id="setup-tiers" class="tier-picks"></div>
+
+      <div class="setup-sum">
+        <div><span>Set size</span><b id="setup-total">0</b><i>puzzles</i></div>
+        <div><span>Cycle 1 pace</span><b id="setup-perday">0</b><i>a day for 28 days</i></div>
+      </div>
+
+      <button class="btn btn-primary wide" id="setup-go" type="button">Start cycle 1</button>
+
+      <details class="method" id="import-panel">
+        <summary>Use your own puzzles instead</summary>
+        <p class="hint">Paste a <b>PGN</b> whose games carry a <code>[FEN]</code> tag (what a
+          lichess study exports), or one puzzle per line as <code>FEN | moves</code>. Moves can
+          be SAN or UCI. In an imported puzzle <b>you move first</b>, as positions are posed in
+          books and studies.</p>
+        <p class="hint">Imported sets are saved in this browser only. Nothing is uploaded and
+          nothing is added to the site.</p>
+        <textarea id="import-text" rows="5" spellcheck="false"
+          placeholder="8/8/8/8/8/5k2/6q1/7K b - - 0 1 | Qg2#"></textarea>
+        <div class="row">
+          <input type="text" id="import-label" placeholder="Set name" maxlength="40">
+          <button class="ctl" id="import-go" type="button">Import</button>
+          <button class="ctl" id="import-clear" type="button">Remove</button>
+        </div>
+        <div id="import-fb" class="import-fb"></div>
+      </details>
+
+      <details class="method">
+        <summary>How the method works</summary>
+        <ol>
+          <li>Solve the whole set once. Budget about <b>four weeks</b>.</li>
+          <li>Rest a day or two.</li>
+          <li>Solve the <b>same set again</b>, in half the days.</li>
+          <li>Keep halving: 28 &rarr; 14 &rarr; 7 &rarr; 4 &rarr; 2 &rarr; 1.</li>
+          <li>Stop when you clear the set in a single day, or after cycle 7.</li>
+        </ol>
+        <p>This is deliberately <em>not</em> spaced repetition. There are no per-puzzle
+          intervals &mdash; only whole-set cycles against a shrinking clock.</p>
+      </details>
+    </div>
+
+    <!-- returning: the course -->
+    <div id="course" style="display:none">
+      <div class="pane cycle-pane">
+        <div class="cyc-head">
+          <div class="cyc-n"><span id="cycle-n">1</span></div>
+          <div class="cyc-meta">
+            <b>Cycle</b>
+            <span id="cycle-of">of 7</span>
+          </div>
+          <div class="cyc-count" id="cycle-count">0 / 0</div>
+        </div>
+        <div class="cyc-bar"><span id="cycle-bar"></span></div>
+        <div class="pace" id="pace"></div>
+        <button class="btn btn-primary wide" id="btn-train" type="button">Start cycle</button>
+        <button class="btn btn-outline wide" id="btn-close-cycle" type="button"
+                style="display:none;margin-top:.5rem;">Close out cycle &rarr;</button>
+      </div>
+
+      <div class="pane">
+        <h2 class="pane-h">Chapters</h2>
+        <div id="chapters"></div>
+      </div>
+
+      <div class="pane" id="cycle-table-pane">
+        <div id="cycle-table"></div>
+        <div id="offenders"></div>
+        <button class="ctl danger" id="btn-reset" type="button" data-armed="0">Reset course</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ SOLVE ═══════════════════════ -->
+  <section id="view-solve" class="view">
+    <div class="solve-top">
+      <button class="ctl" id="btn-quit" type="button" title="Back to the course">&#8592;</button>
+      <div class="solve-prog">
+        <div class="sp-row"><b id="solve-cycle">Cycle 1</b><span id="solve-prog">0 / 0</span></div>
+        <div class="cyc-bar sm"><span id="solve-bar"></span></div>
+      </div>
+      <button class="ctl" id="btn-flip" type="button" title="Flip the board">&#8645;</button>
+    </div>
+
+    <p class="turn" id="solve-turn">&hellip;</p>
+
+    <div class="board-host" id="board-host"></div>
+
+    <div class="fb" id="solve-fb"></div>
+    <div class="motifs" id="solve-motif"></div>
+
+    <div class="solve-ctl">
+      <button class="ctl" id="btn-hint" type="button">Hint</button>
+      <button class="ctl" id="btn-skip" type="button">Show me</button>
+      <button class="btn btn-primary grow" id="btn-next" type="button">Next &rarr;</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ REPORT ══════════════════════ -->
+  <section id="view-report" class="view">
+    <div class="pane" id="report-body"></div>
+    <button class="btn btn-primary wide" id="btn-report-done" type="button">Back to the course</button>
+  </section>
+
+</div>
+
+<script src="js/vendor/chess.js"></script>
+<script src="js/chess-pieces.js"></script>
+<script src="js/tactic-set.js"></script>
+<!-- Generated locally from a book on this machine; gitignored, and the
+     page works fine when it is absent. -->
+<script src="js/book-set.js" onerror="window.__noBookSet=1"></script>
+<script src="js/tc-import.js"></script>
+<script src="js/tc-board.js"></script>
+<script src="js/tc-progress.js"></script>
+<script src="js/tc-app.js"></script>
+<script src="js/skin.js"></script>
+</body>
+</html>
