@@ -9,14 +9,12 @@
 'use strict';
 
 var P = window.TCProgress;
-/* tactic-set.js declares `const TACTIC_SET`, which is a lexical
-   global — visible to other classic scripts, but NOT a property of window. */
 /* The bundled chapters, plus an imported one if this browser has saved a set. */
 var SET = [];
 var byId = {};
 
 function rebuildSet(){
-  SET = TACTIC_SET.slice();
+  SET = [];
   /* A locally generated book set, if one has been built. It is optional:
      the script 404s harmlessly when absent, so guard on the binding. */
   try {
@@ -80,11 +78,28 @@ function renderShelf(){
 
 function renderSetup(){
   var host = $('#setup-tiers');
-  host.innerHTML = SET.map(function(t){
+  if (!SET.length){
+    /* The chapter file is generated locally and gitignored, so having none
+       is the normal state on a fresh clone - say so instead of showing an
+       empty list and a dead button. */
+    host.innerHTML =
+      '<div class="empty-set">' +
+      '<b>No puzzle set on this machine.</b>' +
+      '<span>Generate one from a book you own:</span>' +
+      '<code>python tools/pdf-to-puzzles.py BOOK.pdf --chapter 32 69 224 247 ' +
+      '--names "Easy" --js docs/js/book-set.js</code>' +
+      '<span>Then reload the page. Or paste your own positions in below.</span>' +
+      '</div>';
+    $('#setup-total').textContent = '0';
+    $('#setup-perday').textContent = '0';
+    $('#setup-go').disabled = true;
+    return;
+  }
+  host.innerHTML = SET.map(function(t, i){
     return '<label class="tier-pick">' +
-      '<input type="checkbox" value="' + t.key + '"' + (t.key === 'easy' ? ' checked' : '') + '>' +
+      '<input type="checkbox" value="' + t.key + '"' + (i === 0 ? ' checked' : '') + '>' +
       '<span class="tp-body"><b>' + t.label + '</b>' +
-      '<span class="tp-meta">' + t.puzzles.length + ' puzzles &middot; lichess rating ' + t.band + '</span>' +
+      '<span class="tp-meta">' + t.puzzles.length + ' puzzles</span>' +
       '</span></label>';
   }).join('');
   host.onchange = updateSetupTotal;    /* assign, not add - renderSetup re-runs */
@@ -189,12 +204,8 @@ function renderOffenders(){
     '<div class="off-grid">' + list.map(function(o){
       var p = byId[o.id];
       var name = p ? (p.label || prettyMotif(p.themes.split(' ')[0])) : o.id;
-      var body = '<b>' + name + '</b><span>missed ' + o.misses +
-                 ' of ' + o.of + '</span>';
-      return (p && (p.tier === 'custom' || String(p.tier).indexOf('bk-') === 0))
-        ? '<span class="off">' + body + '</span>'
-        : '<a class="off" href="https://lichess.org/training/' + o.id +
-          '" target="_blank" rel="noopener">' + body + '</a>';
+      return '<span class="off"><b>' + name + '</b><span>missed ' +
+             o.misses + ' of ' + o.of + '</span></span>';
     }).join('') + '</div>';
 }
 
@@ -206,9 +217,9 @@ function loadPuzzle(id){
 
   S.puzzle = p;
   S.uci = p.moves.split(' ');
-  /* Lichess puzzles open with the opponent's mistake, so the solver answers
-     uci[1]. An imported puzzle is posed the way a book poses it - you to
-     move - so the solver starts at uci[0]. */
+  /* A puzzle posed the way a book poses it starts with YOU to move, so the
+     solver answers uci[0]. A puzzle that instead opens with the opponent's
+     mistake plays that first, and the solver answers uci[1]. */
   S.solverFirst = !!p.solverFirst;
   S.ply = S.solverFirst ? 0 : 1;
   S.firstTry = true;
@@ -264,8 +275,7 @@ function onUserMove(mv){
   var wantNorm = want.length === 5 ? want : want.slice(0, 4);
   var gotNorm  = want.length === 5 ? got : got.slice(0, 4);
 
-  /* An alternative mate in the same number of moves is still a solve —
-     lichess accepts this and so should we. */
+  /* An alternative mate in the same number of moves is still a solve. */
   var alsoFine = S.board.game.isCheckmate() && S.ply === S.uci.length - 1;
 
   if (gotNorm !== wantNorm && !alsoFine){
@@ -310,9 +320,7 @@ function solved(){
   $('#solve-motif').innerHTML = S.puzzle.themes.split(' ').map(function(t){
     return '<span class="motif">' + prettyMotif(t) + '</span>';
   }).join('') +
-    ((S.puzzle.tier === 'custom' || String(S.puzzle.tier).indexOf('bk-') === 0) ? ''
-      : '<a class="motif link" href="https://lichess.org/training/' + S.puzzle.id +
-        '" target="_blank" rel="noopener">lichess ↗</a>');
+    (S.puzzle.label ? '<span class="motif">' + S.puzzle.label + '</span>' : '');
 
   $('#btn-hint').disabled = true;
   $('#btn-skip').disabled = true;
