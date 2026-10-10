@@ -36,9 +36,63 @@ window.TCBoard = function(hostEl){
     dests: [],            /* legal destinations from sel */
     last: null,           /* {from,to} of the last move played */
     marks: {},            /* square -> extra class */
+    eyes: 0,              /* 0 off, 1 yours, 2 theirs, 3 all */
+    eyesSide: 'w',        /* which colour counts as "yours" */
+    isolate: null,        /* square whose vision is shown alone */
     onMove: null,         /* fn(moveObj) after a legal move is made */
-    onIllegal: null       /* fn(from,to) when the user tries a non-move */
+    onIllegal: null,      /* fn(from,to) when the user tries a non-move */
+    onEyes: null          /* fn() when the overlay state changes */
   };
+
+  /* ── vision ───────────────────────────────────────────────────────
+     Who attacks what, straight from the engine so the overlay can never
+     disagree with the position. Cached per FEN because render() runs on
+     every tap and this is 128 engine calls. */
+
+  var visionCache = { fen: null, map: null };
+
+  function vision(){
+    var fen = b.game.fen();
+    if (visionCache.fen === fen) return visionCache.map;
+    var map = {};
+    for (var f = 0; f < 8; f++){
+      for (var r = 0; r < 8; r++){
+        var sq = FILES[f] + RANKS[r];
+        var entry = { w: [], b: [] };
+        ['w', 'b'].forEach(function(colour){
+          b.game.attackers(sq, colour).forEach(function(from){
+            var pc = b.game.get(from);
+            if (pc) entry[colour].push({ from: from, type: pc.type });
+          });
+        });
+        if (entry.w.length || entry.b.length) map[sq] = entry;
+      }
+    }
+    visionCache = { fen: fen, map: map };
+    return map;
+  }
+
+  /* Squares a single piece attacks. */
+  b.seenBy = function(square){
+    var pc = b.game.get(square);
+    if (!pc) return [];
+    var map = vision(), out = [];
+    Object.keys(map).forEach(function(sq){
+      if (map[sq][pc.color].some(function(a){ return a.from === square; })) out.push(sq);
+    });
+    return out;
+  };
+
+  /* Most valuable first, so a capped pip row keeps the pieces that matter. */
+  var ORDER = { q: 0, r: 1, b: 2, n: 3, p: 4, k: 5 };
+  function pipRow(list, side){
+    if (!list.length) return '';
+    var sorted = list.slice().sort(function(x, y){ return ORDER[x.type] - ORDER[y.type]; });
+    var shown = sorted.slice(0, 4);
+    return '<span class="tc-eyes ' + side + '">' + shown.map(function(a){
+      return '<i class="e-' + a.type + '"></i>';
+    }).join('') + (sorted.length > 4 ? '<i class="e-more"></i>' : '') + '</span>';
+  }
 
   /* ── geometry ─────────────────────────────────────────────────────── */
 
@@ -60,6 +114,18 @@ window.TCBoard = function(hostEl){
     var inCheck = b.game.inCheck();
     var turn = b.game.turn();
 
+    var eyeMap = b.eyes ? vision() : null;
+    var mine = b.eyesSide, theirs = mine === 'w' ? 'b' : 'w';
+    var showMine  = b.eyes === 1 || b.eyes === 3;
+    var showTheirs = b.eyes === 2 || b.eyes === 3;
+
+    /* Isolating one piece replaces the pip overview with a single wash. */
+    var isoSquares = null, isoType = null;
+    if (b.eyes && b.isolate){
+      var ip = b.game.get(b.isolate);
+      if (ip){ isoSquares = b.seenBy(b.isolate); isoType = ip.type; }
+    }
+
     s.r.forEach(function(r){
       s.f.forEach(function(f){
         var sq    = FILES[f] + RANKS[r];
@@ -73,14 +139,26 @@ window.TCBoard = function(hostEl){
         if (pc && pc.type === 'k' && pc.color === turn && inCheck) cls += ' check';
 
         var inner = '';
+
+        if (isoSquares){
+          if (isoSquares.indexOf(sq) !== -1) cls += ' seen seen-' + isoType;
+          if (sq === b.isolate) cls += ' eyeing';
+        } else if (eyeMap && eyeMap[sq]){
+          if (showMine)  inner += pipRow(eyeMap[sq][mine], 'top');
+          if (showTheirs) inner += pipRow(eyeMap[sq][theirs], 'bot');
+        }
+
         if (pc){
           /* cburnett draws white and black separately, so the symbol id
              carries the colour: pc-wK, pc-bK, ... */
           inner += '<svg class="tc-pc" viewBox="0 0 45 45" aria-hidden="true">' +
                    '<use href="#pc-' + pc.color + pc.type.toUpperCase() + '"/></svg>';
         }
-        /* legal-destination hint: a dot on an empty square, a ring on a capture */
-        if (b.dests.indexOf(sq) !== -1){
+        /* Legal-destination hints: a dot on an empty square, a ring on a
+           capture. Suppressed while a piece is isolated, because the vision
+           wash already covers every one of them and more - it also shows the
+           friendly pieces this piece defends. */
+        if (!isoSquares && b.dests.indexOf(sq) !== -1){
           inner += pc ? '<span class="tc-cap"></span>' : '<span class="tc-dot"></span>';
         }
 
@@ -105,8 +183,32 @@ window.TCBoard = function(hostEl){
   function clearSel(){ b.sel = null; b.dests = []; }
 
   function tap(sq){
-    if (!b.interactive) return;
     var pc = b.game.get(sq);
+
+    /* With the overlay on, a tap asks "what does this piece see?" - including
+       the opponent's pieces, which are not otherwise tappable. Tapping the
+       same piece again, or an empty square, clears it. */
+    if (b.eyes){
+      if (pc && pc.color !== b.game.turn()){
+        b.isolate = (b.isolate === sq) ? null : sq;
+        clearSel();
+        b.render();
+        if (b.onEyes) b.onEyes();
+        return;
+      }
+      if (!pc && b.isolate){
+        b.isolate = null;
+        b.render();
+        if (b.onEyes) b.onEyes();
+        return;
+      }
+      if (pc){
+        b.isolate = (b.isolate === sq) ? null : sq;
+        if (b.onEyes) b.onEyes();
+      }
+    }
+
+    if (!b.interactive) return;
 
     /* picking up, or switching to, one of your own pieces */
     if (pc && pc.color === b.game.turn()){
@@ -186,8 +288,16 @@ window.TCBoard = function(hostEl){
   b.setFen = function(fen, orient){
     b.game = new Chess(fen);
     if (orient) b.orient = orient;
-    b.last = null; b.marks = {}; clearSel();
+    b.last = null; b.marks = {}; b.isolate = null; clearSel();
     b.render();
+  };
+
+  /* Off -> yours -> theirs -> all -> off */
+  b.cycleEyes = function(){
+    b.eyes = (b.eyes + 1) % 4;
+    b.isolate = null;
+    b.render();
+    return b.eyes;
   };
   b.setInteractive = function(on){ b.interactive = !!on; if (!on) clearSel(); b.render(); };
   b.mark = function(sq, kind){ b.marks[sq] = kind; };

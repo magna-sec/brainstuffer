@@ -99,6 +99,14 @@
         <button class="ctl danger" id="btn-reset" type="button" data-armed="0">Reset course</button>
       </div>
     </div>
+
+    <!-- Appearance sits outside #course so it is reachable before a set
+         has been chosen, not only once training has begun. -->
+    <div class="pane">
+      <h2 class="pane-h">Pieces</h2>
+      <div class="piece-pick" id="piece-pick"></div>
+      <div class="piece-credit" id="piece-credit"></div>
+    </div>
   </section>
 
   <!-- ═══════════════════════ SOLVE ═══════════════════════ -->
@@ -109,6 +117,8 @@
         <div class="sp-row"><b id="solve-cycle">Cycle 1</b><span id="solve-prog">0 / 0</span></div>
         <div class="cyc-bar sm"><span id="solve-bar"></span></div>
       </div>
+      <button class="ctl" id="btn-eyes" type="button" title="Show what the pieces see"
+              aria-pressed="false">&#128065;</button>
       <button class="ctl" id="btn-flip" type="button" title="Flip the board">&#8645;</button>
     </div>
 
@@ -116,6 +126,7 @@
 
     <div class="board-host" id="board-host"></div>
 
+    <div class="eye-key" id="eye-key"></div>
     <div class="fb" id="solve-fb"></div>
     <div class="motifs" id="solve-motif"></div>
 
@@ -135,7 +146,7 @@
 </div>
 
 <script src="js/vendor/chess.js"></script>
-<script src="js/chess-pieces.js"></script>
+<script src="js/tc-pieces.js"></script>
 <!-- Generated locally from a book on this machine; gitignored, and the
      page still loads when it is absent. -->
 <script src="js/book-set.js" onerror="window.__noBookSet=1"></script>

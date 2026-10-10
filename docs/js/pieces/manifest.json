@@ -1,0 +1,58 @@
+[
+  {
+    "key": "cburnett",
+    "name": "Classic",
+    "blurb": "The Wikipedia standard",
+    "credit": "Colin M.L. Burnett",
+    "licence": "GPLv2+ / CC BY-SA 3.0"
+  },
+  {
+    "key": "merida",
+    "name": "Traditional",
+    "blurb": "Printed-book Staunton",
+    "credit": "Armando Hernandez Marroquin",
+    "licence": "GPLv2+"
+  },
+  {
+    "key": "staunty",
+    "name": "Modern",
+    "blurb": "Flat and solid",
+    "credit": "sadsnake1",
+    "licence": "CC BY-NC-SA 4.0"
+  },
+  {
+    "key": "gioco",
+    "name": "Clean",
+    "blurb": "Simplified silhouettes",
+    "credit": "sadsnake1",
+    "licence": "CC BY-NC-SA 4.0"
+  },
+  {
+    "key": "cardinal",
+    "name": "Bold",
+    "blurb": "Heavy outlines",
+    "credit": "sadsnake1",
+    "licence": "CC BY-NC-SA 4.0"
+  },
+  {
+    "key": "maestro",
+    "name": "Elegant",
+    "blurb": "Softly shaded",
+    "credit": "sadsnake1",
+    "licence": "CC BY-NC-SA 4.0"
+  },
+  {
+    "key": "fantasy",
+    "name": "Fantasy",
+    "blurb": "Illustrated",
+    "credit": "Maurizio Monge",
+    "licence": "MIT"
+  },
+  {
+    "key": "spatial",
+    "name": "Spatial",
+    "blurb": "Angular and graphic",
+    "credit": "Maurizio Monge",
+    "licence": "MIT"
+  }
+]

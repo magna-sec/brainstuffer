@@ -36,6 +36,7 @@ function rebuildSet(){
 rebuildSet();
 
 var $ = function(s){ return document.querySelector(s); };
+var PIECE_LONG = { k:'king', q:'queen', r:'rook', b:'bishop', n:'knight', p:'pawn' };
 
 /* ── solving state ────────────────────────────────────────────────── */
 var S = {
@@ -74,6 +75,7 @@ function renderShelf(){
   $('#setup').style.display = started ? 'none' : '';
   $('#course').style.display = started ? '' : 'none';
   if (started) renderCourse(); else renderSetup();
+  renderPiecePicker();
 }
 
 function renderSetup(){
@@ -181,6 +183,98 @@ function renderCourse(){
   renderOffenders();
 }
 
+/* ── Piece sets ───────────────────────────────────────────────────── */
+
+var PREVIEW = ['wK', 'wN', 'bQ', 'bP'];
+var previewsWanted = false;
+
+function previewHost(){
+  var el = document.getElementById('tc-piece-previews');
+  if (!el){
+    el = document.createElement('div');
+    el.id = 'tc-piece-previews';
+    el.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+    document.body.insertBefore(el, document.body.firstChild);
+  }
+  return el;
+}
+
+/* Pull in each set's artwork and drop a namespaced copy into the hidden
+   host, so all eight can be drawn at once without their ids colliding. */
+function loadPreviews(){
+  if (previewsWanted || !window.TCPieces) return;
+  previewsWanted = true;
+  var host = previewHost();
+  window.TCPieces.SETS.forEach(function(s){
+    if (document.getElementById('prev-' + s.key)) return;
+    window.TCPieces.preview(s.key, function(sprite){
+      if (!sprite) return;
+      var box = document.createElement('div');
+      box.id = 'prev-' + s.key;
+      box.innerHTML = sprite;
+      host.appendChild(box);
+      var sw = document.querySelector('.pp[data-set="' + s.key + '"] .pp-row');
+      if (sw) sw.innerHTML = swatch(s.key);
+    });
+  });
+}
+
+function swatch(key){
+  return PREVIEW.map(function(p){
+    return '<span><svg viewBox="0 0 45 45"><use href="#' + key + '-pc-' + p + '"/></svg></span>';
+  }).join('');
+}
+
+function renderPiecePicker(){
+  var host = $('#piece-pick');
+  if (!host || !window.TCPieces) return;
+  var TP = window.TCPieces, now = TP.current();
+
+  host.innerHTML = TP.SETS.map(function(s){
+    var ready = !!document.getElementById('prev-' + s.key);
+    return '<button type="button" class="pp' + (s.key === now ? ' on' : '') +
+           '" data-set="' + s.key + '" aria-pressed="' + (s.key === now) + '">' +
+           '<span class="pp-row">' + (ready ? swatch(s.key) : '') + '</span>' +
+           '<span class="pp-name">' + s.name + '</span>' +
+           '<span class="pp-blurb">' + s.blurb + '</span></button>';
+  }).join('');
+
+  host.querySelectorAll('[data-set]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var key = b.getAttribute('data-set');
+      if (key === TP.current()) return;
+      TP.use(key, function(){
+        renderPiecePicker();
+        S.board.render();
+      });
+    });
+  });
+
+  var info = TP.info(now);
+  $('#piece-credit').innerHTML =
+    '<b>' + info.name + '</b> by ' + info.credit + ' &middot; ' + info.licence +
+    '. Piece art from the <a href="https://github.com/lichess-org/lila" ' +
+    'target="_blank" rel="noopener">lichess</a> collection.' +
+    (info.licence.indexOf('NC') !== -1
+      ? ' <b>Non-commercial</b> \u2014 fine for personal study, not for a paid site.'
+      : '');
+
+  /* Fetch the swatches when the picker is actually looked at. */
+  if (!previewsWanted){
+    if (typeof IntersectionObserver === 'function'){
+      var io = new IntersectionObserver(function(entries){
+        if (entries.some(function(e){ return e.isIntersecting; })){
+          io.disconnect();
+          loadPreviews();
+        }
+      }, { rootMargin: '200px' });
+      io.observe(host);
+    } else {
+      loadPreviews();
+    }
+  }
+}
+
 function renderCycleTable(){
   var rows = P.summary();
   var host = $('#cycle-table');
@@ -237,6 +331,8 @@ function loadPuzzle(id){
   S.board.setInteractive(false);
   S.board.render();
 
+  S.board.isolate = null;
+  renderEyeKey();
   $('#solve-motif').textContent = '';
   $('#solve-fb').textContent = '';
   $('#solve-fb').className = 'fb';
@@ -259,6 +355,38 @@ function loadPuzzle(id){
   } else {
     setTimeout(function(){ S.board.playUci(S.uci[0]); begin(); }, 520);
   }
+}
+
+var EYE_LABEL = ['Eyes off', 'Your eyes', 'Their eyes', 'All eyes'];
+var EYE_PIECES = [['q','queen'],['r','rook'],['b','bishop'],['n','knight'],
+                  ['p','pawn'],['k','king']];
+
+function renderEyeKey(){
+  var el = $('#eye-key'), btn = $('#btn-eyes'), n = S.board.eyes;
+  btn.classList.toggle('on', n > 0);
+  btn.setAttribute('aria-pressed', n > 0 ? 'true' : 'false');
+  btn.title = EYE_LABEL[n] + ' — tap to change';
+
+  if (!n){ el.className = 'eye-key'; el.innerHTML = ''; return; }
+  el.className = 'eye-key on';
+
+  var iso = S.board.isolate ? S.board.game.get(S.board.isolate) : null;
+  var note;
+  if (iso){
+    note = 'Showing only what ' +
+      (iso.color === S.board.orient ? 'your ' : 'their ') +
+      PIECE_LONG[iso.type] + ' on <b>' + S.board.isolate +
+      '</b> sees, including the pieces it defends. Tap it again for all of them.';
+  } else {
+    note = '<b>' + EYE_LABEL[n] + '</b> — one pip per attacker. ' +
+      (n === 3 ? 'Yours sit along the top of a square, theirs along the bottom. '
+               : '') +
+      'Tap any piece to see only what it sees.';
+  }
+
+  el.innerHTML = EYE_PIECES.map(function(p){
+    return '<span><i style="background:var(--eye-' + p[0] + ')"></i>' + p[1] + '</span>';
+  }).join('') + '<span class="note">' + note + '</span>';
 }
 
 function updateSolveHeader(){
@@ -420,6 +548,14 @@ function init(){
   S.board = window.TCBoard($('#board-host'));
   S.board.onMove = onUserMove;
 
+  /* Pieces load asynchronously; redraw once the sprite is in. */
+  if (window.TCPieces){
+    window.TCPieces.init(function(){
+      S.board.render();
+      renderPiecePicker();
+    });
+  }
+
   $('#setup-go').addEventListener('click', beginCourse);
   $('#btn-train').addEventListener('click', function(){
     var id = P.nextId();
@@ -435,6 +571,11 @@ function init(){
   $('#btn-skip').addEventListener('click', skip);
   $('#btn-quit').addEventListener('click', finishSession);
   $('#btn-flip').addEventListener('click', function(){ S.board.flip(); });
+  $('#btn-eyes').addEventListener('click', function(){
+    S.board.cycleEyes();
+    renderEyeKey();
+  });
+  S.board.onEyes = renderEyeKey;
   $('#btn-close-cycle').addEventListener('click', closeCycle);
   $('#btn-report-done').addEventListener('click', function(){ show('shelf'); renderShelf(); });
 
