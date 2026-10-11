@@ -22,6 +22,13 @@ function rebuildSet(){
       SET = SET.concat(BOOK_SET);
     }
   } catch (e) { /* not defined - bundled chapters only */ }
+  /* Your own blunders, if tools/chesscom-to-puzzles.py has been run. Same
+     shape, same guard: the file is gitignored and may not exist. */
+  try {
+    if (typeof OWN_SET !== 'undefined' && OWN_SET && OWN_SET.length){
+      SET = SET.concat(OWN_SET);
+    }
+  } catch (e) { /* no personal set on this machine */ }
   var custom = window.TCImport && window.TCImport.load();
   if (custom){
     SET.push({ key: 'custom', label: custom.label || 'My set',
@@ -584,7 +591,7 @@ function solved(){
      the prompt - so a book puzzle shows nothing here and lets Explain carry
      the detail. */
   $('#solve-motif').innerHTML = S.puzzle.themes.split(' ').filter(function(t){
-    return t !== 'book' && t !== 'imported';
+    return t !== 'book' && t !== 'imported' && t !== 'own';
   }).map(function(t){
     return '<span class="motif">' + prettyMotif(t) + '</span>';
   }).join('') +
