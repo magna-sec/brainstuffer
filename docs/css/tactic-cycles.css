@@ -288,26 +288,6 @@ p.sub{color:var(--subtle);font-size:.84rem;line-height:1.6;margin-bottom:1.2rem;
   --eye-k:#fb7185;   /* king   rose   */
 }
 
-.tc-eyes{
-  position:absolute;left:0;right:0;
-  display:flex;justify-content:center;align-items:center;gap:7%;
-  pointer-events:none;z-index:3;
-}
-.tc-eyes.top{top:5%;}
-.tc-eyes.bot{bottom:5%;}
-.tc-eyes i{
-  display:block;width:15%;aspect-ratio:1/1;border-radius:50%;
-  box-shadow:0 0 0 1px rgba(8,10,16,.5);
-}
-.tc-eyes.bot i{border-radius:2px;}      /* a second cue: theirs are square */
-.tc-eyes i.e-p{background:var(--eye-p);}
-.tc-eyes i.e-n{background:var(--eye-n);}
-.tc-eyes i.e-b{background:var(--eye-b);}
-.tc-eyes i.e-r{background:var(--eye-r);}
-.tc-eyes i.e-q{background:var(--eye-q);}
-.tc-eyes i.e-k{background:var(--eye-k);}
-.tc-eyes i.e-more{background:transparent;box-shadow:inset 0 0 0 1px rgba(8,10,16,.55);}
-
 /* Isolated piece: one colour, one square wash, no competition. */
 .tc-sq.seen::before{
   content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
@@ -339,8 +319,6 @@ p.sub{color:var(--subtle);font-size:.84rem;line-height:1.6;margin-bottom:1.2rem;
 .eye-key .note b{color:var(--subtle);font-weight:700;}
 
 @media (max-width:430px){
-  .tc-eyes i{width:17%;}
-  .tc-eyes{gap:6%;}
   .eye-key{font-size:.62rem;gap:.25rem .45rem;}
 }
 
@@ -364,3 +342,48 @@ p.sub{color:var(--subtle);font-size:.84rem;line-height:1.6;margin-bottom:1.2rem;
 .piece-credit{font-size:.66rem;color:var(--muted);line-height:1.6;
               border-top:1px dashed var(--card-border);padding-top:.5rem;}
 .piece-credit b{color:var(--subtle);}
+
+/* ── Arrows ───────────────────────────────────────────────────────── */
+.tc-arrows{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:4;overflow:visible;
+}
+.ar{color:var(--eye-q);}
+.ar.faint{opacity:.78;}
+.ar.wisp{opacity:.3;}
+.tc-arrows .ar path,.tc-arrows .ar polygon{
+  paint-order:stroke;
+  filter:drop-shadow(0 0 .02px rgba(8,10,16,.9));
+}
+
+/* ── Explain ──────────────────────────────────────────────────────── */
+#btn-explain{transition:opacity .2s,border-color .15s,color .15s;}
+.explain{
+  display:none;margin-top:.8rem;background:var(--bg2);
+  border:1px solid var(--card-border);border-left:3px solid var(--accent);
+  border-radius:0 10px 10px 0;padding:.8rem .9rem;
+}
+.explain.on{display:block;}
+.explain h4{font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;
+            color:var(--accent);margin-bottom:.4rem;}
+.explain .game{font-size:.78rem;color:var(--subtle);margin-bottom:.55rem;
+               font-style:italic;}
+.explain .prose{font-size:.84rem;line-height:1.7;color:var(--text);}
+.explain .prose b{color:var(--accent2);font-family:'Courier New',monospace;font-weight:700;}
+.explain .facts{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.6rem;}
+.explain .fact{font-size:.66rem;padding:.22rem .5rem;border-radius:20px;
+               background:var(--card);border:1px solid var(--card-border);
+               color:var(--subtle);}
+.explain .fact.big{border-color:var(--success);color:var(--success);}
+.explain .fact.mate{border-color:var(--danger);color:var(--danger);}
+.explain .src{font-size:.64rem;color:var(--muted);margin-top:.55rem;
+              border-top:1px dashed var(--card-border);padding-top:.45rem;}
+
+/* A primary button only looks primary while it can actually be pressed. */
+.btn.btn-primary:disabled,
+.btn.btn-primary[disabled]{
+  background:var(--bg2);color:var(--muted);
+  box-shadow:none;opacity:1;cursor:not-allowed;
+  border:1px solid var(--card-border);
+}
+.btn:disabled{opacity:1;}

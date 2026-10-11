@@ -332,7 +332,11 @@ function loadPuzzle(id){
   S.board.render();
 
   S.board.isolate = null;
-  renderEyeKey();
+  renderArrowKey();
+  $('#explain').className = 'explain';
+  $('#explain').innerHTML = '';
+  $('#btn-explain').disabled = true;
+  $('#btn-explain').classList.remove('on');
   $('#solve-motif').textContent = '';
   $('#solve-fb').textContent = '';
   $('#solve-fb').className = 'fb';
@@ -357,36 +361,167 @@ function loadPuzzle(id){
   }
 }
 
-var EYE_LABEL = ['Eyes off', 'Your eyes', 'Their eyes', 'All eyes'];
-var EYE_PIECES = [['q','queen'],['r','rook'],['b','bishop'],['n','knight'],
-                  ['p','pawn'],['k','king']];
+var ARROW_LABEL = ['Arrows off', "White's arrows", "Black's arrows"];
+var ARROW_PIECES = [['q','queen'],['r','rook'],['b','bishop'],['n','knight'],
+                    ['p','pawn'],['k','king']];
 
-function renderEyeKey(){
-  var el = $('#eye-key'), btn = $('#btn-eyes'), n = S.board.eyes;
+function renderArrowKey(){
+  var el = $('#eye-key'), btn = $('#btn-arrows'), n = S.board.arrows;
+  var iso = S.board.isolate ? S.board.game.get(S.board.isolate) : null;
+
   btn.classList.toggle('on', n > 0);
   btn.setAttribute('aria-pressed', n > 0 ? 'true' : 'false');
-  btn.title = EYE_LABEL[n] + ' — tap to change';
+  btn.title = ARROW_LABEL[n] + ' \u2014 tap to change';
 
-  if (!n){ el.className = 'eye-key'; el.innerHTML = ''; return; }
+  if (!n && !iso){ el.className = 'eye-key'; el.innerHTML = ''; return; }
   el.className = 'eye-key on';
 
-  var iso = S.board.isolate ? S.board.game.get(S.board.isolate) : null;
   var note;
   if (iso){
-    note = 'Showing only what ' +
-      (iso.color === S.board.orient ? 'your ' : 'their ') +
+    note = 'Only the ' + (iso.color === 'w' ? 'white ' : 'black ') +
       PIECE_LONG[iso.type] + ' on <b>' + S.board.isolate +
-      '</b> sees, including the pieces it defends. Tap it again for all of them.';
+      '</b>, including the pieces it defends. Tap it again for the rest.';
   } else {
-    note = '<b>' + EYE_LABEL[n] + '</b> — one pip per attacker. ' +
-      (n === 3 ? 'Yours sit along the top of a square, theirs along the bottom. '
-               : '') +
-      'Tap any piece to see only what it sees.';
+    note = '<b>' + ARROW_LABEL[n] + '</b> \u2014 every square that side covers. ' +
+      'Tap any piece for just its own.';
   }
 
-  el.innerHTML = EYE_PIECES.map(function(p){
+  el.innerHTML = ARROW_PIECES.map(function(p){
     return '<span><i style="background:var(--eye-' + p[0] + ')"></i>' + p[1] + '</span>';
   }).join('') + '<span class="note">' + note + '</span>';
+}
+
+/* ── Explain ──────────────────────────────────────────────────────── */
+
+var PIECE_FULL = { k:'king', q:'queen', r:'rook', b:'bishop', n:'knight', p:'pawn' };
+var VALUE = { p:1, n:3, b:3, r:5, q:9, k:0 };
+
+function materialFor(game, colour){
+  return game.board().flat().filter(Boolean)
+    .filter(function(p){ return p.color === colour; })
+    .reduce(function(a, p){ return a + VALUE[p.type]; }, 0);
+}
+
+/* What the solution actually did, read off the board rather than asserted. */
+function solutionFacts(p){
+  var Chess = window.ChessJS.Chess;
+  var g = new Chess(p.fen);
+  var uci = p.moves.split(' ');
+  var solver = p.solverFirst ? g.turn() : (g.turn() === 'w' ? 'b' : 'w');
+  var before = materialFor(g, solver) - materialFor(g, solver === 'w' ? 'b' : 'w');
+
+  var facts = [], captured = [], sans = [];
+  uci.forEach(function(u, i){
+    var mv;
+    try { mv = g.move({ from:u.slice(0,2), to:u.slice(2,4), promotion:u.slice(4) || 'q' }); }
+    catch (e) { mv = null; }
+    if (!mv) return;
+    sans.push(mv.san);
+    if (mv.captured && mv.color === solver) captured.push({ type: mv.captured });
+  });
+
+  var after = materialFor(g, solver) - materialFor(g, solver === 'w' ? 'b' : 'w');
+  var gain = after - before;
+
+  /* Count the NET swing, not the captures. A mating combination often gives
+     up more than it takes - saying "wins a pawn" about a rook sacrifice that
+     ends in mate is just wrong. */
+  if (g.isCheckmate()){
+    facts.push({ t:'checkmate', cls:'mate' });
+    if (gain < 0) facts.push({ t:'sacrifices ' + (-gain) + ' points', cls:'' });
+  } else if (g.isStalemate()){
+    facts.push({ t:'stalemate', cls:'' });
+  } else if (gain > 0){
+    facts.push({ t: (captured.length === 1 && gain === VALUE[captured[0].type])
+                   ? 'wins the ' + PIECE_FULL[captured[0].type]
+                   : 'wins ' + gain + ' point' + (gain === 1 ? '' : 's'), cls:'big' });
+  } else if (gain < 0){
+    facts.push({ t:'sacrifices ' + (-gain) + ' points', cls:'' });
+  }
+  if (g.inCheck() && !g.isCheckmate()) facts.push({ t:'with check', cls:'' });
+  facts.push({ t: sans.length + (sans.length === 1 ? ' move' : ' moves'), cls:'' });
+
+  return { facts: facts, mate: g.isCheckmate(), final: g,
+           solver: solver, sans: sans };
+}
+
+/* Who is delivering mate, and from where. */
+function matingNet(game){
+  var loser = game.turn();
+  var kingSq = null;
+  game.board().forEach(function(row, ri){
+    row.forEach(function(sq, fi){
+      if (sq && sq.type === 'k' && sq.color === loser){
+        kingSq = 'abcdefgh'[fi] + (8 - ri);
+      }
+    });
+  });
+  if (!kingSq) return [];
+  var winner = loser === 'w' ? 'b' : 'w';
+  return game.attackers(kingSq, winner).map(function(from){
+    var p = game.get(from);
+    return { from: from, to: kingSq, type: p ? p.type : 'q' };
+  });
+}
+
+function toggleExplain(){
+  var el = $('#explain');
+  if (el.classList.contains('on')){
+    el.classList.remove('on');
+    $('#btn-explain').classList.remove('on');
+    S.board.render();
+    renderArrowKey();
+    return;
+  }
+  renderExplain();
+}
+
+function renderExplain(){
+  var p = S.puzzle, el = $('#explain');
+  if (!p) return;
+  var info = solutionFacts(p);
+
+  var html = '<h4>Why this works</h4>';
+  if (p.label) html += '<div class="game">' + p.label + '</div>';
+
+  if (p.explain){
+    /* bold the moves so the line stands out from the commentary */
+    var prose = p.explain.replace(
+      /\b(\d+\.(?:\.\.)?\s*)?((?:[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?|O-O(?:-O)?)[+#!?]*)/g,
+      function(m){ return '<b>' + m + '</b>'; });
+    html += '<div class="prose">' + prose + '</div>';
+  } else {
+    html += '<div class="prose">' + info.sans.join(' ') +
+            (info.mate ? ' \u2014 mate.' : '.') + '</div>';
+  }
+
+  html += '<div class="facts">' + info.facts.map(function(f){
+    return '<span class="fact ' + f.cls + '">' + f.t + '</span>';
+  }).join('') + '</div>';
+
+  html += '<div class="src">' + (info.mate
+    ? 'Arrows show every piece attacking the mated king.'
+    : 'Arrows show what the moved piece covers now.') + '</div>';
+
+  el.innerHTML = html;
+  el.classList.add('on');
+  $('#btn-explain').classList.add('on');
+
+  /* Put the final position on the board with the explanatory arrows. */
+  S.board.setFen(info.final.fen(), S.board.orient);
+  S.board.setInteractive(false);
+  if (info.mate){
+    S.board.showArrows(matingNet(info.final));
+  } else {
+    var last = p.moves.split(' ').pop();
+    var to = last.slice(2, 4);
+    var pc = info.final.get(to);
+    if (pc){
+      S.board.isolate = to;
+      S.board.render();
+    }
+  }
+  renderArrowKey();
 }
 
 function updateSolveHeader(){
@@ -445,13 +580,19 @@ function solved(){
   fb.innerHTML = (S.firstTry ? '✓ Solved' : '✓ Solved, but not first time') +
     ' · ' + fmtTime(Math.round(ms / 1000));
 
-  $('#solve-motif').innerHTML = S.puzzle.themes.split(' ').map(function(t){
+  /* "book" is not a motif worth a chip, and the game is already named under
+     the prompt - so a book puzzle shows nothing here and lets Explain carry
+     the detail. */
+  $('#solve-motif').innerHTML = S.puzzle.themes.split(' ').filter(function(t){
+    return t !== 'book' && t !== 'imported';
+  }).map(function(t){
     return '<span class="motif">' + prettyMotif(t) + '</span>';
   }).join('') +
-    (S.puzzle.label ? '<span class="motif">' + S.puzzle.label + '</span>' : '');
+    '';
 
   $('#btn-hint').disabled = true;
   $('#btn-skip').disabled = true;
+  $('#btn-explain').disabled = false;
   $('#btn-next').disabled = false;
   updateSolveHeader();
 
@@ -571,11 +712,12 @@ function init(){
   $('#btn-skip').addEventListener('click', skip);
   $('#btn-quit').addEventListener('click', finishSession);
   $('#btn-flip').addEventListener('click', function(){ S.board.flip(); });
-  $('#btn-eyes').addEventListener('click', function(){
-    S.board.cycleEyes();
-    renderEyeKey();
+  $('#btn-arrows').addEventListener('click', function(){
+    S.board.cycleArrows();
+    renderArrowKey();
   });
-  S.board.onEyes = renderEyeKey;
+  $('#btn-explain').addEventListener('click', toggleExplain);
+  S.board.onArrows = renderArrowKey;
   $('#btn-close-cycle').addEventListener('click', closeCycle);
   $('#btn-report-done').addEventListener('click', function(){ show('shelf'); renderShelf(); });
 

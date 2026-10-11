@@ -27,6 +27,14 @@ window.TCBoard = function(hostEl){
   frame.appendChild(corner); frame.appendChild(files);
   hostEl.appendChild(frame);
 
+  /* Arrows sit in their own SVG above the squares. One unit per square, so
+     every coordinate is just a file/rank index. */
+  var arrowSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  arrowSvg.setAttribute('class', 'tc-arrows');
+  arrowSvg.setAttribute('viewBox', '0 0 8 8');
+  arrowSvg.setAttribute('aria-hidden', 'true');
+  board.appendChild(arrowSvg);
+
   var b = {
     el: board,
     game: new Chess(),
@@ -36,12 +44,11 @@ window.TCBoard = function(hostEl){
     dests: [],            /* legal destinations from sel */
     last: null,           /* {from,to} of the last move played */
     marks: {},            /* square -> extra class */
-    eyes: 0,              /* 0 off, 1 yours, 2 theirs, 3 all */
-    eyesSide: 'w',        /* which colour counts as "yours" */
-    isolate: null,        /* square whose vision is shown alone */
+    arrows: 0,            /* 0 off, 1 white's arrows, 2 black's */
+    isolate: null,        /* square whose arrows are shown alone */
     onMove: null,         /* fn(moveObj) after a legal move is made */
     onIllegal: null,      /* fn(from,to) when the user tries a non-move */
-    onEyes: null          /* fn() when the overlay state changes */
+    onArrows: null        /* fn() when the overlay state changes */
   };
 
   /* ── vision ───────────────────────────────────────────────────────
@@ -83,15 +90,102 @@ window.TCBoard = function(hostEl){
     return out;
   };
 
-  /* Most valuable first, so a capped pip row keeps the pieces that matter. */
-  var ORDER = { q: 0, r: 1, b: 2, n: 3, p: 4, k: 5 };
-  function pipRow(list, side){
-    if (!list.length) return '';
-    var sorted = list.slice().sort(function(x, y){ return ORDER[x.type] - ORDER[y.type]; });
-    var shown = sorted.slice(0, 4);
-    return '<span class="tc-eyes ' + side + '">' + shown.map(function(a){
-      return '<i class="e-' + a.type + '"></i>';
-    }).join('') + (sorted.length > 4 ? '<i class="e-more"></i>' : '') + '</span>';
+  /* ── arrows ───────────────────────────────────────────────────── */
+
+  var ARROW_COLOUR = { p:'--eye-p', n:'--eye-n', b:'--eye-b',
+                       r:'--eye-r', q:'--eye-q', k:'--eye-k' };
+
+  /* Centre of a square in the 8x8 arrow viewBox, honouring orientation. */
+  function centre(sq){
+    var f = FILES.indexOf(sq[0]), r = RANKS.indexOf(sq[1]);
+    return (b.orient === 'w')
+      ? { x: f + 0.5, y: (7 - r) + 0.5 }
+      : { x: (7 - f) + 0.5, y: r + 0.5 };
+  }
+
+  function svgEl(name, attrs){
+    var e = document.createElementNS('http://www.w3.org/2000/svg', name);
+    Object.keys(attrs).forEach(function(k){ e.setAttribute(k, attrs[k]); });
+    return e;
+  }
+
+  /* An arrow from one square to another. Knights bend, as they do on every
+     analysis board, so the shape reads as a knight move. */
+  function arrow(from, to, type, faint){
+    var a = centre(from), z = centre(to);
+    var dx = z.x - a.x, dy = z.y - a.y;
+    var knight = (Math.abs(dx) === 1 && Math.abs(dy) === 2) ||
+                 (Math.abs(dx) === 2 && Math.abs(dy) === 1);
+
+    /* Three weights. An arrow landing on a PIECE is a real attack or
+       defence and carries the information; an arrow to an empty square is
+       only coverage, and at 70-odd arrows that is what turns the board into
+       a thicket. So coverage is drawn thin and faint, and attacks are not. */
+    var w = faint === 2 ? 0.055 : (faint ? 0.085 : 0.12);
+    var head = faint === 2 ? 0.2 : (faint ? 0.26 : 0.3);
+    var cls = 'ar' + (faint === 2 ? ' wisp' : (faint ? ' faint' : ''));
+    var g = svgEl('g', { class: cls,
+                         style: 'color:var(' + ARROW_COLOUR[type] + ')' });
+
+    /* the last leg, which the head is aligned to */
+    var lx = a.x, ly = a.y;
+    if (knight){
+      if (Math.abs(dx) === 2){ lx = z.x; ly = a.y; }   /* along the file, then across */
+      else { lx = a.x; ly = z.y; }
+    }
+    var ux = z.x - lx, uy = z.y - ly;
+    var len = Math.sqrt(ux * ux + uy * uy) || 1;
+    ux /= len; uy /= len;
+
+    /* stop the shaft short so the head is the point of the arrow */
+    var sx = z.x - ux * head, sy = z.y - uy * head;
+
+    var d = knight
+      ? 'M ' + a.x + ' ' + a.y + ' L ' + lx + ' ' + ly + ' L ' + sx + ' ' + sy
+      : 'M ' + a.x + ' ' + a.y + ' L ' + sx + ' ' + sy;
+    g.appendChild(svgEl('path', { d: d, fill: 'none', stroke: 'currentColor',
+                                  'stroke-width': w, 'stroke-linecap': 'round',
+                                  'stroke-linejoin': 'round' }));
+
+    var px = -uy, py = ux, hw = head * 0.52;
+    g.appendChild(svgEl('polygon', {
+      points: [z.x + ' ' + z.y,
+               (sx + px * hw) + ' ' + (sy + py * hw),
+               (sx - px * hw) + ' ' + (sy - py * hw)].join(' '),
+      fill: 'currentColor'
+    }));
+    return g;
+  }
+
+  function drawArrows(){
+    while (arrowSvg.firstChild) arrowSvg.removeChild(arrowSvg.firstChild);
+    if (!b.arrows && !b.isolate) return;
+
+    var pairs = [];
+    if (b.isolate){
+      var ip = b.game.get(b.isolate);
+      if (ip) b.seenBy(b.isolate).forEach(function(sq){
+        pairs.push({ from: b.isolate, to: sq, type: ip.type, faint: false });
+      });
+    } else {
+      var side = b.arrows === 2 ? 'b' : 'w';
+      var map = vision();
+      Object.keys(map).forEach(function(sq){
+        var occupied = !!b.game.get(sq);
+        map[sq][side].forEach(function(at){
+          pairs.push({ from: at.from, to: sq, type: at.type,
+                       faint: occupied ? 1 : 2 });
+        });
+      });
+    }
+    /* heavier pieces last, so their arrows sit on top */
+    /* wisps first, so the arrows that matter are drawn over them */
+    var depth = { p:0, n:1, b:2, r:3, q:4, k:5 };
+    pairs.sort(function(x, y){
+      if ((y.faint === 2) !== (x.faint === 2)) return x.faint === 2 ? -1 : 1;
+      return depth[x.type] - depth[y.type];
+    });
+    pairs.forEach(function(p){ arrowSvg.appendChild(arrow(p.from, p.to, p.type, p.faint)); });
   }
 
   /* ── geometry ─────────────────────────────────────────────────────── */
@@ -114,14 +208,10 @@ window.TCBoard = function(hostEl){
     var inCheck = b.game.inCheck();
     var turn = b.game.turn();
 
-    var eyeMap = b.eyes ? vision() : null;
-    var mine = b.eyesSide, theirs = mine === 'w' ? 'b' : 'w';
-    var showMine  = b.eyes === 1 || b.eyes === 3;
-    var showTheirs = b.eyes === 2 || b.eyes === 3;
-
-    /* Isolating one piece replaces the pip overview with a single wash. */
+    /* An isolated piece gets a light wash under its arrows, so the squares
+       it covers are readable even where arrows overlap. */
     var isoSquares = null, isoType = null;
-    if (b.eyes && b.isolate){
+    if (b.isolate){
       var ip = b.game.get(b.isolate);
       if (ip){ isoSquares = b.seenBy(b.isolate); isoType = ip.type; }
     }
@@ -143,9 +233,6 @@ window.TCBoard = function(hostEl){
         if (isoSquares){
           if (isoSquares.indexOf(sq) !== -1) cls += ' seen seen-' + isoType;
           if (sq === b.isolate) cls += ' eyeing';
-        } else if (eyeMap && eyeMap[sq]){
-          if (showMine)  inner += pipRow(eyeMap[sq][mine], 'top');
-          if (showTheirs) inner += pipRow(eyeMap[sq][theirs], 'bot');
         }
 
         if (pc){
@@ -169,6 +256,8 @@ window.TCBoard = function(hostEl){
       });
     });
     board.innerHTML = html;
+    board.appendChild(arrowSvg);      /* innerHTML wiped it; put it back on top */
+    drawArrows();
     ranks.innerHTML = s.r.map(function(r){ return '<div>' + RANKS[r] + '</div>'; }).join('');
     files.innerHTML = s.f.map(function(f){ return '<div>' + FILES[f] + '</div>'; }).join('');
     board.classList.toggle('pick', b.interactive);
@@ -188,23 +277,23 @@ window.TCBoard = function(hostEl){
     /* With the overlay on, a tap asks "what does this piece see?" - including
        the opponent's pieces, which are not otherwise tappable. Tapping the
        same piece again, or an empty square, clears it. */
-    if (b.eyes){
+    if (b.arrows || b.isolate){
       if (pc && pc.color !== b.game.turn()){
         b.isolate = (b.isolate === sq) ? null : sq;
         clearSel();
         b.render();
-        if (b.onEyes) b.onEyes();
+        if (b.onArrows) b.onArrows();
         return;
       }
       if (!pc && b.isolate){
         b.isolate = null;
         b.render();
-        if (b.onEyes) b.onEyes();
+        if (b.onArrows) b.onArrows();
         return;
       }
       if (pc){
         b.isolate = (b.isolate === sq) ? null : sq;
-        if (b.onEyes) b.onEyes();
+        if (b.onArrows) b.onArrows();
       }
     }
 
@@ -292,12 +381,21 @@ window.TCBoard = function(hostEl){
     b.render();
   };
 
-  /* Off -> yours -> theirs -> all -> off */
-  b.cycleEyes = function(){
-    b.eyes = (b.eyes + 1) % 4;
+  /* Off -> White's arrows -> Black's arrows -> off. One side at a time:
+     both at once is what made this unreadable before. */
+  b.cycleArrows = function(){
+    b.arrows = (b.arrows + 1) % 3;
     b.isolate = null;
     b.render();
-    return b.eyes;
+    return b.arrows;
+  };
+
+  /* Draw an explicit set of arrows, e.g. a mating net. */
+  b.showArrows = function(list){
+    while (arrowSvg.firstChild) arrowSvg.removeChild(arrowSvg.firstChild);
+    (list || []).forEach(function(a){
+      arrowSvg.appendChild(arrow(a.from, a.to, a.type || 'q', false));
+    });
   };
   b.setInteractive = function(on){ b.interactive = !!on; if (!on) clearSel(); b.render(); };
   b.mark = function(sq, kind){ b.marks[sq] = kind; };

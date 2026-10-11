@@ -117,8 +117,8 @@
         <div class="sp-row"><b id="solve-cycle">Cycle 1</b><span id="solve-prog">0 / 0</span></div>
         <div class="cyc-bar sm"><span id="solve-bar"></span></div>
       </div>
-      <button class="ctl" id="btn-eyes" type="button" title="Show what the pieces see"
-              aria-pressed="false">&#128065;</button>
+      <button class="ctl" id="btn-arrows" type="button" title="Show what the pieces cover"
+              aria-pressed="false">&#8599;</button>
       <button class="ctl" id="btn-flip" type="button" title="Flip the board">&#8645;</button>
     </div>
 
@@ -127,12 +127,14 @@
     <div class="board-host" id="board-host"></div>
 
     <div class="eye-key" id="eye-key"></div>
+    <div class="explain" id="explain"></div>
     <div class="fb" id="solve-fb"></div>
     <div class="motifs" id="solve-motif"></div>
 
     <div class="solve-ctl">
       <button class="ctl" id="btn-hint" type="button">Hint</button>
       <button class="ctl" id="btn-skip" type="button">Show me</button>
+      <button class="ctl" id="btn-explain" type="button" disabled>Explain</button>
       <button class="btn btn-primary grow" id="btn-next" type="button">Next &rarr;</button>
     </div>
   </section>
