@@ -1,0 +1,3540 @@
+{
+ "username": "suroh90",
+ "games": {
+  "7f9d999b-b799-11f1-837b-7ca6b701000f": {
+   "end_time": 1790200802,
+   "url": "https://www.chess.com/game/live/184278153450",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "adb5df97-b79a-11f1-9e49-30204801000f": {
+   "end_time": 1790201653,
+   "url": "https://www.chess.com/game/live/184278408690",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "861091a5-b79c-11f1-a095-e68c2101000f": {
+   "end_time": 1790202197,
+   "url": "https://www.chess.com/game/live/184278794608",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9081cce0-b79d-11f1-becf-3c44d601000f": {
+   "end_time": 1790202740,
+   "url": "https://www.chess.com/game/live/184279006862",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "22c450fb-b79f-11f1-becf-3c44d601000f": {
+   "end_time": 1790203518,
+   "url": "https://www.chess.com/game/live/184279318610",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9fedfc1c-b80f-11f1-8ba1-8500da01000f": {
+   "end_time": 1790251762,
+   "url": "https://www.chess.com/game/live/184302459696",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4cd55b50-b819-11f1-a6ac-8eeeee01000f": {
+   "end_time": 1790255736,
+   "url": "https://www.chess.com/game/live/184305421730",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "44cfda92-b821-11f1-bb80-3022bd01000f": {
+   "end_time": 1790259297,
+   "url": "https://www.chess.com/game/live/184308007584",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "85eeeaa9-b85e-11f1-9e49-30204801000f": {
+   "end_time": 1790285426,
+   "url": "https://www.chess.com/game/live/184326999528",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4a6a4b42-b85f-11f1-9c4d-f45fe701000f": {
+   "end_time": 1790286028,
+   "url": "https://www.chess.com/game/live/184327180210",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "50bf5204-b861-11f1-a6ac-8eeeee01000f": {
+   "end_time": 1790286881,
+   "url": "https://www.chess.com/game/live/184327648248",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "05fe499e-b863-11f1-b596-8a56cc01000f": {
+   "end_time": 1790287458,
+   "url": "https://www.chess.com/game/live/184328029986",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0f950cd2-b865-11f1-a6ac-8eeeee01000f": {
+   "end_time": 1790288475,
+   "url": "https://www.chess.com/game/live/184328463290",
+   "puzzles": 3,
+   "analysed": "2026-10-11"
+  },
+  "00649e37-b98c-11f1-9a2c-ece1e601000f": {
+   "end_time": 1790415112,
+   "url": "https://www.chess.com/game/live/184395718360",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "20984123-b9a4-11f1-becf-3c44d601000f": {
+   "end_time": 1790425457,
+   "url": "https://www.chess.com/game/live/184402151408",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ad134f1f-b9ec-11f1-9a2c-ece1e601000f": {
+   "end_time": 1790456567,
+   "url": "https://www.chess.com/game/live/184424022308",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d13eafda-b9ed-11f1-b596-8a56cc01000f": {
+   "end_time": 1790457169,
+   "url": "https://www.chess.com/game/live/184424298708",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "176c6d7f-b9ef-11f1-b596-8a56cc01000f": {
+   "end_time": 1790457513,
+   "url": "https://www.chess.com/game/live/184424602816",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "076ed6a1-b9f0-11f1-9e49-30204801000f": {
+   "end_time": 1790457801,
+   "url": "https://www.chess.com/game/live/184424824706",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "8e9cdb73-b9f0-11f1-a6ac-8eeeee01000f": {
+   "end_time": 1790458171,
+   "url": "https://www.chess.com/game/live/184424947052",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9f192c90-b9f1-11f1-a6ac-8eeeee01000f": {
+   "end_time": 1790458322,
+   "url": "https://www.chess.com/game/live/184425191808",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c0e18d61-b9f1-11f1-becf-3c44d601000f": {
+   "end_time": 1790458616,
+   "url": "https://www.chess.com/game/live/184425222008",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "864ad08b-b9f2-11f1-b596-8a56cc01000f": {
+   "end_time": 1790459143,
+   "url": "https://www.chess.com/game/live/184425397556",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c9a19fb1-b9f3-11f1-b596-8a56cc01000f": {
+   "end_time": 1790459706,
+   "url": "https://www.chess.com/game/live/184425680162",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c011bdcd-ba3f-11f1-9e49-30204801000f": {
+   "end_time": 1790492174,
+   "url": "https://www.chess.com/game/live/184439406400",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9f3e1224-bab8-11f1-9e49-30204801000f": {
+   "end_time": 1790544220,
+   "url": "https://www.chess.com/game/live/184473901186",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "1ca980c4-baba-11f1-9343-8dc15001000f": {
+   "end_time": 1790544981,
+   "url": "https://www.chess.com/game/live/184474253688",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e1dd8e44-babb-11f1-a095-e68c2101000f": {
+   "end_time": 1790545524,
+   "url": "https://www.chess.com/game/live/184474657280",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2b9bf6fe-babe-11f1-becf-3c44d601000f": {
+   "end_time": 1790546188,
+   "url": "https://www.chess.com/game/live/184475159790",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "64c683dd-babe-11f1-8ba1-8500da01000f": {
+   "end_time": 1790546594,
+   "url": "https://www.chess.com/game/live/184475207432",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5040317e-babf-11f1-9c4d-f45fe701000f": {
+   "end_time": 1790547019,
+   "url": "https://www.chess.com/game/live/184475400224",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ef232128-bac0-11f1-9e49-30204801000f": {
+   "end_time": 1790547825,
+   "url": "https://www.chess.com/game/live/184475731806",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "67739369-bd10-11f1-8bef-2a4af901000f": {
+   "end_time": 1790801433,
+   "url": "https://www.chess.com/game/live/184623847392",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "cdfb22ff-bd10-11f1-a987-563c1101000f": {
+   "end_time": 1790802445,
+   "url": "https://www.chess.com/game/live/184623952280",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4ebd6876-bd13-11f1-8c7a-e0caaf01000f": {
+   "end_time": 1790802977,
+   "url": "https://www.chess.com/game/live/184624589188",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "8bbb23cb-bddf-11f1-983e-eed3f101000f": {
+   "end_time": 1790890767,
+   "url": "https://www.chess.com/game/live/184675722268",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f2fa4d41-bde0-11f1-be75-03cfdc01000f": {
+   "end_time": 1790891933,
+   "url": "https://www.chess.com/game/live/184676053998",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "71ae0d68-bea1-11f1-b809-a9c32901000f": {
+   "end_time": 1790974276,
+   "url": "https://www.chess.com/game/live/184724278206",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "36209ea5-bea3-11f1-8dbb-feb0c301000f": {
+   "end_time": 1790975222,
+   "url": "https://www.chess.com/game/live/184724749712",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "04dd5a90-bea6-11f1-8bef-2a4af901000f": {
+   "end_time": 1790976452,
+   "url": "https://www.chess.com/game/live/184725470088",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c7df278d-c0b5-11f1-8c7a-e0caaf01000f": {
+   "end_time": 1791202929,
+   "url": "https://www.chess.com/game/live/184850044562",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "7ea0f5b7-c0fe-11f1-be75-03cfdc01000f": {
+   "end_time": 1791233978,
+   "url": "https://www.chess.com/game/live/184873708364",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d2c9e1ad-c17b-11f1-9982-0d13da01000f": {
+   "end_time": 1791287475,
+   "url": "https://www.chess.com/game/live/184900018618",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5a5dd429-c17c-11f1-be75-03cfdc01000f": {
+   "end_time": 1791288156,
+   "url": "https://www.chess.com/game/live/184900176314",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "758ed6f8-c1b6-11f1-9651-fbb1b701000f": {
+   "end_time": 1791312991,
+   "url": "https://www.chess.com/game/live/184919632160",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "32b5c11f-c28f-11f1-b809-a9c32901000f": {
+   "end_time": 1791406282,
+   "url": "https://www.chess.com/game/live/184975479704",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4ffef06d-c291-11f1-b809-a9c32901000f": {
+   "end_time": 1791407206,
+   "url": "https://www.chess.com/game/live/184976062524",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4bcbc8ef-c312-11f1-8dbb-feb0c301000f": {
+   "end_time": 1791462694,
+   "url": "https://www.chess.com/game/live/185003601556",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ce5d025c-c314-11f1-94d8-40057201000f": {
+   "end_time": 1791463601,
+   "url": "https://www.chess.com/game/live/185004384410",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "af34367f-c35f-11f1-a696-76c0b701000f": {
+   "end_time": 1791495639,
+   "url": "https://www.chess.com/game/live/185029032592",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "874b508f-c361-11f1-8c7a-e0caaf01000f": {
+   "end_time": 1791496806,
+   "url": "https://www.chess.com/game/live/185029477986",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "776ba54d-c3e0-11f1-91e9-76c88101000f": {
+   "end_time": 1791551260,
+   "url": "https://www.chess.com/game/live/185057117380",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b24a92a7-c3e3-11f1-a696-76c0b701000f": {
+   "end_time": 1791552729,
+   "url": "https://www.chess.com/game/live/185058178200",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "d853e005-c4eb-11f1-8c7a-e0caaf01000f": {
+   "end_time": 1791666152,
+   "url": "https://www.chess.com/game/live/185129428168",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "43f053d8-c4ee-11f1-be75-03cfdc01000f": {
+   "end_time": 1791666857,
+   "url": "https://www.chess.com/game/live/185130046402",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d66fe0e8-c4ef-11f1-94d8-40057201000f": {
+   "end_time": 1791667932,
+   "url": "https://www.chess.com/game/live/185130439476",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "835ebe65-c4f2-11f1-8c7a-e0caaf01000f": {
+   "end_time": 1791671055,
+   "url": "https://www.chess.com/game/live/185131088992",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "df49c38e-c4f9-11f1-94d8-40057201000f": {
+   "end_time": 1791672697,
+   "url": "https://www.chess.com/game/live/185132725420",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "780f05c6-c572-11f1-8c7a-e0caaf01000f": {
+   "end_time": 1791725609,
+   "url": "https://www.chess.com/game/live/185158830182",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0c932da6-c57a-11f1-983e-eed3f101000f": {
+   "end_time": 1791726684,
+   "url": "https://www.chess.com/game/live/185161191070",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c4d22f9e-6258-11e3-8000-000000010001": {
+   "end_time": 1528326797,
+   "url": "https://www.chess.com/game/live/2860837811",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "222ae041-403d-11eb-8649-0069e4010001": {
+   "end_time": 1608192660,
+   "url": "https://www.chess.com/game/live/5987213688",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "1e7f6834-4213-11eb-8649-0069e4010001": {
+   "end_time": 1608394248,
+   "url": "https://www.chess.com/game/live/6006423286",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "40f3d4f5-4215-11eb-8649-0069e4010001": {
+   "end_time": 1608394932,
+   "url": "https://www.chess.com/game/live/6006532461",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "757f2e52-42a8-11eb-8649-0069e4010001": {
+   "end_time": 1608458858,
+   "url": "https://www.chess.com/game/live/6012325607",
+   "puzzles": 6,
+   "analysed": "2026-10-11"
+  },
+  "18dd9a4e-42b2-11eb-8649-0069e4010001": {
+   "end_time": 1608462711,
+   "url": "https://www.chess.com/game/live/6012674038",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "71112ee8-42b4-11eb-8649-0069e4010001": {
+   "end_time": 1608463542,
+   "url": "https://www.chess.com/game/live/6012762227",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "3d382f5a-42b8-11eb-8649-0069e4010001": {
+   "end_time": 1608465415,
+   "url": "https://www.chess.com/game/live/6012906934",
+   "puzzles": 3,
+   "analysed": "2026-10-11"
+  },
+  "6951738b-42c8-11eb-8649-0069e4010001": {
+   "end_time": 1608471929,
+   "url": "https://www.chess.com/game/live/6013578860",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "1da92230-42cb-11eb-8649-0069e4010001": {
+   "end_time": 1608472765,
+   "url": "https://www.chess.com/game/live/6013700755",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c80a1466-42cb-11eb-8649-0069e4010001": {
+   "end_time": 1608473546,
+   "url": "https://www.chess.com/game/live/6013731122",
+   "puzzles": 4,
+   "analysed": "2026-10-11"
+  },
+  "ba36bb3d-42cd-11eb-8649-0069e4010001": {
+   "end_time": 1608473891,
+   "url": "https://www.chess.com/game/live/6013820137",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5aa01a15-42ce-11eb-8649-0069e4010001": {
+   "end_time": 1608474786,
+   "url": "https://www.chess.com/game/live/6013848786",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4d87d3a7-42d0-11eb-8649-0069e4010001": {
+   "end_time": 1608475513,
+   "url": "https://www.chess.com/game/live/6013938770",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "7c6c2681-42d2-11eb-8649-0069e4010001": {
+   "end_time": 1608476625,
+   "url": "https://www.chess.com/game/live/6014041119",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "076d6909-42d5-11eb-8649-0069e4010001": {
+   "end_time": 1608477371,
+   "url": "https://www.chess.com/game/live/6014164667",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "77bdbdc4-42d6-11eb-8649-0069e4010001": {
+   "end_time": 1608477485,
+   "url": "https://www.chess.com/game/live/6014235621",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c4149633-42d6-11eb-8649-0069e4010001": {
+   "end_time": 1608478678,
+   "url": "https://www.chess.com/game/live/6014250388",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "cc539c86-42d9-11eb-8649-0069e4010001": {
+   "end_time": 1608479742,
+   "url": "https://www.chess.com/game/live/6014400476",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f53a84ff-42ec-11eb-8649-0069e4010001": {
+   "end_time": 1608487864,
+   "url": "https://www.chess.com/game/live/6015410153",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c54dc589-42ee-11eb-8649-0069e4010001": {
+   "end_time": 1608488813,
+   "url": "https://www.chess.com/game/live/6015506154",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "72e88523-4895-11eb-9c8f-0069e4010001": {
+   "end_time": 1609110759,
+   "url": "https://www.chess.com/game/live/6075441671",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d1e8e774-4913-11eb-9c8f-0069e4010001": {
+   "end_time": 1609164458,
+   "url": "https://www.chess.com/game/live/6080011273",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "687f6663-4916-11eb-9c8f-0069e4010001": {
+   "end_time": 1609165118,
+   "url": "https://www.chess.com/game/live/6080135332",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "17b272bd-4964-11eb-9c8f-0069e4010001": {
+   "end_time": 1609198913,
+   "url": "https://www.chess.com/game/live/6084406676",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6332bf38-49cf-11eb-9c8f-0069e4010001": {
+   "end_time": 1609245626,
+   "url": "https://www.chess.com/game/live/6088215107",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "bfd62164-49e2-11eb-9c8f-0069e4010001": {
+   "end_time": 1609254064,
+   "url": "https://www.chess.com/game/live/6089110495",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "54b76f5a-49e8-11eb-9c8f-0069e4010001": {
+   "end_time": 1609257303,
+   "url": "https://www.chess.com/game/live/6089392253",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b8666f29-4a28-11eb-9c8f-0069e4010001": {
+   "end_time": 1609285105,
+   "url": "https://www.chess.com/game/live/6092974708",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "43e699ab-4aee-11eb-9c8f-0069e4010001": {
+   "end_time": 1609370659,
+   "url": "https://www.chess.com/game/live/6101577157",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "be50a1d3-4c1d-11eb-9c8f-0069e4010001": {
+   "end_time": 1609500027,
+   "url": "https://www.chess.com/game/live/6113124867",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "43ee94c0-4c91-11eb-9c8f-0069e4010001": {
+   "end_time": 1609548439,
+   "url": "https://www.chess.com/game/live/6118629628",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "01c6cb3a-4d11-11eb-9c8f-0069e4010001": {
+   "end_time": 1609602523,
+   "url": "https://www.chess.com/game/live/6123395747",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "11b58c65-4d13-11eb-9c8f-0069e4010001": {
+   "end_time": 1609604116,
+   "url": "https://www.chess.com/game/live/6123509436",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "da7035ad-4d19-11eb-9c8f-0069e4010001": {
+   "end_time": 1609607666,
+   "url": "https://www.chess.com/game/live/6123892561",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9a5a1975-4d3a-11eb-9c8f-0069e4010001": {
+   "end_time": 1609621830,
+   "url": "https://www.chess.com/game/live/6125802854",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "09906bb9-4d3f-11eb-9c8f-0069e4010001": {
+   "end_time": 1609622456,
+   "url": "https://www.chess.com/game/live/6126056112",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "fa038d31-4d49-11eb-9c8f-0069e4010001": {
+   "end_time": 1609629536,
+   "url": "https://www.chess.com/game/live/6126664226",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "62f1b6a3-4e6a-11eb-9c8f-0069e4010001": {
+   "end_time": 1609752558,
+   "url": "https://www.chess.com/game/live/6138940274",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "1773990a-4fa2-11eb-9c8f-0069e4010001": {
+   "end_time": 1609886188,
+   "url": "https://www.chess.com/game/live/6153856325",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7225825c-503d-11eb-bc90-0069e4010001": {
+   "end_time": 1609953105,
+   "url": "https://www.chess.com/game/live/6160254459",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "a9020537-505b-11eb-bc90-0069e4010001": {
+   "end_time": 1609967232,
+   "url": "https://www.chess.com/game/live/6162064536",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "b536dbca-5273-11eb-bc90-0069e4010001": {
+   "end_time": 1610194700,
+   "url": "https://www.chess.com/game/live/6185749360",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "9971a417-528d-11eb-bc90-0069e4010001": {
+   "end_time": 1610206108,
+   "url": "https://www.chess.com/game/live/6187017357",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ffdd9514-56ab-11eb-9a76-0069e4010001": {
+   "end_time": 1610658553,
+   "url": "https://www.chess.com/game/live/6236932830",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "8c31156c-56ad-11eb-9a76-0069e4010001": {
+   "end_time": 1610661597,
+   "url": "https://www.chess.com/game/live/6237030329",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "20600d09-57fd-11eb-9a76-0069e4010001": {
+   "end_time": 1610803467,
+   "url": "https://www.chess.com/game/live/6252251845",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "de63581e-5807-11eb-9a76-0069e4010001": {
+   "end_time": 1610808277,
+   "url": "https://www.chess.com/game/live/6252818725",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "2b87ec7d-5a7a-11eb-9a76-0069e4010001": {
+   "end_time": 1611076693,
+   "url": "https://www.chess.com/game/live/6283552496",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5b808021-5a7a-11eb-9a76-0069e4010001": {
+   "end_time": 1611077278,
+   "url": "https://www.chess.com/game/live/6283564946",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "46385604-5bd9-11eb-b524-0069e4010001": {
+   "end_time": 1611230532,
+   "url": "https://www.chess.com/game/live/6300563970",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "770b91da-5e55-11eb-bd25-0069e4010001": {
+   "end_time": 1611502763,
+   "url": "https://www.chess.com/game/live/6332372191",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3b9e3c81-5e81-11eb-bd25-0069e4010001": {
+   "end_time": 1611519535,
+   "url": "https://www.chess.com/game/live/6335189390",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "cfd050e1-5e81-11eb-bd25-0069e4010001": {
+   "end_time": 1611520714,
+   "url": "https://www.chess.com/game/live/6335226962",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "76e67258-5e84-11eb-bd25-0069e4010001": {
+   "end_time": 1611522357,
+   "url": "https://www.chess.com/game/live/6335398490",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "082294dd-3891-11ec-ac94-09ff3c010001": {
+   "end_time": 1635498208,
+   "url": "https://www.chess.com/game/live/29234417449",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "d43e689b-41ad-11ec-90b8-09ff3c010001": {
+   "end_time": 1636497762,
+   "url": "https://www.chess.com/game/live/30236378079",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "5e3ddc3e-41ae-11ec-90b8-09ff3c010001": {
+   "end_time": 1636498777,
+   "url": "https://www.chess.com/game/live/30236893457",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f664f7db-4405-11ec-aecf-09ff3c010001": {
+   "end_time": 1636758536,
+   "url": "https://www.chess.com/game/live/30494344811",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "d4c61003-4482-11ec-aecf-09ff3c010001": {
+   "end_time": 1636809765,
+   "url": "https://www.chess.com/game/live/30547791631",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4bf2279f-44d0-11ec-aecf-09ff3c010001": {
+   "end_time": 1636843631,
+   "url": "https://www.chess.com/game/live/30581323271",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "83099906-472c-11ec-aecf-09ff3c010001": {
+   "end_time": 1637101831,
+   "url": "https://www.chess.com/game/live/30840591161",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "37fa3e7e-472d-11ec-aecf-09ff3c010001": {
+   "end_time": 1637102332,
+   "url": "https://www.chess.com/game/live/30841127311",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "cc6d1936-4986-11ec-8f08-09ff3c010001": {
+   "end_time": 1637360973,
+   "url": "https://www.chess.com/game/live/31099230679",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "e1074d57-4a4a-11ec-8f08-09ff3c010001": {
+   "end_time": 1637445374,
+   "url": "https://www.chess.com/game/live/31183750765",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "56fe2d76-4a50-11ec-8f08-09ff3c010001": {
+   "end_time": 1637447850,
+   "url": "https://www.chess.com/game/live/31186139515",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4e68ebb7-4aa9-11ec-8f08-09ff3c010001": {
+   "end_time": 1637485829,
+   "url": "https://www.chess.com/game/live/31224001131",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "633ba595-4d6d-11ec-9719-09ff3c010001": {
+   "end_time": 1637790183,
+   "url": "https://www.chess.com/game/live/31528232943",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "27e4d4b5-5026-11ec-9719-09ff3c010001": {
+   "end_time": 1638089580,
+   "url": "https://www.chess.com/game/live/31827589687",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "3b305a32-5090-11ec-9719-09ff3c010001": {
+   "end_time": 1638134878,
+   "url": "https://www.chess.com/game/live/31873193667",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "89020a8d-61e5-11ec-93ae-09ff3c010001": {
+   "end_time": 1640041884,
+   "url": "https://www.chess.com/game/live/33778823493",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b3c0bb10-04a2-11ef-aa9f-6cfe544c0428": {
+   "end_time": 1714229806,
+   "url": "https://www.chess.com/game/live/107967099203",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0684db82-04d5-11ef-aa9f-6cfe544c0428": {
+   "end_time": 1714250629,
+   "url": "https://www.chess.com/game/live/107988689927",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "bda688e9-e27a-11ef-9baf-6cfe544c0428": {
+   "end_time": 1738621336,
+   "url": "https://www.chess.com/game/live/132359390503",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "a6dbecb3-e669-11ef-b220-6cfe544c0428": {
+   "end_time": 1739053647,
+   "url": "https://www.chess.com/game/live/132791427263",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7727bb3c-eb78-11ef-88a8-45c1d801000f": {
+   "end_time": 1739609422,
+   "url": "https://www.chess.com/game/live/122906870616",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "bdde85c1-ebf0-11ef-b2f1-db2e2701000f": {
+   "end_time": 1739661378,
+   "url": "https://www.chess.com/game/live/122929846524",
+   "puzzles": 3,
+   "analysed": "2026-10-11"
+  },
+  "befbb555-ecb4-11ef-99e1-b584ca01000f": {
+   "end_time": 1739744935,
+   "url": "https://www.chess.com/game/live/122962844088",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c72da65f-ecb8-11ef-b2f1-db2e2701000f": {
+   "end_time": 1739747461,
+   "url": "https://www.chess.com/game/live/122963464118",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "86d65410-ed7e-11ef-b2f1-db2e2701000f": {
+   "end_time": 1739832053,
+   "url": "https://www.chess.com/game/live/122998523376",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "85375ede-ee44-11ef-89e5-6cfe544c0428": {
+   "end_time": 1739917478,
+   "url": "https://www.chess.com/game/live/133655344033",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "724a45e0-ef10-11ef-8a2c-468bfa01000f": {
+   "end_time": 1740004553,
+   "url": "https://www.chess.com/game/live/123072117148",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9dd51d72-f236-11ef-a3ec-9ee23101000f": {
+   "end_time": 1740350474,
+   "url": "https://www.chess.com/game/live/123219247184",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "53817201-f237-11ef-a3ec-9ee23101000f": {
+   "end_time": 1740350961,
+   "url": "https://www.chess.com/game/live/123219365450",
+   "puzzles": 3,
+   "analysed": "2026-10-11"
+  },
+  "bc6f1a51-f239-11ef-8e80-689e6101000f": {
+   "end_time": 1740352637,
+   "url": "https://www.chess.com/game/live/123219754328",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9eafdb7b-f2fc-11ef-af14-b7062301000f": {
+   "end_time": 1740436097,
+   "url": "https://www.chess.com/game/live/123255975932",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "1cd8ae48-f625-11ef-b81c-95e0f101000f": {
+   "end_time": 1740782747,
+   "url": "https://www.chess.com/game/live/123405453036",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "eec168c3-f625-11ef-ac1c-57bc2901000f": {
+   "end_time": 1740783409,
+   "url": "https://www.chess.com/game/live/123405590394",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "a0e30b70-f6f1-11ef-b4f8-403b8201000f": {
+   "end_time": 1740871267,
+   "url": "https://www.chess.com/game/live/123441177674",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6309a399-f7b2-11ef-b81c-95e0f101000f": {
+   "end_time": 1740953552,
+   "url": "https://www.chess.com/game/live/123475875684",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "35e64af0-f87d-11ef-ab68-99f71101000f": {
+   "end_time": 1741040660,
+   "url": "https://www.chess.com/game/live/123512965280",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9aaa6532-fad9-11ef-879d-b111dd01000f": {
+   "end_time": 1741300402,
+   "url": "https://www.chess.com/game/live/123622639250",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "ae4c73b0-fc6f-11ef-98f2-8bcf2701000f": {
+   "end_time": 1741474826,
+   "url": "https://www.chess.com/game/live/136055865224",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9d7b6422-fd38-11ef-ba3e-a318ff01000f": {
+   "end_time": 1741561001,
+   "url": "https://www.chess.com/game/live/136091254124",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "dc5cbfd1-fdf7-11ef-8008-6cfe544c0428": {
+   "end_time": 1741643535,
+   "url": "https://www.chess.com/game/live/135381569955",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0720d2d6-ff9b-11ef-8d4b-7841af01000f": {
+   "end_time": 1741823115,
+   "url": "https://www.chess.com/game/live/136199795432",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d6353634-005f-11f0-80bf-8bba5f01000f": {
+   "end_time": 1741908168,
+   "url": "https://www.chess.com/game/live/136235996772",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0054b99b-0063-11f0-80bf-8bba5f01000f": {
+   "end_time": 1741909184,
+   "url": "https://www.chess.com/game/live/136236491344",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ee6ac6f1-0064-11f0-b659-2f149001000f": {
+   "end_time": 1741909753,
+   "url": "https://www.chess.com/game/live/136236780266",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f06a9913-0065-11f0-a3d7-fc9bbd01000f": {
+   "end_time": 1741910300,
+   "url": "https://www.chess.com/game/live/136236928576",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "556fffdc-0067-11f0-a3d7-fc9bbd01000f": {
+   "end_time": 1741911106,
+   "url": "https://www.chess.com/game/live/136237130540",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "00fa1e5c-00f3-11f0-80bf-8bba5f01000f": {
+   "end_time": 1741971163,
+   "url": "https://www.chess.com/game/live/136261022992",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b989f2f7-0112-11f0-a8a0-2985d301000f": {
+   "end_time": 1741984996,
+   "url": "https://www.chess.com/game/live/136268363076",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "17990b36-012c-11f0-b659-2f149001000f": {
+   "end_time": 1741995963,
+   "url": "https://www.chess.com/game/live/136273079298",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "48c13beb-02b3-11f0-b659-2f149001000f": {
+   "end_time": 1742163544,
+   "url": "https://www.chess.com/game/live/136343382338",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e1895d3b-02b4-11f0-9993-78109401000f": {
+   "end_time": 1742164522,
+   "url": "https://www.chess.com/game/live/136343663988",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "a65867e1-06a4-11f0-b81b-bee3db01000f": {
+   "end_time": 1742596777,
+   "url": "https://www.chess.com/game/live/136528444710",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7e8d11b3-06a5-11f0-af28-48520f01000f": {
+   "end_time": 1742597549,
+   "url": "https://www.chess.com/game/live/136528590824",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4a32f849-082d-11f0-aed7-6cfe544c0428": {
+   "end_time": 1742765583,
+   "url": "https://www.chess.com/game/live/137078463003",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "39e96ad2-0e7b-11f0-8731-6cfe544c0428": {
+   "end_time": 1743459252,
+   "url": "https://www.chess.com/game/live/137772040815",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "90afecc5-0f3f-11f0-91db-43dde101000f": {
+   "end_time": 1743543277,
+   "url": "https://www.chess.com/game/live/136925265292",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "958c358c-0f41-11f0-88b8-c841ad01000f": {
+   "end_time": 1743544301,
+   "url": "https://www.chess.com/game/live/136925635440",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f27b7d48-0f43-11f0-9fb1-b49f8101000f": {
+   "end_time": 1743545310,
+   "url": "https://www.chess.com/game/live/136926052282",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "125f81ba-1898-11f0-b0e0-d8a9c301000f": {
+   "end_time": 1744570527,
+   "url": "https://www.chess.com/game/live/137346406152",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6a1815e4-368c-11f0-8a70-4464de01000f": {
+   "end_time": 1747864460,
+   "url": "https://www.chess.com/game/live/138718429978",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "843efb6e-3b39-11f0-a62a-6cfe544c0428": {
+   "end_time": 1748378191,
+   "url": "https://www.chess.com/game/live/142691418653",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e359473e-3e50-11f0-a62a-6cfe544c0428": {
+   "end_time": 1748718762,
+   "url": "https://www.chess.com/game/live/143031608023",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f35465dd-4329-11f0-8e8c-fd979401000f": {
+   "end_time": 1749251243,
+   "url": "https://www.chess.com/game/live/139298350820",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "de35dbb0-4388-11f0-947a-35d0a201000f": {
+   "end_time": 1749292123,
+   "url": "https://www.chess.com/game/live/139312355372",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "3e6fe756-43e8-11f0-ad85-54b12501000f": {
+   "end_time": 1749332815,
+   "url": "https://www.chess.com/game/live/139333545968",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "45d43015-43e9-11f0-ad9b-0c17f301000f": {
+   "end_time": 1749332975,
+   "url": "https://www.chess.com/game/live/139333727444",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "55777b9a-43e9-11f0-bb81-5d933701000f": {
+   "end_time": 1749333378,
+   "url": "https://www.chess.com/game/live/139333738044",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4228061a-43eb-11f0-bb81-5d933701000f": {
+   "end_time": 1749334337,
+   "url": "https://www.chess.com/game/live/139334068654",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "bef16827-43ec-11f0-ad85-54b12501000f": {
+   "end_time": 1749334947,
+   "url": "https://www.chess.com/game/live/139334315818",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "32e3c32b-43ee-11f0-bb81-5d933701000f": {
+   "end_time": 1749335640,
+   "url": "https://www.chess.com/game/live/139334552452",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "bc77aeb9-43ef-11f0-947a-35d0a201000f": {
+   "end_time": 1749336295,
+   "url": "https://www.chess.com/game/live/139334796834",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "11870d7b-4449-11f0-bb81-5d933701000f": {
+   "end_time": 1749374174,
+   "url": "https://www.chess.com/game/live/139347658202",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "60a08822-4449-11f0-947a-35d0a201000f": {
+   "end_time": 1749374306,
+   "url": "https://www.chess.com/game/live/139347717456",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "8cd5ab61-4449-11f0-9b26-00687f01000f": {
+   "end_time": 1749374563,
+   "url": "https://www.chess.com/game/live/139347750242",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "727ec1d3-4469-11f0-947a-35d0a201000f": {
+   "end_time": 1749388155,
+   "url": "https://www.chess.com/game/live/139354468192",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e5b3cf99-44ae-11f0-947a-35d0a201000f": {
+   "end_time": 1749418370,
+   "url": "https://www.chess.com/game/live/139370348554",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5cf702ef-44b0-11f0-ad85-54b12501000f": {
+   "end_time": 1749418773,
+   "url": "https://www.chess.com/game/live/139370604800",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4d2759d9-44b1-11f0-bb81-5d933701000f": {
+   "end_time": 1749419458,
+   "url": "https://www.chess.com/game/live/139370753838",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e0e72f1f-44b2-11f0-bb81-5d933701000f": {
+   "end_time": 1749419868,
+   "url": "https://www.chess.com/game/live/139371017902",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e21b7480-44b3-11f0-947a-35d0a201000f": {
+   "end_time": 1749420259,
+   "url": "https://www.chess.com/game/live/139371191912",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "98381747-44b4-11f0-947a-35d0a201000f": {
+   "end_time": 1749420836,
+   "url": "https://www.chess.com/game/live/139371312352",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "e7d460b7-44b5-11f0-a7fe-8ce59301000f": {
+   "end_time": 1749421434,
+   "url": "https://www.chess.com/game/live/139371531272",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "cbdb5c8e-44b7-11f0-bb81-5d933701000f": {
+   "end_time": 1749421947,
+   "url": "https://www.chess.com/game/live/139371842962",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "908f590d-44b8-11f0-ad85-54b12501000f": {
+   "end_time": 1749422446,
+   "url": "https://www.chess.com/game/live/139371966694",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "3f86236f-4579-11f0-8a04-a4bcdb01000f": {
+   "end_time": 1749505226,
+   "url": "https://www.chess.com/game/live/139409142402",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d48b4ce3-457e-11f0-8a04-a4bcdb01000f": {
+   "end_time": 1749507724,
+   "url": "https://www.chess.com/game/live/139410175514",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "514b1226-4580-11f0-ad85-54b12501000f": {
+   "end_time": 1749508313,
+   "url": "https://www.chess.com/game/live/139410431038",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "70d86483-4582-11f0-ad85-54b12501000f": {
+   "end_time": 1749509173,
+   "url": "https://www.chess.com/game/live/139410780952",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "b9f61586-4583-11f0-8a04-a4bcdb01000f": {
+   "end_time": 1749509729,
+   "url": "https://www.chess.com/game/live/139410988250",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "330e7df6-4585-11f0-ad85-54b12501000f": {
+   "end_time": 1749510488,
+   "url": "https://www.chess.com/game/live/139411218918",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b6d57c22-4644-11f0-8cb1-1d689101000f": {
+   "end_time": 1749592659,
+   "url": "https://www.chess.com/game/live/139448376366",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0b855e00-4646-11f0-a5d9-a10d9f01000f": {
+   "end_time": 1749593313,
+   "url": "https://www.chess.com/game/live/139448618918",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "a4521361-4647-11f0-a5d9-a10d9f01000f": {
+   "end_time": 1749593933,
+   "url": "https://www.chess.com/game/live/139448899644",
+   "puzzles": 4,
+   "analysed": "2026-10-11"
+  },
+  "10738b44-4649-11f0-a84c-59f6b601000f": {
+   "end_time": 1749594360,
+   "url": "https://www.chess.com/game/live/139449142480",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2b7fb7e2-464a-11f0-a5d9-a10d9f01000f": {
+   "end_time": 1749594977,
+   "url": "https://www.chess.com/game/live/139449326350",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "afba9f05-464b-11f0-8cb1-1d689101000f": {
+   "end_time": 1749595477,
+   "url": "https://www.chess.com/game/live/139449572460",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9602f3c4-464c-11f0-8c01-383ba101000f": {
+   "end_time": 1749595727,
+   "url": "https://www.chess.com/game/live/139449714502",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2fa4a225-464d-11f0-a5d9-a10d9f01000f": {
+   "end_time": 1749595889,
+   "url": "https://www.chess.com/game/live/139449808538",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c2922882-464d-11f0-8c01-383ba101000f": {
+   "end_time": 1749596493,
+   "url": "https://www.chess.com/game/live/139449897848",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "fc951f2e-464e-11f0-8cb1-1d689101000f": {
+   "end_time": 1749597156,
+   "url": "https://www.chess.com/game/live/139450082704",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e1d1032d-4712-11f0-908e-11778f01000f": {
+   "end_time": 1749681159,
+   "url": "https://www.chess.com/game/live/139487675050",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "50a146ba-4714-11f0-a5d9-a10d9f01000f": {
+   "end_time": 1749681337,
+   "url": "https://www.chess.com/game/live/139487907722",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "82e7e9a9-4714-11f0-a5d9-a10d9f01000f": {
+   "end_time": 1749681491,
+   "url": "https://www.chess.com/game/live/139487938938",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "fa6ed1a6-4714-11f0-908e-11778f01000f": {
+   "end_time": 1749681809,
+   "url": "https://www.chess.com/game/live/139488012740",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "fb29047c-4715-11f0-a5d9-a10d9f01000f": {
+   "end_time": 1749682538,
+   "url": "https://www.chess.com/game/live/139488170080",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "43a4d158-4717-11f0-908e-11778f01000f": {
+   "end_time": 1749683154,
+   "url": "https://www.chess.com/game/live/139488366632",
+   "puzzles": 5,
+   "analysed": "2026-10-11"
+  },
+  "01b8d4f8-4719-11f0-a5d9-a10d9f01000f": {
+   "end_time": 1749683922,
+   "url": "https://www.chess.com/game/live/139488624178",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b0bd1376-47d6-11f0-8cb1-1d689101000f": {
+   "end_time": 1749765061,
+   "url": "https://www.chess.com/game/live/139524819124",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b9d0b9b7-47d7-11f0-b32c-69679d01000f": {
+   "end_time": 1749765741,
+   "url": "https://www.chess.com/game/live/139525006632",
+   "puzzles": 3,
+   "analysed": "2026-10-11"
+  },
+  "f480dfd2-47d8-11f0-a5d9-a10d9f01000f": {
+   "end_time": 1749765897,
+   "url": "https://www.chess.com/game/live/139525222674",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4817b088-47da-11f0-a5d9-a10d9f01000f": {
+   "end_time": 1749766544,
+   "url": "https://www.chess.com/game/live/139525449010",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "431cb4f6-47db-11f0-8cb1-1d689101000f": {
+   "end_time": 1749767284,
+   "url": "https://www.chess.com/game/live/139525613782",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ec88a285-47dc-11f0-a5d9-a10d9f01000f": {
+   "end_time": 1749767980,
+   "url": "https://www.chess.com/game/live/139525884926",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "78501058-47de-11f0-b32c-69679d01000f": {
+   "end_time": 1749768719,
+   "url": "https://www.chess.com/game/live/139526128926",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "28308517-47e0-11f0-8c01-383ba101000f": {
+   "end_time": 1749769067,
+   "url": "https://www.chess.com/game/live/139526387582",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e5ebd662-47e0-11f0-b32c-69679d01000f": {
+   "end_time": 1749769575,
+   "url": "https://www.chess.com/game/live/139526498752",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "32f8ea39-47e2-11f0-8cb1-1d689101000f": {
+   "end_time": 1749770326,
+   "url": "https://www.chess.com/game/live/139526688448",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "b1e5efe7-47e3-11f0-8c01-383ba101000f": {
+   "end_time": 1749770590,
+   "url": "https://www.chess.com/game/live/139526903754",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5ae5a461-47e4-11f0-8cb1-1d689101000f": {
+   "end_time": 1749770993,
+   "url": "https://www.chess.com/game/live/139526998084",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2e5db008-47e5-11f0-8cb1-1d689101000f": {
+   "end_time": 1749771196,
+   "url": "https://www.chess.com/game/live/139527113758",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7d27e330-4843-11f0-acd2-6f075a01000f": {
+   "end_time": 1749812116,
+   "url": "https://www.chess.com/game/live/139541154052",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "6b4db286-4846-11f0-9267-58655e01000f": {
+   "end_time": 1749813163,
+   "url": "https://www.chess.com/game/live/139541749950",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "aa8be564-484a-11f0-9267-58655e01000f": {
+   "end_time": 1749815101,
+   "url": "https://www.chess.com/game/live/139542645622",
+   "puzzles": 3,
+   "analysed": "2026-10-11"
+  },
+  "8d764d0f-484c-11f0-bc60-22941001000f": {
+   "end_time": 1749815840,
+   "url": "https://www.chess.com/game/live/139543054360",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "840feb3b-484e-11f0-a329-55591e01000f": {
+   "end_time": 1749816833,
+   "url": "https://www.chess.com/game/live/139543483454",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "0c034d0b-4858-11f0-acd2-6f075a01000f": {
+   "end_time": 1749820849,
+   "url": "https://www.chess.com/game/live/139545632354",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "824c1a21-4859-11f0-a329-55591e01000f": {
+   "end_time": 1749821311,
+   "url": "https://www.chess.com/game/live/139545973910",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "5f842e5f-485a-11f0-a329-55591e01000f": {
+   "end_time": 1749821587,
+   "url": "https://www.chess.com/game/live/139546178070",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "198f69db-485e-11f0-a329-55591e01000f": {
+   "end_time": 1749823503,
+   "url": "https://www.chess.com/game/live/139547068216",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "29b1eff3-4861-11f0-a329-55591e01000f": {
+   "end_time": 1749824763,
+   "url": "https://www.chess.com/game/live/139547809170",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "93e07137-4862-11f0-bc60-22941001000f": {
+   "end_time": 1749825202,
+   "url": "https://www.chess.com/game/live/139548156850",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ba216be1-4863-11f0-9267-58655e01000f": {
+   "end_time": 1749825923,
+   "url": "https://www.chess.com/game/live/139548440908",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "3c554dec-4867-11f0-a329-55591e01000f": {
+   "end_time": 1749827411,
+   "url": "https://www.chess.com/game/live/139549310616",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9dbcfd20-4899-11f0-87e3-10635501000f": {
+   "end_time": 1749849110,
+   "url": "https://www.chess.com/game/live/139560813618",
+   "puzzles": 6,
+   "analysed": "2026-10-11"
+  },
+  "8c5f462b-489b-11f0-bc60-22941001000f": {
+   "end_time": 1749849621,
+   "url": "https://www.chess.com/game/live/139561178798",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "72ffccd4-489c-11f0-acd2-6f075a01000f": {
+   "end_time": 1749849784,
+   "url": "https://www.chess.com/game/live/139561347280",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "a8d7d3e4-489c-11f0-9267-58655e01000f": {
+   "end_time": 1749850115,
+   "url": "https://www.chess.com/game/live/139561386200",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6644b70a-489d-11f0-bc60-22941001000f": {
+   "end_time": 1749850366,
+   "url": "https://www.chess.com/game/live/139561522828",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "01d452ee-489e-11f0-9267-58655e01000f": {
+   "end_time": 1749850876,
+   "url": "https://www.chess.com/game/live/139561633190",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "ec26a566-48a3-11f0-bc60-22941001000f": {
+   "end_time": 1749853538,
+   "url": "https://www.chess.com/game/live/139562649972",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "9f4729b6-48a5-11f0-acd2-6f075a01000f": {
+   "end_time": 1749853722,
+   "url": "https://www.chess.com/game/live/139562921832",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "dd0d37c0-48a5-11f0-acd2-6f075a01000f": {
+   "end_time": 1749854240,
+   "url": "https://www.chess.com/game/live/139562959904",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "2677d141-48a7-11f0-9267-58655e01000f": {
+   "end_time": 1749854377,
+   "url": "https://www.chess.com/game/live/139563159990",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "55586561-48a7-11f0-9267-58655e01000f": {
+   "end_time": 1749854956,
+   "url": "https://www.chess.com/game/live/139563188122",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "fa00b070-48a8-11f0-bc60-22941001000f": {
+   "end_time": 1749855720,
+   "url": "https://www.chess.com/game/live/139563437496",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "782cafa1-48aa-11f0-acd2-6f075a01000f": {
+   "end_time": 1749855887,
+   "url": "https://www.chess.com/game/live/139563656766",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "01ebe698-48ab-11f0-9267-58655e01000f": {
+   "end_time": 1749856161,
+   "url": "https://www.chess.com/game/live/139563734114",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "99f4cd19-48ab-11f0-acd2-6f075a01000f": {
+   "end_time": 1749856422,
+   "url": "https://www.chess.com/game/live/139563819198",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "31302952-48ac-11f0-9267-58655e01000f": {
+   "end_time": 1749856497,
+   "url": "https://www.chess.com/game/live/139563902642",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3d6a32a7-48ac-11f0-acd2-6f075a01000f": {
+   "end_time": 1749856966,
+   "url": "https://www.chess.com/game/live/139563909420",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "66a692c4-48ad-11f0-bc60-22941001000f": {
+   "end_time": 1749857332,
+   "url": "https://www.chess.com/game/live/139564071628",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7ddc158f-48ae-11f0-bc60-22941001000f": {
+   "end_time": 1749857996,
+   "url": "https://www.chess.com/game/live/139564221544",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "0db3655c-48b0-11f0-bc60-22941001000f": {
+   "end_time": 1749858644,
+   "url": "https://www.chess.com/game/live/139564432420",
+   "puzzles": 4,
+   "analysed": "2026-10-11"
+  },
+  "1f2ca697-4901-11f0-bc60-22941001000f": {
+   "end_time": 1749893257,
+   "url": "https://www.chess.com/game/live/139575967008",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0b114a31-4902-11f0-acd2-6f075a01000f": {
+   "end_time": 1749893406,
+   "url": "https://www.chess.com/game/live/139576136012",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3977a5d2-4902-11f0-a9a4-4881e601000f": {
+   "end_time": 1749894037,
+   "url": "https://www.chess.com/game/live/139576169586",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6ef870aa-491d-11f0-9267-58655e01000f": {
+   "end_time": 1749905514,
+   "url": "https://www.chess.com/game/live/139581593928",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "80444712-491e-11f0-9267-58655e01000f": {
+   "end_time": 1749905998,
+   "url": "https://www.chess.com/game/live/139581827204",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "19836f0f-495f-11f0-9267-58655e01000f": {
+   "end_time": 1749933794,
+   "url": "https://www.chess.com/game/live/139596400136",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "0217aec9-496b-11f0-9267-58655e01000f": {
+   "end_time": 1749938919,
+   "url": "https://www.chess.com/game/live/139598530768",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "3c112eca-496c-11f0-9267-58655e01000f": {
+   "end_time": 1749939573,
+   "url": "https://www.chess.com/game/live/139598729798",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "bfb5a24c-496d-11f0-a9a4-4881e601000f": {
+   "end_time": 1749940071,
+   "url": "https://www.chess.com/game/live/139598971960",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ff96374f-496e-11f0-a9a4-4881e601000f": {
+   "end_time": 1749940660,
+   "url": "https://www.chess.com/game/live/139599166918",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "42219fbd-4970-11f0-a9a4-4881e601000f": {
+   "end_time": 1749941035,
+   "url": "https://www.chess.com/game/live/139599359744",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4ea2cf33-4971-11f0-9267-58655e01000f": {
+   "end_time": 1749941743,
+   "url": "https://www.chess.com/game/live/139599517564",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c17b065a-4972-11f0-acd2-6f075a01000f": {
+   "end_time": 1749942381,
+   "url": "https://www.chess.com/game/live/139599730920",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3d29a5de-49d0-11f0-9267-58655e01000f": {
+   "end_time": 1749982313,
+   "url": "https://www.chess.com/game/live/139613196028",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "48bfd7b4-49d1-11f0-9267-58655e01000f": {
+   "end_time": 1749982670,
+   "url": "https://www.chess.com/game/live/139613397480",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "21ab2821-49d2-11f0-bc60-22941001000f": {
+   "end_time": 1749983319,
+   "url": "https://www.chess.com/game/live/139613561468",
+   "puzzles": 3,
+   "analysed": "2026-10-11"
+  },
+  "4aceda35-49d4-11f0-9267-58655e01000f": {
+   "end_time": 1749984217,
+   "url": "https://www.chess.com/game/live/139613984102",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "a8bc26cd-49d5-11f0-ab2b-4faa4a01000f": {
+   "end_time": 1749984746,
+   "url": "https://www.chess.com/game/live/139614252950",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f3116e73-49d6-11f0-a86c-8520fd01000f": {
+   "end_time": 1749985208,
+   "url": "https://www.chess.com/game/live/139614509478",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "e1c7d0c5-4a16-11f0-acd2-6f075a01000f": {
+   "end_time": 1750012550,
+   "url": "https://www.chess.com/game/live/139629280454",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "af244bbc-4a17-11f0-8fb2-de58e401000f": {
+   "end_time": 1750013182,
+   "url": "https://www.chess.com/game/live/139629463942",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2d719037-4a33-11f0-9267-58655e01000f": {
+   "end_time": 1750024942,
+   "url": "https://www.chess.com/game/live/139635079322",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f7cd7fb8-4a34-11f0-bc60-22941001000f": {
+   "end_time": 1750025580,
+   "url": "https://www.chess.com/game/live/139635376160",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "26a237f6-4a36-11f0-9267-58655e01000f": {
+   "end_time": 1750025830,
+   "url": "https://www.chess.com/game/live/139635564620",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f09e7104-4a36-11f0-bc60-22941001000f": {
+   "end_time": 1750026634,
+   "url": "https://www.chess.com/game/live/139635687804",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "b41b57d2-4a38-11f0-ab2b-4faa4a01000f": {
+   "end_time": 1750027092,
+   "url": "https://www.chess.com/game/live/139635956752",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "0f9771f3-4afd-11f0-9c64-64664901000f": {
+   "end_time": 1750111730,
+   "url": "https://www.chess.com/game/live/139672779610",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "c900166d-4afe-11f0-bc60-22941001000f": {
+   "end_time": 1750111962,
+   "url": "https://www.chess.com/game/live/139673077642",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0be813bb-4aff-11f0-9c64-64664901000f": {
+   "end_time": 1750112444,
+   "url": "https://www.chess.com/game/live/139673121496",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "580c27f2-4b00-11f0-9c64-64664901000f": {
+   "end_time": 1750113035,
+   "url": "https://www.chess.com/game/live/139673338110",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d3d027e8-4b01-11f0-9267-58655e01000f": {
+   "end_time": 1750113368,
+   "url": "https://www.chess.com/game/live/139673576206",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b7fb1b55-4b02-11f0-9267-58655e01000f": {
+   "end_time": 1750113851,
+   "url": "https://www.chess.com/game/live/139673716166",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9cc38659-4b03-11f0-acd2-6f075a01000f": {
+   "end_time": 1750114515,
+   "url": "https://www.chess.com/game/live/139673854006",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "17a36819-4b05-11f0-9c64-64664901000f": {
+   "end_time": 1750115139,
+   "url": "https://www.chess.com/game/live/139674077722",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "941de7ce-4b06-11f0-9c64-64664901000f": {
+   "end_time": 1750115585,
+   "url": "https://www.chess.com/game/live/139674300436",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "94afd204-4b07-11f0-bc60-22941001000f": {
+   "end_time": 1750115933,
+   "url": "https://www.chess.com/game/live/139674447564",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "577a9c66-4b08-11f0-9267-58655e01000f": {
+   "end_time": 1750116572,
+   "url": "https://www.chess.com/game/live/139674556550",
+   "puzzles": 3,
+   "analysed": "2026-10-11"
+  },
+  "cb72ea84-4b09-11f0-9267-58655e01000f": {
+   "end_time": 1750117129,
+   "url": "https://www.chess.com/game/live/139674761108",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "37776431-4b0b-11f0-acd2-6f075a01000f": {
+   "end_time": 1750117774,
+   "url": "https://www.chess.com/game/live/139674957078",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9bc20611-4b0c-11f0-acd2-6f075a01000f": {
+   "end_time": 1750118125,
+   "url": "https://www.chess.com/game/live/139675146204",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7569a0a4-4b0d-11f0-acd2-6f075a01000f": {
+   "end_time": 1750118732,
+   "url": "https://www.chess.com/game/live/139675259476",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e1cc8ea9-4b0e-11f0-acd2-6f075a01000f": {
+   "end_time": 1750118987,
+   "url": "https://www.chess.com/game/live/139675447920",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "6a1a825a-4b0f-11f0-acd2-6f075a01000f": {
+   "end_time": 1750119487,
+   "url": "https://www.chess.com/game/live/139675518642",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d3d3c962-4b59-11f0-b907-78177101000f": {
+   "end_time": 1750151428,
+   "url": "https://www.chess.com/game/live/139686269604",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "032bd4db-4bc5-11f0-a6bc-bfbd7d01000f": {
+   "end_time": 1750197433,
+   "url": "https://www.chess.com/game/live/139710523810",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "2d4ffdbf-4bc6-11f0-a6bc-bfbd7d01000f": {
+   "end_time": 1750197854,
+   "url": "https://www.chess.com/game/live/139710731604",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5b04516e-4bc7-11f0-acd2-6f075a01000f": {
+   "end_time": 1750198605,
+   "url": "https://www.chess.com/game/live/139710934182",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e92984b8-4bc8-11f0-acd2-6f075a01000f": {
+   "end_time": 1750199033,
+   "url": "https://www.chess.com/game/live/139711195734",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ef2febb8-4bc9-11f0-b907-78177101000f": {
+   "end_time": 1750199601,
+   "url": "https://www.chess.com/game/live/139711363670",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4de4cdd3-4bcb-11f0-b907-78177101000f": {
+   "end_time": 1750199983,
+   "url": "https://www.chess.com/game/live/139711582694",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "34bf020f-4bcc-11f0-b907-78177101000f": {
+   "end_time": 1750200217,
+   "url": "https://www.chess.com/game/live/139711725244",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "a9a500f1-4bcc-11f0-acd2-6f075a01000f": {
+   "end_time": 1750200739,
+   "url": "https://www.chess.com/game/live/139711795972",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "fc21610b-4bcd-11f0-bc60-22941001000f": {
+   "end_time": 1750201224,
+   "url": "https://www.chess.com/game/live/139711998404",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "09b11914-4bcf-11f0-b907-78177101000f": {
+   "end_time": 1750201450,
+   "url": "https://www.chess.com/game/live/139712155432",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6960a43e-4bcf-11f0-b907-78177101000f": {
+   "end_time": 1750202037,
+   "url": "https://www.chess.com/game/live/139712210372",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f67f8b95-4bd0-11f0-acd2-6f075a01000f": {
+   "end_time": 1750202441,
+   "url": "https://www.chess.com/game/live/139712435514",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c54225dd-4bd1-11f0-9267-58655e01000f": {
+   "end_time": 1750203016,
+   "url": "https://www.chess.com/game/live/139712551216",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "3d4881be-4bd3-11f0-acd2-6f075a01000f": {
+   "end_time": 1750203681,
+   "url": "https://www.chess.com/game/live/139712757424",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "d8d6e0ea-4c79-11f0-bc60-22941001000f": {
+   "end_time": 1750275240,
+   "url": "https://www.chess.com/game/live/139744066492",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b058d75f-4c8c-11f0-9267-58655e01000f": {
+   "end_time": 1750283341,
+   "url": "https://www.chess.com/game/live/139747943778",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "3efe8597-4c8e-11f0-bc60-22941001000f": {
+   "end_time": 1750283718,
+   "url": "https://www.chess.com/game/live/139748228876",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "2b77f028-4c8f-11f0-bc60-22941001000f": {
+   "end_time": 1750283990,
+   "url": "https://www.chess.com/game/live/139748393510",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "a819c22f-4c8f-11f0-bc60-22941001000f": {
+   "end_time": 1750284629,
+   "url": "https://www.chess.com/game/live/139748478338",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "fd947927-4e0e-11f0-9c88-db5bed01000f": {
+   "end_time": 1750448680,
+   "url": "https://www.chess.com/game/live/139819058380",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0abc3de4-4e0f-11f0-bc60-22941001000f": {
+   "end_time": 1750449271,
+   "url": "https://www.chess.com/game/live/139819069026",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4bee8a13-4e11-11f0-acd2-6f075a01000f": {
+   "end_time": 1750449907,
+   "url": "https://www.chess.com/game/live/139819524160",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2d5b482f-4e12-11f0-bc60-22941001000f": {
+   "end_time": 1750450090,
+   "url": "https://www.chess.com/game/live/139819701064",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7a7d5f64-4e12-11f0-af61-0e2fc501000f": {
+   "end_time": 1750450761,
+   "url": "https://www.chess.com/game/live/139819761604",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3f8b2052-4e14-11f0-9267-58655e01000f": {
+   "end_time": 1750451406,
+   "url": "https://www.chess.com/game/live/139820115962",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "eaa6e0e7-4e15-11f0-af61-0e2fc501000f": {
+   "end_time": 1750451939,
+   "url": "https://www.chess.com/game/live/139820446042",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b5110068-4e17-11f0-acd2-6f075a01000f": {
+   "end_time": 1750453004,
+   "url": "https://www.chess.com/game/live/139820795848",
+   "puzzles": 4,
+   "analysed": "2026-10-11"
+  },
+  "2e5c8701-4e19-11f0-acd2-6f075a01000f": {
+   "end_time": 1750453349,
+   "url": "https://www.chess.com/game/live/139821078838",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "fd445cda-4e19-11f0-af61-0e2fc501000f": {
+   "end_time": 1750453472,
+   "url": "https://www.chess.com/game/live/139821231124",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4edcf72e-4e1c-11f0-af61-0e2fc501000f": {
+   "end_time": 1750454596,
+   "url": "https://www.chess.com/game/live/139821662406",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c6338b1e-4e1d-11f0-af61-0e2fc501000f": {
+   "end_time": 1750455300,
+   "url": "https://www.chess.com/game/live/139821929554",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7f2b8840-4e1e-11f0-acd2-6f075a01000f": {
+   "end_time": 1750455509,
+   "url": "https://www.chess.com/game/live/139822057906",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "ee95e952-4e1f-11f0-bc60-22941001000f": {
+   "end_time": 1750456553,
+   "url": "https://www.chess.com/game/live/139822310654",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "63ad1527-4e21-11f0-9267-58655e01000f": {
+   "end_time": 1750456681,
+   "url": "https://www.chess.com/game/live/139822563442",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6fa62780-4e22-11f0-acd2-6f075a01000f": {
+   "end_time": 1750457572,
+   "url": "https://www.chess.com/game/live/139822737626",
+   "puzzles": 3,
+   "analysed": "2026-10-11"
+  },
+  "d0273ead-4e23-11f0-bc60-22941001000f": {
+   "end_time": 1750457705,
+   "url": "https://www.chess.com/game/live/139822963496",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "00fd4fd2-4e26-11f0-bc60-22941001000f": {
+   "end_time": 1750459065,
+   "url": "https://www.chess.com/game/live/139823313794",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f0d642f1-4e27-11f0-9267-58655e01000f": {
+   "end_time": 1750459823,
+   "url": "https://www.chess.com/game/live/139823611042",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5e3284de-4e29-11f0-af61-0e2fc501000f": {
+   "end_time": 1750460387,
+   "url": "https://www.chess.com/game/live/139823825926",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "69520065-4e2a-11f0-acd2-6f075a01000f": {
+   "end_time": 1750460950,
+   "url": "https://www.chess.com/game/live/139823979302",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "f22beabf-4e2b-11f0-acd2-6f075a01000f": {
+   "end_time": 1750461494,
+   "url": "https://www.chess.com/game/live/139824197074",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "89d43276-4e84-11f0-a084-1b4f2201000f": {
+   "end_time": 1750499768,
+   "url": "https://www.chess.com/game/live/139836867708",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "f02baa79-4ec6-11f0-9251-c10aaa01000f": {
+   "end_time": 1750528307,
+   "url": "https://www.chess.com/game/live/139851481832",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "def93cc0-4ed2-11f0-bc60-22941001000f": {
+   "end_time": 1750533033,
+   "url": "https://www.chess.com/game/live/139854064916",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "c41d8f2d-4ed4-11f0-bc60-22941001000f": {
+   "end_time": 1750534133,
+   "url": "https://www.chess.com/game/live/139854452246",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "aa03833b-4ed6-11f0-a084-1b4f2201000f": {
+   "end_time": 1750534869,
+   "url": "https://www.chess.com/game/live/139854835530",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "311c16d3-4eef-11f0-bc60-22941001000f": {
+   "end_time": 1750545380,
+   "url": "https://www.chess.com/game/live/139859236518",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c9486dc9-4ef0-11f0-acd2-6f075a01000f": {
+   "end_time": 1750545904,
+   "url": "https://www.chess.com/game/live/139859476264",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ea9e9971-4ef2-11f0-9267-58655e01000f": {
+   "end_time": 1750547124,
+   "url": "https://www.chess.com/game/live/139859788790",
+   "puzzles": 3,
+   "analysed": "2026-10-11"
+  },
+  "78a580d0-4f47-11f0-acd2-6f075a01000f": {
+   "end_time": 1750583356,
+   "url": "https://www.chess.com/game/live/139871390414",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "fe1dc9fb-4f48-11f0-9d17-f14ff101000f": {
+   "end_time": 1750584066,
+   "url": "https://www.chess.com/game/live/139871664108",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "76297cd0-4f4a-11f0-acd2-6f075a01000f": {
+   "end_time": 1750584680,
+   "url": "https://www.chess.com/game/live/139871932592",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0f0b8001-4fa7-11f0-acd2-6f075a01000f": {
+   "end_time": 1750624254,
+   "url": "https://www.chess.com/game/live/139892371234",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4599255a-4fb3-11f0-bc60-22941001000f": {
+   "end_time": 1750629373,
+   "url": "https://www.chess.com/game/live/139894659458",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f8b58065-4fb3-11f0-bc60-22941001000f": {
+   "end_time": 1750629676,
+   "url": "https://www.chess.com/game/live/139894777810",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ae6557ab-4fb4-11f0-9d62-6a53ad01000f": {
+   "end_time": 1750630372,
+   "url": "https://www.chess.com/game/live/139894894676",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "58545808-4fb6-11f0-9267-58655e01000f": {
+   "end_time": 1750630816,
+   "url": "https://www.chess.com/game/live/139895160242",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "35069aef-4fb7-11f0-bc60-22941001000f": {
+   "end_time": 1750631390,
+   "url": "https://www.chess.com/game/live/139895295648",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "b1454915-4fb8-11f0-9d62-6a53ad01000f": {
+   "end_time": 1750632050,
+   "url": "https://www.chess.com/game/live/139895524602",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "113cbda7-4fba-11f0-9267-58655e01000f": {
+   "end_time": 1750632663,
+   "url": "https://www.chess.com/game/live/139895731928",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "7cecfd9a-4fbb-11f0-9d62-6a53ad01000f": {
+   "end_time": 1750632912,
+   "url": "https://www.chess.com/game/live/139895942328",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3eefbc3d-4fbc-11f0-9d62-6a53ad01000f": {
+   "end_time": 1750633414,
+   "url": "https://www.chess.com/game/live/139896053438",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "58294bdb-4fbd-11f0-acd2-6f075a01000f": {
+   "end_time": 1750633939,
+   "url": "https://www.chess.com/game/live/139896210140",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7e35a2a4-4fbe-11f0-bc60-22941001000f": {
+   "end_time": 1750634551,
+   "url": "https://www.chess.com/game/live/139896370232",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "a383d14f-500c-11f0-acd2-6f075a01000f": {
+   "end_time": 1750667712,
+   "url": "https://www.chess.com/game/live/139906879656",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "898a62ad-500d-11f0-acd2-6f075a01000f": {
+   "end_time": 1750668565,
+   "url": "https://www.chess.com/game/live/139907032154",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "24603cf6-5014-11f0-ab81-5497c501000f": {
+   "end_time": 1750671302,
+   "url": "https://www.chess.com/game/live/139908185908",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6ac2a8ce-5016-11f0-9267-58655e01000f": {
+   "end_time": 1750672223,
+   "url": "https://www.chess.com/game/live/139908601542",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "9ae64f16-5017-11f0-ab81-5497c501000f": {
+   "end_time": 1750672282,
+   "url": "https://www.chess.com/game/live/139908822130",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c5e711b4-5017-11f0-ab81-5497c501000f": {
+   "end_time": 1750672601,
+   "url": "https://www.chess.com/game/live/139908853716",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "9fb4f8ff-5018-11f0-acd2-6f075a01000f": {
+   "end_time": 1750672957,
+   "url": "https://www.chess.com/game/live/139909012906",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "77750ef8-5019-11f0-bc60-22941001000f": {
+   "end_time": 1750673673,
+   "url": "https://www.chess.com/game/live/139909169456",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ffcb4a3b-501a-11f0-ab81-5497c501000f": {
+   "end_time": 1750674128,
+   "url": "https://www.chess.com/game/live/139909457948",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5e3cc5c5-501d-11f0-9235-ede83f01000f": {
+   "end_time": 1750674761,
+   "url": "https://www.chess.com/game/live/139909916338",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5ef1ef7a-501e-11f0-acd2-6f075a01000f": {
+   "end_time": 1750675573,
+   "url": "https://www.chess.com/game/live/139910114466",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f513c819-502d-11f0-bc60-22941001000f": {
+   "end_time": 1750682100,
+   "url": "https://www.chess.com/game/live/139913403116",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "35739e89-502f-11f0-a771-fa2a4f01000f": {
+   "end_time": 1750682832,
+   "url": "https://www.chess.com/game/live/139913685546",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4f437a8c-5030-11f0-9235-ede83f01000f": {
+   "end_time": 1750683173,
+   "url": "https://www.chess.com/game/live/139913935596",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6a42618e-5031-11f0-9235-ede83f01000f": {
+   "end_time": 1750683579,
+   "url": "https://www.chess.com/game/live/139914186436",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2dd1db82-5032-11f0-ab81-5497c501000f": {
+   "end_time": 1750684256,
+   "url": "https://www.chess.com/game/live/139914359684",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b00bd6c8-5035-11f0-acd2-6f075a01000f": {
+   "end_time": 1750685615,
+   "url": "https://www.chess.com/game/live/139915171722",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d8fa3e8e-5036-11f0-acd2-6f075a01000f": {
+   "end_time": 1750686072,
+   "url": "https://www.chess.com/game/live/139915443374",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3399f11d-5039-11f0-ab81-5497c501000f": {
+   "end_time": 1750686932,
+   "url": "https://www.chess.com/game/live/139915998730",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f929b243-503a-11f0-bc60-22941001000f": {
+   "end_time": 1750687662,
+   "url": "https://www.chess.com/game/live/139916417190",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c03859b0-5041-11f0-ab81-5497c501000f": {
+   "end_time": 1750690986,
+   "url": "https://www.chess.com/game/live/139918072384",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "b56b2cc0-5079-11f0-9267-58655e01000f": {
+   "end_time": 1750714863,
+   "url": "https://www.chess.com/game/live/139931129812",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "bf327674-507b-11f0-ab81-5497c501000f": {
+   "end_time": 1750715812,
+   "url": "https://www.chess.com/game/live/139931509192",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "83f041dc-507d-11f0-acd2-6f075a01000f": {
+   "end_time": 1750716462,
+   "url": "https://www.chess.com/game/live/139931823918",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "a085a5e5-507e-11f0-ab81-5497c501000f": {
+   "end_time": 1750717087,
+   "url": "https://www.chess.com/game/live/139932014678",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2f072aed-5080-11f0-acd2-6f075a01000f": {
+   "end_time": 1750717519,
+   "url": "https://www.chess.com/game/live/139932273860",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "1998e873-5081-11f0-9267-58655e01000f": {
+   "end_time": 1750717888,
+   "url": "https://www.chess.com/game/live/139932422310",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "3b4f03d3-5082-11f0-9267-58655e01000f": {
+   "end_time": 1750718373,
+   "url": "https://www.chess.com/game/live/139932601888",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "f8d451f8-5082-11f0-ab81-5497c501000f": {
+   "end_time": 1750718647,
+   "url": "https://www.chess.com/game/live/139932717652",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "e6230dbd-5083-11f0-bc60-22941001000f": {
+   "end_time": 1750719343,
+   "url": "https://www.chess.com/game/live/139932860462",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "64b34d4e-5085-11f0-9267-58655e01000f": {
+   "end_time": 1750719994,
+   "url": "https://www.chess.com/game/live/139933085716",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4b574848-50fb-11f0-91b1-f23cba01000f": {
+   "end_time": 1750770138,
+   "url": "https://www.chess.com/game/live/139951885258",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c8338b81-50fb-11f0-88ab-0cff0401000f": {
+   "end_time": 1750770651,
+   "url": "https://www.chess.com/game/live/139951997232",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "aca835c0-5100-11f0-bc18-64904801000f": {
+   "end_time": 1750772815,
+   "url": "https://www.chess.com/game/live/139953145368",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "0e6e4f03-5102-11f0-bc18-64904801000f": {
+   "end_time": 1750773226,
+   "url": "https://www.chess.com/game/live/139953478298",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d58f7c1c-5102-11f0-9493-59c71301000f": {
+   "end_time": 1750773880,
+   "url": "https://www.chess.com/game/live/139953666040",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0f472911-510a-11f0-9ec1-bad31601000f": {
+   "end_time": 1750777011,
+   "url": "https://www.chess.com/game/live/139955430826",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "91e4db61-510b-11f0-9ec1-bad31601000f": {
+   "end_time": 1750777402,
+   "url": "https://www.chess.com/game/live/139955807478",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "aade2d57-510c-11f0-bc18-64904801000f": {
+   "end_time": 1750777850,
+   "url": "https://www.chess.com/game/live/139956076832",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0897cdff-5113-11f0-9740-f690a301000f": {
+   "end_time": 1750780809,
+   "url": "https://www.chess.com/game/live/139957673688",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "0f56665a-5141-11f0-a413-6cfe544c0428": {
+   "end_time": 1750800097,
+   "url": "https://www.chess.com/game/live/145113572965",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "57ded293-5141-11f0-a413-6cfe544c0428": {
+   "end_time": 1750800686,
+   "url": "https://www.chess.com/game/live/145113575985",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "741f1fdc-5147-11f0-9493-59c71301000f": {
+   "end_time": 1750803366,
+   "url": "https://www.chess.com/game/live/139969518874",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2ce67ad0-5149-11f0-91b1-f23cba01000f": {
+   "end_time": 1750803830,
+   "url": "https://www.chess.com/game/live/139969809346",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3be46973-514a-11f0-9ec1-bad31601000f": {
+   "end_time": 1750804402,
+   "url": "https://www.chess.com/game/live/139969984210",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "54e51974-514c-11f0-9740-f690a301000f": {
+   "end_time": 1750805215,
+   "url": "https://www.chess.com/game/live/139970319264",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d0eb6b28-519d-11f0-9493-59c71301000f": {
+   "end_time": 1750840208,
+   "url": "https://www.chess.com/game/live/139981676676",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "f28a03e5-51bf-11f0-a93c-b4faff01000f": {
+   "end_time": 1750855278,
+   "url": "https://www.chess.com/game/live/139988423570",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "acc290ad-51c3-11f0-a93c-b4faff01000f": {
+   "end_time": 1750856932,
+   "url": "https://www.chess.com/game/live/139989274594",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "597e2c62-51ca-11f0-91b1-f23cba01000f": {
+   "end_time": 1750859631,
+   "url": "https://www.chess.com/game/live/139990840056",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "1aa3dd19-51cc-11f0-9493-59c71301000f": {
+   "end_time": 1750860659,
+   "url": "https://www.chess.com/game/live/139991263096",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "8ae8110c-51cf-11f0-91b1-f23cba01000f": {
+   "end_time": 1750861414,
+   "url": "https://www.chess.com/game/live/139992098316",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3e2c6769-51d0-11f0-97ca-f9ce5001000f": {
+   "end_time": 1750862282,
+   "url": "https://www.chess.com/game/live/139992270346",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4c6a92b3-51d2-11f0-898d-893ed801000f": {
+   "end_time": 1750863529,
+   "url": "https://www.chess.com/game/live/139992777558",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "88ded025-51d6-11f0-9740-f690a301000f": {
+   "end_time": 1750865146,
+   "url": "https://www.chess.com/game/live/139993831792",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6e196af0-520c-11f0-a93c-b4faff01000f": {
+   "end_time": 1750888127,
+   "url": "https://www.chess.com/game/live/140006358944",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "671c8f65-520e-11f0-91b1-f23cba01000f": {
+   "end_time": 1750889087,
+   "url": "https://www.chess.com/game/live/140006722208",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ab08a4fe-5210-11f0-a93c-b4faff01000f": {
+   "end_time": 1750890211,
+   "url": "https://www.chess.com/game/live/140007119534",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "37edc1a7-5213-11f0-9493-59c71301000f": {
+   "end_time": 1750891455,
+   "url": "https://www.chess.com/game/live/140007546196",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "0f8a5f06-5216-11f0-9740-f690a301000f": {
+   "end_time": 1750891708,
+   "url": "https://www.chess.com/game/live/140007996876",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "bf20a142-5216-11f0-9493-59c71301000f": {
+   "end_time": 1750892692,
+   "url": "https://www.chess.com/game/live/140008101914",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "fa62ff87-5218-11f0-9493-59c71301000f": {
+   "end_time": 1750893675,
+   "url": "https://www.chess.com/game/live/140008433818",
+   "puzzles": 11,
+   "analysed": "2026-10-11"
+  },
+  "3c40ce7a-521b-11f0-9493-59c71301000f": {
+   "end_time": 1750894821,
+   "url": "https://www.chess.com/game/live/140008757032",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "c1729828-5271-11f0-ab35-9cc61c01000f": {
+   "end_time": 1750931749,
+   "url": "https://www.chess.com/game/live/140021212918",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "b473e256-5275-11f0-9740-f690a301000f": {
+   "end_time": 1750932796,
+   "url": "https://www.chess.com/game/live/140021958862",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "8b3e2652-5276-11f0-ab35-9cc61c01000f": {
+   "end_time": 1750933217,
+   "url": "https://www.chess.com/game/live/140022119888",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "9bcd3cd9-5277-11f0-91b1-f23cba01000f": {
+   "end_time": 1750934484,
+   "url": "https://www.chess.com/game/live/140022327542",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2dc6d726-5281-11f0-9493-59c71301000f": {
+   "end_time": 1750938470,
+   "url": "https://www.chess.com/game/live/140024288436",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "ce5fe645-5283-11f0-ab35-9cc61c01000f": {
+   "end_time": 1750939701,
+   "url": "https://www.chess.com/game/live/140024858518",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "a8c36c1f-5286-11f0-9493-59c71301000f": {
+   "end_time": 1750940281,
+   "url": "https://www.chess.com/game/live/140025481710",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "abd682ee-5287-11f0-ab35-9cc61c01000f": {
+   "end_time": 1750940763,
+   "url": "https://www.chess.com/game/live/140025706740",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5f7090e7-5296-11f0-9740-f690a301000f": {
+   "end_time": 1750947476,
+   "url": "https://www.chess.com/game/live/140029136192",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "adab0bcc-5298-11f0-ab35-9cc61c01000f": {
+   "end_time": 1750948111,
+   "url": "https://www.chess.com/game/live/140029698440",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "fc7bf07d-5299-11f0-b20f-0e382d01000f": {
+   "end_time": 1750948278,
+   "url": "https://www.chess.com/game/live/140030020914",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5d6c86ca-529a-11f0-91b1-f23cba01000f": {
+   "end_time": 1750948599,
+   "url": "https://www.chess.com/game/live/140030114040",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "24af457c-529b-11f0-9493-59c71301000f": {
+   "end_time": 1750949560,
+   "url": "https://www.chess.com/game/live/140030306718",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "ba336a42-529d-11f0-9740-f690a301000f": {
+   "end_time": 1750950248,
+   "url": "https://www.chess.com/game/live/140030954760",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "59d9d0f2-529f-11f0-b20f-0e382d01000f": {
+   "end_time": 1750951480,
+   "url": "https://www.chess.com/game/live/140031358534",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "5bd3d345-533b-11f0-91b1-f23cba01000f": {
+   "end_time": 1751018236,
+   "url": "https://www.chess.com/game/live/140058914514",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6be70d71-533d-11f0-91b1-f23cba01000f": {
+   "end_time": 1751019523,
+   "url": "https://www.chess.com/game/live/140059300664",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "cbf2c5cf-5341-11f0-9740-f690a301000f": {
+   "end_time": 1751020809,
+   "url": "https://www.chess.com/game/live/140060132642",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6cb04c5e-5344-11f0-b5a1-c0d37201000f": {
+   "end_time": 1751022475,
+   "url": "https://www.chess.com/game/live/140060654508",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "586012f6-5347-11f0-98fb-e6589701000f": {
+   "end_time": 1751023660,
+   "url": "https://www.chess.com/game/live/140061249160",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "fee53f43-5349-11f0-9493-59c71301000f": {
+   "end_time": 1751024480,
+   "url": "https://www.chess.com/game/live/140061804064",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "a840c73e-534d-11f0-b5a1-c0d37201000f": {
+   "end_time": 1751025774,
+   "url": "https://www.chess.com/game/live/140062588746",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7c31ba23-5353-11f0-91b1-f23cba01000f": {
+   "end_time": 1751028782,
+   "url": "https://www.chess.com/game/live/140063866432",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ec6717a8-5355-11f0-98fb-e6589701000f": {
+   "end_time": 1751029631,
+   "url": "https://www.chess.com/game/live/140064419248",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "bfdeaa29-5421-11f0-91b1-f23cba01000f": {
+   "end_time": 1751116459,
+   "url": "https://www.chess.com/game/live/140101576156",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f37dd854-5421-11f0-91b1-f23cba01000f": {
+   "end_time": 1751117063,
+   "url": "https://www.chess.com/game/live/140101620398",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "4f5ad0c2-544a-11f0-9886-e4a5dd01000f": {
+   "end_time": 1751133944,
+   "url": "https://www.chess.com/game/live/140110919926",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "8b0774aa-544a-11f0-9945-6db92301000f": {
+   "end_time": 1751134586,
+   "url": "https://www.chess.com/game/live/140110971074",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "11f4d187-544c-11f0-9886-e4a5dd01000f": {
+   "end_time": 1751135156,
+   "url": "https://www.chess.com/game/live/140111300768",
+   "puzzles": 3,
+   "analysed": "2026-10-11"
+  },
+  "c5970966-544d-11f0-9886-e4a5dd01000f": {
+   "end_time": 1751135765,
+   "url": "https://www.chess.com/game/live/140111665234",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "deb0739e-5453-11f0-9493-59c71301000f": {
+   "end_time": 1751138299,
+   "url": "https://www.chess.com/game/live/140112935570",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "ba076c4f-5454-11f0-8b95-a147a201000f": {
+   "end_time": 1751138717,
+   "url": "https://www.chess.com/game/live/140113109408",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ce8bd7f4-5455-11f0-9493-59c71301000f": {
+   "end_time": 1751139345,
+   "url": "https://www.chess.com/game/live/140113327538",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3b5f89ab-5457-11f0-9886-e4a5dd01000f": {
+   "end_time": 1751139932,
+   "url": "https://www.chess.com/game/live/140113613818",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7ed6b1e2-5458-11f0-9740-f690a301000f": {
+   "end_time": 1751140483,
+   "url": "https://www.chess.com/game/live/140113866350",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "edf2f38d-5459-11f0-9493-59c71301000f": {
+   "end_time": 1751140962,
+   "url": "https://www.chess.com/game/live/140114149864",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e53b3db2-545a-11f0-9740-f690a301000f": {
+   "end_time": 1751141590,
+   "url": "https://www.chess.com/game/live/140114340516",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d174e306-545f-11f0-9493-59c71301000f": {
+   "end_time": 1751143456,
+   "url": "https://www.chess.com/game/live/140115272770",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d9145fe5-5460-11f0-9886-e4a5dd01000f": {
+   "end_time": 1751143975,
+   "url": "https://www.chess.com/game/live/140115462780",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "36083c3a-5463-11f0-8b95-a147a201000f": {
+   "end_time": 1751144825,
+   "url": "https://www.chess.com/game/live/140115897518",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "150451b5-5465-11f0-91b1-f23cba01000f": {
+   "end_time": 1751145727,
+   "url": "https://www.chess.com/game/live/140116232310",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6b334aca-546c-11f0-91b1-f23cba01000f": {
+   "end_time": 1751149019,
+   "url": "https://www.chess.com/game/live/140117463464",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "a77b4f02-546d-11f0-8b95-a147a201000f": {
+   "end_time": 1751149477,
+   "url": "https://www.chess.com/game/live/140117659238",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c6c3509e-546e-11f0-8b95-a147a201000f": {
+   "end_time": 1751150134,
+   "url": "https://www.chess.com/game/live/140117834024",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "50cf7a34-5470-11f0-9740-f690a301000f": {
+   "end_time": 1751150502,
+   "url": "https://www.chess.com/game/live/140118070120",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "8a87369c-5471-11f0-91b1-f23cba01000f": {
+   "end_time": 1751151061,
+   "url": "https://www.chess.com/game/live/140118253596",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "71520231-5472-11f0-91b1-f23cba01000f": {
+   "end_time": 1751151366,
+   "url": "https://www.chess.com/game/live/140118386748",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5f83f1a5-5473-11f0-8b95-a147a201000f": {
+   "end_time": 1751152025,
+   "url": "https://www.chess.com/game/live/140118521584",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "a85d466c-5474-11f0-9493-59c71301000f": {
+   "end_time": 1751152390,
+   "url": "https://www.chess.com/game/live/140118702560",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "91a6a65a-5475-11f0-91b1-f23cba01000f": {
+   "end_time": 1751152845,
+   "url": "https://www.chess.com/game/live/140118828406",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "dee52aa2-5476-11f0-9493-59c71301000f": {
+   "end_time": 1751153577,
+   "url": "https://www.chess.com/game/live/140119005142",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "57d2b2eb-5478-11f0-9740-f690a301000f": {
+   "end_time": 1751154098,
+   "url": "https://www.chess.com/game/live/140119200174",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "80fcc3e6-5479-11f0-91b1-f23cba01000f": {
+   "end_time": 1751154714,
+   "url": "https://www.chess.com/game/live/140119353480",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "f82edf5a-547a-11f0-9740-f690a301000f": {
+   "end_time": 1751154948,
+   "url": "https://www.chess.com/game/live/140119542848",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "be8eb7f9-547b-11f0-91b1-f23cba01000f": {
+   "end_time": 1751155638,
+   "url": "https://www.chess.com/game/live/140119640578",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "17c818ec-547d-11f0-9740-f690a301000f": {
+   "end_time": 1751156162,
+   "url": "https://www.chess.com/game/live/140119808740",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "bf77ea2a-54c6-11f0-840f-e007a201000f": {
+   "end_time": 1751187318,
+   "url": "https://www.chess.com/game/live/140130018408",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f27a8a28-54c6-11f0-9493-59c71301000f": {
+   "end_time": 1751187779,
+   "url": "https://www.chess.com/game/live/140130054086",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0e7fe33f-54c8-11f0-9493-59c71301000f": {
+   "end_time": 1751188303,
+   "url": "https://www.chess.com/game/live/140130252004",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "4d3b31de-54c9-11f0-91b1-f23cba01000f": {
+   "end_time": 1751189023,
+   "url": "https://www.chess.com/game/live/140130477696",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "44460951-54cb-11f0-91b1-f23cba01000f": {
+   "end_time": 1751189702,
+   "url": "https://www.chess.com/game/live/140130837154",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "08d3689b-54e2-11f0-9493-59c71301000f": {
+   "end_time": 1751199580,
+   "url": "https://www.chess.com/game/live/140135327952",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "273b1599-54e6-11f0-9493-59c71301000f": {
+   "end_time": 1751201124,
+   "url": "https://www.chess.com/game/live/140136207878",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0b329bd5-54e7-11f0-91b1-f23cba01000f": {
+   "end_time": 1751201643,
+   "url": "https://www.chess.com/game/live/140136401804",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "be5e005b-54e9-11f0-840f-e007a201000f": {
+   "end_time": 1751202792,
+   "url": "https://www.chess.com/game/live/140136992216",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5d9937d4-54ed-11f0-9e95-1934a801000f": {
+   "end_time": 1751204431,
+   "url": "https://www.chess.com/game/live/140137797548",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e882c810-54ee-11f0-840f-e007a201000f": {
+   "end_time": 1751205058,
+   "url": "https://www.chess.com/game/live/140138145316",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2f55b19f-5513-11f0-81c7-014f6b01000f": {
+   "end_time": 1751220255,
+   "url": "https://www.chess.com/game/live/140146726946",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e8718a2a-5513-11f0-840f-e007a201000f": {
+   "end_time": 1751220896,
+   "url": "https://www.chess.com/game/live/140146894216",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "108aee7e-5515-11f0-840f-e007a201000f": {
+   "end_time": 1751221233,
+   "url": "https://www.chess.com/game/live/140147161154",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "079e6e2e-5516-11f0-9e95-1934a801000f": {
+   "end_time": 1751221510,
+   "url": "https://www.chess.com/game/live/140147383070",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "7791ca5f-5516-11f0-81c7-014f6b01000f": {
+   "end_time": 1751221830,
+   "url": "https://www.chess.com/game/live/140147482650",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "354ad23b-5517-11f0-81c7-014f6b01000f": {
+   "end_time": 1751222469,
+   "url": "https://www.chess.com/game/live/140147651538",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e153cb3c-55fc-11f0-91b1-f23cba01000f": {
+   "end_time": 1751321382,
+   "url": "https://www.chess.com/game/live/140190119024",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "14487703-55ff-11f0-91b1-f23cba01000f": {
+   "end_time": 1751322343,
+   "url": "https://www.chess.com/game/live/140190498364",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "cd66396c-5601-11f0-9083-c7021501000f": {
+   "end_time": 1751323826,
+   "url": "https://www.chess.com/game/live/140190947350",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "c0294d23-5852-11f0-a413-6cfe544c0428": {
+   "end_time": 1751577959,
+   "url": "https://www.chess.com/game/live/145891163701",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7d97663a-5d0c-11f0-86e3-a0369feff220": {
+   "end_time": 1752097793,
+   "url": "https://www.chess.com/game/live/146410406691",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0a6bb0d3-5fbe-11f0-9493-59c71301000f": {
+   "end_time": 1752393206,
+   "url": "https://www.chess.com/game/live/140639930110",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "7f86a201-5fbe-11f0-9493-59c71301000f": {
+   "end_time": 1752393831,
+   "url": "https://www.chess.com/game/live/140640007540",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4db7e2a9-6549-11f0-9493-59c71301000f": {
+   "end_time": 1753002816,
+   "url": "https://www.chess.com/game/live/140898065616",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "3ae0838f-654b-11f0-9098-fcf9dc01000f": {
+   "end_time": 1753003894,
+   "url": "https://www.chess.com/game/live/140898421788",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "72909fd3-65b2-11f0-9493-59c71301000f": {
+   "end_time": 1753047844,
+   "url": "https://www.chess.com/game/live/140921095314",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "11d4b833-65b3-11f0-9493-59c71301000f": {
+   "end_time": 1753048746,
+   "url": "https://www.chess.com/game/live/140921202202",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e5371185-667a-11f0-9493-59c71301000f": {
+   "end_time": 1753134373,
+   "url": "https://www.chess.com/game/live/140958409658",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "945e4897-667c-11f0-9493-59c71301000f": {
+   "end_time": 1753134971,
+   "url": "https://www.chess.com/game/live/140958721756",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e97e0266-667d-11f0-9740-f690a301000f": {
+   "end_time": 1753135547,
+   "url": "https://www.chess.com/game/live/140958959762",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "5d4e071f-9149-11f0-a60b-b1162f01000f": {
+   "end_time": 1757840717,
+   "url": "https://www.chess.com/game/live/143103334444",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e98caa1b-914b-11f0-9cc8-0b52fe01000f": {
+   "end_time": 1757842145,
+   "url": "https://www.chess.com/game/live/143103844438",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "615a033d-9c49-11f0-8c59-c333fc01000f": {
+   "end_time": 1759050170,
+   "url": "https://www.chess.com/game/live/143652382230",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "2d2249d2-9c4a-11f0-9d16-2ccca301000f": {
+   "end_time": 1759051323,
+   "url": "https://www.chess.com/game/live/143652535562",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "fe080fdf-9cb5-11f0-8c59-c333fc01000f": {
+   "end_time": 1759097078,
+   "url": "https://www.chess.com/game/live/143676655338",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "639b3fb7-accc-11f0-98f0-1f5aca01000f": {
+   "end_time": 1760866467,
+   "url": "https://www.chess.com/game/live/144470122778",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "52e608b9-aec6-11f0-b7a7-6978ca01000f": {
+   "end_time": 1761082785,
+   "url": "https://www.chess.com/game/live/144573383308",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "342414dd-aec7-11f0-b7a7-6978ca01000f": {
+   "end_time": 1761083642,
+   "url": "https://www.chess.com/game/live/144573545158",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "80d57399-aec8-11f0-908b-a37f0d01000f": {
+   "end_time": 1761084175,
+   "url": "https://www.chess.com/game/live/144573780192",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3a90af99-aecb-11f0-9d16-2ccca301000f": {
+   "end_time": 1761085317,
+   "url": "https://www.chess.com/game/live/144574244678",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "01d8e10e-af8f-11f0-9d16-2ccca301000f": {
+   "end_time": 1761169347,
+   "url": "https://www.chess.com/game/live/144613238492",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "8f016595-af90-11f0-91ac-5ba50501000f": {
+   "end_time": 1761169964,
+   "url": "https://www.chess.com/game/live/144613527766",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b6ae56f2-af92-11f0-9d16-2ccca301000f": {
+   "end_time": 1761171111,
+   "url": "https://www.chess.com/game/live/144613914938",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "4e78b774-af94-11f0-908b-a37f0d01000f": {
+   "end_time": 1761171793,
+   "url": "https://www.chess.com/game/live/144614187324",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "ef480ea4-af95-11f0-a829-974a0401000f": {
+   "end_time": 1761172457,
+   "url": "https://www.chess.com/game/live/144614456824",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "64e75585-af97-11f0-a829-974a0401000f": {
+   "end_time": 1761172646,
+   "url": "https://www.chess.com/game/live/144614689970",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c7922612-b00e-11f0-b441-75281401000f": {
+   "end_time": 1761224568,
+   "url": "https://www.chess.com/game/live/144634807054",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "e332ae83-b05a-11f0-8f91-acf21201000f": {
+   "end_time": 1761256827,
+   "url": "https://www.chess.com/game/live/144653626114",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "c7f637e0-b05b-11f0-9d16-2ccca301000f": {
+   "end_time": 1761257405,
+   "url": "https://www.chess.com/game/live/144653783412",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "3ce8eb4b-b05d-11f0-9199-342e7501000f": {
+   "end_time": 1761257906,
+   "url": "https://www.chess.com/game/live/144654033922",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "893c1b68-b0f1-11f0-a829-974a0401000f": {
+   "end_time": 1761322258,
+   "url": "https://www.chess.com/game/live/144681839434",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "891f9a02-b251-11f0-98f0-1f5aca01000f": {
+   "end_time": 1761472769,
+   "url": "https://www.chess.com/game/live/144747610186",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d04e4c68-b252-11f0-98f0-1f5aca01000f": {
+   "end_time": 1761473249,
+   "url": "https://www.chess.com/game/live/144747869520",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "b3b5a1da-b253-11f0-8453-864eae01000f": {
+   "end_time": 1761473608,
+   "url": "https://www.chess.com/game/live/144748050326",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "a37472cb-b254-11f0-8453-864eae01000f": {
+   "end_time": 1761474898,
+   "url": "https://www.chess.com/game/live/144748243764",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "78754da4-b359-11f0-87d7-1cff4901000f": {
+   "end_time": 1761586071,
+   "url": "https://www.chess.com/game/live/144801118668",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2ac5c555-b515-11f0-9a9e-172e6f01000f": {
+   "end_time": 1761777305,
+   "url": "https://www.chess.com/game/live/144891246070",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "194bbcac-b520-11f0-9a9e-172e6f01000f": {
+   "end_time": 1761781331,
+   "url": "https://www.chess.com/game/live/144893061592",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "1f9e6e34-b521-11f0-9a9e-172e6f01000f": {
+   "end_time": 1761781985,
+   "url": "https://www.chess.com/game/live/144893217566",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "a847d258-b522-11f0-87eb-558ec601000f": {
+   "end_time": 1761782420,
+   "url": "https://www.chess.com/game/live/144893445444",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "bc1f2459-b594-11f0-bb6a-2e71d901000f": {
+   "end_time": 1761831591,
+   "url": "https://www.chess.com/game/live/144912901582",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0c19e27b-b596-11f0-bd67-cd368101000f": {
+   "end_time": 1761832294,
+   "url": "https://www.chess.com/game/live/144913239928",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "fa47037f-b667-11f0-a77b-03def501000f": {
+   "end_time": 1761922749,
+   "url": "https://www.chess.com/game/live/144955277330",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "aa7988de-b8b8-11f0-a77b-03def501000f": {
+   "end_time": 1762177092,
+   "url": "https://www.chess.com/game/live/145066859722",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6ce8fef5-a494-11f1-9f37-3022bd01000f": {
+   "end_time": 1788109609,
+   "url": "https://www.chess.com/game/live/173755832524",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "0ebe4dd4-a577-11f1-8cd6-ece1e601000f": {
+   "end_time": 1788207168,
+   "url": "https://www.chess.com/game/live/173810264626",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "9391ce60-a5d1-11f1-9f37-3022bd01000f": {
+   "end_time": 1788245658,
+   "url": "https://www.chess.com/game/live/173827354796",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "fd93ce01-a607-11f1-a51b-ebd42201000f": {
+   "end_time": 1788269475,
+   "url": "https://www.chess.com/game/live/173840807530",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "bcf94d13-a8a9-11f1-8cd6-ece1e601000f": {
+   "end_time": 1788558338,
+   "url": "https://www.chess.com/game/live/174006668114",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "060da4b5-a8aa-11f1-9f37-3022bd01000f": {
+   "end_time": 1788558702,
+   "url": "https://www.chess.com/game/live/174006731956",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "c9cbb382-a8ab-11f1-b4a6-d9079701000f": {
+   "end_time": 1788559352,
+   "url": "https://www.chess.com/game/live/174007117638",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "acdfb7a4-a8ac-11f1-baf2-8a56cc01000f": {
+   "end_time": 1788560643,
+   "url": "https://www.chess.com/game/live/174007305778",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "d634b18c-a93e-11f1-9983-3c44d601000f": {
+   "end_time": 1788622703,
+   "url": "https://www.chess.com/game/live/174039359916",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e3f38702-abc9-11f1-bb1f-e68c2101000f": {
+   "end_time": 1788902302,
+   "url": "https://www.chess.com/game/live/174195653446",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f8cace5f-abca-11f1-bb1f-e68c2101000f": {
+   "end_time": 1788902650,
+   "url": "https://www.chess.com/game/live/174195914958",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "507b9373-ac46-11f1-baf2-8a56cc01000f": {
+   "end_time": 1788955721,
+   "url": "https://www.chess.com/game/live/174220688932",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "64b80afb-ac50-11f1-b4a6-d9079701000f": {
+   "end_time": 1788960027,
+   "url": "https://www.chess.com/game/live/174223705542",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "c2ce032a-ac53-11f1-9983-3c44d601000f": {
+   "end_time": 1788961362,
+   "url": "https://www.chess.com/game/live/174224761496",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "19f82283-ad5a-11f1-9f37-3022bd01000f": {
+   "end_time": 1789074319,
+   "url": "https://www.chess.com/game/live/174291759344",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "5631216f-ad5d-11f1-baf2-8a56cc01000f": {
+   "end_time": 1789075942,
+   "url": "https://www.chess.com/game/live/174292535626",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "cf4415ee-ad5f-11f1-9983-3c44d601000f": {
+   "end_time": 1789077096,
+   "url": "https://www.chess.com/game/live/174293107574",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "2adbb55d-adba-11f1-b6f0-30204801000f": {
+   "end_time": 1789115159,
+   "url": "https://www.chess.com/game/live/174309645870",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "aa033bfe-af7c-11f1-bbdf-8eeeee01000f": {
+   "end_time": 1789309067,
+   "url": "https://www.chess.com/game/live/174418650484",
+   "puzzles": 2,
+   "analysed": "2026-10-11"
+  },
+  "91942bb6-afa4-11f1-bb1f-e68c2101000f": {
+   "end_time": 1789325760,
+   "url": "https://www.chess.com/game/live/174430871824",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "e3bda5d0-afa4-11f1-8acf-f45fe701000f": {
+   "end_time": 1789325987,
+   "url": "https://www.chess.com/game/live/174430964824",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "fad8b24e-b335-11f1-93e5-8500da01000f": {
+   "end_time": 1789718424,
+   "url": "https://www.chess.com/game/live/183999170066",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "f1488ce1-b35d-11f1-8acf-f45fe701000f": {
+   "end_time": 1789735592,
+   "url": "https://www.chess.com/game/live/184009617978",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "abdebed4-b46e-11f1-a51b-ebd42201000f": {
+   "end_time": 1789852885,
+   "url": "https://www.chess.com/game/live/184079827426",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "b77f86fd-b474-11f1-93e5-8500da01000f": {
+   "end_time": 1789855475,
+   "url": "https://www.chess.com/game/live/184081177280",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "2a74640a-b4bf-11f1-8acf-f45fe701000f": {
+   "end_time": 1789887194,
+   "url": "https://www.chess.com/game/live/184094296024",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "40be298a-b4c4-11f1-9983-3c44d601000f": {
+   "end_time": 1789889489,
+   "url": "https://www.chess.com/game/live/184095399090",
+   "puzzles": 0,
+   "analysed": "2026-10-11"
+  },
+  "6776c0af-b4d7-11f1-8acf-f45fe701000f": {
+   "end_time": 1789897606,
+   "url": "https://www.chess.com/game/live/184099948502",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  },
+  "6ad5efe4-b507-11f1-8cd6-ece1e601000f": {
+   "end_time": 1789918413,
+   "url": "https://www.chess.com/game/live/184113791864",
+   "puzzles": 1,
+   "analysed": "2026-10-11"
+  }
+ },
+ "last_run": "2026-10-11"
+}

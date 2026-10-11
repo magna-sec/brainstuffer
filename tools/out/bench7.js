@@ -1,0 +1,25 @@
+/* Puzzles built from suroh90's own chess.com games by
+   tools/chesscom-to-puzzles.py. Gitignored: this is personal game
+   history, not part of the site. Re-run the tool to rebuild it.
+
+   Each one is posed at the position where a real mistake was played,
+   with YOU to move, so solverFirst is true. */
+
+const OWN_SET = [
+  {
+    key: "own", label: "Own blunders", band: "11 puzzles",
+    puzzles: [
+      {"id":"own-0f950cd2-38","fen":"6rr/p1Q3pp/1p1ppk2/q7/1nPP4/2P1P1P1/P6P/R3K2R w KQ - 1 20","moves":"e1g1 f6g6 c3b4 a5h5 c7d6","rating":0,"themes":"own wins material","label":"vs PinheiroGOD · 2026-09-24","explain":"You played <b>Rf1+</b> here, costing about 3.4 pawns. <b>O-O+</b> wins: O-O+ Kg6 cxb4 Qh5 Qxd6. <a href=\"https://www.chess.com/game/live/184328463290\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
+      {"id":"own-9f3e1224-41","fen":"3qk1r1/p2b3p/4p3/3pP3/3Q4/N7/PPr3PP/R4RK1 b - - 0 21","moves":"g8g2 g1h1 g2h2 h1g1 c2g2","rating":0,"themes":"own mate","label":"vs Ahmedsabry119 · 2026-09-27","explain":"You played <b>Re2</b> here. <b>Rgxg2+</b> was mate: Rgxg2+ Kh1 Rxh2+ Kg1 Rcg2#. <a href=\"https://www.chess.com/game/live/184473901186\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
+      {"id":"own-ef232128-28","fen":"r1bq2k1/1p3rbp/p2p1np1/2p1n1N1/2P1P3/1QNB3P/PP3PP1/R1B2RK1 w - - 0 15","moves":"g5f7 e5f7 d3e2 c8e6 b3c2","rating":0,"themes":"own wins material","label":"vs marqui24 · 2026-09-27","explain":"You played <b>Ne6</b> here, costing about 12.6 pawns. <b>Nxf7</b> wins: Nxf7 Nxf7 Be2 Be6 Qc2. <a href=\"https://www.chess.com/game/live/184475731806\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
+      {"id":"own-f2fa4d41-50","fen":"6k1/5ppp/5b2/pbprp3/1p2P3/1P3P2/P1K1N1PP/3R4 w - - 0 26","moves":"d1d5 b5e2 d5c5 g8f8 c5a5","rating":0,"themes":"own defence","label":"vs Desmon106 · 2026-10-01","explain":"You played <b>exd5</b> here, costing about 3.8 pawns. <b>Rxd5</b> was the save: Rxd5 Bxe2 Rxc5 Kf8 Rxa5. <a href=\"https://www.chess.com/game/live/184676053998\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
+      {"id":"own-71ae0d68-21","fen":"r3kb1r/4pppp/p1p2n2/q2p4/3PN3/5Q1P/PPPB1PP1/R3K2R b KQkq - 2 11","moves":"d5e4 d2a5 e4f3 g2f3 h7h5","rating":0,"themes":"own wins material","label":"vs alonmedan · 2026-10-02","explain":"You played <b>Qb6</b> here, costing about 7.8 pawns. <b>dxe4</b> wins: dxe4 Bxa5 exf3 gxf3 h5. <a href=\"https://www.chess.com/game/live/184724278206\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
+      {"id":"own-c7df278d-35","fen":"r1b2rk1/1p3p2/p3p2p/2b1P1p1/n1PN3q/3B4/PP1B1PPP/1R1Q1RK1 b - - 0 18","moves":"h4d4","rating":0,"themes":"own wins material","label":"vs Anyup-Gupta · 2026-10-05","explain":"You played <b>Bxd4</b> here, costing about 2.6 pawns. <b>Qxd4</b> wins: Qxd4. <a href=\"https://www.chess.com/game/live/184850044562\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
+      {"id":"own-ce5d025c-45","fen":"5rk1/pp3pp1/7p/7b/3r4/1BPP1P2/PP5P/2K2RR1 b - - 0 23","moves":"d4d3","rating":0,"themes":"own defence","label":"vs avishekpoudel · 2026-10-08","explain":"You played <b>Rd7</b> here, costing about 3.0 pawns. <b>Rxd3</b> was the save: Rxd3. <a href=\"https://www.chess.com/game/live/185004384410\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
+      {"id":"own-b24a92a7-22","fen":"rnb1kbnr/pp4pp/2p3q1/5pB1/2P1p2P/3BPNN1/PP3PP1/R2QK2R w KQkq - 0 12","moves":"d3e4 f8b4 e1f1 g8e7 e4c2","rating":0,"themes":"own wins material","label":"vs kiranyalla · 2026-10-09","explain":"You played <b>h5</b> here, costing about 6.4 pawns. <b>Bxe4</b> wins: Bxe4 Bb4+ Kf1 Ne7 Bc2. <a href=\"https://www.chess.com/game/live/185058178200\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
+      {"id":"own-d853e005-41","fen":"3r1rk1/pp4pp/4R3/5p2/8/q7/3B1PPP/2Q3K1 b - - 2 21","moves":"a3c1 e6e1 c1d2 e1f1 f8e8","rating":0,"themes":"own wins material","label":"vs bacillo · 2026-10-10","explain":"You played <b>Rxd2</b> here, costing about 11.0 pawns. <b>Qxc1+</b> wins: Qxc1+ Re1 Qxd2 Rf1 Rfe8. <a href=\"https://www.chess.com/game/live/185129428168\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
+      {"id":"own-d66fe0e8-73","fen":"k7/pp5p/8/2K3R1/q7/2P3Q1/3r1PPP/8 b - - 9 37","moves":"b7b6","rating":0,"themes":"own mate","label":"vs JORGECAMAENA_1602 · 2026-10-10","explain":"You played <b>Qc6+</b> here. <b>b6#</b> was mate: b6#. <a href=\"https://www.chess.com/game/live/185130439476\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
+      {"id":"own-835ebe65-30","fen":"r3k1nr/ppp2ppp/8/R7/8/3BB1P1/1P3P1P/3bN1K1 w kq - 0 16","moves":"a5e5","rating":0,"themes":"own defence","label":"vs MaitreGuiGui · 2026-10-10","explain":"You played <b>Rd5</b> here, costing about 4.4 pawns. <b>Re5+</b> was the save: Re5+. <a href=\"https://www.chess.com/game/live/185131088992\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true}
+    ]
+  }
+];
