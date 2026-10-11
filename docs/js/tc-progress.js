@@ -97,6 +97,19 @@ var P = {
 
   reset: function(){ P.state = blank(); return save(P.state); },
 
+  /* Replace the running order without touching the set itself. Used to
+     reshuffle chapters that have no meaningful sequence. The set stays
+     frozen: same puzzles, same count, different order. */
+  reorder: function(ids){
+    var s = P.state;
+    if (!ids || ids.length !== s.order.length) return s;
+    var have = {};
+    s.order.forEach(function(id){ have[id] = 1; });
+    if (!ids.every(function(id){ return have[id]; })) return s;
+    s.order = ids.slice();
+    return save(s);
+  },
+
   size: function(){ return P.state.order.length; },
 
   /* ── current cycle ─────────────────────────────────────────────── */

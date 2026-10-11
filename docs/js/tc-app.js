@@ -129,14 +129,37 @@ function updateSetupTotal(){
   $('#setup-go').disabled = n === 0;
 }
 
+/* A chapter from a book is ordered by its author, and the method says to
+   solve it in that order. Your own blunders have no such sequence - and
+   because several can come from one game, leaving them chronological serves
+   near-identical positions back to back. Those get shuffled. */
+function shufflesOrder(t){
+  return t.shuffle === true || t.key === 'own';
+}
+
+function shuffled(a){
+  var out = a.slice();
+  for (var i = out.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = out[i]; out[i] = out[j]; out[j] = t;
+  }
+  return out;
+}
+
+function buildOrder(keys){
+  var ids = [];
+  SET.forEach(function(t){
+    if (keys.indexOf(t.key) === -1) return;
+    var part = t.puzzles.map(function(p){ return p.id; });
+    ids = ids.concat(shufflesOrder(t) ? shuffled(part) : part);
+  });
+  return ids;
+}
+
 function beginCourse(){
   var keys = chosenKeys();
   if (!keys.length) return;
-  var ids = [];
-  SET.forEach(function(t){
-    if (keys.indexOf(t.key) !== -1) t.puzzles.forEach(function(p){ ids.push(p.id); });
-  });
-  P.begin(keys, ids);
+  P.begin(keys, buildOrder(keys));
   renderShelf();
 }
 
@@ -177,7 +200,7 @@ function renderCourse(){
       '<div class="ch-head"><b>' + t.label + '</b>' +
         '<span class="ch-n">' + d + ' / ' + t.puzzles.length + '</span></div>' +
       '<div class="ch-bar"><span style="width:' + (100 * d / t.puzzles.length) + '%"></span></div>' +
-      '<div class="ch-meta">rating ' + t.band +
+      '<div class="ch-meta">' + t.band + (shufflesOrder(t) ? ' · shuffled' : ' · in order') +
         (f ? ' · <span class="miss">' + f + ' missed this cycle</span>' : '') + '</div>' +
       '</div>';
   }).join('');
@@ -657,6 +680,13 @@ function closeCycle(){
   var prev = P.summary();
   var rec = P.advance();
   if (!rec) return;
+  /* Reshuffle for the new cycle: recognising "the one after the mate" is
+     sequence memory, not pattern memory. */
+  if (P.state.chapters && P.state.chapters.some(function(k){
+        return SET.some(function(t){ return t.key === k && shufflesOrder(t); });
+      })){
+    P.reorder(buildOrder(P.state.chapters));
+  }
   var rows = P.summary();
   var me = rows[rows.length - 1];
   var before = prev.length ? prev[prev.length - 1] : null;

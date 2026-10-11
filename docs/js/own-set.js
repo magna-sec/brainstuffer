@@ -8,6 +8,7 @@
 const OWN_SET = [
   {
     key: "own", label: "Own blunders", band: "250 puzzles",
+    shuffle: true,
     puzzles: [
       {"id":"own-40f3d4f5-44","fen":"r1b1Rbkr/2Qp2pp/8/7P/3p4/pP3PP1/2n2K2/2n3NR w - - 2 23","moves":"c7c4 d7d5 c4d5 c8e6 d5e6","rating":0,"themes":"own mate","label":"vs Okwok · 2020-12-19","explain":"You played <b>Qd8</b> here. <b>Qc4+</b> was mate: Qc4+ d5 Qxd5+ Be6 Qxe6#. <a href=\"https://www.chess.com/game/live/6006532461\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
       {"id":"own-757f2e52-44","fen":"Bn5r/3k2pp/pp3p1n/2p1b3/P6P/2N1PbP1/RB6/4K1R1 w - - 0 23","moves":"a8f3 b8c6 c3d5 c6b4 d5b4","rating":0,"themes":"own winsMaterial","label":"vs TrevTev · 2020-12-20","explain":"You played <b>Ba3</b> here, costing about 13.9 pawns. <b>Bxf3</b> wins: Bxf3 Nc6 Nd5 Nb4 Nxb4. <a href=\"https://www.chess.com/game/live/6012325607\" target=\"_blank\" rel=\"noopener\">See the game</a>","solverFirst":true},
