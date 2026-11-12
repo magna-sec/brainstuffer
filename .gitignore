@@ -25,3 +25,8 @@ incorrect_*.yml
 *.PDF
 *.epub
 *.djvu
+
+# Decrypted private quiz plaintext — edit locally, commit only the .bsq
+private_quizes/*.json
+private_quizes/*.yml
+private_quizes/*.yaml
