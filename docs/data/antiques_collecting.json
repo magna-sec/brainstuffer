@@ -7,7 +7,7 @@
       "Bauhaus",
       "Art Deco"
     ],
-    "correct": "Queen Anne and Chippendale"
+    "correct": "Queen Anne and Chippendale", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What does the Meissen mark look like on porcelain?",
@@ -17,7 +17,7 @@
       "A blue lion rampant",
       "A star with letter M"
     ],
-    "correct": "Two crossed blue swords"
+    "correct": "Two crossed blue swords", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is hallmarking on silver?",
@@ -27,7 +27,7 @@
       "A decorative engraving",
       "An owner's monogram"
     ],
-    "correct": "A series of official marks guaranteeing silver content and origin"
+    "correct": "A series of official marks guaranteeing silver content and origin", "subcategory": "Silver & Metalware"
   },
   {
     "question": "Which auction house is the oldest in the world?",
@@ -37,7 +37,7 @@
       "Christie's (1766)",
       "Bonhams (1793)"
     ],
-    "correct": "Stockholms Auktionsverk (1674)"
+    "correct": "Stockholms Auktionsverk (1674)", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is Satsuma ware?",
@@ -47,7 +47,7 @@
       "Korean celadon ceramics",
       "Thai terracotta pottery"
     ],
-    "correct": "Japanese pottery with cream crackled glaze decorated with enamel and gold"
+    "correct": "Japanese pottery with cream crackled glaze decorated with enamel and gold", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What does 'patina' refer to in antiques?",
@@ -57,7 +57,7 @@
       "The original paint on antiques",
       "A decorative inlay technique"
     ],
-    "correct": "A surface layer developed over time through aging and use"
+    "correct": "A surface layer developed over time through aging and use", "subcategory": "Auction & Terminology"
   },
   {
     "question": "Which English furniture maker is associated with the Rococo style in the 18th century?",
@@ -67,7 +67,7 @@
       "Thomas Sheraton",
       "Robert Adam"
     ],
-    "correct": "Thomas Chippendale"
+    "correct": "Thomas Chippendale", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is a 'marriage' in antique collecting terminology?",
@@ -77,7 +77,7 @@
       "A piece restored with original materials",
       "A documented provenance"
     ],
-    "correct": "Two pieces of furniture joined together that were not originally made as a pair"
+    "correct": "Two pieces of furniture joined together that were not originally made as a pair", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is Wedgwood Jasperware?",
@@ -87,7 +87,7 @@
       "Bone china with gilt decoration",
       "Salt-glaze stoneware"
     ],
-    "correct": "Unglazed stoneware with colored body and white relief decoration"
+    "correct": "Unglazed stoneware with colored body and white relief decoration", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is the lion passant hallmark on British silver?",
@@ -97,7 +97,7 @@
       "A date letter",
       "A maker's mark"
     ],
-    "correct": "A guarantee of sterling silver (92.5% purity)"
+    "correct": "A guarantee of sterling silver (92.5% purity)", "subcategory": "Silver & Metalware"
   },
   {
     "question": "Which furniture style features straight lines, tapered legs, and classical motifs?",
@@ -107,7 +107,7 @@
       "Rococo",
       "Gothic Revival"
     ],
-    "correct": "Neoclassical (Hepplewhite/Sheraton)"
+    "correct": "Neoclassical (Hepplewhite/Sheraton)", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is Art Nouveau characterized by?",
@@ -117,7 +117,7 @@
       "Classical Greek and Roman motifs",
       "Industrial materials and modernism"
     ],
-    "correct": "Organic, flowing lines inspired by natural forms"
+    "correct": "Organic, flowing lines inspired by natural forms", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What does 'sterling silver' mean?",
@@ -127,7 +127,7 @@
       "Silver plated on a base metal",
       "80% silver"
     ],
-    "correct": "92.5% pure silver with 7.5% alloy (usually copper)"
+    "correct": "92.5% pure silver with 7.5% alloy (usually copper)", "subcategory": "Silver & Metalware"
   },
   {
     "question": "What is a majolica pottery?",
@@ -137,7 +137,7 @@
       "Porcelain with blue underglaze",
       "Salt-fired stoneware"
     ],
-    "correct": "Tin-glazed earthenware with colorful opaque decoration"
+    "correct": "Tin-glazed earthenware with colorful opaque decoration", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "Which famous collection of antiquities is housed in the British Museum?",
@@ -147,7 +147,7 @@
       "The Elgin Marbles and Rosetta Stone are both there",
       "The Terracotta Army"
     ],
-    "correct": "The Elgin Marbles and Rosetta Stone are both there"
+    "correct": "The Elgin Marbles and Rosetta Stone are both there", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is a commode in antique furniture?",
@@ -157,7 +157,7 @@
       "A writing desk",
       "A dressing table"
     ],
-    "correct": "A chest of drawers or low cabinet, originally a French form"
+    "correct": "A chest of drawers or low cabinet, originally a French form", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is ormolu?",
@@ -167,7 +167,7 @@
       "A gilded porcelain technique",
       "A lacquer finish from Asia"
     ],
-    "correct": "Gilded bronze or brass used decoratively on furniture"
+    "correct": "Gilded bronze or brass used decoratively on furniture", "subcategory": "Silver & Metalware"
   },
   {
     "question": "Which pottery company produced 'Blue Willow' pattern?",
@@ -177,7 +177,7 @@
       "Royal Doulton",
       "Minton"
     ],
-    "correct": "Spode (popularized it, c.1790)"
+    "correct": "Spode (popularized it, c.1790)", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is a 'sleeper' in antique auction terminology?",
@@ -187,7 +187,7 @@
       "An item with hidden damage",
       "A reproduction piece"
     ],
-    "correct": "An undervalued item that sells below its true worth"
+    "correct": "An undervalued item that sells below its true worth", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is transfer printing in ceramics?",
@@ -197,7 +197,7 @@
       "Stenciling a design",
       "Screen printing on clay"
     ],
-    "correct": "Applying a design from engraved copper plate via tissue paper to pottery"
+    "correct": "Applying a design from engraved copper plate via tissue paper to pottery", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "Which English pottery town is famous for its ceramic industry?",
@@ -207,7 +207,7 @@
       "Birmingham",
       "Sheffield"
     ],
-    "correct": "Stoke-on-Trent"
+    "correct": "Stoke-on-Trent", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is marquetry in furniture?",
@@ -217,7 +217,7 @@
       "A painting on wood",
       "A brass inlay technique"
     ],
-    "correct": "Decorative inlay of thin pieces of wood, ivory, or other materials"
+    "correct": "Decorative inlay of thin pieces of wood, ivory, or other materials", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What does 'provenance' mean in the art and antiques world?",
@@ -227,7 +227,7 @@
       "The maker's certificate",
       "The restoration history"
     ],
-    "correct": "The documented history of ownership of an object"
+    "correct": "The documented history of ownership of an object", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is cloisonne enamel?",
@@ -237,7 +237,7 @@
       "Guilloche enamel on gold",
       "Champlevé enamel with sunken cells"
     ],
-    "correct": "Enamel work using fine wire partitions to separate different colors"
+    "correct": "Enamel work using fine wire partitions to separate different colors", "subcategory": "Silver & Metalware"
   },
   {
     "question": "Which American auction house is headquartered in New York?",
@@ -247,7 +247,7 @@
       "Skinner",
       "Heritage Auctions"
     ],
-    "correct": "Sotheby's and Christie's both have major New York operations"
+    "correct": "Sotheby's and Christie's both have major New York operations", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is Tiffany glass associated with?",
@@ -257,7 +257,7 @@
       "Bohemian colored glass",
       "Venetian blown glass"
     ],
-    "correct": "Art Nouveau stained glass lamps and windows by Louis Comfort Tiffany"
+    "correct": "Art Nouveau stained glass lamps and windows by Louis Comfort Tiffany", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is a tallboy in antique furniture?",
@@ -267,7 +267,7 @@
       "A tall narrow cabinet",
       "A high-backed chair"
     ],
-    "correct": "A tall chest of drawers in two sections"
+    "correct": "A tall chest of drawers in two sections", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is the Staffordshire figurine?",
@@ -277,7 +277,7 @@
       "Ceramic animals from the Royal Worcester factory",
       "Bisque porcelain figurines"
     ],
-    "correct": "Earthenware figures made in the Staffordshire Potteries from the late 18th century onward"
+    "correct": "Earthenware figures made in the Staffordshire Potteries from the late 18th century onward", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is coin silver in American silversmithing?",
@@ -287,7 +287,7 @@
       "Fine silver (99.9%)",
       "Silver plate"
     ],
-    "correct": "Silver made from melted coins at approximately 90% purity"
+    "correct": "Silver made from melted coins at approximately 90% purity", "subcategory": "Silver & Metalware"
   },
   {
     "question": "What is a davenport desk?",
@@ -297,7 +297,7 @@
       "A roll-top desk",
       "A partners desk"
     ],
-    "correct": "A small desk with a sloping top and side drawers"
+    "correct": "A small desk with a sloping top and side drawers", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What does 'blanc de chine' refer to?",
@@ -307,7 +307,7 @@
       "White Wedgwood pottery",
       "Any unpainted white ceramic"
     ],
-    "correct": "White Chinese porcelain from Dehua, Fujian province"
+    "correct": "White Chinese porcelain from Dehua, Fujian province", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is a bergere chair?",
@@ -317,7 +317,7 @@
       "A rocking chair",
       "A high-backed throne chair"
     ],
-    "correct": "An upholstered armchair with enclosed upholstered sides"
+    "correct": "An upholstered armchair with enclosed upholstered sides", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What does 'EPNS' stand for on silverware?",
@@ -327,7 +327,7 @@
       "English Pewter and Nickel Society",
       "Enameled Plate with Nickel Substrate"
     ],
-    "correct": "Electro Plated Nickel Silver"
+    "correct": "Electro Plated Nickel Silver", "subcategory": "Silver & Metalware"
   },
   {
     "question": "What period is the 'Empire style' furniture associated with?",
@@ -337,7 +337,7 @@
       "Georgian England",
       "Victorian Era"
     ],
-    "correct": "Napoleonic France (early 19th century)"
+    "correct": "Napoleonic France (early 19th century)", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is Delftware?",
@@ -347,7 +347,7 @@
       "English bone china",
       "Belgian crystal glass"
     ],
-    "correct": "Dutch tin-glazed earthenware typically decorated in blue and white"
+    "correct": "Dutch tin-glazed earthenware typically decorated in blue and white", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is a 'buyer's premium' at auction?",
@@ -357,7 +357,7 @@
       "The shipping fee for a purchased item",
       "Insurance on a purchased lot"
     ],
-    "correct": "An additional percentage fee paid by the buyer on top of the hammer price"
+    "correct": "An additional percentage fee paid by the buyer on top of the hammer price", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is papier-mache furniture associated with in Victorian collecting?",
@@ -367,7 +367,7 @@
       "Children's furniture",
       "Garden furniture"
     ],
-    "correct": "Black lacquered furniture with mother-of-pearl inlay, popular in the mid-19th century"
+    "correct": "Black lacquered furniture with mother-of-pearl inlay, popular in the mid-19th century", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is Derby porcelain?",
@@ -377,7 +377,7 @@
       "German Meissen-style porcelain",
       "Irish Belleek porcelain"
     ],
-    "correct": "Fine English porcelain made in Derby from the mid-18th century"
+    "correct": "Fine English porcelain made in Derby from the mid-18th century", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is chinoiserie?",
@@ -387,7 +387,7 @@
       "Japanese lacquerware",
       "Chinese export porcelain for Europe"
     ],
-    "correct": "A European decorative style inspired by and imitating Asian art"
+    "correct": "A European decorative style inspired by and imitating Asian art", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is a Welsh dresser?",
@@ -397,7 +397,7 @@
       "A wardrobe with mirror",
       "A linen chest"
     ],
-    "correct": "A kitchen furniture piece with a base of drawers and cupboards topped by open shelves"
+    "correct": "A kitchen furniture piece with a base of drawers and cupboards topped by open shelves", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is vernis martin?",
@@ -407,7 +407,7 @@
       "A gilding technique",
       "A marquetry style"
     ],
-    "correct": "A French lacquer technique imitating Asian lacquer, used in 18th-century furniture"
+    "correct": "A French lacquer technique imitating Asian lacquer, used in 18th-century furniture", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "Which ceramics factory produced the famous 'Imari' pattern?",
@@ -417,7 +417,7 @@
       "Meissen",
       "Sevres"
     ],
-    "correct": "Arita kilns (Nabeshima domain, Japan)"
+    "correct": "Arita kilns (Nabeshima domain, Japan)", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is a Canterbury in Victorian furniture?",
@@ -427,7 +427,7 @@
       "A prayer stand",
       "A decorative plant stand"
     ],
-    "correct": "A stand for holding sheet music or magazines"
+    "correct": "A stand for holding sheet music or magazines", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is the term for furniture made between roughly 1714 and 1830 in England?",
@@ -437,7 +437,7 @@
       "Edwardian",
       "Regency"
     ],
-    "correct": "Georgian"
+    "correct": "Georgian", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is celadon glaze?",
@@ -447,7 +447,7 @@
       "An opaque white glaze",
       "A crackled gray glaze"
     ],
-    "correct": "A pale green glaze used in Chinese and Korean ceramics"
+    "correct": "A pale green glaze used in Chinese and Korean ceramics", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What does 'reserve price' mean at auction?",
@@ -457,7 +457,7 @@
       "The estimated value of the lot",
       "The buyer's premium threshold"
     ],
-    "correct": "The minimum price below which the seller will not sell"
+    "correct": "The minimum price below which the seller will not sell", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is Art Deco characterized by?",
@@ -467,7 +467,7 @@
       "Classical revival motifs",
       "Handcrafted rustic design"
     ],
-    "correct": "Geometric shapes, bold colors, and streamlined, machine-age design"
+    "correct": "Geometric shapes, bold colors, and streamlined, machine-age design", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is a secretaire (or secretary) in antique furniture?",
@@ -477,7 +477,7 @@
       "A narrow console table",
       "A type of wardrobe"
     ],
-    "correct": "A writing cabinet with a fall-front that opens to reveal a writing surface and interior"
+    "correct": "A writing cabinet with a fall-front that opens to reveal a writing surface and interior", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is Sèvres porcelain?",
@@ -487,7 +487,7 @@
       "Dutch Delftware",
       "English bone china"
     ],
-    "correct": "Fine French royal porcelain made at the Sèvres factory near Paris"
+    "correct": "Fine French royal porcelain made at the Sèvres factory near Paris", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is a 'sleeper' lot in auction parlance?",
@@ -497,7 +497,7 @@
       "An item that has been in storage",
       "A lot with disputed provenance"
     ],
-    "correct": "A lot that is undervalued or unrecognized by most bidders"
+    "correct": "A lot that is undervalued or unrecognized by most bidders", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is parquetry in furniture?",
@@ -507,7 +507,7 @@
       "Carved wooden panels",
       "Painted wooden surfaces"
     ],
-    "correct": "Geometric mosaic wood inlay, as opposed to pictorial marquetry"
+    "correct": "Geometric mosaic wood inlay, as opposed to pictorial marquetry", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is the Arts and Crafts movement in decorative arts?",
@@ -517,7 +517,7 @@
       "A revival of classical decorative forms",
       "An American pottery movement only"
     ],
-    "correct": "A late 19th-century movement valuing handcraft over industrialization, inspired by medieval traditions"
+    "correct": "A late 19th-century movement valuing handcraft over industrialization, inspired by medieval traditions", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is a jardiniere?",
@@ -527,7 +527,7 @@
       "A French armchair",
       "A decorative mirror frame"
     ],
-    "correct": "An ornamental stand or container for displaying plants or flowers"
+    "correct": "An ornamental stand or container for displaying plants or flowers", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What does the anchor mark signify on English pottery?",
@@ -537,7 +537,7 @@
       "Minton",
       "Spode"
     ],
-    "correct": "Chelsea porcelain (one period of marks used an anchor)"
+    "correct": "Chelsea porcelain (one period of marks used an anchor)", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is a 'marriage' in the context of silver?",
@@ -547,7 +547,7 @@
       "A hallmarked piece of matching flatware",
       "A documented piece with original receipts"
     ],
-    "correct": "Two pieces of silver that were not originally made together but have been combined"
+    "correct": "Two pieces of silver that were not originally made together but have been combined", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is Parian ware?",
@@ -557,7 +557,7 @@
       "Stoneware from the Parian island tradition",
       "Bisque porcelain figurines with painted decoration"
     ],
-    "correct": "A type of white unglazed porcelain resembling marble, used for figurines"
+    "correct": "A type of white unglazed porcelain resembling marble, used for figurines", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "Which English factory is credited with inventing bone china?",
@@ -567,7 +567,7 @@
       "Royal Worcester",
       "Derby"
     ],
-    "correct": "Spode (Josiah Spode II perfected the formula)"
+    "correct": "Spode (Josiah Spode II perfected the formula)", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is a lowboy in antique furniture?",
@@ -577,7 +577,7 @@
       "A low settee",
       "A side cabinet"
     ],
-    "correct": "A low dressing table or side table with drawers"
+    "correct": "A low dressing table or side table with drawers", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is the difference between earthenware and stoneware?",
@@ -587,7 +587,7 @@
       "Stoneware always has a glaze",
       "Earthenware is used only for cooking"
     ],
-    "correct": "Stoneware is fired at higher temperatures and is denser and less porous than earthenware"
+    "correct": "Stoneware is fired at higher temperatures and is denser and less porous than earthenware", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is a girandole?",
@@ -597,7 +597,7 @@
       "A French commode style",
       "A silver epergne"
     ],
-    "correct": "A branched candleholder or a circular convex mirror with candle brackets"
+    "correct": "A branched candleholder or a circular convex mirror with candle brackets", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What does 'hammer price' mean at auction?",
@@ -607,7 +607,7 @@
       "The seller's opening price",
       "The reserve price"
     ],
-    "correct": "The final bid price at which the auctioneer's hammer falls, before buyer's premium"
+    "correct": "The final bid price at which the auctioneer's hammer falls, before buyer's premium", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is baccarat crystal?",
@@ -617,7 +617,7 @@
       "Irish Waterford crystal",
       "Bohemian crystal glass"
     ],
-    "correct": "Fine French crystal glassware made in Baccarat, Lorraine, since 1764"
+    "correct": "Fine French crystal glassware made in Baccarat, Lorraine, since 1764", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is a 'flea market find' term for an unexpected valuable item?",
@@ -627,7 +627,7 @@
       "A forgery",
       "A reproduction"
     ],
-    "correct": "A discovery or sleeper"
+    "correct": "A discovery or sleeper", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is the 'Aesthetic Movement' in decorative arts?",
@@ -637,7 +637,7 @@
       "A German Biedermeier revival",
       "An American Arts and Crafts subset"
     ],
-    "correct": "An 1870s-1880s British movement emphasizing art for art's sake and Japanese-influenced design"
+    "correct": "An 1870s-1880s British movement emphasizing art for art's sake and Japanese-influenced design", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is a Daum vase known for?",
@@ -647,7 +647,7 @@
       "English pressed glass",
       "Venetian millefiori glass"
     ],
-    "correct": "French Art Nouveau and Art Deco cameo glass from Nancy"
+    "correct": "French Art Nouveau and Art Deco cameo glass from Nancy", "subcategory": "Ceramics & Glass"
   },
   {
     "question": "What is the difference between antique and vintage?",
@@ -657,7 +657,7 @@
       "Vintage is older than antique",
       "Antique means hand-made; vintage means mass-produced"
     ],
-    "correct": "Antique is typically 100+ years old; vintage is usually 20-99 years old"
+    "correct": "Antique is typically 100+ years old; vintage is usually 20-99 years old", "subcategory": "Auction & Terminology"
   },
   {
     "question": "What is a teapoy?",
@@ -667,7 +667,7 @@
       "A Chinese tea ceremony item",
       "A silver tea urn stand"
     ],
-    "correct": "A small three-legged stand for a tea caddy"
+    "correct": "A small three-legged stand for a tea caddy", "subcategory": "Furniture & Styles"
   },
   {
     "question": "What is Japanese lacquerware called?",
@@ -677,7 +677,7 @@
       "Satsuma",
       "Imari"
     ],
-    "correct": "Urushi lacquer (the general term) or specifically Maki-e for gold/silver decorated lacquer"
+    "correct": "Urushi lacquer (the general term) or specifically Maki-e for gold/silver decorated lacquer", "subcategory": "Silver & Metalware"
   },
   {
     "question": "What is the 'Omega' mark associated with in clocks?",
@@ -687,7 +687,7 @@
       "A quality mark for French mantel clocks",
       "A German clock-making guild mark"
     ],
-    "correct": "Omega is a Swiss watch manufacturer known for precision timepieces"
+    "correct": "Omega is a Swiss watch manufacturer known for precision timepieces", "subcategory": "Silver & Metalware"
   },
   {
     "question": "What is a whatnot in Victorian furniture?",
@@ -697,6 +697,6 @@
       "A decorative fireplace screen",
       "A multi-purpose storage ottoman"
     ],
-    "correct": "A freestanding set of open shelves for displaying ornaments and curiosities"
+    "correct": "A freestanding set of open shelves for displaying ornaments and curiosities", "subcategory": "Furniture & Styles"
   }
 ]

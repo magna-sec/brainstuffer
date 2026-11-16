@@ -121,5 +121,11 @@ document.getElementById('creator-home-link').addEventListener('click', goHome);
 // INIT
 // ══════════════════════════════════════════════════════════════════
 loadManifest();
+
+// Open the Category sub-filter whenever a question set is chosen
+document.getElementById('filename').addEventListener('change', function () {
+    if (window.bsPopulateSubcats) bsPopulateSubcats(this.value);
+});
+
 checkHash();
 if (window.initCreator) window.initCreator();

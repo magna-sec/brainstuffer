@@ -7,7 +7,7 @@
       "7",
       "10"
     ],
-    "correct": "12"
+    "correct": "12", "subcategory": "Intervals & Scales"
   },
   {
     "question": "How many semitones make up a perfect fifth?",
@@ -17,7 +17,7 @@
       "6",
       "8"
     ],
-    "correct": "7"
+    "correct": "7", "subcategory": "Intervals & Scales"
   },
   {
     "question": "The major scale follows which pattern of whole (W) and half (H) steps?",
@@ -27,7 +27,7 @@
       "H-W-W-H-W-W-W",
       "W-W-W-H-W-W-H"
     ],
-    "correct": "W-W-H-W-W-W-H"
+    "correct": "W-W-H-W-W-W-H", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What is the enharmonic equivalent of F#?",
@@ -37,7 +37,7 @@
       "Eb",
       "Fb"
     ],
-    "correct": "Gb"
+    "correct": "Gb", "subcategory": "Intervals & Scales"
   },
   {
     "question": "How many sharps does the key of E major have?",
@@ -47,7 +47,7 @@
       "2",
       "5"
     ],
-    "correct": "4"
+    "correct": "4", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "Which mode starts on the 2nd degree of the major scale?",
@@ -57,7 +57,7 @@
       "Lydian",
       "Mixolydian"
     ],
-    "correct": "Dorian"
+    "correct": "Dorian", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "A major triad is built from the root, a major third, and what?",
@@ -67,7 +67,7 @@
       "Augmented fourth",
       "Minor seventh"
     ],
-    "correct": "Perfect fifth"
+    "correct": "Perfect fifth", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What does 'mezzo forte' (mf) mean?",
@@ -77,7 +77,7 @@
       "Moderately soft",
       "Very soft"
     ],
-    "correct": "Moderately loud"
+    "correct": "Moderately loud", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "Which time signature has 3 beats per bar with a quarter note getting one beat?",
@@ -87,7 +87,7 @@
       "3/8",
       "9/8"
     ],
-    "correct": "3/4"
+    "correct": "3/4", "subcategory": "Notation & Terms"
   },
   {
     "question": "What Italian tempo term means 'very slow', roughly 40–60 BPM?",
@@ -97,7 +97,7 @@
       "Andante",
       "Grave"
     ],
-    "correct": "Largo"
+    "correct": "Largo", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "What does a fermata symbol over a note indicate?",
@@ -107,7 +107,7 @@
       "Repeat the previous measure",
       "Play staccato"
     ],
-    "correct": "Hold the note longer than its written value"
+    "correct": "Hold the note longer than its written value", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "The Mixolydian mode is like a major scale but with which alteration?",
@@ -117,7 +117,7 @@
       "Lowered 3rd degree",
       "Raised 6th degree"
     ],
-    "correct": "Lowered 7th degree"
+    "correct": "Lowered 7th degree", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "A diminished triad is built from which intervals?",
@@ -127,7 +127,7 @@
       "Major third + minor third",
       "Major third + major third"
     ],
-    "correct": "Minor third + minor third (root, b3, b5)"
+    "correct": "Minor third + minor third (root, b3, b5)", "subcategory": "Intervals & Scales"
   },
   {
     "question": "How many semitones make up a major 7th interval?",
@@ -137,7 +137,7 @@
       "12",
       "9"
     ],
-    "correct": "11"
+    "correct": "11", "subcategory": "Intervals & Scales"
   },
   {
     "question": "How many flats are in the key of Bb major?",
@@ -147,7 +147,7 @@
       "1",
       "4"
     ],
-    "correct": "2"
+    "correct": "2", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "The Dorian mode is like a natural minor scale but with which alteration?",
@@ -157,7 +157,7 @@
       "Lowered 2nd degree",
       "Raised 3rd degree"
     ],
-    "correct": "Raised 6th degree"
+    "correct": "Raised 6th degree", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "A V7 chord resolving to I is an example of which cadence?",
@@ -167,7 +167,7 @@
       "Deceptive cadence",
       "Half cadence"
     ],
-    "correct": "Authentic cadence"
+    "correct": "Authentic cadence", "subcategory": "Chords & Harmony"
   },
   {
     "question": "What does 'staccato' mean?",
@@ -177,7 +177,7 @@
       "Play notes with accent",
       "Play notes very softly"
     ],
-    "correct": "Play notes short and detached"
+    "correct": "Play notes short and detached", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "Which clef is used for the bass staff?",
@@ -187,7 +187,7 @@
       "Alto C clef",
       "Percussion clef"
     ],
-    "correct": "F clef"
+    "correct": "F clef", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is the relative minor of C major?",
@@ -197,7 +197,7 @@
       "D minor",
       "G minor"
     ],
-    "correct": "A minor"
+    "correct": "A minor", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "The Lydian mode is like a major scale but with which alteration?",
@@ -207,7 +207,7 @@
       "Lowered 3rd degree",
       "Raised 6th degree"
     ],
-    "correct": "Raised 4th degree"
+    "correct": "Raised 4th degree", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "What is an 'augmented' interval?",
@@ -217,7 +217,7 @@
       "Two semitones larger than a minor interval",
       "Equal to a tritone"
     ],
-    "correct": "One semitone larger than a perfect or major interval"
+    "correct": "One semitone larger than a perfect or major interval", "subcategory": "Intervals & Scales"
   },
   {
     "question": "How many sharps does G major have?",
@@ -227,7 +227,7 @@
       "3",
       "0"
     ],
-    "correct": "1"
+    "correct": "1", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "Which tempo marking means 'a walking pace', around 76–108 BPM?",
@@ -237,7 +237,7 @@
       "Adagio",
       "Allegretto"
     ],
-    "correct": "Andante"
+    "correct": "Andante", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "What symbol raises a note by one semitone?",
@@ -247,7 +247,7 @@
       "Natural sign",
       "Double sharp (x)"
     ],
-    "correct": "Sharp (#)"
+    "correct": "Sharp (#)", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What is the tritone?",
@@ -257,7 +257,7 @@
       "A chord built entirely on whole tones",
       "An interval of 7 semitones"
     ],
-    "correct": "An interval of 6 semitones (augmented 4th / diminished 5th)"
+    "correct": "An interval of 6 semitones (augmented 4th / diminished 5th)", "subcategory": "Intervals & Scales"
   },
   {
     "question": "A dominant 7th chord (V7) consists of which intervals above the root?",
@@ -267,7 +267,7 @@
       "Minor 3rd, perfect 5th, minor 7th",
       "Major 3rd, augmented 5th, minor 7th"
     ],
-    "correct": "Major 3rd, perfect 5th, minor 7th"
+    "correct": "Major 3rd, perfect 5th, minor 7th", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What does 'legato' mean?",
@@ -277,7 +277,7 @@
       "Play notes with increasing speed",
       "Play notes with a slight accent"
     ],
-    "correct": "Play notes smoothly and connected"
+    "correct": "Play notes smoothly and connected", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "The natural minor scale differs from the major scale by having which lowered degrees?",
@@ -287,7 +287,7 @@
       "2nd, 5th, and 7th",
       "3rd, 5th, and 6th"
     ],
-    "correct": "3rd, 6th, and 7th"
+    "correct": "3rd, 6th, and 7th", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What is the correct order of flats in key signatures?",
@@ -297,7 +297,7 @@
       "Bb Ab Db Eb Gb Cb Fb",
       "Eb Bb Ab Db Gb Cb Fb"
     ],
-    "correct": "Bb Eb Ab Db Gb Cb Fb"
+    "correct": "Bb Eb Ab Db Gb Cb Fb", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "What does 'pianissimo' (pp) mean?",
@@ -307,7 +307,7 @@
       "Very loud",
       "Moderately soft"
     ],
-    "correct": "Very soft"
+    "correct": "Very soft", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "In 6/8 time, how many eighth notes fill one bar?",
@@ -317,7 +317,7 @@
       "8",
       "3"
     ],
-    "correct": "6"
+    "correct": "6", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is a 'suspension' in harmony?",
@@ -327,7 +327,7 @@
       "A chord played in a higher octave",
       "An accent placed on a weak beat"
     ],
-    "correct": "A non-chord tone held from the previous chord before resolving"
+    "correct": "A non-chord tone held from the previous chord before resolving", "subcategory": "Chords & Harmony"
   },
   {
     "question": "The Phrygian mode is like a natural minor scale but with which alteration?",
@@ -337,7 +337,7 @@
       "Lowered 7th degree",
       "Raised 4th degree"
     ],
-    "correct": "Lowered 2nd degree"
+    "correct": "Lowered 2nd degree", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "What is a 'half cadence'?",
@@ -347,7 +347,7 @@
       "A cadence from IV to I",
       "A cadence from V to VI"
     ],
-    "correct": "A phrase that ends on the V chord"
+    "correct": "A phrase that ends on the V chord", "subcategory": "Chords & Harmony"
   },
   {
     "question": "What does 'accelerando' mean?",
@@ -357,7 +357,7 @@
       "A steady fast tempo",
       "A sudden tempo change"
     ],
-    "correct": "Gradually speeding up"
+    "correct": "Gradually speeding up", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "What is syncopation?",
@@ -367,7 +367,7 @@
       "A gradual change in dynamics",
       "A repeating rhythmic ostinato pattern"
     ],
-    "correct": "Emphasis placed on normally weak beats or off-beats"
+    "correct": "Emphasis placed on normally weak beats or off-beats", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "How many semitones make up a major 3rd?",
@@ -377,7 +377,7 @@
       "5",
       "2"
     ],
-    "correct": "4"
+    "correct": "4", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What is the harmonic minor scale?",
@@ -387,7 +387,7 @@
       "Natural minor with both 6th and 7th raised",
       "Natural minor with the 3rd raised"
     ],
-    "correct": "Natural minor with the 7th degree raised by one semitone"
+    "correct": "Natural minor with the 7th degree raised by one semitone", "subcategory": "Intervals & Scales"
   },
   {
     "question": "Which major key has 7 sharps?",
@@ -397,7 +397,7 @@
       "B major",
       "G# major"
     ],
-    "correct": "C# major"
+    "correct": "C# major", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "What does 'forte' (f) indicate?",
@@ -407,7 +407,7 @@
       "Moderately loud",
       "Soft"
     ],
-    "correct": "Loud"
+    "correct": "Loud", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "The Aeolian mode is the same as which scale?",
@@ -417,7 +417,7 @@
       "Melodic minor",
       "Major"
     ],
-    "correct": "Natural minor"
+    "correct": "Natural minor", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "What does a tie between two notes of the same pitch indicate?",
@@ -427,7 +427,7 @@
       "Crescendo between the notes",
       "Play the second note softer"
     ],
-    "correct": "Hold the combined duration, attack only once"
+    "correct": "Hold the combined duration, attack only once", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "What is the Locrian mode?",
@@ -437,7 +437,7 @@
       "Built on the 4th degree with a raised 4th",
       "Built on the 5th degree with a lowered 7th"
     ],
-    "correct": "Built on the 7th degree of the major scale, with a diminished fifth above its root"
+    "correct": "Built on the 7th degree of the major scale, with a diminished fifth above its root", "subcategory": "Modes & Key Signatures"
   },
   {
     "question": "What is the interval between C and G?",
@@ -447,7 +447,7 @@
       "Augmented fourth",
       "Minor seventh"
     ],
-    "correct": "Perfect fifth"
+    "correct": "Perfect fifth", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What does 'da capo' (D.C.) mean in notation?",
@@ -457,7 +457,7 @@
       "Repeat the previous section",
       "Play from the sign (Dal segno)"
     ],
-    "correct": "Return to the beginning and play again"
+    "correct": "Return to the beginning and play again", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "An augmented triad is built from which two stacked intervals?",
@@ -467,7 +467,7 @@
       "Major third + minor third",
       "Minor third + major third"
     ],
-    "correct": "Major third + major third (root, 3, #5)"
+    "correct": "Major third + major third (root, 3, #5)", "subcategory": "Intervals & Scales"
   },
   {
     "question": "How many beats does a dotted quarter note receive in 4/4 time?",
@@ -477,7 +477,7 @@
       "2",
       "2.5"
     ],
-    "correct": "1.5"
+    "correct": "1.5", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "What is 'voice leading'?",
@@ -487,7 +487,7 @@
       "The process of assigning parts to instruments",
       "The melodic line in the bass voice"
     ],
-    "correct": "Smooth movement of individual chord tones between chords, minimising large leaps"
+    "correct": "Smooth movement of individual chord tones between chords, minimising large leaps", "subcategory": "Chords & Harmony"
   },
   {
     "question": "What does 'ritardando' (rit.) mean?",
@@ -497,7 +497,7 @@
       "A slower tempo immediately",
       "Return to original tempo"
     ],
-    "correct": "Gradually slowing down"
+    "correct": "Gradually slowing down", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "What is 'counterpoint'?",
@@ -507,7 +507,7 @@
       "Repeating a melody at a different pitch level",
       "Writing music in more than one key simultaneously"
     ],
-    "correct": "Two or more independent melodic lines played simultaneously"
+    "correct": "Two or more independent melodic lines played simultaneously", "subcategory": "Chords & Harmony"
   },
   {
     "question": "Which chord is the subdominant in C major?",
@@ -517,7 +517,7 @@
       "D minor (ii)",
       "A minor (vi)"
     ],
-    "correct": "F major (IV)"
+    "correct": "F major (IV)", "subcategory": "Chords & Harmony"
   },
   {
     "question": "What is the enharmonic equivalent of Db?",
@@ -527,7 +527,7 @@
       "Bb",
       "Ab"
     ],
-    "correct": "C#"
+    "correct": "C#", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What Italian term means 'becoming louder'?",
@@ -537,7 +537,7 @@
       "Decrescendo",
       "Sforzando"
     ],
-    "correct": "Crescendo"
+    "correct": "Crescendo", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "What is a 'pedal point' in music?",
@@ -547,7 +547,7 @@
       "The lowest note of any chord",
       "A note tied across a bar line"
     ],
-    "correct": "A sustained or repeated note in one voice while harmonies change above or around it"
+    "correct": "A sustained or repeated note in one voice while harmonies change above or around it", "subcategory": "Chords & Harmony"
   },
   {
     "question": "What is an 'ostinato'?",
@@ -557,7 +557,7 @@
       "An ornament added to a melody",
       "A through-composed musical form"
     ],
-    "correct": "A short, persistently repeated musical pattern"
+    "correct": "A short, persistently repeated musical pattern", "subcategory": "Chords & Harmony"
   },
   {
     "question": "How many semitones make up a perfect fourth?",
@@ -567,7 +567,7 @@
       "6",
       "3"
     ],
-    "correct": "5"
+    "correct": "5", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What does 'allegro' indicate?",
@@ -577,7 +577,7 @@
       "Very fast, over 168 BPM",
       "At a walking pace, 76–108 BPM"
     ],
-    "correct": "Fast and lively, roughly 120–168 BPM"
+    "correct": "Fast and lively, roughly 120–168 BPM", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "What is a 'deceptive cadence'?",
@@ -587,7 +587,7 @@
       "A cadence from IV to I",
       "A cadence that does not resolve"
     ],
-    "correct": "A V chord resolving unexpectedly to vi instead of I"
+    "correct": "A V chord resolving unexpectedly to vi instead of I", "subcategory": "Chords & Harmony"
   },
   {
     "question": "What does 'sforzando' (sfz) mean?",
@@ -597,7 +597,7 @@
       "Play very loud throughout",
       "A sudden decrease in volume"
     ],
-    "correct": "A sudden, strong accent on a single note or chord"
+    "correct": "A sudden, strong accent on a single note or chord", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "What is the interval of a minor 3rd in semitones?",
@@ -607,7 +607,7 @@
       "2",
       "5"
     ],
-    "correct": "3"
+    "correct": "3", "subcategory": "Intervals & Scales"
   },
   {
     "question": "In figured bass, what does the symbol '6' alone below a bass note indicate?",
@@ -617,7 +617,7 @@
       "Root position with a 6th added",
       "A diminished 6th above the bass"
     ],
-    "correct": "First inversion (6/3 chord, interval of a 6th above the bass)"
+    "correct": "First inversion (6/3 chord, interval of a 6th above the bass)", "subcategory": "Chords & Harmony"
   },
   {
     "question": "What is a 'sequence' in melodic writing?",
@@ -627,7 +627,7 @@
       "A scale passage moving by step",
       "A passage that repeats exactly at the same pitch"
     ],
-    "correct": "Repetition of a melodic pattern at a different pitch level"
+    "correct": "Repetition of a melodic pattern at a different pitch level", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is a pentatonic scale?",
@@ -637,7 +637,7 @@
       "A chromatic scale",
       "A scale used only in jazz"
     ],
-    "correct": "A scale with five notes per octave"
+    "correct": "A scale with five notes per octave", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What is the time signature 3/4 also known as?",
@@ -647,7 +647,7 @@
       "Common time",
       "Cut time"
     ],
-    "correct": "Waltz time"
+    "correct": "Waltz time", "subcategory": "Notation & Terms"
   },
   {
     "question": "How many strings does a standard guitar have?",
@@ -657,7 +657,7 @@
       "8",
       "7"
     ],
-    "correct": "6"
+    "correct": "6", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is counterpoint in music?",
@@ -667,7 +667,7 @@
       "A technique for writing bass lines",
       "The use of contrasting dynamics"
     ],
-    "correct": "The technique of combining two or more melodic lines simultaneously"
+    "correct": "The technique of combining two or more melodic lines simultaneously", "subcategory": "Chords & Harmony"
   },
   {
     "question": "Which musical instrument has keys, pedals, and strings inside?",
@@ -677,7 +677,7 @@
       "Organ",
       "Clavichord"
     ],
-    "correct": "Piano"
+    "correct": "Piano", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is jazz improvisation?",
@@ -687,7 +687,7 @@
       "Playing written solos from memory",
       "Playing very fast passages"
     ],
-    "correct": "Creating spontaneous melodic variations while maintaining harmonic structure"
+    "correct": "Creating spontaneous melodic variations while maintaining harmonic structure", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is a chord?",
@@ -697,7 +697,7 @@
       "A scale pattern",
       "A melodic motif"
     ],
-    "correct": "Three or more notes played simultaneously"
+    "correct": "Three or more notes played simultaneously", "subcategory": "Chords & Harmony"
   },
   {
     "question": "What is the lowest singing voice in classical music?",
@@ -707,7 +707,7 @@
       "Tenor",
       "Countertenor"
     ],
-    "correct": "Bass"
+    "correct": "Bass", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is the dominant note in a C major scale?",
@@ -717,7 +717,7 @@
       "E",
       "F"
     ],
-    "correct": "G"
+    "correct": "G", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What is a fugue?",
@@ -727,7 +727,7 @@
       "A free-form improvisation",
       "A theme and variations structure"
     ],
-    "correct": "A contrapuntal composition based on a theme developed through imitation"
+    "correct": "A contrapuntal composition based on a theme developed through imitation", "subcategory": "Chords & Harmony"
   },
   {
     "question": "What is the standard number of keys on a piano?",
@@ -737,7 +737,7 @@
       "84",
       "92"
     ],
-    "correct": "88"
+    "correct": "88", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is a sonata form?",
@@ -747,7 +747,7 @@
       "A three-movement structure",
       "A form associated with the Baroque period"
     ],
-    "correct": "A musical structure with exposition, development, and recapitulation"
+    "correct": "A musical structure with exposition, development, and recapitulation", "subcategory": "Notation & Terms"
   },
   {
     "question": "What does 'a cappella' mean?",
@@ -757,7 +757,7 @@
       "Singing very high notes",
       "An Italian style of choral singing"
     ],
-    "correct": "Singing without instrumental accompaniment"
+    "correct": "Singing without instrumental accompaniment", "subcategory": "Notation & Terms"
   },
   {
     "question": "How many notes are in a standard Western chromatic scale?",
@@ -767,7 +767,7 @@
       "8",
       "10"
     ],
-    "correct": "12"
+    "correct": "12", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What is the main difference between major and minor keys?",
@@ -777,7 +777,7 @@
       "Major keys have more notes",
       "Minor keys use sharps only"
     ],
-    "correct": "Minor keys have a flattened third degree giving a darker sound"
+    "correct": "Minor keys have a flattened third degree giving a darker sound", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is a leitmotif?",
@@ -787,7 +787,7 @@
       "A bass line pattern",
       "A type of bridge in a song"
     ],
-    "correct": "A recurring musical theme associated with a character or idea"
+    "correct": "A recurring musical theme associated with a character or idea", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is the lowest note on a standard piano?",
@@ -797,7 +797,7 @@
       "F0",
       "B0"
     ],
-    "correct": "A0"
+    "correct": "A0", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is a cadenza in classical music?",
@@ -807,7 +807,7 @@
       "A type of ornament",
       "The opening theme"
     ],
-    "correct": "A solo passage near the end of a movement where the soloist can display virtuosity"
+    "correct": "A solo passage near the end of a movement where the soloist can display virtuosity", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is the term for music that follows no key or tonal center?",
@@ -817,7 +817,7 @@
       "Modal",
       "Chromatic"
     ],
-    "correct": "Atonal"
+    "correct": "Atonal", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is a suite in classical music?",
@@ -827,7 +827,7 @@
       "A solo piece",
       "A set of variations"
     ],
-    "correct": "A collection of instrumental pieces meant to be performed in sequence"
+    "correct": "A collection of instrumental pieces meant to be performed in sequence", "subcategory": "Notation & Terms"
   },
   {
     "question": "What does 'vivace' mean in musical tempo markings?",
@@ -837,7 +837,7 @@
       "Moderately slow",
       "Walking pace"
     ],
-    "correct": "Lively and fast"
+    "correct": "Lively and fast", "subcategory": "Tempo & Dynamics"
   },
   {
     "question": "What is the function of a bridge in a popular song?",
@@ -847,7 +847,7 @@
       "To end the song",
       "To repeat the verse"
     ],
-    "correct": "To provide contrast and variation before the final chorus"
+    "correct": "To provide contrast and variation before the final chorus", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is the term for two notes played simultaneously a half step apart creating tension?",
@@ -857,7 +857,7 @@
       "Harmony",
       "Suspension"
     ],
-    "correct": "Dissonance"
+    "correct": "Dissonance", "subcategory": "Intervals & Scales"
   },
   {
     "question": "What is a toccata?",
@@ -867,7 +867,7 @@
       "A dance form",
       "A type of theme and variations"
     ],
-    "correct": "A virtuosic keyboard composition demonstrating technical skill"
+    "correct": "A virtuosic keyboard composition demonstrating technical skill", "subcategory": "Notation & Terms"
   },
   {
     "question": "What is the treble clef also known as?",
@@ -877,6 +877,6 @@
       "C clef",
       "Alto clef"
     ],
-    "correct": "G clef"
+    "correct": "G clef", "subcategory": "Notation & Terms"
   }
 ]

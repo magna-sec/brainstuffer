@@ -112,6 +112,7 @@
             sel.appendChild(opt);
         }
         sel.value = key;
+        if (window.bsPopulateSubcats) bsPopulateSubcats(key);
         showUploadAlert('Loaded <strong>' + escHtml(name) + '</strong> with ' + data.length + ' questions.', 'success');
     }
 

@@ -47,3 +47,58 @@ async function loadQuizData(filename) {
     quizDataCache[filename] = data;
     return data;
 }
+
+// ══════════════════════════════════════════════════════════════════
+// SUBCATEGORY FILTER
+// ══════════════════════════════════════════════════════════════════
+
+// Populate the "Category" dropdown for the chosen question set.
+// Shows "All categories" by default plus each distinct subcategory.
+async function bsPopulateSubcats(filename) {
+    const wrap = document.getElementById('subcategory-wrap');
+    const sel  = document.getElementById('subcategory');
+    if (!wrap || !sel) return;
+    sel.innerHTML = '';
+    wrap.style.display = 'none';
+    if (!filename || filename === 'creator:new') return;
+
+    const data = await loadQuizData(filename);
+    if (!data || !data.length) return;
+
+    const order = [], counts = {};
+    data.forEach(function(q) {
+        const s = q.subcategory;
+        if (!s) return;
+        if (counts[s] === undefined) { counts[s] = 0; order.push(s); }
+        counts[s]++;
+    });
+
+    const allOpt = document.createElement('option');
+    allOpt.value = '__all__';
+    allOpt.textContent = 'All categories (' + data.length + ')';
+    sel.appendChild(allOpt);
+
+    order.sort();
+    order.forEach(function(s) {
+        const o = document.createElement('option');
+        o.value = s;
+        o.textContent = s + ' (' + counts[s] + ')';
+        sel.appendChild(o);
+    });
+    sel.value = '__all__';
+
+    // Only surface the control when there is a genuine choice to make.
+    if (order.length >= 2) wrap.style.display = '';
+}
+
+// Narrow a question list to the currently-selected subcategory.
+// Returns the full list when "All categories" is chosen (the default),
+// when the set has no subcategories, or when a filter would be empty.
+function bsApplySubcatFilter(questions) {
+    const sel = document.getElementById('subcategory');
+    if (!sel || !questions) return questions;
+    const val = sel.value;
+    if (!val || val === '__all__') return questions;
+    const filtered = questions.filter(function(q) { return q.subcategory === val; });
+    return filtered.length ? filtered : questions;
+}

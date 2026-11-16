@@ -7,7 +7,7 @@
       "Fe",
       "Pb"
     ],
-    "correct": "Au"
+    "correct": "Au", "subcategory": "Chemistry"
   },
   {
     "question": "Who proposed the theory of general relativity?",
@@ -17,7 +17,7 @@
       "Niels Bohr",
       "Max Planck"
     ],
-    "correct": "Albert Einstein"
+    "correct": "Albert Einstein", "subcategory": "Physics"
   },
   {
     "question": "What is the atomic number of carbon?",
@@ -27,7 +27,7 @@
       "12",
       "14"
     ],
-    "correct": "6"
+    "correct": "6", "subcategory": "Chemistry"
   },
   {
     "question": "Which scientist discovered penicillin?",
@@ -37,7 +37,7 @@
       "Robert Koch",
       "Joseph Lister"
     ],
-    "correct": "Alexander Fleming"
+    "correct": "Alexander Fleming", "subcategory": "Biology & Medicine"
   },
   {
     "question": "What is the speed of light in a vacuum (approximately)?",
@@ -47,7 +47,7 @@
       "3 x 10^10 m/s",
       "3 x 10^4 m/s"
     ],
-    "correct": "3 x 10^8 m/s"
+    "correct": "3 x 10^8 m/s", "subcategory": "Physics"
   },
   {
     "question": "Who developed the polio vaccine?",
@@ -57,7 +57,7 @@
       "Louis Pasteur",
       "Edward Jenner"
     ],
-    "correct": "Jonas Salk"
+    "correct": "Jonas Salk", "subcategory": "Biology & Medicine"
   },
   {
     "question": "What is Newton's second law of motion?",
@@ -67,7 +67,7 @@
       "PV = nRT",
       "F = mv2/r"
     ],
-    "correct": "F = ma"
+    "correct": "F = ma", "subcategory": "Physics"
   },
   {
     "question": "Which element has the atomic symbol Fe?",
@@ -77,7 +77,7 @@
       "Francium",
       "Fermium"
     ],
-    "correct": "Iron"
+    "correct": "Iron", "subcategory": "Chemistry"
   },
   {
     "question": "Who discovered the structure of DNA alongside Watson?",
@@ -87,7 +87,7 @@
       "Linus Pauling",
       "Maurice Wilkins"
     ],
-    "correct": "Francis Crick"
+    "correct": "Francis Crick", "subcategory": "Biology & Medicine"
   },
   {
     "question": "What is the powerhouse of the cell?",
@@ -97,7 +97,7 @@
       "Ribosome",
       "Golgi apparatus"
     ],
-    "correct": "Mitochondria"
+    "correct": "Mitochondria", "subcategory": "Biology & Medicine"
   },
   {
     "question": "Which scientist formulated the law of gravitation?",
@@ -107,7 +107,7 @@
       "Johannes Kepler",
       "Tycho Brahe"
     ],
-    "correct": "Isaac Newton"
+    "correct": "Isaac Newton", "subcategory": "Physics"
   },
   {
     "question": "What does DNA stand for?",
@@ -117,7 +117,7 @@
       "Deoxyribose nuclease acid",
       "Dinuclear adenosine"
     ],
-    "correct": "Deoxyribonucleic acid"
+    "correct": "Deoxyribonucleic acid", "subcategory": "Biology & Medicine"
   },
   {
     "question": "Which gas makes up the majority of Earth's atmosphere?",
@@ -127,7 +127,7 @@
       "Carbon dioxide",
       "Argon"
     ],
-    "correct": "Nitrogen"
+    "correct": "Nitrogen", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "Who won the first Nobel Prize in Physics (1901)?",
@@ -137,7 +137,7 @@
       "Lord Rayleigh",
       "Philipp Lenard"
     ],
-    "correct": "Wilhelm Rontgen"
+    "correct": "Wilhelm Rontgen", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "What is the pH of pure water at 25 degrees C?",
@@ -147,7 +147,7 @@
       "8",
       "5"
     ],
-    "correct": "7"
+    "correct": "7", "subcategory": "Chemistry"
   },
   {
     "question": "Who proposed the heliocentric model of the solar system in 1543?",
@@ -157,7 +157,7 @@
       "Johannes Kepler",
       "Tycho Brahe"
     ],
-    "correct": "Nicolaus Copernicus"
+    "correct": "Nicolaus Copernicus", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "What is the chemical formula for water?",
@@ -167,7 +167,7 @@
       "HO2",
       "H3O"
     ],
-    "correct": "H2O"
+    "correct": "H2O", "subcategory": "Chemistry"
   },
   {
     "question": "Which experiment demonstrated that the atom has a nucleus?",
@@ -177,7 +177,7 @@
       "Thomson cathode ray experiment",
       "Davisson-Germer experiment"
     ],
-    "correct": "Rutherford gold foil experiment"
+    "correct": "Rutherford gold foil experiment", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "What is Avogadro's number (approximately)?",
@@ -187,7 +187,7 @@
       "6.022 x 10^22",
       "6.626 x 10^-34"
     ],
-    "correct": "6.022 x 10^23"
+    "correct": "6.022 x 10^23", "subcategory": "Chemistry"
   },
   {
     "question": "Which scientist developed the theory of evolution by natural selection?",
@@ -197,7 +197,7 @@
       "Jean-Baptiste Lamarck",
       "Gregor Mendel"
     ],
-    "correct": "Charles Darwin"
+    "correct": "Charles Darwin", "subcategory": "Biology & Medicine"
   },
   {
     "question": "Who discovered radioactivity?",
@@ -207,7 +207,7 @@
       "Ernest Rutherford",
       "Wilhelm Rontgen"
     ],
-    "correct": "Henri Becquerel"
+    "correct": "Henri Becquerel", "subcategory": "Physics"
   },
   {
     "question": "What is the strongest force in nature at subatomic scales?",
@@ -217,7 +217,7 @@
       "Weak nuclear force",
       "Gravity"
     ],
-    "correct": "Strong nuclear force"
+    "correct": "Strong nuclear force", "subcategory": "Physics"
   },
   {
     "question": "Which law states pressure and volume of an ideal gas are inversely proportional at constant temperature?",
@@ -227,7 +227,7 @@
       "Gay-Lussac's Law",
       "Dalton's Law"
     ],
-    "correct": "Boyle's Law"
+    "correct": "Boyle's Law", "subcategory": "Chemistry"
   },
   {
     "question": "Who discovered X-rays?",
@@ -237,7 +237,7 @@
       "Marie Curie",
       "Ernest Rutherford"
     ],
-    "correct": "Wilhelm Rontgen"
+    "correct": "Wilhelm Rontgen", "subcategory": "Physics"
   },
   {
     "question": "What is the SI unit of electrical resistance?",
@@ -247,7 +247,7 @@
       "Volt",
       "Watt"
     ],
-    "correct": "Ohm"
+    "correct": "Ohm", "subcategory": "Physics"
   },
   {
     "question": "Which scientist developed the rabies vaccine?",
@@ -257,7 +257,7 @@
       "Joseph Lister",
       "Alexander Fleming"
     ],
-    "correct": "Louis Pasteur"
+    "correct": "Louis Pasteur", "subcategory": "Biology & Medicine"
   },
   {
     "question": "What is the Heisenberg Uncertainty Principle?",
@@ -267,7 +267,7 @@
       "Matter and energy are interchangeable",
       "Opposite charges attract"
     ],
-    "correct": "Cannot simultaneously know exact position and momentum"
+    "correct": "Cannot simultaneously know exact position and momentum", "subcategory": "Physics"
   },
   {
     "question": "Which gas is produced by photosynthesis?",
@@ -277,7 +277,7 @@
       "Nitrogen",
       "Hydrogen"
     ],
-    "correct": "Oxygen"
+    "correct": "Oxygen", "subcategory": "Biology & Medicine"
   },
   {
     "question": "Who coined the term cell to describe biological cells?",
@@ -287,7 +287,7 @@
       "Rudolf Virchow",
       "Matthias Schleiden"
     ],
-    "correct": "Robert Hooke"
+    "correct": "Robert Hooke", "subcategory": "Biology & Medicine"
   },
   {
     "question": "What is the chemical symbol for potassium?",
@@ -297,7 +297,7 @@
       "Po",
       "Pt"
     ],
-    "correct": "K"
+    "correct": "K", "subcategory": "Chemistry"
   },
   {
     "question": "Which planet did Galileo observe moons around in 1610?",
@@ -307,7 +307,7 @@
       "Mars",
       "Venus"
     ],
-    "correct": "Jupiter"
+    "correct": "Jupiter", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "What does the second law of thermodynamics state?",
@@ -317,7 +317,7 @@
       "Every action has an equal opposite reaction",
       "Pressure and volume are inversely proportional"
     ],
-    "correct": "Entropy of an isolated system tends to increase"
+    "correct": "Entropy of an isolated system tends to increase", "subcategory": "Physics"
   },
   {
     "question": "Who developed the periodic table?",
@@ -327,7 +327,7 @@
       "Antoine Lavoisier",
       "Julius Lothar Meyer"
     ],
-    "correct": "Dmitri Mendeleev"
+    "correct": "Dmitri Mendeleev", "subcategory": "Chemistry"
   },
   {
     "question": "What is the process by which plants make food using sunlight?",
@@ -337,7 +337,7 @@
       "Transpiration",
       "Osmosis"
     ],
-    "correct": "Photosynthesis"
+    "correct": "Photosynthesis", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "What is the unit of frequency?",
@@ -347,7 +347,7 @@
       "Newton",
       "Pascal"
     ],
-    "correct": "Hertz"
+    "correct": "Hertz", "subcategory": "Physics"
   },
   {
     "question": "Who published On the Origin of Species in 1859?",
@@ -357,7 +357,7 @@
       "Thomas Henry Huxley",
       "Herbert Spencer"
     ],
-    "correct": "Charles Darwin"
+    "correct": "Charles Darwin", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "What is the chemical symbol for sodium?",
@@ -367,7 +367,7 @@
       "S",
       "Sn"
     ],
-    "correct": "Na"
+    "correct": "Na", "subcategory": "Chemistry"
   },
   {
     "question": "Which type of radiation has the greatest penetrating power?",
@@ -377,7 +377,7 @@
       "Alpha particles",
       "Neutrons"
     ],
-    "correct": "Gamma rays"
+    "correct": "Gamma rays", "subcategory": "Physics"
   },
   {
     "question": "What did Marie Curie discover?",
@@ -387,7 +387,7 @@
       "Radium only",
       "Thorium and Polonium"
     ],
-    "correct": "Polonium and Radium"
+    "correct": "Polonium and Radium", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "Which scientist won the Nobel Prize in Physics for the photoelectric effect?",
@@ -397,7 +397,7 @@
       "Niels Bohr",
       "Werner Heisenberg"
     ],
-    "correct": "Albert Einstein"
+    "correct": "Albert Einstein", "subcategory": "Physics"
   },
   {
     "question": "What is the human body's largest organ?",
@@ -407,7 +407,7 @@
       "Brain",
       "Lungs"
     ],
-    "correct": "Skin"
+    "correct": "Skin", "subcategory": "Biology & Medicine"
   },
   {
     "question": "Who discovered the electron?",
@@ -417,7 +417,7 @@
       "Niels Bohr",
       "Robert Millikan"
     ],
-    "correct": "J.J. Thomson"
+    "correct": "J.J. Thomson", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "Which bone is the longest in the human body?",
@@ -427,7 +427,7 @@
       "Humerus",
       "Fibula"
     ],
-    "correct": "Femur"
+    "correct": "Femur", "subcategory": "Biology & Medicine"
   },
   {
     "question": "What is the chemical formula for table salt?",
@@ -437,7 +437,7 @@
       "CaCl2",
       "MgCl2"
     ],
-    "correct": "NaCl"
+    "correct": "NaCl", "subcategory": "Chemistry"
   },
   {
     "question": "What does E = mc2 represent?",
@@ -447,7 +447,7 @@
       "Energy of a photon",
       "Kinetic energy formula"
     ],
-    "correct": "Mass-energy equivalence"
+    "correct": "Mass-energy equivalence", "subcategory": "Physics"
   },
   {
     "question": "Which organ produces insulin?",
@@ -457,7 +457,7 @@
       "Kidney",
       "Spleen"
     ],
-    "correct": "Pancreas"
+    "correct": "Pancreas", "subcategory": "Biology & Medicine"
   },
   {
     "question": "Who is credited with inventing the telephone?",
@@ -467,7 +467,7 @@
       "Thomas Edison",
       "Nikola Tesla"
     ],
-    "correct": "Alexander Graham Bell"
+    "correct": "Alexander Graham Bell", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "What is the chemical symbol for lead?",
@@ -477,7 +477,7 @@
       "Ld",
       "Pl"
     ],
-    "correct": "Pb"
+    "correct": "Pb", "subcategory": "Chemistry"
   },
   {
     "question": "What is the process by which a solid turns directly into a gas?",
@@ -487,7 +487,7 @@
       "Condensation",
       "Deposition"
     ],
-    "correct": "Sublimation"
+    "correct": "Sublimation", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "Which blood type is the universal donor?",
@@ -497,7 +497,7 @@
       "AB negative",
       "AB positive"
     ],
-    "correct": "O negative"
+    "correct": "O negative", "subcategory": "Biology & Medicine"
   },
   {
     "question": "What is the most abundant element in the universe?",
@@ -507,7 +507,7 @@
       "Oxygen",
       "Carbon"
     ],
-    "correct": "Hydrogen"
+    "correct": "Hydrogen", "subcategory": "Chemistry"
   },
   {
     "question": "Who discovered the neutron?",
@@ -517,7 +517,7 @@
       "Niels Bohr",
       "Enrico Fermi"
     ],
-    "correct": "James Chadwick"
+    "correct": "James Chadwick", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "What type of bond involves sharing of electrons between atoms?",
@@ -527,7 +527,7 @@
       "Metallic bond",
       "Hydrogen bond"
     ],
-    "correct": "Covalent bond"
+    "correct": "Covalent bond", "subcategory": "Chemistry"
   },
   {
     "question": "What is the term for minimum energy needed to start a chemical reaction?",
@@ -537,7 +537,7 @@
       "Gibbs free energy",
       "Bond dissociation energy"
     ],
-    "correct": "Activation energy"
+    "correct": "Activation energy", "subcategory": "Chemistry"
   },
   {
     "question": "Which organ is responsible for filtering blood?",
@@ -547,7 +547,7 @@
       "Spleen",
       "Pancreas"
     ],
-    "correct": "Kidney"
+    "correct": "Kidney", "subcategory": "Biology & Medicine"
   },
   {
     "question": "What does a catalyst do in a chemical reaction?",
@@ -557,7 +557,7 @@
       "Adds itself to the products",
       "Increases the activation energy"
     ],
-    "correct": "Lowers the activation energy"
+    "correct": "Lowers the activation energy", "subcategory": "Chemistry"
   },
   {
     "question": "Which element is liquid at room temperature besides mercury?",
@@ -567,7 +567,7 @@
       "Gallium",
       "Francium"
     ],
-    "correct": "Bromine"
+    "correct": "Bromine", "subcategory": "Chemistry"
   },
   {
     "question": "What protein carries oxygen in red blood cells?",
@@ -577,7 +577,7 @@
       "Albumin",
       "Fibrinogen"
     ],
-    "correct": "Hemoglobin"
+    "correct": "Hemoglobin", "subcategory": "Biology & Medicine"
   },
   {
     "question": "Who proposed the quantum model of the atom with discrete energy levels?",
@@ -587,7 +587,7 @@
       "Werner Heisenberg",
       "Max Planck"
     ],
-    "correct": "Niels Bohr"
+    "correct": "Niels Bohr", "subcategory": "Physics"
   },
   {
     "question": "What is the phenomenon where light bends around an obstacle?",
@@ -597,7 +597,7 @@
       "Reflection",
       "Dispersion"
     ],
-    "correct": "Diffraction"
+    "correct": "Diffraction", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "Which acid is found in the stomach?",
@@ -607,7 +607,7 @@
       "Nitric acid",
       "Acetic acid"
     ],
-    "correct": "Hydrochloric acid"
+    "correct": "Hydrochloric acid", "subcategory": "Chemistry"
   },
   {
     "question": "Who developed the germ theory of disease?",
@@ -617,7 +617,7 @@
       "Joseph Lister",
       "Ignaz Semmelweis"
     ],
-    "correct": "Louis Pasteur"
+    "correct": "Louis Pasteur", "subcategory": "Biology & Medicine"
   },
   {
     "question": "What is the term for the number of protons in an atom nucleus?",
@@ -627,7 +627,7 @@
       "Atomic mass",
       "Isotope number"
     ],
-    "correct": "Atomic number"
+    "correct": "Atomic number", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "What is the half-life of Carbon-14?",
@@ -637,7 +637,7 @@
       "14,000 years",
       "3,200 years"
     ],
-    "correct": "5,730 years"
+    "correct": "5,730 years", "subcategory": "Physics"
   },
   {
     "question": "Which scientist first used a microscope to observe microorganisms?",
@@ -647,7 +647,7 @@
       "Louis Pasteur",
       "Robert Koch"
     ],
-    "correct": "Antonie van Leeuwenhoek"
+    "correct": "Antonie van Leeuwenhoek", "subcategory": "Biology & Medicine"
   },
   {
     "question": "What is the SI unit of force?",
@@ -657,7 +657,7 @@
       "Pascal",
       "Watt"
     ],
-    "correct": "Newton"
+    "correct": "Newton", "subcategory": "Physics"
   },
   {
     "question": "What is the chemical symbol for silver?",
@@ -667,7 +667,7 @@
       "Au",
       "Sr"
     ],
-    "correct": "Ag"
+    "correct": "Ag", "subcategory": "Chemistry"
   },
   {
     "question": "What law relates current, voltage, and resistance in a circuit?",
@@ -677,7 +677,7 @@
       "Ampere's Law",
       "Kirchhoff's Law"
     ],
-    "correct": "Ohm's Law"
+    "correct": "Ohm's Law", "subcategory": "Physics"
   },
   {
     "question": "What is the approximate temperature of the Sun's surface?",
@@ -687,7 +687,7 @@
       "15,000 degrees C",
       "500 degrees C"
     ],
-    "correct": "5,500 degrees C"
+    "correct": "5,500 degrees C", "subcategory": "Scientists & Discoveries"
   },
   {
     "question": "Which vitamin is produced when skin is exposed to sunlight?",
@@ -697,7 +697,7 @@
       "Vitamin C",
       "Vitamin B12"
     ],
-    "correct": "Vitamin D"
+    "correct": "Vitamin D", "subcategory": "Biology & Medicine"
   },
   {
     "question": "Who first described black holes mathematically?",
@@ -707,7 +707,7 @@
       "Stephen Hawking",
       "John Wheeler"
     ],
-    "correct": "Karl Schwarzschild"
+    "correct": "Karl Schwarzschild", "subcategory": "Physics"
   },
   {
     "question": "Which part of the brain controls balance and coordination?",
@@ -717,7 +717,7 @@
       "Medulla oblongata",
       "Hypothalamus"
     ],
-    "correct": "Cerebellum"
+    "correct": "Cerebellum", "subcategory": "Biology & Medicine"
   },
   {
     "question": "What is the chemical formula for ammonia?",
@@ -727,7 +727,7 @@
       "NO2",
       "N2O"
     ],
-    "correct": "NH3"
+    "correct": "NH3", "subcategory": "Chemistry"
   },
   {
     "question": "What scale is used to measure earthquake magnitude?",
@@ -737,6 +737,6 @@
       "Mohs scale",
       "Fujita scale"
     ],
-    "correct": "Richter scale"
+    "correct": "Richter scale", "subcategory": "Scientists & Discoveries"
   }
 ]

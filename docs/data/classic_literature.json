@@ -7,7 +7,7 @@
       "George Eliot",
       "Emily Brontë"
     ],
-    "correct": "Jane Austen"
+    "correct": "Jane Austen", "subcategory": "Authors & Works"
   },
   {
     "question": "Which novel opens with 'Call me Ishmael'?",
@@ -17,7 +17,7 @@
       "The Old Man and the Sea",
       "Lord Jim"
     ],
-    "correct": "Moby-Dick"
+    "correct": "Moby-Dick", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'Don Quixote'?",
@@ -27,7 +27,7 @@
       "Francisco de Quevedo",
       "Calderón de la Barca"
     ],
-    "correct": "Miguel de Cervantes"
+    "correct": "Miguel de Cervantes", "subcategory": "Authors & Works"
   },
   {
     "question": "In which year was 'Hamlet' believed to have been written?",
@@ -37,7 +37,7 @@
       "1620–1621",
       "1590–1591"
     ],
-    "correct": "1600–1601"
+    "correct": "1600–1601", "subcategory": "Shakespeare"
   },
   {
     "question": "Who wrote 'The Divine Comedy'?",
@@ -47,7 +47,7 @@
       "Giovanni Boccaccio",
       "Virgil"
     ],
-    "correct": "Dante Alighieri"
+    "correct": "Dante Alighieri", "subcategory": "Authors & Works"
   },
   {
     "question": "Which author created the character Sherlock Holmes?",
@@ -57,7 +57,7 @@
       "Edgar Allan Poe",
       "G.K. Chesterton"
     ],
-    "correct": "Arthur Conan Doyle"
+    "correct": "Arthur Conan Doyle", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'War and Peace'?",
@@ -67,7 +67,7 @@
       "Ivan Turgenev",
       "Anton Chekhov"
     ],
-    "correct": "Leo Tolstoy"
+    "correct": "Leo Tolstoy", "subcategory": "Authors & Works"
   },
   {
     "question": "Which novel features the character Atticus Finch?",
@@ -77,7 +77,7 @@
       "The Grapes of Wrath",
       "East of Eden"
     ],
-    "correct": "To Kill a Mockingbird"
+    "correct": "To Kill a Mockingbird", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'Ulysses' (1922)?",
@@ -87,7 +87,7 @@
       "T.S. Eliot",
       "D.H. Lawrence"
     ],
-    "correct": "James Joyce"
+    "correct": "James Joyce", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'Crime and Punishment'?",
@@ -97,7 +97,7 @@
       "Nikolai Gogol",
       "Alexander Pushkin"
     ],
-    "correct": "Fyodor Dostoevsky"
+    "correct": "Fyodor Dostoevsky", "subcategory": "Authors & Works"
   },
   {
     "question": "Which literary movement did William Wordsworth and Samuel Taylor Coleridge belong to?",
@@ -107,7 +107,7 @@
       "Modernism",
       "Naturalism"
     ],
-    "correct": "Romanticism"
+    "correct": "Romanticism", "subcategory": "Literary Movements & Periods"
   },
   {
     "question": "Who wrote 'The Canterbury Tales'?",
@@ -117,7 +117,7 @@
       "Edmund Spenser",
       "Sir Philip Sidney"
     ],
-    "correct": "Geoffrey Chaucer"
+    "correct": "Geoffrey Chaucer", "subcategory": "Authors & Works"
   },
   {
     "question": "What is the first name of Mr. Darcy in 'Pride and Prejudice'?",
@@ -127,7 +127,7 @@
       "George",
       "William"
     ],
-    "correct": "Fitzwilliam"
+    "correct": "Fitzwilliam", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'Madame Bovary'?",
@@ -137,7 +137,7 @@
       "Victor Hugo",
       "Honoré de Balzac"
     ],
-    "correct": "Gustave Flaubert"
+    "correct": "Gustave Flaubert", "subcategory": "Authors & Works"
   },
   {
     "question": "Which Shakespeare play features the character Iago?",
@@ -147,7 +147,7 @@
       "King Lear",
       "Hamlet"
     ],
-    "correct": "Othello"
+    "correct": "Othello", "subcategory": "Shakespeare"
   },
   {
     "question": "Who wrote 'One Hundred Years of Solitude'?",
@@ -157,7 +157,7 @@
       "Jorge Luis Borges",
       "Pablo Neruda"
     ],
-    "correct": "Gabriel García Márquez"
+    "correct": "Gabriel García Márquez", "subcategory": "Authors & Works"
   },
   {
     "question": "Which novel by Charles Dickens features the character Ebenezer Scrooge?",
@@ -167,7 +167,7 @@
       "Oliver Twist",
       "David Copperfield"
     ],
-    "correct": "A Christmas Carol"
+    "correct": "A Christmas Carol", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'Middlemarch'?",
@@ -177,7 +177,7 @@
       "Elizabeth Gaskell",
       "Anthony Trollope"
     ],
-    "correct": "George Eliot"
+    "correct": "George Eliot", "subcategory": "Authors & Works"
   },
   {
     "question": "In which country was Franz Kafka born?",
@@ -187,7 +187,7 @@
       "Germany",
       "Hungary"
     ],
-    "correct": "Bohemia (now Czech Republic)"
+    "correct": "Bohemia (now Czech Republic)", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'The Brothers Karamazov'?",
@@ -197,7 +197,7 @@
       "Ivan Turgenev",
       "Maxim Gorky"
     ],
-    "correct": "Fyodor Dostoevsky"
+    "correct": "Fyodor Dostoevsky", "subcategory": "Authors & Works"
   },
   {
     "question": "Which poet wrote 'The Waste Land'?",
@@ -207,7 +207,7 @@
       "W.B. Yeats",
       "Wallace Stevens"
     ],
-    "correct": "T.S. Eliot"
+    "correct": "T.S. Eliot", "subcategory": "Poetry & Poets"
   },
   {
     "question": "Who wrote 'Anna Karenina'?",
@@ -217,7 +217,7 @@
       "Ivan Turgenev",
       "Boris Pasternak"
     ],
-    "correct": "Leo Tolstoy"
+    "correct": "Leo Tolstoy", "subcategory": "Authors & Works"
   },
   {
     "question": "Which of these novels was written by Herman Melville?",
@@ -227,7 +227,7 @@
       "The Last of the Mohicans",
       "Walden"
     ],
-    "correct": "Moby-Dick"
+    "correct": "Moby-Dick", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'Beloved'?",
@@ -237,7 +237,7 @@
       "Maya Angelou",
       "Zora Neale Hurston"
     ],
-    "correct": "Toni Morrison"
+    "correct": "Toni Morrison", "subcategory": "Authors & Works"
   },
   {
     "question": "Which literary period is associated with John Dryden and Alexander Pope?",
@@ -247,7 +247,7 @@
       "Baroque",
       "Enlightenment Realism"
     ],
-    "correct": "Neoclassicism"
+    "correct": "Neoclassicism", "subcategory": "Literary Movements & Periods"
   },
   {
     "question": "Who wrote 'The Picture of Dorian Gray'?",
@@ -257,7 +257,7 @@
       "Bram Stoker",
       "Henry James"
     ],
-    "correct": "Oscar Wilde"
+    "correct": "Oscar Wilde", "subcategory": "Authors & Works"
   },
   {
     "question": "Which Shakespeare play contains the line 'To be, or not to be'?",
@@ -267,7 +267,7 @@
       "Othello",
       "King Lear"
     ],
-    "correct": "Hamlet"
+    "correct": "Hamlet", "subcategory": "Shakespeare"
   },
   {
     "question": "Who wrote 'Frankenstein'?",
@@ -277,7 +277,7 @@
       "Lord Byron",
       "Ann Radcliffe"
     ],
-    "correct": "Mary Shelley"
+    "correct": "Mary Shelley", "subcategory": "Authors & Works"
   },
   {
     "question": "Which novel by F. Scott Fitzgerald is set in the Jazz Age?",
@@ -287,7 +287,7 @@
       "This Side of Paradise",
       "The Beautiful and Damned"
     ],
-    "correct": "The Great Gatsby"
+    "correct": "The Great Gatsby", "subcategory": "Literary Movements & Periods"
   },
   {
     "question": "Who wrote 'Wuthering Heights'?",
@@ -297,7 +297,7 @@
       "Anne Brontë",
       "George Eliot"
     ],
-    "correct": "Emily Brontë"
+    "correct": "Emily Brontë", "subcategory": "Authors & Works"
   },
   {
     "question": "Which author wrote under the pen name 'George Orwell'?",
@@ -307,7 +307,7 @@
       "Aldous Leonard Huxley",
       "Jerome Klapka Jerome"
     ],
-    "correct": "Eric Arthur Blair"
+    "correct": "Eric Arthur Blair", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'The Iliad' and 'The Odyssey'?",
@@ -317,7 +317,7 @@
       "Sophocles",
       "Hesiod"
     ],
-    "correct": "Homer"
+    "correct": "Homer", "subcategory": "Poetry & Poets"
   },
   {
     "question": "Which novel by Ernest Hemingway is set during the Spanish Civil War?",
@@ -327,7 +327,7 @@
       "The Sun Also Rises",
       "Fiesta"
     ],
-    "correct": "For Whom the Bell Tolls"
+    "correct": "For Whom the Bell Tolls", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'The Stranger' (L'Étranger)?",
@@ -337,7 +337,7 @@
       "Simone de Beauvoir",
       "André Gide"
     ],
-    "correct": "Albert Camus"
+    "correct": "Albert Camus", "subcategory": "Authors & Works"
   },
   {
     "question": "Which literary movement is associated with stream-of-consciousness writing?",
@@ -347,7 +347,7 @@
       "Naturalism",
       "Romanticism"
     ],
-    "correct": "Modernism"
+    "correct": "Modernism", "subcategory": "Literary Movements & Periods"
   },
   {
     "question": "Who wrote 'Gulliver's Travels'?",
@@ -357,7 +357,7 @@
       "Henry Fielding",
       "Samuel Richardson"
     ],
-    "correct": "Jonathan Swift"
+    "correct": "Jonathan Swift", "subcategory": "Authors & Works"
   },
   {
     "question": "Which Dickens novel features the character Miss Havisham?",
@@ -367,7 +367,7 @@
       "Dombey and Son",
       "Little Dorrit"
     ],
-    "correct": "Great Expectations"
+    "correct": "Great Expectations", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'The Aeneid'?",
@@ -377,7 +377,7 @@
       "Ovid",
       "Horace"
     ],
-    "correct": "Virgil"
+    "correct": "Virgil", "subcategory": "Poetry & Poets"
   },
   {
     "question": "Which of these is a novel by Virginia Woolf?",
@@ -387,7 +387,7 @@
       "Tess of the d'Urbervilles",
       "The Way of All Flesh"
     ],
-    "correct": "Mrs Dalloway"
+    "correct": "Mrs Dalloway", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'In Search of Lost Time' (À la recherche du temps perdu)?",
@@ -397,7 +397,7 @@
       "Émile Zola",
       "André Gide"
     ],
-    "correct": "Marcel Proust"
+    "correct": "Marcel Proust", "subcategory": "Authors & Works"
   },
   {
     "question": "Which poet wrote 'Ode to a Nightingale'?",
@@ -407,7 +407,7 @@
       "Lord Byron",
       "William Blake"
     ],
-    "correct": "John Keats"
+    "correct": "John Keats", "subcategory": "Poetry & Poets"
   },
   {
     "question": "Who wrote 'Jane Eyre'?",
@@ -417,7 +417,7 @@
       "George Eliot",
       "Elizabeth Gaskell"
     ],
-    "correct": "Charlotte Brontë"
+    "correct": "Charlotte Brontë", "subcategory": "Authors & Works"
   },
   {
     "question": "Which ancient Greek playwright wrote 'Oedipus Rex'?",
@@ -427,7 +427,7 @@
       "Euripides",
       "Aristophanes"
     ],
-    "correct": "Sophocles"
+    "correct": "Sophocles", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote '1984'?",
@@ -437,7 +437,7 @@
       "H.G. Wells",
       "Ray Bradbury"
     ],
-    "correct": "George Orwell"
+    "correct": "George Orwell", "subcategory": "Authors & Works"
   },
   {
     "question": "Which author wrote 'The Old Man and the Sea'?",
@@ -447,7 +447,7 @@
       "William Faulkner",
       "F. Scott Fitzgerald"
     ],
-    "correct": "Ernest Hemingway"
+    "correct": "Ernest Hemingway", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'Paradise Lost'?",
@@ -457,7 +457,7 @@
       "Edmund Spenser",
       "Francis Bacon"
     ],
-    "correct": "John Milton"
+    "correct": "John Milton", "subcategory": "Poetry & Poets"
   },
   {
     "question": "Which novel by Tolstoy is considered one of the first great novels?",
@@ -467,7 +467,7 @@
       "Resurrection",
       "The Death of Ivan Ilyich"
     ],
-    "correct": "War and Peace"
+    "correct": "War and Peace", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'The Metamorphosis'?",
@@ -477,7 +477,7 @@
       "Hermann Hesse",
       "Stefan Zweig"
     ],
-    "correct": "Franz Kafka"
+    "correct": "Franz Kafka", "subcategory": "Authors & Works"
   },
   {
     "question": "Which American author wrote 'Leaves of Grass'?",
@@ -487,7 +487,7 @@
       "Henry David Thoreau",
       "Emily Dickinson"
     ],
-    "correct": "Walt Whitman"
+    "correct": "Walt Whitman", "subcategory": "Poetry & Poets"
   },
   {
     "question": "Who wrote 'Sense and Sensibility'?",
@@ -497,7 +497,7 @@
       "Elizabeth Gaskell",
       "Frances Burney"
     ],
-    "correct": "Jane Austen"
+    "correct": "Jane Austen", "subcategory": "Authors & Works"
   },
   {
     "question": "Which Shakespeare play features witches and a Scottish king?",
@@ -507,7 +507,7 @@
       "King Lear",
       "Othello"
     ],
-    "correct": "Macbeth"
+    "correct": "Macbeth", "subcategory": "Shakespeare"
   },
   {
     "question": "Who wrote 'The Count of Monte Cristo'?",
@@ -517,7 +517,7 @@
       "Honoré de Balzac",
       "Stendhal"
     ],
-    "correct": "Alexandre Dumas"
+    "correct": "Alexandre Dumas", "subcategory": "Authors & Works"
   },
   {
     "question": "Which novel by Dostoevsky features the character Prince Myshkin?",
@@ -527,7 +527,7 @@
       "The Possessed",
       "Crime and Punishment"
     ],
-    "correct": "The Idiot"
+    "correct": "The Idiot", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'Invisible Man' (1952)?",
@@ -537,7 +537,7 @@
       "James Baldwin",
       "Langston Hughes"
     ],
-    "correct": "Ralph Ellison"
+    "correct": "Ralph Ellison", "subcategory": "Authors & Works"
   },
   {
     "question": "Which literary movement did Émile Zola champion?",
@@ -547,7 +547,7 @@
       "Realism",
       "Surrealism"
     ],
-    "correct": "Naturalism"
+    "correct": "Naturalism", "subcategory": "Literary Movements & Periods"
   },
   {
     "question": "Who wrote 'Catch-22'?",
@@ -557,7 +557,7 @@
       "Ken Kesey",
       "Norman Mailer"
     ],
-    "correct": "Joseph Heller"
+    "correct": "Joseph Heller", "subcategory": "Authors & Works"
   },
   {
     "question": "Which poet wrote 'The Road Not Taken'?",
@@ -567,7 +567,7 @@
       "Edwin Arlington Robinson",
       "Edgar Lee Masters"
     ],
-    "correct": "Robert Frost"
+    "correct": "Robert Frost", "subcategory": "Poetry & Poets"
   },
   {
     "question": "Who wrote 'To the Lighthouse'?",
@@ -577,7 +577,7 @@
       "Dorothy Richardson",
       "May Sinclair"
     ],
-    "correct": "Virginia Woolf"
+    "correct": "Virginia Woolf", "subcategory": "Authors & Works"
   },
   {
     "question": "Which novel features the character Jay Gatsby?",
@@ -587,7 +587,7 @@
       "This Side of Paradise",
       "The Sun Also Rises"
     ],
-    "correct": "The Great Gatsby"
+    "correct": "The Great Gatsby", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'Les Misérables'?",
@@ -597,7 +597,7 @@
       "Gustave Flaubert",
       "Honoré de Balzac"
     ],
-    "correct": "Victor Hugo"
+    "correct": "Victor Hugo", "subcategory": "Authors & Works"
   },
   {
     "question": "Which author created the character Hercule Poirot?",
@@ -607,7 +607,7 @@
       "Ngaio Marsh",
       "Margery Allingham"
     ],
-    "correct": "Agatha Christie"
+    "correct": "Agatha Christie", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'Brave New World'?",
@@ -617,7 +617,7 @@
       "H.G. Wells",
       "Evelyn Waugh"
     ],
-    "correct": "Aldous Huxley"
+    "correct": "Aldous Huxley", "subcategory": "Authors & Works"
   },
   {
     "question": "Which poet wrote 'The Raven'?",
@@ -627,7 +627,7 @@
       "Henry Wadsworth Longfellow",
       "Oliver Wendell Holmes"
     ],
-    "correct": "Edgar Allan Poe"
+    "correct": "Edgar Allan Poe", "subcategory": "Poetry & Poets"
   },
   {
     "question": "Who wrote 'The Sun Also Rises'?",
@@ -637,7 +637,7 @@
       "John Dos Passos",
       "Sinclair Lewis"
     ],
-    "correct": "Ernest Hemingway"
+    "correct": "Ernest Hemingway", "subcategory": "Authors & Works"
   },
   {
     "question": "Which novel by James Joyce is set over a single day in Dublin?",
@@ -647,7 +647,7 @@
       "A Portrait of the Artist as a Young Man",
       "Finnegans Wake"
     ],
-    "correct": "Ulysses"
+    "correct": "Ulysses", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'The Trial' (Der Proceß)?",
@@ -657,7 +657,7 @@
       "Hermann Hesse",
       "Robert Musil"
     ],
-    "correct": "Franz Kafka"
+    "correct": "Franz Kafka", "subcategory": "Authors & Works"
   },
   {
     "question": "Which Greek poet wrote the 'Theogony'?",
@@ -667,7 +667,7 @@
       "Pindar",
       "Sappho"
     ],
-    "correct": "Hesiod"
+    "correct": "Hesiod", "subcategory": "Poetry & Poets"
   },
   {
     "question": "Who wrote 'Heart of Darkness'?",
@@ -677,7 +677,7 @@
       "H. Rider Haggard",
       "Somerset Maugham"
     ],
-    "correct": "Joseph Conrad"
+    "correct": "Joseph Conrad", "subcategory": "Authors & Works"
   },
   {
     "question": "Which of these is NOT a play by Anton Chekhov?",
@@ -687,7 +687,7 @@
       "Three Sisters",
       "Uncle Vanya"
     ],
-    "correct": "The Wild Duck"
+    "correct": "The Wild Duck", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'The Grapes of Wrath'?",
@@ -697,7 +697,7 @@
       "Theodore Dreiser",
       "Sinclair Lewis"
     ],
-    "correct": "John Steinbeck"
+    "correct": "John Steinbeck", "subcategory": "Authors & Works"
   },
   {
     "question": "Which author wrote 'Tess of the d'Urbervilles'?",
@@ -707,7 +707,7 @@
       "George Gissing",
       "Anthony Trollope"
     ],
-    "correct": "Thomas Hardy"
+    "correct": "Thomas Hardy", "subcategory": "Authors & Works"
   },
   {
     "question": "Who wrote 'Lolita'?",
@@ -717,7 +717,7 @@
       "John Updike",
       "Philip Roth"
     ],
-    "correct": "Vladimir Nabokov"
+    "correct": "Vladimir Nabokov", "subcategory": "Authors & Works"
   },
   {
     "question": "Which Shakespeare comedy features the line 'All the world's a stage'?",
@@ -727,7 +727,7 @@
       "Twelfth Night",
       "Much Ado About Nothing"
     ],
-    "correct": "As You Like It"
+    "correct": "As You Like It", "subcategory": "Shakespeare"
   },
   {
     "question": "Who wrote 'The Sound and the Fury'?",
@@ -737,7 +737,7 @@
       "Ernest Hemingway",
       "Sherwood Anderson"
     ],
-    "correct": "William Faulkner"
+    "correct": "William Faulkner", "subcategory": "Authors & Works"
   },
   {
     "question": "Which novel by Gabriel García Márquez uses magical realism most famously?",
@@ -747,6 +747,6 @@
       "Chronicle of a Death Foretold",
       "The Autumn of the Patriarch"
     ],
-    "correct": "One Hundred Years of Solitude"
+    "correct": "One Hundred Years of Solitude", "subcategory": "Literary Movements & Periods"
   }
 ]

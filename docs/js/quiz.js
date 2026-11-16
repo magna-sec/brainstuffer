@@ -9,9 +9,10 @@ async function startQuiz() {
     if (!filename || filename === 'creator:new') return;
 
     const amount = parseInt(document.getElementById('amount').value) || 0;
-    const questions = await loadQuizData(filename);
-    if (!questions || !questions.length) return;
+    const all = await loadQuizData(filename);
+    if (!all || !all.length) return;
 
+    const questions = bsApplySubcatFilter(all);
     const n = (amount && amount < questions.length) ? amount : questions.length;
     const sampled = sample(questions, n);
 
@@ -381,9 +382,10 @@ async function restartQuiz() {
     if (!store) { showPage('home'); return; }
 
     const filename = store.filename;
-    const questions = await loadQuizData(filename);
-    if (!questions || !questions.length) { showPage('home'); return; }
+    const all = await loadQuizData(filename);
+    if (!all || !all.length) { showPage('home'); return; }
 
+    const questions = bsApplySubcatFilter(all);
     const quiz = shuffle(questions).map(q => {
         const answers = q.answers.slice();
         const correct = answers[0];

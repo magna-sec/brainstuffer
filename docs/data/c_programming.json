@@ -9,7 +9,7 @@
     ],
     "correct": "NULL",
     "explanation": "malloc returns NULL when it cannot allocate the requested memory (insufficient heap space or size 0 on some implementations). Always check the return value before dereferencing — writing through a NULL pointer is undefined behaviour and typically crashes.",
-    "diagram": "  malloc(n) - heap allocation attempt\n  +---------------------------+\n  |         HEAP              |\n  |  [used][used][used]...    |\n  |  (insufficient space)     |\n  +---------------------------+\n         |\n         v\n    malloc returns\n   +----------+\n   |   NULL   |  <-- always check this!\n   +----------+\n  if (p == NULL) { /* handle error */ }"
+    "diagram": "  malloc(n) - heap allocation attempt\n  +---------------------------+\n  |         HEAP              |\n  |  [used][used][used]...    |\n  |  (insufficient space)     |\n  +---------------------------+\n         |\n         v\n    malloc returns\n   +----------+\n   |   NULL   |  <-- always check this!\n   +----------+\n  if (p == NULL) { /* handle error */ }", "subcategory": "Memory & Pointers"
   },
   {
     "question": "What is a dangling pointer?",
@@ -21,7 +21,7 @@
     ],
     "correct": "Both a pointer to freed memory AND a pointer to a stack variable after it goes out of scope",
     "explanation": "Any pointer that refers to memory that is no longer valid is dangling. This includes pointers to heap memory after free(), and pointers to local variables whose stack frame has been destroyed on return.",
-    "diagram": "  After free(p):\n\n  p ----> +----------+\n          | (freed)  |  <-- memory returned to allocator\n          +----------+     may be reused at any time\n\n  p still holds the old address but the memory is invalid.\n\n  Also dangling after function returns:\n  +------------------+\n  |  stack frame     |\n  |  int local = 5   | <-- destroyed on return\n  +------------------+\n  ptr_to_local --> (invalid address)"
+    "diagram": "  After free(p):\n\n  p ----> +----------+\n          | (freed)  |  <-- memory returned to allocator\n          +----------+     may be reused at any time\n\n  p still holds the old address but the memory is invalid.\n\n  Also dangling after function returns:\n  +------------------+\n  |  stack frame     |\n  |  int local = 5   | <-- destroyed on return\n  +------------------+\n  ptr_to_local --> (invalid address)", "subcategory": "Memory & Pointers"
   },
   {
     "question": "What is the key difference between malloc and calloc?",
@@ -32,7 +32,7 @@
       "They are identical — calloc is just an alias"
     ],
     "correct": "calloc initialises allocated memory to zero; malloc does not",
-    "explanation": "malloc(n) allocates n bytes with indeterminate content. calloc(count, size) allocates count*size bytes and zeroes them. The zeroing has a small overhead but prevents reading uninitialised data, which is undefined behaviour in C."
+    "explanation": "malloc(n) allocates n bytes with indeterminate content. calloc(count, size) allocates count*size bytes and zeroes them. The zeroing has a small overhead but prevents reading uninitialised data, which is undefined behaviour in C.", "subcategory": "Memory & Pointers"
   },
   {
     "question": "What does the 'static' keyword do to a local variable?",
@@ -43,7 +43,7 @@
       "Allocates the variable on the heap"
     ],
     "correct": "Makes the variable persist across function calls (stored in BSS/data segment, not the stack)",
-    "explanation": "Normally a local variable lives on the stack and is destroyed when the function returns. 'static' moves it to the data/BSS segment so it has static storage duration — it is initialised once and retains its value between calls."
+    "explanation": "Normally a local variable lives on the stack and is destroyed when the function returns. 'static' moves it to the data/BSS segment so it has static storage duration — it is initialised once and retains its value between calls.", "subcategory": "Language Features"
   },
   {
     "question": "What does sizeof(char) always evaluate to?",
@@ -54,7 +54,7 @@
       "4"
     ],
     "correct": "1",
-    "explanation": "The C standard defines sizeof(char) == 1 by definition — it is the unit of measurement for sizeof. This does NOT mean a char is one byte wide in the real-world sense; it means sizeof returns values in multiples of sizeof(char)."
+    "explanation": "The C standard defines sizeof(char) == 1 by definition — it is the unit of measurement for sizeof. This does NOT mean a char is one byte wide in the real-world sense; it means sizeof returns values in multiples of sizeof(char).", "subcategory": "Language Features"
   },
   {
     "question": "What typically causes a segmentation fault?",
@@ -65,7 +65,7 @@
       "Forgetting to return from main"
     ],
     "correct": "Accessing memory the process is not permitted to access (null/dangling/out-of-bounds pointer)",
-    "explanation": "A segfault is a hardware protection fault raised when a process touches a virtual address page that is unmapped or has insufficient permissions. Typical triggers: dereferencing NULL, accessing a freed buffer, or indexing an array far out of bounds."
+    "explanation": "A segfault is a hardware protection fault raised when a process touches a virtual address page that is unmapped or has insufficient permissions. Typical triggers: dereferencing NULL, accessing a freed buffer, or indexing an array far out of bounds.", "subcategory": "Memory & Pointers"
   },
   {
     "question": "What does 'volatile' tell the compiler about a variable?",
@@ -76,7 +76,7 @@
       "The variable is thread-safe"
     ],
     "correct": "Do not cache or optimise away reads/writes — the value may change outside the compiler's knowledge",
-    "explanation": "Without volatile, the compiler may optimise away repeated reads by caching the value in a register. volatile forces every access to go to memory. It's used for memory-mapped I/O registers, signal handlers, and setjmp buffers — but does NOT provide atomicity or thread safety."
+    "explanation": "Without volatile, the compiler may optimise away repeated reads by caching the value in a register. volatile forces every access to go to memory. It's used for memory-mapped I/O registers, signal handlers, and setjmp buffers — but does NOT provide atomicity or thread safety.", "subcategory": "Language Features"
   },
   {
     "question": "What is undefined behaviour in C?",
@@ -87,7 +87,7 @@
       "Code that is implementation-defined but documented"
     ],
     "correct": "Code where the C standard places no requirements on the result — the compiler can do anything",
-    "explanation": "UB is exploited by modern optimisers: if a code path contains UB, the compiler can assume it is unreachable and delete entire branches. Examples: signed integer overflow, null pointer dereference, out-of-bounds access, reading an uninitialised variable."
+    "explanation": "UB is exploited by modern optimisers: if a code path contains UB, the compiler can assume it is unreachable and delete entire branches. Examples: signed integer overflow, null pointer dereference, out-of-bounds access, reading an uninitialised variable.", "subcategory": "Language Features"
   },
   {
     "question": "What does 'extern' do in a variable declaration?",
@@ -98,7 +98,7 @@
       "Forces the variable into a specific memory segment"
     ],
     "correct": "Declares a variable defined in another translation unit without allocating storage here",
-    "explanation": "extern tells the compiler 'this symbol exists somewhere; the linker will resolve it'. No storage is allocated at the extern declaration site. It's how you share a global variable defined in one .c file across multiple files."
+    "explanation": "extern tells the compiler 'this symbol exists somewhere; the linker will resolve it'. No storage is allocated at the extern declaration site. It's how you share a global variable defined in one .c file across multiple files.", "subcategory": "Language Features"
   },
   {
     "question": "What does NULL evaluate to in C?",
@@ -109,7 +109,7 @@
       "The address 0xFFFFFFFF"
     ],
     "correct": "0 (a null pointer constant that compares equal to any null pointer)",
-    "explanation": "NULL is typically defined as ((void*)0) or simply 0. Any null pointer compares equal to NULL regardless of the pointer type. On nearly all platforms null pointers map to address 0, but the standard only requires they compare equal — not that they ARE address 0."
+    "explanation": "NULL is typically defined as ((void*)0) or simply 0. Any null pointer compares equal to NULL regardless of the pointer type. On nearly all platforms null pointers map to address 0, but the standard only requires they compare equal — not that they ARE address 0.", "subcategory": "Memory & Pointers"
   },
   {
     "question": "What is the maximum value of an unsigned char?",
@@ -120,7 +120,7 @@
       "65535"
     ],
     "correct": "255",
-    "explanation": "An unsigned char is exactly 8 bits on virtually all platforms (CHAR_BIT == 8). 8 bits unsigned = 0 to 2^8-1 = 0 to 255. The signed char range is -128 to 127."
+    "explanation": "An unsigned char is exactly 8 bits on virtually all platforms (CHAR_BIT == 8). 8 bits unsigned = 0 to 2^8-1 = 0 to 255. The signed char range is -128 to 127.", "subcategory": "Language Features"
   },
   {
     "question": "What does the '%p' format specifier print in printf?",
@@ -131,7 +131,7 @@
       "The pointer in decimal"
     ],
     "correct": "A pointer value (address) in hexadecimal, implementation-defined format",
-    "explanation": "Always cast the pointer to (void*) when using %p. The exact output format (0x prefix, padding, case) is implementation-defined but is almost universally hex. Passing a non-pointer type to %p is undefined behaviour."
+    "explanation": "Always cast the pointer to (void*) when using %p. The exact output format (0x prefix, padding, case) is implementation-defined but is almost universally hex. Passing a non-pointer type to %p is undefined behaviour.", "subcategory": "Language Features"
   },
   {
     "question": "What is a union in C?",
@@ -143,7 +143,7 @@
     ],
     "correct": "A type where all members share the same memory location — only one holds a valid value at a time",
     "explanation": "A union's size equals its largest member. Writing to one member then reading another is type-punning. It's useful for serialisation, implementing variant types, or viewing the same bytes as different types (though formally still UB in C++ for non-trivial cases).",
-    "diagram": "  struct { int i; float f; } uses SEPARATE memory:\n  +------+------+\n  |  i   |  f   |   (size = sizeof(int) + sizeof(float))\n  +------+------+\n\n  union { int i; float f; } uses SHARED memory:\n  +------+\n  |  i   |   writing i overlaps f's bytes\n  |  f   |   (size = sizeof largest member)\n  +------+\n  Only ONE member valid at a time."
+    "diagram": "  struct { int i; float f; } uses SEPARATE memory:\n  +------+------+\n  |  i   |  f   |   (size = sizeof(int) + sizeof(float))\n  +------+------+\n\n  union { int i; float f; } uses SHARED memory:\n  +------+\n  |  i   |   writing i overlaps f's bytes\n  |  f   |   (size = sizeof largest member)\n  +------+\n  Only ONE member valid at a time.", "subcategory": "Language Features"
   },
   {
     "question": "What does fclose do?",
@@ -154,7 +154,7 @@
       "Marks the file descriptor as read-only"
     ],
     "correct": "Closes an open FILE stream, flushes buffered data, and releases the FILE structure",
-    "explanation": "fclose flushes the stream's write buffer to the OS, closes the underlying file descriptor, and frees the FILE structure back to the C runtime. Not calling fclose on a write-mode file can silently lose data that's still in the buffer."
+    "explanation": "fclose flushes the stream's write buffer to the OS, closes the underlying file descriptor, and frees the FILE structure back to the C runtime. Not calling fclose on a write-mode file can silently lose data that's still in the buffer.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What operator yields the address of a variable?",
@@ -165,7 +165,7 @@
       "@ (not a C operator)"
     ],
     "correct": "& (address-of operator)",
-    "explanation": "int x = 5; int *p = &x; — p now holds the memory address of x. The & operator cannot be applied to bit-fields, register variables, or expressions that are not lvalues. The & in a declaration (int &r = x) is a C++ reference, not C."
+    "explanation": "int x = 5; int *p = &x; — p now holds the memory address of x. The & operator cannot be applied to bit-fields, register variables, or expressions that are not lvalues. The & in a declaration (int &r = x) is a C++ reference, not C.", "subcategory": "Memory & Pointers"
   },
   {
     "question": "What is the purpose of typedef in C?",
@@ -176,7 +176,7 @@
       "Makes a type definition available across translation units without headers"
     ],
     "correct": "Creates an alias for an existing type to improve readability and portability",
-    "explanation": "typedef does not create a new type — it creates an alias. typedef unsigned long long uint64; means uint64 and unsigned long long are interchangeable. It's heavily used in system headers (DWORD, size_t, etc.) to hide platform-specific underlying types."
+    "explanation": "typedef does not create a new type — it creates an alias. typedef unsigned long long uint64; means uint64 and unsigned long long are interchangeable. It's heavily used in system headers (DWORD, size_t, etc.) to hide platform-specific underlying types.", "subcategory": "Language Features"
   },
   {
     "question": "What does free() do?",
@@ -187,7 +187,7 @@
       "Terminates the allocation and invalidates the pointer variable"
     ],
     "correct": "Returns heap memory to the allocator so it can be reused; the pointer value is unchanged",
-    "explanation": "free() only releases the allocator's claim on the block — it does not zero memory, and crucially it does NOT set the pointer to NULL. After free(p), p is a dangling pointer. Best practice: set p = NULL immediately after free to prevent accidental use."
+    "explanation": "free() only releases the allocator's claim on the block — it does not zero memory, and crucially it does NOT set the pointer to NULL. After free(p), p is a dangling pointer. Best practice: set p = NULL immediately after free to prevent accidental use.", "subcategory": "Memory & Pointers"
   },
   {
     "question": "What is a void pointer (void*)?",
@@ -198,7 +198,7 @@
       "A pointer with no associated storage"
     ],
     "correct": "A generic pointer that can hold any data address but cannot be dereferenced directly without a cast",
-    "explanation": "void* is the type of malloc's return value. Any data pointer can be assigned to void* without a cast (in C, not C++), and void* can be assigned back to any pointer type. You must cast before dereferencing: ((int*)p) to get an int."
+    "explanation": "void* is the type of malloc's return value. Any data pointer can be assigned to void* without a cast (in C, not C++), and void* can be assigned back to any pointer type. You must cast before dereferencing: ((int*)p) to get an int.", "subcategory": "Memory & Pointers"
   },
   {
     "question": "What does the ternary operator ?: do?",
@@ -209,7 +209,7 @@
       "Combines two boolean conditions with short-circuit evaluation"
     ],
     "correct": "Evaluates a condition; returns the second expression if true, the third if false",
-    "explanation": "int max = (a > b) ? a : b; is equivalent to if (a > b) max = a; else max = b; The ternary is an expression (produces a value), unlike if-else. Both branches must have compatible types."
+    "explanation": "int max = (a > b) ? a : b; is equivalent to if (a > b) max = a; else max = b; The ternary is an expression (produces a value), unlike if-else. Both branches must have compatible types.", "subcategory": "Language Features"
   },
   {
     "question": "What is a function pointer in C?",
@@ -220,7 +220,7 @@
       "A macro wrapping a function call"
     ],
     "correct": "A variable holding the address of a function, callable via the pointer",
-    "explanation": "Declaration: int (*fp)(int, int); — fp is a pointer to a function taking two ints and returning int. Assign: fp = &add; Call: result = fp(3, 4); or (*fp)(3, 4). Used for callbacks, dispatch tables, and plugin architectures."
+    "explanation": "Declaration: int (*fp)(int, int); — fp is a pointer to a function taking two ints and returning int. Assign: fp = &add; Call: result = fp(3, 4); or (*fp)(3, 4). Used for callbacks, dispatch tables, and plugin architectures.", "subcategory": "Memory & Pointers"
   },
   {
     "question": "What does this code print?",
@@ -233,7 +233,7 @@
       "Undefined behaviour"
     ],
     "correct": "5",
-    "explanation": "x++ is post-increment: it evaluates to the current value of x (5) and increments x afterwards. By the time printf reads x, the argument has already been evaluated as 5, so 5 is printed. After this statement, x == 6. Use ++x (pre-increment) if you want 6 printed."
+    "explanation": "x++ is post-increment: it evaluates to the current value of x (5) and increments x afterwards. By the time printf reads x, the argument has already been evaluated as 5, so 5 is printed. After this statement, x == 6. Use ++x (pre-increment) if you want 6 printed.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is the output?",
@@ -246,7 +246,7 @@
       "0"
     ],
     "correct": "3",
-    "explanation": "Both operands are int, so C performs integer division: the fractional part is truncated toward zero. 10 / 3 = 3.333... → 3. To get 3.33, use (double)a / b or a / 3.0."
+    "explanation": "Both operands are int, so C performs integer division: the fractional part is truncated toward zero. 10 / 3 = 3.333... → 3. To get 3.33, use (double)a / b or a / 3.0.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this print?",
@@ -260,7 +260,7 @@
     ],
     "correct": "30",
     "explanation": "p points to arr[0]. Pointer arithmetic p + 2 advances by 2 * sizeof(int) bytes, landing on arr[2] (value 30). *(p + 2) dereferences that address. This is exactly equivalent to arr[2] — array subscript is just syntactic sugar for *(arr + i).",
-    "diagram": "  arr in memory:\n  +------+------+------+\n  |  10  |  20  |  30  |\n  +------+------+------+\n  arr[0] arr[1] arr[2]\n  ^\n  p = arr (points to arr[0])\n\n  p + 2 advances by 2 * sizeof(int):\n  +------+------+------+\n  |  10  |  20  |  30  |\n  +------+------+------+\n                ^\n               p+2\n  *(p + 2) --> 30"
+    "diagram": "  arr in memory:\n  +------+------+------+\n  |  10  |  20  |  30  |\n  +------+------+------+\n  arr[0] arr[1] arr[2]\n  ^\n  p = arr (points to arr[0])\n\n  p + 2 advances by 2 * sizeof(int):\n  +------+------+------+\n  |  10  |  20  |  30  |\n  +------+------+------+\n                ^\n               p+2\n  *(p + 2) --> 30", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is the problem with this code?",
@@ -274,7 +274,7 @@
     ],
     "correct": "Buffer overflow: 'Hello' requires 6 bytes but buf is only 4",
     "explanation": "strcpy copies until (and including) the null terminator '\\0'. 'Hello' = 5 chars + 1 null = 6 bytes. buf is only 4 bytes, so strcpy writes 2 bytes past the end of buf, corrupting adjacent stack memory (potentially overwriting saved EBP or the return address).",
-    "diagram": "  Stack layout before strcpy:\n  +----+----+----+----+--------+----------+\n  |buf |buf |buf |buf | other  |  saved   |\n  | [0]| [1]| [2]| [3]| data   |  ret addr|\n  +----+----+----+----+--------+----------+\n\n  strcpy(buf, \"Hello\") writes 6 bytes (H e l l o \\0):\n  +----+----+----+----+----+----+----------+\n  | H  | e  | l  | l  | o  |\\0  | CORRUPT  |\n  +----+----+----+----+----+----+----------+\n  <-- buf[4] --->  ^    ^\n                   |    |\n              overflow! overwrites adjacent memory"
+    "diagram": "  Stack layout before strcpy:\n  +----+----+----+----+--------+----------+\n  |buf |buf |buf |buf | other  |  saved   |\n  | [0]| [1]| [2]| [3]| data   |  ret addr|\n  +----+----+----+----+--------+----------+\n\n  strcpy(buf, \"Hello\") writes 6 bytes (H e l l o \\0):\n  +----+----+----+----+----+----+----------+\n  | H  | e  | l  | l  | o  |\\0  | CORRUPT  |\n  +----+----+----+----+----+----+----------+\n  <-- buf[4] --->  ^    ^\n                   |    |\n              overflow! overwrites adjacent memory", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is printed?",
@@ -287,7 +287,7 @@
       "0 1"
     ],
     "correct": "0 1 2 ",
-    "explanation": "The loop runs while i < 3. i starts at 0 and increments each iteration. Iteration values: 0, 1, 2. When i becomes 3, the condition 3 < 3 is false and the loop exits. The output includes a trailing space after each number."
+    "explanation": "The loop runs while i < 3. i starts at 0 and increments each iteration. Iteration values: 0, 1, 2. When i becomes 3, the condition 3 < 3 is false and the loop exits. The output includes a trailing space after each number.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this print?",
@@ -301,7 +301,7 @@
     ],
     "correct": "10",
     "explanation": "p holds the address of x. *p = 10 writes 10 to the memory location that p points to — which IS x. After the assignment, x and *p both refer to the same storage location containing 10. This is direct memory manipulation via pointer.",
-    "diagram": "  int x = 5;        x: [ 5 ]  (at address 0x100 e.g.)\n  int *p = &x;      p: [0x100] --> [ 5 ]\n\n  *p = 10;  (write 10 to the address p holds)\n            p: [0x100] --> [ 10 ]\n                            ^\n                            x is now 10\n\n  printf(\"%d\", x) --> 10"
+    "diagram": "  int x = 5;        x: [ 5 ]  (at address 0x100 e.g.)\n  int *p = &x;      p: [0x100] --> [ 5 ]\n\n  *p = 10;  (write 10 to the address p holds)\n            p: [0x100] --> [ 10 ]\n                            ^\n                            x is now 10\n\n  printf(\"%d\", x) --> 10", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is the output?",
@@ -315,7 +315,7 @@
     ],
     "correct": "4 3",
     "explanation": "x++ post-increment: y is assigned the current value of x (3), then x is incremented to 4. So y = 3, x = 4. printf prints 4 then 3. If it were y = ++x (pre-increment), both would be 4.",
-    "diagram": "  int x = 3;\n  int y = x++;   post-increment: y gets current x, THEN x increments\n\n  Step 1: evaluate x++ -> yields 3 (current value)\n          +---+        +---+\n      x = | 3 |    y = | 3 |  (y assigned old x)\n          +---+        +---+\n\n  Step 2: x increments after assignment\n          +---+\n      x = | 4 |\n          +---+\n\n  printf(\"%d %d\", x, y) --> 4 3"
+    "diagram": "  int x = 3;\n  int y = x++;   post-increment: y gets current x, THEN x increments\n\n  Step 1: evaluate x++ -> yields 3 (current value)\n          +---+        +---+\n      x = | 3 |    y = | 3 |  (y assigned old x)\n          +---+        +---+\n\n  Step 2: x increments after assignment\n          +---+\n      x = | 4 |\n          +---+\n\n  printf(\"%d %d\", x, y) --> 4 3", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this code print? (Spot the bug)",
@@ -328,7 +328,7 @@
       "Undefined behaviour"
     ],
     "correct": "\"true\" (assignment returns 3, which is truthy — common bug)",
-    "explanation": "x = 3 is an assignment, not a comparison. It assigns 3 to x and evaluates to 3. Since 3 is non-zero (truthy in C), the if-branch executes. The correct test is x == 3. Many compilers warn about this with -Wall. Some style guides write constants first: if (3 == x) to make accidental = a compile error."
+    "explanation": "x = 3 is an assignment, not a comparison. It assigns 3 to x and evaluates to 3. Since 3 is non-zero (truthy in C), the if-branch executes. The correct test is x == 3. Many compilers warn about this with -Wall. Some style guides write constants first: if (3 == x) to make accidental = a compile error.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this typically print on a 32-bit or 64-bit x86 platform?",
@@ -341,7 +341,7 @@
       "Platform-dependent — no guaranteed output"
     ],
     "correct": "4",
-    "explanation": "On ILP32 (most 32-bit) and LP64 (most 64-bit Linux/Windows) models, int is 4 bytes. The %zu format is correct for size_t. sizeof returns a size_t (an unsigned integer type). On unusual platforms (16-bit embedded) sizeof(int) could be 2."
+    "explanation": "On ILP32 (most 32-bit) and LP64 (most 64-bit Linux/Windows) models, int is 4 bytes. The %zu format is correct for size_t. sizeof returns a size_t (an unsigned integer type). On unusual platforms (16-bit embedded) sizeof(int) could be 2.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is printed?",
@@ -355,7 +355,7 @@
     ],
     "correct": "15",
     "explanation": "0xFF == 255 == 0b11111111. Right-shifting by 4 drops the low 4 bits and fills from the top: 0b00001111 == 15. For positive signed integers, >> behaves like unsigned divide by 2^n. 255 >> 4 = 255 / 16 = 15 (integer division).",
-    "diagram": "  a = 0xFF = 255:\n  bit 7                  bit 0\n  [ 1  1  1  1  1  1  1  1 ]\n\n  a >> 4  (right shift by 4, drop low nibble):\n  [ 0  0  0  0  1  1  1  1 ]  = 15\n\n  High nibble moved to low nibble position.\n  Equivalent to 255 / 16 = 15 (integer division).\n\n  printf(\"%d\", a >> 4) --> 15"
+    "diagram": "  a = 0xFF = 255:\n  bit 7                  bit 0\n  [ 1  1  1  1  1  1  1  1 ]\n\n  a >> 4  (right shift by 4, drop low nibble):\n  [ 0  0  0  0  1  1  1  1 ]  = 15\n\n  High nibble moved to low nibble position.\n  Equivalent to 255 / 16 = 15 (integer division).\n\n  printf(\"%d\", a >> 4) --> 15", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is printed?",
@@ -368,7 +368,7 @@
       "6 because the null terminator is counted"
     ],
     "correct": "5",
-    "explanation": "strlen counts characters up to but NOT including the null terminator '\\0'. 'hello' has 5 characters, so strlen returns 5. The string in memory is {h, e, l, l, o, \\0} — 6 bytes total, but strlen reports 5."
+    "explanation": "strlen counts characters up to but NOT including the null terminator '\\0'. 'hello' has 5 characters, so strlen returns 5. The string in memory is {h, e, l, l, o, \\0} — 6 bytes total, but strlen reports 5.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is printed?",
@@ -382,7 +382,7 @@
     ],
     "correct": "8",
     "explanation": "1 << 3 shifts the value 1 left by 3 positions: 0b00000001 → 0b00001000 = 8. The |= ORs x (currently 0) with 8, setting bit 3. This is the standard idiom for setting a specific bit in a flags variable.",
-    "diagram": "  x starts as 0:  bit 7 ............ bit 0\n                  [ 0  0  0  0  0  0  0  0 ]\n\n  1 << 3  shifts 1 left by 3:\n                  [ 0  0  0  0  1  0  0  0 ]  = 8\n\n  x |= 8  (OR sets bit 3):\n    0000 0000\n  | 0000 1000\n  ----------\n    0000 1000  = 8\n\n  printf(\"%d\", x) --> 8"
+    "diagram": "  x starts as 0:  bit 7 ............ bit 0\n                  [ 0  0  0  0  0  0  0  0 ]\n\n  1 << 3  shifts 1 left by 3:\n                  [ 0  0  0  0  1  0  0  0 ]  = 8\n\n  x |= 8  (OR sets bit 3):\n    0000 0000\n  | 0000 1000\n  ----------\n    0000 1000  = 8\n\n  printf(\"%d\", x) --> 8", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this print?",
@@ -395,7 +395,7 @@
       "sizeof is undefined for arrays"
     ],
     "correct": "3",
-    "explanation": "sizeof(arr) == 3 * 4 = 12 bytes. sizeof(arr[0]) == sizeof(int) == 4. 12/4 = 3 — the number of elements. This only works inside the scope where arr is declared as an array, NOT after it decays to a pointer (e.g., inside a called function)."
+    "explanation": "sizeof(arr) == 3 * 4 = 12 bytes. sizeof(arr[0]) == sizeof(int) == 4. 12/4 = 3 — the number of elements. This only works inside the scope where arr is declared as an array, NOT after it decays to a pointer (e.g., inside a called function).", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is the problem with this code?",
@@ -409,7 +409,7 @@
     ],
     "correct": "Use-after-free: p is a dangling pointer after free()",
     "explanation": "After free(p), the memory block is returned to the allocator and may be immediately reused. p still holds the old address but accessing it is undefined behaviour. In practice it often 'works' accidentally, which makes UAF bugs hard to find. Set p = NULL after free.",
-    "diagram": "  int *p = malloc(sizeof(int));\n  p --> +------+\n        |  ??  |  (heap, allocated)\n        +------+\n  *p = 42;\n  p --> +------+\n        |  42  |\n        +------+\n  free(p);\n  p --> +------+\n        | freed|  <-- memory returned to allocator\n        +------+     may be reused or unmapped\n  printf(\"%d\", *p);\n        ^\n        use-after-free: undefined behaviour\n        p is now a dangling pointer"
+    "diagram": "  int *p = malloc(sizeof(int));\n  p --> +------+\n        |  ??  |  (heap, allocated)\n        +------+\n  *p = 42;\n  p --> +------+\n        |  42  |\n        +------+\n  free(p);\n  p --> +------+\n        | freed|  <-- memory returned to allocator\n        +------+     may be reused or unmapped\n  printf(\"%d\", *p);\n        ^\n        use-after-free: undefined behaviour\n        p is now a dangling pointer", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is printed?",
@@ -423,7 +423,7 @@
     ],
     "correct": "4294967295",
     "explanation": "-1 in two's complement 32-bit is 0xFFFFFFFF. Converting a signed -1 to unsigned int wraps around modulo 2^32, giving 4294967295 (UINT_MAX). This conversion is well-defined in C — signed-to-unsigned always wraps. The reverse (unsigned-to-signed with large values) can be implementation-defined.",
-    "diagram": "  x = -1 in 32-bit two's complement:\n  binary: 1111 1111 1111 1111 1111 1111 1111 1111\n  hex:    0xFFFFFFFF\n\n  Assign to unsigned int y:\n  same bits, reinterpreted as unsigned:\n  0xFFFFFFFF = 2^32 - 1 = 4294967295\n\n  +-------------------------+\n  | signed   -1             |  x\n  | 0xFFFFFFFF              |\n  | unsigned 4294967295     |  y  (same bits!)\n  +-------------------------+\n\n  printf(\"%u\", y) --> 4294967295"
+    "diagram": "  x = -1 in 32-bit two's complement:\n  binary: 1111 1111 1111 1111 1111 1111 1111 1111\n  hex:    0xFFFFFFFF\n\n  Assign to unsigned int y:\n  same bits, reinterpreted as unsigned:\n  0xFFFFFFFF = 2^32 - 1 = 4294967295\n\n  +-------------------------+\n  | signed   -1             |  x\n  | 0xFFFFFFFF              |\n  | unsigned 4294967295     |  y  (same bits!)\n  +-------------------------+\n\n  printf(\"%u\", y) --> 4294967295", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this print? (x = 7 = 0b0111)",
@@ -437,7 +437,7 @@
     ],
     "correct": "5",
     "explanation": "~(1 << 1): 1 << 1 = 0b10 = 2. ~2 flips all bits: 0b...11111101. x & 0b...11111101 clears bit 1 of x. 7 = 0b111, clearing bit 1 gives 0b101 = 5. This is the standard idiom for clearing a specific bit.",
-    "diagram": "  x = 7 = 0b0111:\n  bit 3  bit 2  bit 1  bit 0\n  [  0     1      1      1  ]\n\n  1 << 1 = 0b0010\n  ~(1 << 1) = 0b...11111101  (all bits flipped, bit 1 cleared)\n\n  x &= ~(1 << 1):\n    0000 0111   (x = 7)\n  & 1111 1101   (~(1<<1))\n  -----------\n    0000 0101   = 5  (bit 1 cleared)\n\n  printf(\"%d\", x) --> 5"
+    "diagram": "  x = 7 = 0b0111:\n  bit 3  bit 2  bit 1  bit 0\n  [  0     1      1      1  ]\n\n  1 << 1 = 0b0010\n  ~(1 << 1) = 0b...11111101  (all bits flipped, bit 1 cleared)\n\n  x &= ~(1 << 1):\n    0000 0111   (x = 7)\n  & 1111 1101   (~(1<<1))\n  -----------\n    0000 0101   = 5  (bit 1 cleared)\n\n  printf(\"%d\", x) --> 5", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is printed?",
@@ -451,7 +451,7 @@
     ],
     "correct": "7",
     "explanation": "XOR (^) operates bitwise: 5 = 0b101, 2 = 0b010. 0b101 XOR 0b010 = 0b111 = 7. XOR sets a bit if exactly one operand has that bit set. It's commonly used for toggling bits and for the XOR-swap trick.",
-    "diagram": "  XOR (^) operates bit by bit:\n\n    5 = 0 1 0 1\n    2 = 0 0 1 0\n        -------\n  XOR = 0 1 1 1  = 7\n\n  Rule: bit is 1 if exactly ONE operand has that bit set.\n  bit 0: 1 XOR 0 = 1\n  bit 1: 0 XOR 1 = 1\n  bit 2: 1 XOR 0 = 1\n\n  printf(\"%d\", 5 ^ 2) --> 7"
+    "diagram": "  XOR (^) operates bit by bit:\n\n    5 = 0 1 0 1\n    2 = 0 0 1 0\n        -------\n  XOR = 0 1 1 1  = 7\n\n  Rule: bit is 1 if exactly ONE operand has that bit set.\n  bit 0: 1 XOR 0 = 1\n  bit 1: 0 XOR 1 = 1\n  bit 2: 1 XOR 0 = 1\n\n  printf(\"%d\", 5 ^ 2) --> 7", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this function return when called with n = 5?",
@@ -464,7 +464,7 @@
       "Infinite recursion for positive n"
     ],
     "correct": "5",
-    "explanation": "This is the Fibonacci sequence: fib(0)=0, fib(1)=1, fib(2)=1, fib(3)=2, fib(4)=3, fib(5)=5. The recursion terminates because n decreases each call and hits the base case n <= 1. Note: this naive implementation is O(2^n) — exponentially slow for large n."
+    "explanation": "This is the Fibonacci sequence: fib(0)=0, fib(1)=1, fib(2)=1, fib(3)=2, fib(4)=3, fib(5)=5. The recursion terminates because n decreases each call and hits the base case n <= 1. Note: this naive implementation is O(2^n) — exponentially slow for large n.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is printed?",
@@ -477,7 +477,7 @@
       "The address of 'e'"
     ],
     "correct": "e",
-    "explanation": "String literals are arrays. \"hello\"[1] indexes the second character (index 1). Array indexing: h=0, e=1, l=2, l=3, o=4. Since a[i] == *(a+i), this is equivalent to *('hello' + 1). The %c format prints the character."
+    "explanation": "String literals are arrays. \"hello\"[1] indexes the second character (index 1). Array indexing: h=0, e=1, l=2, l=3, o=4. Since a[i] == *(a+i), this is equivalent to *('hello' + 1). The %c format prints the character.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is the output?",
@@ -490,7 +490,7 @@
       "4 4 8"
     ],
     "correct": "4 5 8",
-    "explanation": "a++ post-increment: contributes 3 to the sum, then a becomes 4. ++b pre-increment: b becomes 5 first, then contributes 5. c = 3 + 5 = 8. Final state: a=4, b=5, c=8. The key rule: post-increment uses then modifies; pre-increment modifies then uses."
+    "explanation": "a++ post-increment: contributes 3 to the sum, then a becomes 4. ++b pre-increment: b becomes 5 first, then contributes 5. c = 3 + 5 = 8. Final state: a=4, b=5, c=8. The key rule: post-increment uses then modifies; pre-increment modifies then uses.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this function effectively compute?",
@@ -503,7 +503,7 @@
       "The number of unique characters"
     ],
     "correct": "The length of string s (same as strlen)",
-    "explanation": "*s++ dereferences s (reading the char), then advances the pointer. The while loop runs while *s is non-zero (truthy). When the null terminator '\\0' is reached, *s is 0 (false) and the loop exits. n counts exactly how many non-null characters were traversed — identical to strlen behaviour."
+    "explanation": "*s++ dereferences s (reading the char), then advances the pointer. The while loop runs while *s is non-zero (truthy). When the null terminator '\\0' is reached, *s is 0 (false) and the loop exits. n counts exactly how many non-null characters were traversed — identical to strlen behaviour.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this print?",
@@ -516,7 +516,7 @@
       "0xF0"
     ],
     "correct": "15",
-    "explanation": "0xFF = 0b11111111. 0x0F = 0b00001111 (the low nibble mask). AND keeps only bits present in both operands: 0b11111111 & 0b00001111 = 0b00001111 = 15. Masking with 0x0F extracts the low 4 bits — useful for nibble operations."
+    "explanation": "0xFF = 0b11111111. 0x0F = 0b00001111 (the low nibble mask). AND keeps only bits present in both operands: 0b11111111 & 0b00001111 = 0b00001111 = 15. Masking with 0x0F extracts the low 4 bits — useful for nibble operations.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is the output?",
@@ -529,7 +529,7 @@
       "0 2 4 6 "
     ],
     "correct": "0 2 4 ",
-    "explanation": "The loop increments i by 2 each iteration (i += 2). Values: 0, 2, 4. When i = 6, the condition 6 < 5 is false and the loop exits. i = 5 is never reached because the step skips over it."
+    "explanation": "The loop increments i by 2 each iteration (i += 2). Values: 0, 2, 4. When i = 6, the condition 6 < 5 is false and the loop exits. i = 5 is never reached because the step skips over it.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this print?",
@@ -543,7 +543,7 @@
     ],
     "correct": "onetwodef",
     "explanation": "Without break, execution falls through every subsequent case once the matching one is found. x==1 matches case 1, prints 'one', then falls through to case 2 (prints 'two'), then falls through to default (prints 'def'). Always add break unless fall-through is intentional.",
-    "diagram": "  switch (x) with x == 1, NO break statements:\n\n  case 1: printf(\"one\")  <-- matches here\n        |\n        | (falls through, no break)\n        v\n  case 2: printf(\"two\")\n        |\n        | (falls through, no break)\n        v\n  default: printf(\"def\")\n        |\n        v\n       end\n\n  Output: onetwodef\n  Add break after each case to stop fall-through."
+    "diagram": "  switch (x) with x == 1, NO break statements:\n\n  case 1: printf(\"one\")  <-- matches here\n        |\n        | (falls through, no break)\n        v\n  case 2: printf(\"two\")\n        |\n        | (falls through, no break)\n        v\n  default: printf(\"def\")\n        |\n        v\n       end\n\n  Output: onetwodef\n  Add break after each case to stop fall-through.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this print?",
@@ -556,7 +556,7 @@
       "Undefined — arr is partially uninitialised"
     ],
     "correct": "0 99 0",
-    "explanation": "= {0} is an initialiser that sets the first element to 0 and zero-initialises all remaining elements. So arr starts as {0, 0, 0}. Then arr[1] = 99 updates only index 1. Result: {0, 99, 0}."
+    "explanation": "= {0} is an initialiser that sets the first element to 0 and zero-initialises all remaining elements. So arr starts as {0, 0, 0}. Then arr[1] = 99 updates only index 1. Result: {0, 99, 0}.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this output?",
@@ -569,7 +569,7 @@
       "7 4 1 "
     ],
     "correct": "10 7 4 1 ",
-    "explanation": "A do-while always executes the body at least once before checking the condition. Starting at x=10: prints 10, x→7 (7>0 ✓); prints 7, x→4 (4>0 ✓); prints 4, x→1 (1>0 ✓); prints 1, x→-2 (-2>0 ✗ — stop)."
+    "explanation": "A do-while always executes the body at least once before checking the condition. Starting at x=10: prints 10, x→7 (7>0 ✓); prints 7, x→4 (4>0 ✓); prints 4, x→1 (1>0 ✓); prints 1, x→-2 (-2>0 ✗ — stop).", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this print?",
@@ -582,7 +582,7 @@
       "5 5"
     ],
     "correct": "10 10",
-    "explanation": "*p = *q copies the VALUE pointed to by q into the location pointed to by p. q points to y (10), p points to x. So x gets the value 10. y is unchanged. Both x and y are now 10. This is a value copy — not a pointer swap."
+    "explanation": "*p = *q copies the VALUE pointed to by q into the location pointed to by p. q points to y (10), p points to x. So x gets the value 10. y is unchanged. Both x and y are now 10. This is a value copy — not a pointer swap.", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What is the output?",
@@ -596,7 +596,7 @@
     ],
     "correct": "1",
     "explanation": "x >>= 1 divides x by 2 each iteration: 16→8→4→2→1. When x = 1, the condition 1 > 1 is false and the loop exits. The final value printed is 1. This loop effectively counts down to 1 by halving — it terminates because any positive integer repeatedly halved reaches 1.",
-    "diagram": "  x >>= 1 halves x each iteration:\n\n  iteration | x before | x > 1? | x after (>>= 1)\n  ----------+----------+--------+----------------\n      1      |   16     |  yes   |   8\n      2      |    8     |  yes   |   4\n      3      |    4     |  yes   |   2\n      4      |    2     |  yes   |   1\n      5      |    1     |  no    |  (loop exits)\n\n  printf(\"%d\", x) --> 1"
+    "diagram": "  x >>= 1 halves x each iteration:\n\n  iteration | x before | x > 1? | x after (>>= 1)\n  ----------+----------+--------+----------------\n      1      |   16     |  yes   |   8\n      2      |    8     |  yes   |   4\n      3      |    4     |  yes   |   2\n      4      |    2     |  yes   |   1\n      5      |    1     |  no    |  (loop exits)\n\n  printf(\"%d\", x) --> 1", "subcategory": "Code Output & Bugs"
   },
   {
     "question": "What does this macro expand to for SQUARE(3+1)?",
@@ -610,6 +610,6 @@
     ],
     "correct": "3+1*3+1 = 7 (not 16 — classic macro pitfall)",
     "explanation": "Macros do textual substitution: SQUARE(3+1) becomes 3+1*3+1. Due to operator precedence, * binds tighter than +: 3 + (1*3) + 1 = 3 + 3 + 1 = 7. The fix is to parenthesise the argument: #define SQUARE(x) ((x)*(x)). This is why many prefer inline functions over macros.",
-    "diagram": "  #define SQUARE(x) x*x   (no parentheses -- danger!)\n\n  SQUARE(3+1) expands by text substitution:\n    x -> 3+1\n    result: 3+1*3+1\n\n  Operator precedence (* before +):\n    3 + (1*3) + 1\n    3 +   3   + 1  = 7   (NOT 16!)\n\n  Fix: #define SQUARE(x) ((x)*(x))\n    -> ((3+1)*(3+1)) = 4*4 = 16"
+    "diagram": "  #define SQUARE(x) x*x   (no parentheses -- danger!)\n\n  SQUARE(3+1) expands by text substitution:\n    x -> 3+1\n    result: 3+1*3+1\n\n  Operator precedence (* before +):\n    3 + (1*3) + 1\n    3 +   3   + 1  = 7   (NOT 16!)\n\n  Fix: #define SQUARE(x) ((x)*(x))\n    -> ((3+1)*(3+1)) = 4*4 = 16", "subcategory": "Code Output & Bugs"
   }
 ]

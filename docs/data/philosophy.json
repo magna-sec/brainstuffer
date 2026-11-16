@@ -7,7 +7,7 @@
       "Aristotle",
       "Thales"
     ],
-    "correct": "Socrates"
+    "correct": "Socrates", "subcategory": "Philosophers & Works"
   },
   {
     "question": "Which philosopher wrote 'The Republic'?",
@@ -17,7 +17,7 @@
       "Socrates",
       "Xenophon"
     ],
-    "correct": "Plato"
+    "correct": "Plato", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is the term for the philosophical study of existence and being?",
@@ -27,7 +27,7 @@
       "Ethics",
       "Metaphysics"
     ],
-    "correct": "Ontology"
+    "correct": "Ontology", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "Who wrote 'Critique of Pure Reason'?",
@@ -37,7 +37,7 @@
       "John Locke",
       "Rene Descartes"
     ],
-    "correct": "Immanuel Kant"
+    "correct": "Immanuel Kant", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is Descartes' famous philosophical statement?",
@@ -47,7 +47,7 @@
       "To be is to be perceived",
       "Man is the measure of all things"
     ],
-    "correct": "Cogito ergo sum (I think therefore I am)"
+    "correct": "Cogito ergo sum (I think therefore I am)", "subcategory": "Philosophers & Works"
   },
   {
     "question": "Which philosophical school holds that pleasure is the highest good?",
@@ -57,7 +57,7 @@
       "Cynicism",
       "Hedonism"
     ],
-    "correct": "Epicureanism"
+    "correct": "Epicureanism", "subcategory": "Philosophers & Works"
   },
   {
     "question": "Who wrote 'Leviathan'?",
@@ -67,7 +67,7 @@
       "Jean-Jacques Rousseau",
       "John Stuart Mill"
     ],
-    "correct": "Thomas Hobbes"
+    "correct": "Thomas Hobbes", "subcategory": "Ethics & Politics"
   },
   {
     "question": "What is the philosophical problem of other minds?",
@@ -77,7 +77,7 @@
       "Whether free will exists",
       "How we acquire knowledge"
     ],
-    "correct": "How we can know other minds exist and have subjective experience"
+    "correct": "How we can know other minds exist and have subjective experience", "subcategory": "Epistemology & Mind"
   },
   {
     "question": "Who argued that knowledge comes from experience (tabula rasa)?",
@@ -87,7 +87,7 @@
       "Gottfried Leibniz",
       "Immanuel Kant"
     ],
-    "correct": "John Locke"
+    "correct": "John Locke", "subcategory": "Epistemology & Mind"
   },
   {
     "question": "What is the Trolley Problem designed to illustrate?",
@@ -97,7 +97,7 @@
       "The problem of induction",
       "Social contract theory"
     ],
-    "correct": "Ethical dilemmas in utilitarian vs deontological thinking"
+    "correct": "Ethical dilemmas in utilitarian vs deontological thinking", "subcategory": "Ethics & Politics"
   },
   {
     "question": "Who wrote 'Thus Spoke Zarathustra'?",
@@ -107,7 +107,7 @@
       "Soren Kierkegaard",
       "Martin Heidegger"
     ],
-    "correct": "Friedrich Nietzsche"
+    "correct": "Friedrich Nietzsche", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is epistemology the study of?",
@@ -117,7 +117,7 @@
       "Moral values",
       "The nature of being"
     ],
-    "correct": "Knowledge and justified belief"
+    "correct": "Knowledge and justified belief", "subcategory": "Epistemology & Mind"
   },
   {
     "question": "Who developed the concept of the categorical imperative?",
@@ -127,7 +127,7 @@
       "Jeremy Bentham",
       "G.W.F. Hegel"
     ],
-    "correct": "Immanuel Kant"
+    "correct": "Immanuel Kant", "subcategory": "Ethics & Politics"
   },
   {
     "question": "Which philosopher proposed the social contract theory most famously?",
@@ -137,7 +137,7 @@
       "John Locke",
       "David Hume"
     ],
-    "correct": "Jean-Jacques Rousseau"
+    "correct": "Jean-Jacques Rousseau", "subcategory": "Ethics & Politics"
   },
   {
     "question": "What is the Socratic method?",
@@ -147,7 +147,7 @@
       "Empirical observation",
       "Deductive logical proofs"
     ],
-    "correct": "Questioning to stimulate critical thinking and illuminate ideas"
+    "correct": "Questioning to stimulate critical thinking and illuminate ideas", "subcategory": "Philosophers & Works"
   },
   {
     "question": "Who wrote 'Being and Time' (Sein und Zeit)?",
@@ -157,7 +157,7 @@
       "Jean-Paul Sartre",
       "Maurice Merleau-Ponty"
     ],
-    "correct": "Martin Heidegger"
+    "correct": "Martin Heidegger", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "What is utilitarianism?",
@@ -167,7 +167,7 @@
       "Duty determines morality",
       "Self-interest drives all action"
     ],
-    "correct": "The greatest good for the greatest number"
+    "correct": "The greatest good for the greatest number", "subcategory": "Ethics & Politics"
   },
   {
     "question": "Who founded Stoicism?",
@@ -177,7 +177,7 @@
       "Marcus Aurelius",
       "Seneca"
     ],
-    "correct": "Zeno of Citium"
+    "correct": "Zeno of Citium", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is Plato's Allegory of the Cave meant to illustrate?",
@@ -187,7 +187,7 @@
       "The ideal state",
       "The origin of knowledge"
     ],
-    "correct": "The difference between perception and reality"
+    "correct": "The difference between perception and reality", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "Who wrote 'The Prince'?",
@@ -197,7 +197,7 @@
       "Thomas More",
       "Francis Bacon"
     ],
-    "correct": "Niccolo Machiavelli"
+    "correct": "Niccolo Machiavelli", "subcategory": "Ethics & Politics"
   },
   {
     "question": "What is the problem of evil in philosophy of religion?",
@@ -207,7 +207,7 @@
       "Why humans choose evil",
       "The nature of sin"
     ],
-    "correct": "How evil can exist if God is all-good and all-powerful"
+    "correct": "How evil can exist if God is all-good and all-powerful", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "Who argued 'To be is to be perceived' (esse est percipi)?",
@@ -217,7 +217,7 @@
       "David Hume",
       "Immanuel Kant"
     ],
-    "correct": "George Berkeley"
+    "correct": "George Berkeley", "subcategory": "Epistemology & Mind"
   },
   {
     "question": "What is existentialism primarily concerned with?",
@@ -227,7 +227,7 @@
       "The nature of reality",
       "Social structures"
     ],
-    "correct": "Individual freedom, choice, and responsibility"
+    "correct": "Individual freedom, choice, and responsibility", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "Who wrote 'Meditations on First Philosophy'?",
@@ -237,7 +237,7 @@
       "Baruch Spinoza",
       "Gottfried Leibniz"
     ],
-    "correct": "Rene Descartes"
+    "correct": "Rene Descartes", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is the Platonic form?",
@@ -247,7 +247,7 @@
       "A type of argument",
       "A political structure"
     ],
-    "correct": "An abstract ideal of which physical things are imperfect copies"
+    "correct": "An abstract ideal of which physical things are imperfect copies", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "Who is the founder of pragmatism?",
@@ -257,7 +257,7 @@
       "John Dewey",
       "Richard Rorty"
     ],
-    "correct": "Charles Sanders Peirce"
+    "correct": "Charles Sanders Peirce", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What does Nietzsche mean by the Ubermensch?",
@@ -267,7 +267,7 @@
       "A perfect ruler",
       "A religious saint"
     ],
-    "correct": "An individual who creates their own values beyond conventional morality"
+    "correct": "An individual who creates their own values beyond conventional morality", "subcategory": "Ethics & Politics"
   },
   {
     "question": "Who wrote 'A Treatise of Human Nature'?",
@@ -277,7 +277,7 @@
       "George Berkeley",
       "Thomas Reid"
     ],
-    "correct": "David Hume"
+    "correct": "David Hume", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is the philosophical position that reality is fundamentally mental?",
@@ -287,7 +287,7 @@
       "Dualism",
       "Monism"
     ],
-    "correct": "Idealism"
+    "correct": "Idealism", "subcategory": "Philosophers & Works"
   },
   {
     "question": "Who proposed the veil of ignorance thought experiment?",
@@ -297,7 +297,7 @@
       "Michael Sandel",
       "Jurgen Habermas"
     ],
-    "correct": "John Rawls"
+    "correct": "John Rawls", "subcategory": "Ethics & Politics"
   },
   {
     "question": "What is the problem of induction?",
@@ -307,7 +307,7 @@
       "Why some arguments are invalid",
       "The difficulty of defining concepts precisely"
     ],
-    "correct": "We cannot logically justify conclusions about the future based on past experience"
+    "correct": "We cannot logically justify conclusions about the future based on past experience", "subcategory": "Epistemology & Mind"
   },
   {
     "question": "Who wrote 'The Nicomachean Ethics'?",
@@ -317,7 +317,7 @@
       "Socrates",
       "Epicurus"
     ],
-    "correct": "Aristotle"
+    "correct": "Aristotle", "subcategory": "Ethics & Politics"
   },
   {
     "question": "What is the ship of Theseus paradox about?",
@@ -327,7 +327,7 @@
       "The nature of navigation",
       "Theseus and Athens"
     ],
-    "correct": "Whether an object that has had all its parts replaced remains the same object"
+    "correct": "Whether an object that has had all its parts replaced remains the same object", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "Who developed the idea of the will to power?",
@@ -337,7 +337,7 @@
       "G.W.F. Hegel",
       "Karl Marx"
     ],
-    "correct": "Friedrich Nietzsche"
+    "correct": "Friedrich Nietzsche", "subcategory": "Ethics & Politics"
   },
   {
     "question": "What is deontological ethics?",
@@ -347,7 +347,7 @@
       "Ethics based on character",
       "Ethics based on social contracts"
     ],
-    "correct": "Ethics based on rules and duties regardless of consequences"
+    "correct": "Ethics based on rules and duties regardless of consequences", "subcategory": "Ethics & Politics"
   },
   {
     "question": "Who wrote 'Phenomenology of Spirit'?",
@@ -357,7 +357,7 @@
       "Immanuel Kant",
       "Johann Fichte"
     ],
-    "correct": "G.W.F. Hegel"
+    "correct": "G.W.F. Hegel", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is the mind-body problem?",
@@ -367,7 +367,7 @@
       "How the brain works",
       "Whether animals have minds"
     ],
-    "correct": "How the mental and physical are related"
+    "correct": "How the mental and physical are related", "subcategory": "Epistemology & Mind"
   },
   {
     "question": "Who argued that virtue is knowledge?",
@@ -377,7 +377,7 @@
       "Aristotle",
       "Epicurus"
     ],
-    "correct": "Socrates"
+    "correct": "Socrates", "subcategory": "Ethics & Politics"
   },
   {
     "question": "What does 'a priori' mean in philosophy?",
@@ -387,7 +387,7 @@
       "Knowledge from observation",
       "Knowledge from authority"
     ],
-    "correct": "Knowledge independent of experience"
+    "correct": "Knowledge independent of experience", "subcategory": "Epistemology & Mind"
   },
   {
     "question": "Who wrote 'An Enquiry Concerning Human Understanding'?",
@@ -397,7 +397,7 @@
       "George Berkeley",
       "Immanuel Kant"
     ],
-    "correct": "David Hume"
+    "correct": "David Hume", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is solipsism?",
@@ -407,7 +407,7 @@
       "The view that nothing exists",
       "Extreme selfishness"
     ],
-    "correct": "The view that only one's own mind is certain to exist"
+    "correct": "The view that only one's own mind is certain to exist", "subcategory": "Epistemology & Mind"
   },
   {
     "question": "Which philosopher developed the dialectical method of thesis-antithesis-synthesis?",
@@ -417,7 +417,7 @@
       "Johann Fichte",
       "Friedrich Schelling"
     ],
-    "correct": "G.W.F. Hegel"
+    "correct": "G.W.F. Hegel", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "What is the Chinese Room argument designed to show?",
@@ -427,7 +427,7 @@
       "Language is relative",
       "Minds are machines"
     ],
-    "correct": "Syntax (symbol manipulation) is not sufficient for semantics (understanding)"
+    "correct": "Syntax (symbol manipulation) is not sufficient for semantics (understanding)", "subcategory": "Epistemology & Mind"
   },
   {
     "question": "Who is associated with the phrase 'God is dead'?",
@@ -437,7 +437,7 @@
       "Albert Camus",
       "Soren Kierkegaard"
     ],
-    "correct": "Friedrich Nietzsche"
+    "correct": "Friedrich Nietzsche", "subcategory": "Ethics & Politics"
   },
   {
     "question": "What is the original position in John Rawls' theory?",
@@ -447,7 +447,7 @@
       "The first principle of justice",
       "The natural state of humans"
     ],
-    "correct": "A hypothetical standpoint behind a veil of ignorance to choose just principles"
+    "correct": "A hypothetical standpoint behind a veil of ignorance to choose just principles", "subcategory": "Ethics & Politics"
   },
   {
     "question": "Who founded analytic philosophy?",
@@ -457,7 +457,7 @@
       "George Edward Moore",
       "Alfred Ayer"
     ],
-    "correct": "Gottlob Frege and Bertrand Russell"
+    "correct": "Gottlob Frege and Bertrand Russell", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is the teleological argument for God's existence?",
@@ -467,7 +467,7 @@
       "God is the greatest conceivable being",
       "Moral facts require God as their grounding"
     ],
-    "correct": "The universe shows design suggesting a designer"
+    "correct": "The universe shows design suggesting a designer", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "Who wrote 'Tractatus Logico-Philosophicus'?",
@@ -477,7 +477,7 @@
       "Gottlob Frege",
       "G.E. Moore"
     ],
-    "correct": "Ludwig Wittgenstein"
+    "correct": "Ludwig Wittgenstein", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is virtue ethics focused on?",
@@ -487,7 +487,7 @@
       "Moral rules and duties",
       "Social contracts"
     ],
-    "correct": "Character and virtues of the moral agent"
+    "correct": "Character and virtues of the moral agent", "subcategory": "Ethics & Politics"
   },
   {
     "question": "Who argued for tabula rasa in epistemology?",
@@ -497,7 +497,7 @@
       "Gottfried Leibniz",
       "Baruch Spinoza"
     ],
-    "correct": "John Locke"
+    "correct": "John Locke", "subcategory": "Epistemology & Mind"
   },
   {
     "question": "What is absurdism in philosophy?",
@@ -507,7 +507,7 @@
       "Extreme skepticism",
       "The view that all morality is absurd"
     ],
-    "correct": "The conflict between human desire for meaning and the universe's silence"
+    "correct": "The conflict between human desire for meaning and the universe's silence", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "Who wrote 'The Second Sex'?",
@@ -517,7 +517,7 @@
       "Hannah Arendt",
       "Iris Murdoch"
     ],
-    "correct": "Simone de Beauvoir"
+    "correct": "Simone de Beauvoir", "subcategory": "Ethics & Politics"
   },
   {
     "question": "What is naturalistic fallacy?",
@@ -527,7 +527,7 @@
       "Confusing natural with supernatural",
       "Arguing from nature against ethics"
     ],
-    "correct": "Deriving ought from is (deriving moral claims from natural facts)"
+    "correct": "Deriving ought from is (deriving moral claims from natural facts)", "subcategory": "Ethics & Politics"
   },
   {
     "question": "Which philosopher is associated with the categorical imperative?",
@@ -537,7 +537,7 @@
       "Jeremy Bentham",
       "David Hume"
     ],
-    "correct": "Immanuel Kant"
+    "correct": "Immanuel Kant", "subcategory": "Ethics & Politics"
   },
   {
     "question": "What does Occam's Razor state?",
@@ -547,7 +547,7 @@
       "Nature abhors a vacuum",
       "Knowledge requires proof"
     ],
-    "correct": "Do not multiply entities beyond necessity"
+    "correct": "Do not multiply entities beyond necessity", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "Who founded the school of Cynicism in ancient philosophy?",
@@ -557,7 +557,7 @@
       "Crates of Thebes",
       "Socrates"
     ],
-    "correct": "Antisthenes"
+    "correct": "Antisthenes", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is compatibilism in the free will debate?",
@@ -567,7 +567,7 @@
       "Determinism is false",
       "We cannot know if free will exists"
     ],
-    "correct": "Free will and determinism are compatible"
+    "correct": "Free will and determinism are compatible", "subcategory": "Metaphysics & Logic"
   },
   {
     "question": "Who wrote 'The Birth of Tragedy'?",
@@ -577,7 +577,7 @@
       "Richard Wagner",
       "Jakob Burckhardt"
     ],
-    "correct": "Friedrich Nietzsche"
+    "correct": "Friedrich Nietzsche", "subcategory": "Philosophers & Works"
   },
   {
     "question": "What is fallibilism in epistemology?",
@@ -587,6 +587,6 @@
       "Evidence is always fallible",
       "Logic can contain errors"
     ],
-    "correct": "All beliefs could in principle be wrong"
+    "correct": "All beliefs could in principle be wrong", "subcategory": "Epistemology & Mind"
   }
 ]

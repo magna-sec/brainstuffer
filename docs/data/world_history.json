@@ -7,7 +7,7 @@
       "1916",
       "1918"
     ],
-    "correct": "1914"
+    "correct": "1914", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who was the first Emperor of Rome?",
@@ -17,7 +17,7 @@
       "Nero",
       "Caligula"
     ],
-    "correct": "Augustus"
+    "correct": "Augustus", "subcategory": "Ancient & Classical"
   },
   {
     "question": "The Battle of Hastings took place in which year?",
@@ -27,7 +27,7 @@
       "1046",
       "1076"
     ],
-    "correct": "1066"
+    "correct": "1066", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who led the Cuban Revolution?",
@@ -37,7 +37,7 @@
       "Raul Castro",
       "Fulgencio Batista"
     ],
-    "correct": "Fidel Castro"
+    "correct": "Fidel Castro", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Which empire was known as the 'Empire on which the sun never sets'?",
@@ -47,7 +47,7 @@
       "Mongol Empire",
       "Ottoman Empire"
     ],
-    "correct": "British Empire"
+    "correct": "British Empire", "subcategory": "Key Events & Figures"
   },
   {
     "question": "The French Revolution began in which year?",
@@ -57,7 +57,7 @@
       "1799",
       "1783"
     ],
-    "correct": "1789"
+    "correct": "1789", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who was the first President of the United States?",
@@ -67,7 +67,7 @@
       "Thomas Jefferson",
       "Benjamin Franklin"
     ],
-    "correct": "George Washington"
+    "correct": "George Washington", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "Which treaty ended World War I?",
@@ -77,7 +77,7 @@
       "Treaty of Ghent",
       "Treaty of Utrecht"
     ],
-    "correct": "Treaty of Versailles"
+    "correct": "Treaty of Versailles", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "In what year did the Berlin Wall fall?",
@@ -87,7 +87,7 @@
       "1987",
       "1985"
     ],
-    "correct": "1989"
+    "correct": "1989", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "Who was the Egyptian pharaoh during the Exodus according to tradition?",
@@ -97,7 +97,7 @@
       "Akhenaten",
       "Thutmose III"
     ],
-    "correct": "Ramesses II"
+    "correct": "Ramesses II", "subcategory": "Ancient & Classical"
   },
   {
     "question": "The Magna Carta was signed in which year?",
@@ -107,7 +107,7 @@
       "1265",
       "1305"
     ],
-    "correct": "1215"
+    "correct": "1215", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "Which dynasty built the Great Wall of China originally?",
@@ -117,7 +117,7 @@
       "Ming dynasty",
       "Tang dynasty"
     ],
-    "correct": "Qin dynasty"
+    "correct": "Qin dynasty", "subcategory": "Ancient & Classical"
   },
   {
     "question": "Who assassinated Archduke Franz Ferdinand in 1914?",
@@ -127,7 +127,7 @@
       "Mehmed Talat",
       "Nikola Pasic"
     ],
-    "correct": "Gavrilo Princip"
+    "correct": "Gavrilo Princip", "subcategory": "Key Events & Figures"
   },
   {
     "question": "The Roman Empire officially split into East and West in which year?",
@@ -137,7 +137,7 @@
       "395 AD",
       "476 AD"
     ],
-    "correct": "395 AD"
+    "correct": "395 AD", "subcategory": "Ancient & Classical"
   },
   {
     "question": "Who was the first person to circumnavigate the globe?",
@@ -147,7 +147,7 @@
       "Vasco da Gama",
       "Francis Drake"
     ],
-    "correct": "Ferdinand Magellan's expedition (completed by Elcano)"
+    "correct": "Ferdinand Magellan's expedition (completed by Elcano)", "subcategory": "Key Events & Figures"
   },
   {
     "question": "The Mongol Empire was founded by whom?",
@@ -157,7 +157,7 @@
       "Timur",
       "Ogedei Khan"
     ],
-    "correct": "Genghis Khan"
+    "correct": "Genghis Khan", "subcategory": "Ancient & Classical"
   },
   {
     "question": "In which year did the American Civil War begin?",
@@ -167,7 +167,7 @@
       "1863",
       "1865"
     ],
-    "correct": "1861"
+    "correct": "1861", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Which city was the capital of the Byzantine Empire?",
@@ -177,7 +177,7 @@
       "Alexandria",
       "Antioch"
     ],
-    "correct": "Constantinople"
+    "correct": "Constantinople", "subcategory": "Ancient & Classical"
   },
   {
     "question": "Who was Napoleon Bonaparte defeated by at the Battle of Waterloo?",
@@ -187,7 +187,7 @@
       "Tsar Alexander I",
       "Viscount Castlereagh"
     ],
-    "correct": "Duke of Wellington and Blucher"
+    "correct": "Duke of Wellington and Blucher", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "The Bolshevik Revolution occurred in which year?",
@@ -197,7 +197,7 @@
       "1914",
       "1921"
     ],
-    "correct": "1917"
+    "correct": "1917", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Which ancient wonder of the world still exists today?",
@@ -207,7 +207,7 @@
       "The Hanging Gardens of Babylon",
       "The Lighthouse of Alexandria"
     ],
-    "correct": "The Great Pyramid of Giza"
+    "correct": "The Great Pyramid of Giza", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Who was the last Tsar of Russia?",
@@ -217,7 +217,7 @@
       "Nicholas I",
       "Alexander II"
     ],
-    "correct": "Nicholas II"
+    "correct": "Nicholas II", "subcategory": "Key Events & Figures"
   },
   {
     "question": "The D-Day landings took place on which date?",
@@ -227,7 +227,7 @@
       "May 8, 1945",
       "September 1, 1939"
     ],
-    "correct": "June 6, 1944"
+    "correct": "June 6, 1944", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Which empire ruled India before British colonization in most regions?",
@@ -237,7 +237,7 @@
       "Delhi Sultanate",
       "Gupta Empire"
     ],
-    "correct": "Mughal Empire"
+    "correct": "Mughal Empire", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Who was the first woman to win a Nobel Prize?",
@@ -247,7 +247,7 @@
       "Jane Addams",
       "Pearl Buck"
     ],
-    "correct": "Marie Curie"
+    "correct": "Marie Curie", "subcategory": "Key Events & Figures"
   },
   {
     "question": "In what year did the Soviet Union dissolve?",
@@ -257,7 +257,7 @@
       "1985",
       "1993"
     ],
-    "correct": "1991"
+    "correct": "1991", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "Which battle is considered the turning point of World War II on the Eastern Front?",
@@ -267,7 +267,7 @@
       "Battle of Moscow",
       "Siege of Leningrad"
     ],
-    "correct": "Battle of Stalingrad"
+    "correct": "Battle of Stalingrad", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who was the first Emperor of China?",
@@ -277,7 +277,7 @@
       "Emperor Wu",
       "Emperor Yao"
     ],
-    "correct": "Qin Shi Huang"
+    "correct": "Qin Shi Huang", "subcategory": "Ancient & Classical"
   },
   {
     "question": "The Renaissance began in which country?",
@@ -287,7 +287,7 @@
       "Germany",
       "England"
     ],
-    "correct": "Italy"
+    "correct": "Italy", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Which year did India gain independence from Britain?",
@@ -297,7 +297,7 @@
       "1950",
       "1942"
     ],
-    "correct": "1947"
+    "correct": "1947", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "Who built the Taj Mahal?",
@@ -307,7 +307,7 @@
       "Aurangzeb",
       "Humayun"
     ],
-    "correct": "Shah Jahan"
+    "correct": "Shah Jahan", "subcategory": "Key Events & Figures"
   },
   {
     "question": "The Hundred Years War was fought between which two countries?",
@@ -317,7 +317,7 @@
       "France and Germany",
       "England and Scotland"
     ],
-    "correct": "England and France"
+    "correct": "England and France", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who delivered the Gettysburg Address?",
@@ -327,7 +327,7 @@
       "Frederick Douglass",
       "William Seward"
     ],
-    "correct": "Abraham Lincoln"
+    "correct": "Abraham Lincoln", "subcategory": "Key Events & Figures"
   },
   {
     "question": "In which year was the Declaration of Independence signed?",
@@ -337,7 +337,7 @@
       "1783",
       "1781"
     ],
-    "correct": "1776"
+    "correct": "1776", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "Which pharaoh's tomb was discovered by Howard Carter in 1922?",
@@ -347,7 +347,7 @@
       "Amenhotep III",
       "Akhenaten"
     ],
-    "correct": "Tutankhamun"
+    "correct": "Tutankhamun", "subcategory": "Ancient & Classical"
   },
   {
     "question": "The Ottoman Empire was based in which city?",
@@ -357,7 +357,7 @@
       "Baghdad",
       "Damascus"
     ],
-    "correct": "Constantinople (Istanbul)"
+    "correct": "Constantinople (Istanbul)", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Who was the first Chancellor of unified Germany in 1871?",
@@ -367,7 +367,7 @@
       "Helmuth von Moltke",
       "Alfred von Schlieffen"
     ],
-    "correct": "Otto von Bismarck"
+    "correct": "Otto von Bismarck", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "The Korean War armistice was signed in which year?",
@@ -377,7 +377,7 @@
       "1952",
       "1955"
     ],
-    "correct": "1953"
+    "correct": "1953", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Which civilization built Machu Picchu?",
@@ -387,7 +387,7 @@
       "Maya",
       "Tiwanaku"
     ],
-    "correct": "Inca"
+    "correct": "Inca", "subcategory": "Ancient & Classical"
   },
   {
     "question": "Who was the leader of Nazi Germany?",
@@ -397,7 +397,7 @@
       "Hermann Goering",
       "Joseph Goebbels"
     ],
-    "correct": "Adolf Hitler"
+    "correct": "Adolf Hitler", "subcategory": "Key Events & Figures"
   },
   {
     "question": "The Crusades were primarily aimed at capturing which city?",
@@ -407,7 +407,7 @@
       "Alexandria",
       "Antioch"
     ],
-    "correct": "Jerusalem"
+    "correct": "Jerusalem", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "In which year did Mao Zedong proclaim the People's Republic of China?",
@@ -417,7 +417,7 @@
       "1950",
       "1947"
     ],
-    "correct": "1949"
+    "correct": "1949", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Who was the British Prime Minister during most of World War II?",
@@ -427,7 +427,7 @@
       "Clement Attlee",
       "Anthony Eden"
     ],
-    "correct": "Winston Churchill"
+    "correct": "Winston Churchill", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "The Peloponnesian War was fought between which two city-states?",
@@ -437,7 +437,7 @@
       "Sparta and Thebes",
       "Corinth and Sparta"
     ],
-    "correct": "Athens and Sparta"
+    "correct": "Athens and Sparta", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "In what year did apartheid officially end in South Africa?",
@@ -447,7 +447,7 @@
       "1991",
       "1996"
     ],
-    "correct": "1994"
+    "correct": "1994", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "Who was the first woman Prime Minister of the United Kingdom?",
@@ -457,7 +457,7 @@
       "Barbara Castle",
       "Shirley Williams"
     ],
-    "correct": "Margaret Thatcher"
+    "correct": "Margaret Thatcher", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "The Byzantine Empire fell to the Ottomans in which year?",
@@ -467,7 +467,7 @@
       "1204",
       "1492"
     ],
-    "correct": "1453"
+    "correct": "1453", "subcategory": "Ancient & Classical"
   },
   {
     "question": "Who invented the printing press in Europe around 1440?",
@@ -477,7 +477,7 @@
       "Aldus Manutius",
       "Robert Estienne"
     ],
-    "correct": "Johannes Gutenberg"
+    "correct": "Johannes Gutenberg", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Which ancient Greek city-state was known for its military culture?",
@@ -487,7 +487,7 @@
       "Corinth",
       "Thebes"
     ],
-    "correct": "Sparta"
+    "correct": "Sparta", "subcategory": "Ancient & Classical"
   },
   {
     "question": "The Vietnam War ended in which year?",
@@ -497,7 +497,7 @@
       "1970",
       "1969"
     ],
-    "correct": "1975"
+    "correct": "1975", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who was the first Prime Minister of Israel?",
@@ -507,7 +507,7 @@
       "Levi Eshkol",
       "Golda Meir"
     ],
-    "correct": "David Ben-Gurion"
+    "correct": "David Ben-Gurion", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "Which empire was ruled by Suleiman the Magnificent?",
@@ -517,7 +517,7 @@
       "Mughal Empire",
       "Byzantine Empire"
     ],
-    "correct": "Ottoman Empire"
+    "correct": "Ottoman Empire", "subcategory": "Key Events & Figures"
   },
   {
     "question": "The signing of the Armistice ending WWI occurred on which date?",
@@ -527,7 +527,7 @@
       "October 11, 1918",
       "December 11, 1918"
     ],
-    "correct": "November 11, 1918"
+    "correct": "November 11, 1918", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who was the last Aztec Emperor?",
@@ -537,7 +537,7 @@
       "Ahuizotl",
       "Itzcoatl"
     ],
-    "correct": "Cuauhtemoc"
+    "correct": "Cuauhtemoc", "subcategory": "Ancient & Classical"
   },
   {
     "question": "The Meiji Restoration occurred in which country?",
@@ -547,7 +547,7 @@
       "Korea",
       "Vietnam"
     ],
-    "correct": "Japan"
+    "correct": "Japan", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Which explorer first reached the Americas from Europe in 1492?",
@@ -557,7 +557,7 @@
       "John Cabot",
       "Leif Erikson"
     ],
-    "correct": "Christopher Columbus"
+    "correct": "Christopher Columbus", "subcategory": "Key Events & Figures"
   },
   {
     "question": "The Thirty Years War was primarily fought in which region?",
@@ -567,7 +567,7 @@
       "Italy",
       "England and the Netherlands"
     ],
-    "correct": "Holy Roman Empire (Central Europe)"
+    "correct": "Holy Roman Empire (Central Europe)", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who was the Queen of England during the defeat of the Spanish Armada?",
@@ -577,7 +577,7 @@
       "Mary Queen of Scots",
       "Anne Boleyn"
     ],
-    "correct": "Elizabeth I"
+    "correct": "Elizabeth I", "subcategory": "Key Events & Figures"
   },
   {
     "question": "In what year did Japan attack Pearl Harbor?",
@@ -587,7 +587,7 @@
       "1942",
       "1943"
     ],
-    "correct": "1941"
+    "correct": "1941", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who was the first President of the Republic of Turkey?",
@@ -597,7 +597,7 @@
       "Celal Bayar",
       "Adnan Menderes"
     ],
-    "correct": "Mustafa Kemal Ataturk"
+    "correct": "Mustafa Kemal Ataturk", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "The Black Death pandemic peaked in Europe in which decade?",
@@ -607,7 +607,7 @@
       "1360s-1370s",
       "1280s-1290s"
     ],
-    "correct": "1340s-1350s"
+    "correct": "1340s-1350s", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Which battle ended the Napoleonic Wars?",
@@ -617,7 +617,7 @@
       "Battle of Borodino",
       "Battle of Austerlitz"
     ],
-    "correct": "Battle of Waterloo"
+    "correct": "Battle of Waterloo", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who wrote 'The Communist Manifesto'?",
@@ -627,7 +627,7 @@
       "Friedrich Engels alone",
       "Vladimir Lenin"
     ],
-    "correct": "Karl Marx and Friedrich Engels"
+    "correct": "Karl Marx and Friedrich Engels", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "The Iranian Revolution occurred in which year?",
@@ -637,7 +637,7 @@
       "1981",
       "1975"
     ],
-    "correct": "1979"
+    "correct": "1979", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Which civilization created the first known writing system?",
@@ -647,7 +647,7 @@
       "Chinese",
       "Phoenicians"
     ],
-    "correct": "Sumerians"
+    "correct": "Sumerians", "subcategory": "Ancient & Classical"
   },
   {
     "question": "The Spanish-American War ended with which treaty?",
@@ -657,7 +657,7 @@
       "Treaty of Havana",
       "Treaty of Versailles"
     ],
-    "correct": "Treaty of Paris (1898)"
+    "correct": "Treaty of Paris (1898)", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who was the first female Pharaoh of Egypt?",
@@ -667,7 +667,7 @@
       "Nefertiti",
       "Ankhesenamun"
     ],
-    "correct": "Hatshepsut"
+    "correct": "Hatshepsut", "subcategory": "Ancient & Classical"
   },
   {
     "question": "In which year did the United States enter World War I?",
@@ -677,7 +677,7 @@
       "1916",
       "1918"
     ],
-    "correct": "1917"
+    "correct": "1917", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "The Roman Republic transitioned to the Roman Empire in which approximate year?",
@@ -687,7 +687,7 @@
       "100 BC",
       "14 AD"
     ],
-    "correct": "27 BC"
+    "correct": "27 BC", "subcategory": "Ancient & Classical"
   },
   {
     "question": "Who led the Indian independence movement through nonviolent resistance?",
@@ -697,7 +697,7 @@
       "Subhas Chandra Bose",
       "Bal Gangadhar Tilak"
     ],
-    "correct": "Mahatma Gandhi"
+    "correct": "Mahatma Gandhi", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "The Rwandan genocide occurred in which year?",
@@ -707,7 +707,7 @@
       "1996",
       "1992"
     ],
-    "correct": "1994"
+    "correct": "1994", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Which European nation first colonized Brazil?",
@@ -717,7 +717,7 @@
       "France",
       "Netherlands"
     ],
-    "correct": "Portugal"
+    "correct": "Portugal", "subcategory": "Key Events & Figures"
   },
   {
     "question": "What was the name of the alliance between Germany, Austria-Hungary, and Italy in WWI?",
@@ -727,7 +727,7 @@
       "Central Powers",
       "Axis Powers"
     ],
-    "correct": "Triple Alliance"
+    "correct": "Triple Alliance", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Who was the first person to walk on the Moon?",
@@ -737,7 +737,7 @@
       "Yuri Gagarin",
       "Alan Shepard"
     ],
-    "correct": "Neil Armstrong"
+    "correct": "Neil Armstrong", "subcategory": "Key Events & Figures"
   },
   {
     "question": "The Suez Canal was opened in which year?",
@@ -747,7 +747,7 @@
       "1879",
       "1849"
     ],
-    "correct": "1869"
+    "correct": "1869", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Which dynasty ruled China during the construction of most of the current Great Wall?",
@@ -757,7 +757,7 @@
       "Han dynasty",
       "Yuan dynasty"
     ],
-    "correct": "Ming dynasty"
+    "correct": "Ming dynasty", "subcategory": "Ancient & Classical"
   },
   {
     "question": "The Cuban Missile Crisis occurred in which year?",
@@ -767,7 +767,7 @@
       "1963",
       "1961"
     ],
-    "correct": "1962"
+    "correct": "1962", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who was the first European to reach India by sea?",
@@ -777,7 +777,7 @@
       "Bartolomeu Dias",
       "Pedro Cabral"
     ],
-    "correct": "Vasco da Gama"
+    "correct": "Vasco da Gama", "subcategory": "Key Events & Figures"
   },
   {
     "question": "The partition of Korea along the 38th parallel occurred after which war?",
@@ -787,7 +787,7 @@
       "Vietnam War",
       "Sino-Japanese War"
     ],
-    "correct": "World War II"
+    "correct": "World War II", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who commanded the Allied forces on D-Day?",
@@ -797,7 +797,7 @@
       "George Patton",
       "Omar Bradley"
     ],
-    "correct": "Dwight D. Eisenhower"
+    "correct": "Dwight D. Eisenhower", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Which treaty ended the Thirty Years War?",
@@ -807,7 +807,7 @@
       "Peace of Augsburg",
       "Treaty of Pyrenees"
     ],
-    "correct": "Peace of Westphalia"
+    "correct": "Peace of Westphalia", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Cleopatra was the last ruler of which dynasty?",
@@ -817,7 +817,7 @@
       "Lagid dynasty",
       "Seleucid dynasty"
     ],
-    "correct": "Ptolemaic dynasty"
+    "correct": "Ptolemaic dynasty", "subcategory": "Ancient & Classical"
   },
   {
     "question": "The Spanish Civil War began in which year?",
@@ -827,7 +827,7 @@
       "1938",
       "1932"
     ],
-    "correct": "1936"
+    "correct": "1936", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who was the first Secretary-General of the United Nations?",
@@ -837,7 +837,7 @@
       "U Thant",
       "Kurt Waldheim"
     ],
-    "correct": "Trygve Lie"
+    "correct": "Trygve Lie", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "The ancient city of Carthage was located in which modern country?",
@@ -847,7 +847,7 @@
       "Algeria",
       "Morocco"
     ],
-    "correct": "Tunisia"
+    "correct": "Tunisia", "subcategory": "Ancient & Classical"
   },
   {
     "question": "Which revolution began with the storming of the Bastille?",
@@ -857,7 +857,7 @@
       "Russian Revolution",
       "Industrial Revolution"
     ],
-    "correct": "French Revolution"
+    "correct": "French Revolution", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "The Marshall Plan was a US aid program for which region after WWII?",
@@ -867,7 +867,7 @@
       "Asia",
       "Latin America"
     ],
-    "correct": "Western Europe"
+    "correct": "Western Europe", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "Who was the first ruler to unite Upper and Lower Egypt?",
@@ -877,7 +877,7 @@
       "Ramesses II",
       "Thutmose I"
     ],
-    "correct": "Narmer (Menes)"
+    "correct": "Narmer (Menes)", "subcategory": "Ancient & Classical"
   },
   {
     "question": "The Tokugawa shogunate ruled which country?",
@@ -887,7 +887,7 @@
       "Korea",
       "Vietnam"
     ],
-    "correct": "Japan"
+    "correct": "Japan", "subcategory": "Key Events & Figures"
   },
   {
     "question": "When was the state of Israel declared?",
@@ -897,7 +897,7 @@
       "1949",
       "1950"
     ],
-    "correct": "1948"
+    "correct": "1948", "subcategory": "Key Events & Figures"
   },
   {
     "question": "What was the name of the ship that sank in 1912?",
@@ -907,7 +907,7 @@
       "Britannic",
       "Olympic"
     ],
-    "correct": "Titanic"
+    "correct": "Titanic", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Who was the dominant leader of the Soviet Union after Stalin?",
@@ -917,7 +917,7 @@
       "Georgy Malenkov",
       "Vyacheslav Molotov"
     ],
-    "correct": "Nikita Khrushchev"
+    "correct": "Nikita Khrushchev", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "The Aztec Empire was conquered by which Spanish conquistador?",
@@ -927,7 +927,7 @@
       "Juan de Grijalva",
       "Diego Velazquez"
     ],
-    "correct": "Hernan Cortes"
+    "correct": "Hernan Cortes", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "In which year did the Great Fire of London occur?",
@@ -937,7 +937,7 @@
       "1676",
       "1636"
     ],
-    "correct": "1666"
+    "correct": "1666", "subcategory": "Key Events & Figures"
   },
   {
     "question": "The League of Nations was established after which war?",
@@ -947,7 +947,7 @@
       "Franco-Prussian War",
       "Crimean War"
     ],
-    "correct": "World War I"
+    "correct": "World War I", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "Who was the first female Prime Minister of India?",
@@ -957,7 +957,7 @@
       "Pratibha Patil",
       "Sarojini Naidu"
     ],
-    "correct": "Indira Gandhi"
+    "correct": "Indira Gandhi", "subcategory": "Modern Era & Politics"
   },
   {
     "question": "The Battle of Thermopylae involved which Greek city-state holding off Persia?",
@@ -967,7 +967,7 @@
       "Corinth",
       "Thebes"
     ],
-    "correct": "Sparta"
+    "correct": "Sparta", "subcategory": "Wars, Battles & Revolutions"
   },
   {
     "question": "The first successful powered airplane flight was in which year?",
@@ -977,7 +977,7 @@
       "1900",
       "1910"
     ],
-    "correct": "1903"
+    "correct": "1903", "subcategory": "Key Events & Figures"
   },
   {
     "question": "Which empire did Alexander the Great create?",
@@ -987,6 +987,6 @@
       "Greek Empire",
       "Roman Empire"
     ],
-    "correct": "Macedonian Empire"
+    "correct": "Macedonian Empire", "subcategory": "Ancient & Classical"
   }
 ]

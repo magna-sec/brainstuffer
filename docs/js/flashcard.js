@@ -10,9 +10,10 @@ let fcFlipped = false; // current card face
 function startFlashcards() {
     if (!store) { console.warn('[FC] store is null, aborting'); return; }
     console.log('[FC] starting for', store.filename);
-    loadQuizData(store.filename).then(function(questions) {
-        console.log('[FC] loaded', questions && questions.length, 'questions');
-        if (!questions || !questions.length) { console.warn('[FC] no questions loaded'); return; }
+    loadQuizData(store.filename).then(function(all) {
+        console.log('[FC] loaded', all && all.length, 'questions');
+        if (!all || !all.length) { console.warn('[FC] no questions loaded'); return; }
+        const questions = (window.bsApplySubcatFilter ? bsApplySubcatFilter(all) : all);
         const amount = parseInt(document.getElementById('amount').value) || 0;
         const n = (amount && amount < questions.length) ? amount : questions.length;
         fcDeck = shuffle(questions).slice(0, n);

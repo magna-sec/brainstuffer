@@ -7,7 +7,7 @@
       "Autograph label, supplementary",
       "All leaves, sound"
     ],
-    "correct": "Autograph letter, signed"
+    "correct": "Autograph letter, signed", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What does 'T.e.g.' mean in a book description?",
@@ -17,7 +17,7 @@
       "Title edge gilt",
       "Tooled edges, gilt"
     ],
-    "correct": "Top edges gilt"
+    "correct": "Top edges gilt", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What does 'w.a.f.' mean at auction?",
@@ -27,7 +27,7 @@
       "With additional folios",
       "Written and finished"
     ],
-    "correct": "With all faults"
+    "correct": "With all faults", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What does the term 'association copy' describe?",
@@ -37,7 +37,7 @@
       "A copy with an association bookplate",
       "A copy that forms part of a matched set"
     ],
-    "correct": "A copy connected to the author, a person linked to the author, or someone associated with its contents"
+    "correct": "A copy connected to the author, a person linked to the author, or someone associated with its contents", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "In book collecting, what is an 'advance copy'?",
@@ -47,7 +47,7 @@
       "A copy sold in advance of the stated publication date",
       "A proof copy corrected by the author"
     ],
-    "correct": "A copy circulated before publication to reviewers, booksellers or book-club judges"
+    "correct": "A copy circulated before publication to reviewers, booksellers or book-club judges", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What does 'all published' mean in a catalogue description of a multi-volume work?",
@@ -57,7 +57,7 @@
       "Every volume has been published in a revised edition",
       "The set has been published by multiple publishers"
     ],
-    "correct": "The series was never completed and this is all that exists"
+    "correct": "The series was never completed and this is all that exists", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is 'Americana' in book collecting terms?",
@@ -67,7 +67,7 @@
       "Books printed in the United States before 1800",
       "Books about American history published in Britain"
     ],
-    "correct": "Books about, connected with, or printed in America, distinct from books merely by American writers"
+    "correct": "Books about, connected with, or printed in America, distinct from books merely by American writers", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What does 'autograph' mean when used as an adjective in book catalogues?",
@@ -77,7 +77,7 @@
       "Printed with a facsimile of the author's signature",
       "Authenticated by a third party"
     ],
-    "correct": "In the hand of the author or person referenced, whether signed or not"
+    "correct": "In the hand of the author or person referenced, whether signed or not", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is a 'cancel' in bibliographical terms?",
@@ -87,7 +87,7 @@
       "A page removed for censorship that has not been replaced",
       "A bookplate removed from a previous owner's copy"
     ],
-    "correct": "Any part of a book substituted for what was originally printed"
+    "correct": "Any part of a book substituted for what was originally printed", "subcategory": "Bibliography & References"
   },
   {
     "question": "What is the original leaf or sheet called that a cancel replaces?",
@@ -97,7 +97,7 @@
       "The suppressed leaf",
       "The replaced folio"
     ],
-    "correct": "The cancelland (or cancellum)"
+    "correct": "The cancelland (or cancellum)", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is the name for a binding style where the spine and corners are leather but the sides are cloth or paper?",
@@ -107,7 +107,7 @@
       "Three-quarter bound",
       "Cased binding"
     ],
-    "correct": "Half bound"
+    "correct": "Half bound", "subcategory": "Binding & Materials"
   },
   {
     "question": "What distinguishes a 'bound' book from a 'cased' book?",
@@ -117,7 +117,7 @@
       "A bound book is sewn; a cased book is glued",
       "A bound book uses raised bands; a cased book has a hollow back"
     ],
-    "correct": "In a bound book, the sections are sewn directly to bands whose ends are laced into the boards; in a cased book the case is made separately and the book inserted"
+    "correct": "In a bound book, the sections are sewn directly to bands whose ends are laced into the boards; in a cased book the case is made separately and the book inserted", "subcategory": "Binding & Materials"
   },
   {
     "question": "What are 'raised bands' on the spine of a book?",
@@ -127,7 +127,7 @@
       "Bands of leather raised above the boards to protect the spine",
       "The hemp cords visible on the inside of a book's spine"
     ],
-    "correct": "The external ridges on the spine created by the cords or bands on which the quires are sewn"
+    "correct": "The external ridges on the spine created by the cords or bands on which the quires are sewn", "subcategory": "Binding & Materials"
   },
   {
     "question": "What does 'blind tooling' or 'in blind' mean on a binding?",
@@ -137,7 +137,7 @@
       "Decoration that has faded until barely visible",
       "Tooling carried out without a design die, freehand"
     ],
-    "correct": "Decoration or lettering impressed into the covering material without gold or colour"
+    "correct": "Decoration or lettering impressed into the covering material without gold or colour", "subcategory": "Binding & Materials"
   },
   {
     "question": "What is 'calf' in bookbinding?",
@@ -147,7 +147,7 @@
       "A coarse grain leather used for large folios",
       "A paste-board used as an alternative to wooden boards"
     ],
-    "correct": "Smooth leather made from calfskin, the commonest leather used in bookbinding"
+    "correct": "Smooth leather made from calfskin, the commonest leather used in bookbinding", "subcategory": "Binding & Materials"
   },
   {
     "question": "What is a 'colophon' in a book?",
@@ -157,7 +157,7 @@
       "The first leaf of the first gathering",
       "A cancelled title page retained at the end of the volume"
     ],
-    "correct": "An inscription at the end of a book giving details of its production such as printer, place and date"
+    "correct": "An inscription at the end of a book giving details of its production such as printer, place and date", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What does 'ex libris' mean on a book?",
@@ -167,7 +167,7 @@
       "It is a Latin phrase meaning the text is authentic",
       "It describes a book printed without a named publisher"
     ],
-    "correct": "It is a bookplate or label identifying the owner, meaning 'from the books of'"
+    "correct": "It is a bookplate or label identifying the owner, meaning 'from the books of'", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What are 'errata' in a book?",
@@ -177,7 +177,7 @@
       "Passages removed by censorship before publication",
       "Printer's marks used to identify the edition"
     ],
-    "correct": "Mistakes or misprints discovered after printing, listed for correction"
+    "correct": "Mistakes or misprints discovered after printing, listed for correction", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is an 'incunabulum' (plural: incunabula)?",
@@ -187,7 +187,7 @@
       "Any book printed before the introduction of the hand press",
       "A block book printed entirely from woodcuts"
     ],
-    "correct": "A book printed in Europe before 1501, in the cradle period of printing"
+    "correct": "A book printed in Europe before 1501, in the cradle period of printing", "subcategory": "Bibliography & References"
   },
   {
     "question": "What is the 'STC'?",
@@ -197,7 +197,7 @@
       "A short-title catalogue of scientific and technical works",
       "A catalogue of all books printed in the Stationers' Company register"
     ],
-    "correct": "A catalogue of English books printed between 1475 and 1640, compiled by Pollard & Redgrave"
+    "correct": "A catalogue of English books printed between 1475 and 1640, compiled by Pollard & Redgrave", "subcategory": "Bibliography & References"
   },
   {
     "question": "What is 'Wing' in bibliographical reference?",
@@ -207,7 +207,7 @@
       "A catalogue of books with engraved title pages",
       "A record of books sold at the Wing auction house"
     ],
-    "correct": "A short-title catalogue of English books printed between 1641 and 1700"
+    "correct": "A short-title catalogue of English books printed between 1641 and 1700", "subcategory": "Bibliography & References"
   },
   {
     "question": "What does 'ESTC' stand for in its current usage?",
@@ -217,7 +217,7 @@
       "European Short-Title Catalogue",
       "English Subscription Title Catalogue"
     ],
-    "correct": "English Short-Title Catalogue, an online catalogue covering STC, Wing and 18th-century books"
+    "correct": "English Short-Title Catalogue, an online catalogue covering STC, Wing and 18th-century books", "subcategory": "Bibliography & References"
   },
   {
     "question": "What is 'BAL' in book collecting?",
@@ -227,7 +227,7 @@
       "British Antiquarian Library, a catalogue of rare British books",
       "Bibliographical Annals of Literature, a general reference series"
     ],
-    "correct": "Bibliography of American Literature, a detailed bibliography of principal American literary figures"
+    "correct": "Bibliography of American Literature, a detailed bibliography of principal American literary figures", "subcategory": "Bibliography & References"
   },
   {
     "question": "What are 'deckle edges' on a book?",
@@ -237,7 +237,7 @@
       "Edges gilded with a fine dotted or speckled pattern",
       "Edges deliberately frayed to simulate age"
     ],
-    "correct": "The rough, untrimmed edges of hand-made paper, evidence that leaves are uncut"
+    "correct": "The rough, untrimmed edges of hand-made paper, evidence that leaves are uncut", "subcategory": "Binding & Materials"
   },
   {
     "question": "What is 'foxing' in a book?",
@@ -247,7 +247,7 @@
       "Fading of ink caused by exposure to light",
       "Small holes made by bookworms in the text block"
     ],
-    "correct": "Brown spotty staining on the pages caused by oxidisation or fungal growth"
+    "correct": "Brown spotty staining on the pages caused by oxidisation or fungal growth", "subcategory": "Conservation & Condition"
   },
   {
     "question": "What is a 'half-title'?",
@@ -257,7 +257,7 @@
       "A cancel title replacing a withdrawn edition",
       "A printed paper label on the spine of a boards binding"
     ],
-    "correct": "A leaf before the main title page bearing only the short title of the book"
+    "correct": "A leaf before the main title page bearing only the short title of the book", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What does 'original boards' describe?",
@@ -267,7 +267,7 @@
       "Wooden boards used in bindings before the 16th century",
       "Boards covered with the original publisher's decorative paper"
     ],
-    "correct": "The temporary paper-covered board binding in which many books were issued between about 1780 and the 1830s"
+    "correct": "The temporary paper-covered board binding in which many books were issued between about 1780 and the 1830s", "subcategory": "Binding & Materials"
   },
   {
     "question": "What is an 'endpaper'?",
@@ -277,7 +277,7 @@
       "The publisher's printed advertisements inserted at the back of the book",
       "The protective tissue paper laid over an engraved plate"
     ],
-    "correct": "The double leaves added at front and back by the binder, one leaf pasted to the board and one forming the first or last page of the volume"
+    "correct": "The double leaves added at front and back by the binder, one leaf pasted to the board and one forming the first or last page of the volume", "subcategory": "Binding & Materials"
   },
   {
     "question": "What is 'morocco' as a binding leather?",
@@ -287,7 +287,7 @@
       "A type of sheepskin dyed to resemble goatskin",
       "A generic term for any decorative leather from North Africa"
     ],
-    "correct": "Leather made from goatskin, originally associated with Morocco and the Levant, noted for its grain and durability"
+    "correct": "Leather made from goatskin, originally associated with Morocco and the Levant, noted for its grain and durability", "subcategory": "Binding & Materials"
   },
   {
     "question": "What is a 'dust jacket' (or dust wrapper)?",
@@ -297,7 +297,7 @@
       "A plain paper cover used on advance review copies",
       "The stiff cardboard slipcase that houses a fine binding"
     ],
-    "correct": "The printed paper cover wrapped around a cased book to protect it"
+    "correct": "The printed paper cover wrapped around a cased book to protect it", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What does 'editio princeps' mean?",
@@ -307,7 +307,7 @@
       "The first authorised edition, as opposed to a pirated one",
       "The prince's personal copy of a royal presentation edition"
     ],
-    "correct": "The first printed edition of a work, especially a classical text"
+    "correct": "The first printed edition of a work, especially a classical text", "subcategory": "Bibliography & References"
   },
   {
     "question": "What is a 'broadside' or 'broadsheet' in bibliographical terms?",
@@ -317,7 +317,7 @@
       "A pamphlet of four or more leaves",
       "A folded sheet forming a single gathering"
     ],
-    "correct": "A piece of printed matter printed on one side only of a single undivided sheet"
+    "correct": "A piece of printed matter printed on one side only of a single undivided sheet", "subcategory": "Bibliography & References"
   },
   {
     "question": "In auction terminology, what does it mean when a lot is 'bought in'?",
@@ -327,7 +327,7 @@
       "A trade buyer purchased the lot on behalf of a collector",
       "The lot was withdrawn before the sale began"
     ],
-    "correct": "The lot failed to reach its reserve price and was not sold"
+    "correct": "The lot failed to reach its reserve price and was not sold", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "Who is the 'under-bidder' at an auction?",
@@ -337,7 +337,7 @@
       "A dealer bidding below the reserve to test the market",
       "An agent bidding on commission without having viewed the lot"
     ],
-    "correct": "The last unsuccessful bidder on a lot; the runner-up"
+    "correct": "The last unsuccessful bidder on a lot; the runner-up", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is a 'coloured copy' of an illustrated book?",
@@ -347,7 +347,7 @@
       "A copy with the text printed in more than one colour",
       "A copy with the edges stained or sprinkled in colour"
     ],
-    "correct": "A copy in which the illustrations have been hand-coloured, either at the time of publication or later"
+    "correct": "A copy in which the illustrations have been hand-coloured, either at the time of publication or later", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What does 'uncut' mean in a catalogue description?",
@@ -357,7 +357,7 @@
       "The signatures have not been separated from the original printed sheets",
       "The volume retains its original sewing without rebinding"
     ],
-    "correct": "The edges of the leaves have not been trimmed by the binder's knife, preserving the original deckle"
+    "correct": "The edges of the leaves have not been trimmed by the binder's knife, preserving the original deckle", "subcategory": "Conservation & Condition"
   },
   {
     "question": "What is the 'Grolier List'?",
@@ -367,7 +367,7 @@
       "An annual catalogue of the most valuable books sold at American auctions",
       "A record of the books in the collection of the Grolier Club library"
     ],
-    "correct": "One Hundred Books Famous in English Literature, a list published by the Grolier Club of New York in 1902"
+    "correct": "One Hundred Books Famous in English Literature, a list published by the Grolier Club of New York in 1902", "subcategory": "Bibliography & References"
   },
   {
     "question": "What are 'blockbooks' (xylographica)?",
@@ -377,7 +377,7 @@
       "Books printed from metal type but illustrated exclusively with woodcuts",
       "Manuscripts copied in a regular block script before the invention of printing"
     ],
-    "correct": "Early European books in which both text and illustrations were cut on wood blocks and printed from them"
+    "correct": "Early European books in which both text and illustrations were cut on wood blocks and printed from them", "subcategory": "Bibliography & References"
   },
   {
     "question": "When did the heyday of European blockbooks occur, according to modern research?",
@@ -387,7 +387,7 @@
       "The 1480s, after movable type was already widespread",
       "The 1500s, as a continuation of earlier manuscript traditions"
     ],
-    "correct": "The 1460s, not before the invention of movable type as once supposed"
+    "correct": "The 1460s, not before the invention of movable type as once supposed", "subcategory": "Bibliography & References"
   },
   {
     "question": "What is 'bibliophily'?",
@@ -397,7 +397,7 @@
       "The collecting of books as financial investments",
       "The study of the history of printing and publishing"
     ],
-    "correct": "The love of books; a bibliophile is a lover of books"
+    "correct": "The love of books; a bibliophile is a lover of books", "subcategory": "Bibliography & References"
   },
   {
     "question": "What is 'bibliography' in the collector's sense?",
@@ -407,7 +407,7 @@
       "A catalogue of the works of a single author",
       "The science of dating paper and ink to authenticate old books"
     ],
-    "correct": "The study of books as physical objects and the systematic description of them"
+    "correct": "The study of books as physical objects and the systematic description of them", "subcategory": "Bibliography & References"
   },
   {
     "question": "What is 'bisquing' in the context of old books?",
@@ -417,7 +417,7 @@
       "Pressing the covers of a book in a heated press to restore them",
       "Trimming the edges of a book with a bisecting knife"
     ],
-    "correct": "Obliterating passages by painting them out with black ink or overprinting with a blank block, usually for censorship"
+    "correct": "Obliterating passages by painting them out with black ink or overprinting with a blank block, usually for censorship", "subcategory": "Conservation & Condition"
   },
   {
     "question": "What is a 'binding copy'?",
@@ -427,7 +427,7 @@
       "A copy in its original, unrestored publisher's binding",
       "A copy specially bound for presentation by the author"
     ],
-    "correct": "A copy whose covers are in poor condition but whose interior is clean and worth rebinding"
+    "correct": "A copy whose covers are in poor condition but whose interior is clean and worth rebinding", "subcategory": "Binding & Materials"
   },
   {
     "question": "What is the 'Cottage style' of binding?",
@@ -437,7 +437,7 @@
       "A style using natural, undyed leather with flower and foliage tooling",
       "A half-bound style with marbled boards popular in rural England"
     ],
-    "correct": "A style where the top and bottom of the spine panel slope away from a broken centre, creating a gabled effect"
+    "correct": "A style where the top and bottom of the spine panel slope away from a broken centre, creating a gabled effect", "subcategory": "Binding & Materials"
   },
   {
     "question": "What is the 'Etruscan style' of binding?",
@@ -447,7 +447,7 @@
       "A style associated with Italian Renaissance binders using interlace tooling",
       "A Florentine binding technique using coloured inlays on vellum"
     ],
-    "correct": "Decoration of calf bindings by acid staining with classical ornament such as Greek vases and key patterns, popular c.1785–1820"
+    "correct": "Decoration of calf bindings by acid staining with classical ornament such as Greek vases and key patterns, popular c.1785–1820", "subcategory": "Binding & Materials"
   },
   {
     "question": "What does 'cropped' mean in a book description?",
@@ -457,7 +457,7 @@
       "The edges have been cut and coloured by the binder",
       "The boards have been cut down shorter than the text block"
     ],
-    "correct": "The binder's knife has cut into the printed matter itself, not just the margins"
+    "correct": "The binder's knife has cut into the printed matter itself, not just the margins", "subcategory": "Conservation & Condition"
   },
   {
     "question": "What is 'de-acidification' as applied to books?",
@@ -467,7 +467,7 @@
       "A chemical treatment to neutralise the residues of old leather dressings",
       "The removal of acidic adhesives used in rebinding"
     ],
-    "correct": "A process that removes acid from machine-made paper to slow its decay"
+    "correct": "A process that removes acid from machine-made paper to slow its decay", "subcategory": "Conservation & Condition"
   },
   {
     "question": "What are 'copyright libraries' in the UK?",
@@ -477,7 +477,7 @@
       "Libraries operated by the Publishers' Association to safeguard intellectual property",
       "Libraries that specialise in books currently in copyright, as opposed to out-of-print works"
     ],
-    "correct": "Libraries legally entitled to receive a free copy of every book published in the UK, including the British Library, Bodleian, and Cambridge University Library"
+    "correct": "Libraries legally entitled to receive a free copy of every book published in the UK, including the British Library, Bodleian, and Cambridge University Library", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is a 'book-plate' (ex libris)?",
@@ -487,7 +487,7 @@
       "A printed broadside advertising the publication of a new book",
       "A metal plate used for printing the book's illustrations"
     ],
-    "correct": "A label of ownership, usually affixed to a front endpaper, identifying the book's owner"
+    "correct": "A label of ownership, usually affixed to a front endpaper, identifying the book's owner", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is 'vellum' in bookbinding?",
@@ -497,7 +497,7 @@
       "A type of imitation leather made from compressed cotton fibres",
       "A translucent protective paper used as a fly-leaf in fine bindings"
     ],
-    "correct": "A fine writing or binding material prepared from the stretched and dried skin of a calf, goat or sheep"
+    "correct": "A fine writing or binding material prepared from the stretched and dried skin of a calf, goat or sheep", "subcategory": "Binding & Materials"
   },
   {
     "question": "What does 'Aldine' refer to in book collecting?",
@@ -507,7 +507,7 @@
       "The pocket-sized format introduced by Aldus Manutius, irrespective of the printer",
       "Any book printed in italic type, which Aldus invented"
     ],
-    "correct": "Books printed by Aldus Manutius in Venice, or things associated with him, including his dolphin-and-anchor device"
+    "correct": "Books printed by Aldus Manutius in Venice, or things associated with him, including his dolphin-and-anchor device", "subcategory": "Bibliography & References"
   },
   {
     "question": "What is a 'provenance' in book collecting?",
@@ -517,7 +517,7 @@
       "The list of sources cited by the author in the text",
       "A bookseller's written guarantee of a book's authenticity"
     ],
-    "correct": "The history of a book's ownership, traced through inscriptions, bookplates, sale records and other evidence"
+    "correct": "The history of a book's ownership, traced through inscriptions, bookplates, sale records and other evidence", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is a 'gutter' in a book?",
@@ -527,7 +527,7 @@
       "The channel cut by the plough along the edges of the text block",
       "The space between the boards and the text block at the head and tail"
     ],
-    "correct": "To a bookseller, the inner margin between two facing pages; to a printer, the space between fore-edges of two abutting pages in the forme"
+    "correct": "To a bookseller, the inner margin between two facing pages; to a printer, the space between fore-edges of two abutting pages in the forme", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is a 'blurb' in cataloguing terms?",
@@ -537,7 +537,7 @@
       "A brief note describing the physical condition of a book",
       "An annotation in the author's hand found in a copy"
     ],
-    "correct": "A persuasive or laudatory note added by a bookseller to a catalogue description, as distinct from objective bibliographical description"
+    "correct": "A persuasive or laudatory note added by a bookseller to a catalogue description, as distinct from objective bibliographical description", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What does 'called for' mean in a bookseller's catalogue?",
@@ -547,7 +547,7 @@
       "A volume requested from a library for consultation",
       "An item reserved for a specific buyer before the catalogue is issued"
     ],
-    "correct": "Required to be present according to a named bibliography or authority, e.g. 'with the errata slip called for by Jones'"
+    "correct": "Required to be present according to a named bibliography or authority, e.g. 'with the errata slip called for by Jones'", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What are 'guide letters' in early printed books?",
@@ -557,7 +557,7 @@
       "Letters printed in the margin to guide the binder in gathering the quires",
       "Italic letters used to distinguish proper names in the text"
     ],
-    "correct": "Small letters printed in the space left for a hand-painted initial, to guide the illuminator as to which letter was required"
+    "correct": "Small letters printed in the space left for a hand-painted initial, to guide the illuminator as to which letter was required", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is a 'gutta-percha binding'?",
@@ -567,7 +567,7 @@
       "A binding technique using natural resin to consolidate fragile gatherings",
       "A binding with a spine made from hardened vegetable rubber"
     ],
-    "correct": "A binding using a rubber solution instead of sewing to hold the leaves together, developed from about 1840"
+    "correct": "A binding using a rubber solution instead of sewing to hold the leaves together, developed from about 1840", "subcategory": "Binding & Materials"
   },
   {
     "question": "What is 'breaking up' a book?",
@@ -577,7 +577,7 @@
       "Separating the gatherings of an unsewn book for conservation",
       "Removing a book from a composite volume bound together by a previous owner"
     ],
-    "correct": "Dismantling a book and selling its plates or leaves separately, regarded by collectors as vandalism"
+    "correct": "Dismantling a book and selling its plates or leaves separately, regarded by collectors as vandalism", "subcategory": "Conservation & Condition"
   },
   {
     "question": "What is 'cannibalisation' in book collecting?",
@@ -587,7 +587,7 @@
       "Using leaves from a damaged copy to repair another copy of a different edition",
       "Selling individual leaves of a rare book rather than the book as a whole"
     ],
-    "correct": "Breaking up two or more copies of a book to assemble a single 'complete' copy containing variants never originally found together"
+    "correct": "Breaking up two or more copies of a book to assemble a single 'complete' copy containing variants never originally found together", "subcategory": "Conservation & Condition"
   },
   {
     "question": "What is a 'first edition in book form'?",
@@ -597,7 +597,7 @@
       "The first edition to be bound in publisher's cloth rather than boards",
       "The first edition published in the author's home country"
     ],
-    "correct": "The first time a work previously published in a periodical, broadside or other format appeared between its own covers as a book"
+    "correct": "The first time a work previously published in a periodical, broadside or other format appeared between its own covers as a book", "subcategory": "Bibliography & References"
   },
   {
     "question": "What is 'de-accessioning'?",
@@ -607,7 +607,7 @@
       "The cataloguing of newly acquired books into a library's collection",
       "The transfer of a book from active shelves to archive storage"
     ],
-    "correct": "The process by which a library disposes of books deemed surplus to requirements, frequently a euphemism for sale"
+    "correct": "The process by which a library disposes of books deemed surplus to requirements, frequently a euphemism for sale", "subcategory": "Conservation & Condition"
   },
   {
     "question": "What is an 'authorised edition' in book collecting, and why might a collector prefer the unauthorised one?",
@@ -617,7 +617,7 @@
       "An edition licensed by the author's estate after the author's death",
       "The edition bearing the author's own annotations and corrections"
     ],
-    "correct": "The first edition published with the author's consent; collectors often also prize the earlier unauthorised printing for its chronological priority"
+    "correct": "The first edition published with the author's consent; collectors often also prize the earlier unauthorised printing for its chronological priority", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is 'buckram'?",
@@ -627,7 +627,7 @@
       "A stiffened paper used as a substitute for boards in cheap bindings",
       "A type of straw-board used as the base for the sides of a bound book"
     ],
-    "correct": "A durable, firmly woven linen or cotton bookbinding cloth with a smooth calendered finish"
+    "correct": "A durable, firmly woven linen or cotton bookbinding cloth with a smooth calendered finish", "subcategory": "Binding & Materials"
   },
   {
     "question": "What is 'American Book Prices Current' (ABPC)?",
@@ -637,7 +637,7 @@
       "A database of list prices for new books published in the United States",
       "A record of American auction results for books only, excluding manuscripts"
     ],
-    "correct": "An annual record of books, manuscripts and autographs sold at auction in America and the principal London and European houses, published since 1895"
+    "correct": "An annual record of books, manuscripts and autographs sold at auction in America and the principal London and European houses, published since 1895", "subcategory": "Bibliography & References"
   },
   {
     "question": "What is the 'Cambridge style' of binding?",
@@ -647,7 +647,7 @@
       "A half-calf style using a distinctive Cambridge tan leather",
       "A vellum binding style developed at Cambridge for presentation copies"
     ],
-    "correct": "A calf binding style with a rectangular frame left plain and the central rectangle mottled or sprinkled, popular with Cambridge binders in the early 18th century"
+    "correct": "A calf binding style with a rectangular frame left plain and the central rectangle mottled or sprinkled, popular with Cambridge binders in the early 18th century", "subcategory": "Binding & Materials"
   },
   {
     "question": "What is 'gothicc type' (black letter) in early books?",
@@ -657,7 +657,7 @@
       "A heavy typeface used exclusively for Bible printing throughout the hand-press era",
       "The typeface invented by Gutenberg and used only in Germany"
     ],
-    "correct": "A family of typefaces that do not look like roman or italic, including textura, rotunda and bastarda, used widely in Europe before roman type became dominant"
+    "correct": "A family of typefaces that do not look like roman or italic, including textura, rotunda and bastarda, used widely in Europe before roman type became dominant", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What does 'as issued' signify in a catalogue description?",
@@ -667,7 +667,7 @@
       "The book has not been rebound or restored since purchase",
       "The book is accompanied by the original publisher's invoice"
     ],
-    "correct": "The feature described is the original condition as the publisher issued it, even if it contradicts normal expectation"
+    "correct": "The feature described is the original condition as the publisher issued it, even if it contradicts normal expectation", "subcategory": "Catalogue & Terminology"
   },
   {
     "question": "What is 'encapsulation' as a conservation technique?",
@@ -677,6 +677,6 @@
       "Storing a book in a sealed acid-free box to prevent atmospheric damage",
       "Laminating a damaged leaf between sheets of Japanese tissue paper"
     ],
-    "correct": "Vacuum-sealing a single sheet within an envelope of inert plastic to protect it from decay and handling"
+    "correct": "Vacuum-sealing a single sheet within an envelope of inert plastic to protect it from decay and handling", "subcategory": "Conservation & Condition"
   }
 ]
